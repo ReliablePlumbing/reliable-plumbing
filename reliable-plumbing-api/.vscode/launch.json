@@ -1,0 +1,22 @@
+{
+    "version": "0.2.0",
+    
+    "configurations": [
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "node app",
+            "runtimeExecutable": "npm",
+            "windows": {
+                "runtimeExecutable": "npm.cmd"
+            },
+            "protocol": "inspector",
+            "diagnosticLogging": true,
+            "runtimeArgs": [
+                "run-script",
+                "debug"
+            ],
+            "port": 3001
+        }
+    ]
+}

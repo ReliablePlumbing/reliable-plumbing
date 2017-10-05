@@ -1,0 +1,11 @@
+{
+  "files.exclude": {
+    "**/*.sln": true,
+    "**/*.*.csproj": true,
+    "**/obj": true,
+    "**/bin": true,
+    "**/node_modules": true,
+    "**/dist": true,
+    "**/maps": true
+  }
+}

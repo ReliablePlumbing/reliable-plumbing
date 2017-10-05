@@ -1,0 +1,1 @@
+export { UserManager } from './managers/user-manager';

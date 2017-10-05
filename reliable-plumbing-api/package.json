@@ -1,0 +1,61 @@
+{
+  "name": "coworking",
+  "version": "1.0.0",
+  "description": "",
+  "main": "lib/index.js",
+  "types": "lib/index",
+  "scripts": {
+    "start": "node dist/1-api/server.js",
+    "debug": "node --inspect-brk=3001 dist/1-api/server.js",
+    "test": "mocha --reporter spec --compilers ts:ts-node/register",
+    "gulp": "gulp",
+    "git": "git add -A -- . && git commit -m $message && git push node-starter master"
+  },
+  "dependencies": {
+    "automapper-ts": "^1.8.3",
+    "bluebird": "^3.5.1",
+    "body-parser": "^1.18.2",
+    "cors": "^2.8.4",
+    "debug": "^3.1.0",
+    "express": "^4.16.1",
+    "jsonwebtoken": "^8.0.1",
+    "mongoose": "^4.12.0",
+    "morgan": "^1.9.0",
+    "multer": "^1.3.0",
+    "reflect-metadata": "^0.1.10",
+    "routing-controllers": "^0.7.3",
+    "typedi": "^0.5.2"
+  },
+  "devDependencies": {
+    "@types/bluebird": "^3.5.14",
+    "@types/body-parser": "^1.16.5",
+    "@types/chai": "^4.0.4",
+    "@types/chai-http": "3.0.3",
+    "@types/debug": "0.0.30",
+    "@types/express": "^4.0.37",
+    "@types/jsonwebtoken": "^7.2.3",
+    "@types/mocha": "^2.2.43",
+    "@types/mongoose": "^4.7.23",
+    "@types/morgan": "^1.7.33",
+    "@types/multer": "^1.3.3",
+    "@types/node": "^8.0.32",
+    "chai": "^4.1.2",
+    "chai-http": "^3.0.0",
+    "gulp": "^3.9.1",
+    "gulp-typescript": "^3.2.2",
+    "mocha": "^4.0.0",
+    "nodemon": "^1.12.1",
+    "ts-node": "^3.3.0",
+    "typescript": "^2.5.3"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ahmedGomaa90/node-api-starter.git"
+  },
+  "author": "Ahmed Gomaa",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ahmedGomaa90/node-api-starter/issues"
+  },
+  "homepage": "https://github.com/ahmedGomaa90/node-api-starter#readme"
+}
