@@ -6,7 +6,7 @@ import { Role } from '../3-domain/domain-module'
 import { AuthorizationProvider } from './authorization/authorization-provider'
 import { registerDependencies } from './utils/dependency-manager/dependency-manager';
 import { CustomErrorHandler } from './utils/error-handler/error-handler';
-
+ 
 export class App {
 
     constructor() { }
