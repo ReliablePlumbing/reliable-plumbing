@@ -1,0 +1,24 @@
+<div>
+    <div>current user</div>
+    <form #loginForm="ngForm" (ngSubmit)="userLogin(loginForm)" novalidate>
+  
+      <input type="text" name="userName" #usernameControl="ngModel" [(ngModel)]="userName" placeholder="username" required/>
+      <label *ngIf="!usernameControl.valid && (usernameControl.dirty || trySubmit)" class="alert alert-danger">* required</label>
+  
+      <input type="password" name="userPassword" #userPasswordControl="ngModel" [(ngModel)]="userPassword" placeholder="password....."
+        required/>
+      <label *ngIf="!userPasswordControl.valid && (userPasswordControl.dirty || trySubmit)" class="alert alert-danger">* required</label>
+  
+      <a href="#forgot-password-url" class="login-form__forgot-password">forgot password</a>
+  
+      <button type="submit">Login</button>
+  
+      <input type="checkbox" id="rememberMe" />
+      <label for="rememberMe">remember me</label>
+    </form>
+  </div>
+  
+  <div>
+    <div>New user</div>
+    <a href="#" [routerLink]="['/register']">Sign up</a>
+  </div>

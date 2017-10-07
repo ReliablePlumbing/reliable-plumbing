@@ -6,7 +6,7 @@ import { Role } from '../3-domain/domain-module'
 import { AuthorizationProvider } from './authorization/authorization-provider'
 import { registerDependencies } from './utils/dependency-manager/dependency-manager';
 import { CustomErrorHandler } from './utils/error-handler/error-handler';
- 
+
 export class App {
 
     constructor() { }
@@ -16,7 +16,14 @@ export class App {
         useContainer(Container);
         return createExpressServer({
             routePrefix: '/api',
-            cors: true, // for now but use express cors to configure certain cors for the api 
+            cors: {
+                allowedHeaders: ["Origin", "X-Requested-With", "Content-Type", "Accept", "X-Access-Token"],
+                // "Access-Control-Allow-Origin","Access-Control-Allow-Headers","Origin, X-Requested-With, Content-Type", "CORELATION_ID"],
+                 credentials: true,
+                 methods: "GET,HEAD,OPTIONS,PUT,PATCH,POST,DELETE",
+                 origin: '*', // allow only for angular app when deployment, social media login
+                 preflightContinue: false
+            }, 
             defaultErrorHandler: false,
             controllers: this.registerControllers(),
             middlewares: [CustomErrorHandler],
@@ -25,7 +32,7 @@ export class App {
                 return await AuthorizationProvider.validateToken(token)
 
 
-               // return false;
+                // return false;
             }
         });
     }

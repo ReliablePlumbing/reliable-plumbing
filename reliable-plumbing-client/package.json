@@ -23,8 +23,10 @@
     "@angular/platform-browser-dynamic": "^4.2.4",
     "@angular/platform-server": "^4.4.4",
     "@angular/router": "^4.2.4",
+    "@ngrx/core": "^1.2.0",
+    "alertify.js": "^1.0.12",
     "core-js": "^2.4.1",
-    "rxjs": "^5.4.2",
+    "rxjs": "^5.4.3",
     "zone.js": "^0.8.14"
   },
   "devDependencies": {
