@@ -7,11 +7,13 @@ import { ServicesModule } from './services/services.module';
 
 // components
 import { AppComponent } from './app.component';
+import { HomeComponent } from './home/home.component';
 
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    HomeComponent
   ],
   imports: [
     BrowserModule.withServerTransition({appId: 'ang4-seo-pre'}),
