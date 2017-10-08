@@ -15,8 +15,7 @@ export class LoginComponent {
   userName: string;
   userPassword: string;
   constructor(
-    private userManagementService: UserManagementService, private router: Router,
-    private notificationService: NotificationService, private environmentService: EnvironmentService,
+    private userManagementService: UserManagementService, private notificationService: NotificationService, private environmentService: EnvironmentService,
     private routeHandler: RouteHandlerService
   ) { }
 

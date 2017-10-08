@@ -5,7 +5,7 @@ import * as data from '../../../4-data-access/data-access.module';
 import { dependcies } from '../../../5-cross-cutting/dependency-manager/dependency-dictionary';
 
 /*** simulate singletone pattern ***/
-// const dbContext: data.MongoContext = new data.MongoContext();
+const dbContext: data.MongoContext = new data.MongoContext();
 
 export function registerDependencies() {
 
@@ -14,5 +14,5 @@ export function registerDependencies() {
 
     /*** Data Access ***/
     Container.registerService({ id: dependcies.UserRepo, type: data.UserRepo });
-    Container.registerService({ id: dependcies.unitOfWork, type: data.MongoContext });
+    Container.registerService({ id: dependcies.unitOfWork, type: data.MongoContext, instance: dbContext });
 }

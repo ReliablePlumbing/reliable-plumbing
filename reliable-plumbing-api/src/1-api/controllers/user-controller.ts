@@ -4,13 +4,12 @@ import { UserManager } from '../../2-business/business.module';
 import * as express from 'express';
 import { dependcies } from '../../5-cross-cutting/cross-cutting.module';
 import { Inject, Container } from 'typedi';
-import { ToModelInterceptor } from '../utils/interceptors/model-interceptor';
 import { AuthorizationProvider } from '../authorization/authorization-provider';
 
-@JsonController()
+@JsonController('/users')
 export class UserController {
 
-    @Inject(dependcies.UserManager)
+    @Inject(dependcies.UserManager) 
     private userManager: UserManager;
 
     @Post('/register')
@@ -19,7 +18,7 @@ export class UserController {
 
             this.userManager.registerUser(user).then((result: User) => {
                 resolve({
-                    user: result.toModel(),
+                   user: result.toLightModel(),
                     authorization: AuthorizationProvider.generateToken(user)
                 })
             }).catch((error: Error) => reject(error));
@@ -30,7 +29,7 @@ export class UserController {
     login( @Body() user: User) {
         return new Promise<any>((resolve, reject) => {
 
-            this.userManager.validateUser(user).then(isValid => {
+            this.userManager.authenticateUser(user).then(isValid => {
                 resolve(AuthorizationProvider.generateToken(user));
             }).catch((error: Error) => reject(error));
 
@@ -38,7 +37,7 @@ export class UserController {
     }
 
     @Post("/validateToken")
-    @Authorized()
+    // @Authorized()
     validateToken(@Body() token: string){
         return 'aaa'
     }

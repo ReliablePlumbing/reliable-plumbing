@@ -5,7 +5,7 @@
   "main": "lib/index.js",
   "types": "lib/index",
   "scripts": {
-    "start": "node dist/1-api/server.js",
+    "start": "nodemon dist/1-api/server.js",
     "debug": "node --inspect-brk=3001 dist/1-api/server.js",
     "test": "mocha --reporter spec --compilers ts:ts-node/register",
     "gulp": "gulp",

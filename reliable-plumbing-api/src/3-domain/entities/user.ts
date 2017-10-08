@@ -5,14 +5,28 @@ export class User extends BaseEntity {
   hashedPassword?: string;
   password: string;
   salt: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  isEmailVerfied: boolean;
+  mobile: string;
+  tel: string;
   roles?: Role[];
+  creationDate: Date;
+  createdByUserId?: string 
 
-
-  toModel() {
+  toLightModel() {
     return {
-      id: this.id.toString(),
+      id: this.id,
       username: this.username,
-
+      firstName: this.firstName,
+      lastName: this.lastName,
+      email: this.email,
+      isEmailVerfied: this.isEmailVerfied,
+      mobile: this.mobile,
+      tel: this.tel,
+      roles: this.roles,
+      creationDate: this.creationDate
     }
   }
 }

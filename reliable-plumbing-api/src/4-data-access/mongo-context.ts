@@ -1,5 +1,5 @@
 import * as mongoose from 'mongoose';
-import { Model } from './models/model';
+import { GenericModel } from './models/model';
 import { userSchema } from './schemas/user-schema';
 import { Service } from 'typedi';
 import * as promise from 'bluebird';
@@ -14,12 +14,10 @@ export class MongoContext {
         promiseLibrary: promise
     });
 
-    createModel<T>(schema: genericSchema): Model<T> {
-        let entity = this.connection.model<Model<T>>(schema.collectionName, schema.schema);
+    createModel<T>(schema: genericSchema): mongoose.Model<GenericModel<T>> {
+        (<any>mongoose.Promise) = promise;
+        let entity = this.connection.model<GenericModel<T>>(schema.collectionName, schema.schema);
 
-        return new entity();
-
+        return entity;
     }
-
-    users: mongoose.Collection;
 }

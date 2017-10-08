@@ -1,7 +1,5 @@
-import { ObjectId } from "bson";
-
 export abstract class BaseEntity {
-    id: ObjectId;
+    id: string | undefined;
 
-    abstract toModel(): any;
+    abstract toLightModel(): any;
 }

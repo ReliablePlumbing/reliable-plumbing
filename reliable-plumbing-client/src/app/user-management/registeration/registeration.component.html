@@ -1,3 +1,68 @@
-<p>
-  registeration works!
-</p>
+<div class="col-sm-12">
+  <form [formGroup]="registerForm" novalidate>
+    <div class="form-group">
+      <label for="username" class="">username
+        <input type="text" name="username" class="form-control" formControlName="username" [(ngModel)]="user.username"/>
+      </label>
+      <label *ngIf="getControlValidation('username','required')">* required</label>
+      <br/>
+      <label *ngIf="getControlValidation('username','maxlength', false)">username must be less than 30 characters</label>
+    </div>
+
+    <div class="form-group">
+        <label for="password" class="">password
+          <input type="text" name="password" class="form-control" formControlName="password" [(ngModel)]="user.password"/>
+          <pre>
+            password length must not be less than 8 characters and contains the following: 
+            At least one upper case English letter
+            At least one lower case English letter
+            At least one digit
+            At least one special character
+          </pre>
+        </label>
+      <label *ngIf="getControlValidation('password','required')">* required</label>
+      <br/>
+      <label *ngIf="getControlValidation('password','pattern')">password invalid</label>
+      </div>
+
+    <div class="form-group">
+      <label for="firstName" class="">firstName
+        <input type="text" name="firstName" class="form-control" formControlName="firstName" [(ngModel)]="user.firstName"/>
+      </label>
+      <label *ngIf="getControlValidation('firstName','required')">* required</label>
+    </div>
+
+    <div class="form-group">
+      <label for="lastName" class="">last Name
+        <input type="text" name="lastName" class="form-control" formControlName="lastName" [(ngModel)]="user.lastName"/>
+      </label>
+    </div>
+
+    <div class="form-group">
+      <label for="email" class="">email
+        <input type="email" name="email" class="form-control" formControlName="email" [(ngModel)]="user.email"/>
+        ex: exmple@domain.com
+      </label>
+      <label *ngIf="getControlValidation('email','required')">* required</label>
+      <br/>
+      <label *ngIf="getControlValidation('email','email', false)">please enter a valid email</label>
+    </div>
+
+    <div class="form-group">
+      <label for="mobile" class="">mobile
+        <input type="tel" name="mobile" class="form-control" formControlName="mobile" [(ngModel)]="user.mobile"/>
+      </label>
+      <label *ngIf="getControlValidation('mobile','required')">* required</label>
+    </div>
+
+    <div class="form-group">
+      <label for="tel" class="">tel
+        <input type="tel" name="tel" class="form-control" formControlName="tel" [(ngModel)]="user.tel"/>
+      </label>
+    </div>
+
+    <button type="submit" (click)="userRegister()" class="btn btn-success">Sign up</button> &nbsp;
+    <button type="reset" (click)="revert()" class="btn btn-danger">Clear</button>
+  </form>
+
+</div>
