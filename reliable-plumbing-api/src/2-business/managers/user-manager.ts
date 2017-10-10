@@ -1,12 +1,16 @@
 import { User, Role, AppError, ErrorType } from '../../3-domain/domain-module';
 import { UserRepo } from '../../4-data-access/data-access.module';
-import { AccountSecurity, dependcies } from '../../5-cross-cutting/cross-cutting.module';
+import { MailNotifierManager } from '../mail-notifier/mail-notifier-manager';
+import { AccountSecurity, dependcies, TokenManager, ConfigService } from '../../5-cross-cutting/cross-cutting.module';
 import { Inject } from 'typedi';
 
 export class UserManager {
 
     @Inject(dependcies.UserRepo)
     private userRepo: UserRepo;
+
+    @Inject(dependcies.mailNotifierManager)
+    private mailNotifier: MailNotifierManager;
 
     registerUser(user: User): Promise<User> {
         if (user == null)
@@ -19,19 +23,21 @@ export class UserManager {
 
         user.salt = AccountSecurity.generateSalt();
         user.hashedPassword = AccountSecurity.hashPassword(user.password, user.salt);
-
+        user.creationDate = new Date();
         if (user.roles == null)
             user.roles = [Role.Customer];
 
         return new Promise<User>((resolve, error) => {
-            this.userRepo.findByUserName(user).then(firstResult => {
+            this.userRepo.findByUserName(user.username).then(firstResult => {
                 if (firstResult != null)
-                    error(new AppError('user already exists', ErrorType.validation));
+                    return error(new AppError('user already exists', ErrorType.validation));
 
                 this.userRepo.add(user).then(result => {
-                    resolve(result);
+                    let emailContent = this.constructVerificationMail(user);
+                    this.mailNotifier.sendMail(user.email, emailContent.subject, emailContent.content);
+                    return resolve(result);
                 });
-            });
+           });
         });
     }
 
@@ -42,9 +48,9 @@ export class UserManager {
             if (user == null || user.username == null || user.password == null)
                 reject(loginError);
             else {
-                this.userRepo.findByUserName(user).then(result => {
+                this.userRepo.findByUserName(user.username).then(result => {
                     if (result == null)
-                        reject(loginError);
+                        return reject(loginError);
 
                     let passwordHash = AccountSecurity.hashPassword(user.password, result.salt);
 
@@ -55,6 +61,27 @@ export class UserManager {
                 });
             }
         })
+    }
+
+    activateMail(token: string): Promise<boolean>{
+        return new Promise<boolean>((resolve, reject) => {
+            TokenManager.decodeToken(token).then(decodedToken => {
+                if(decodedToken == null)
+                    return resolve(false);
+                let username = decodedToken.username;
+                let email = decodedToken.email;
+
+                this.userRepo.findByUserName(username).then(user => {
+                    if(user == null || user.email == null || user.email.toLowerCase() != email.toLowerCase() || user.isEmailVerfied)
+                        return resolve(false);
+                    
+                    user.isEmailVerfied = true;
+                    this.userRepo.update(user).then(res => {
+                        return resolve(true);
+                    })
+                })
+            });
+        });
     }
 
     private validateUser(user: User): string[] {
@@ -94,5 +121,23 @@ export class UserManager {
         }
 
         return errors;
+    }
+
+    private constructVerificationMail(user: User) {
+        let token = TokenManager.generateToken({
+            username: user.username,
+            email: user.email
+        })
+        let url = ConfigService.config.activationMailUrl + token;
+        let subject = 'Email Activation';
+
+        // todo: get template
+        let content = `<h3>please follow the link bellow to activate your mail address<h3>\n
+                        <a href="${url}">Activate Email<a>`;
+
+        return {
+            subject: subject,
+            content: content
+        }
     }
 }

@@ -16,7 +16,7 @@ import { HomeComponent } from './home/home.component';
     HomeComponent
   ],
   imports: [
-    BrowserModule.withServerTransition({appId: 'ang4-seo-pre'}),
+    BrowserModule/*.withServerTransition({appId: 'ang4-seo-pre'})*/,
     AppRoutingModule, ServicesModule, UserManagementModule
   ],
   providers: [],

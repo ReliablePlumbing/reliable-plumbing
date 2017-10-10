@@ -5,5 +5,13 @@
     },
     "db": {
         "mongoConnectionString": "mongodb://localhost:27017/developmentDb"
-    }
+    },
+    "mailSettings": {
+        "service": "gmail",
+        "auth": {
+            "user": "beartoenodemailer@gmail.com",
+            "pass": "asdasd123123"
+        }
+    },
+    "activationMailUrl": "http://localhost:4200/activate-mail?token="
 }

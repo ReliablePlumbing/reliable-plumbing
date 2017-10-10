@@ -10,12 +10,13 @@ export class MongoContext {
 
     private connectionString = ConfigService.config.db.mongoConnectionString;
     
-    connection: mongoose.Connection = mongoose.createConnection(this.connectionString,{
-        promiseLibrary: promise
-    });
+    private connection = mongoose.createConnection(this.connectionString);
+    
+    constructor(){
+        (<any>mongoose.Promise) = global.Promise;
+    }
 
     createModel<T>(schema: genericSchema): mongoose.Model<GenericModel<T>> {
-        (<any>mongoose.Promise) = promise;
         let entity = this.connection.model<GenericModel<T>>(schema.collectionName, schema.schema);
 
         return entity;

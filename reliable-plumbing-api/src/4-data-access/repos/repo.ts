@@ -9,9 +9,8 @@ import * as mongoose from 'mongoose';
 
 export class Repo<T extends BaseEntity>{
 
-    @Inject(dependcies.unitOfWork)
+    @Inject(dependcies.MongoContext)
     private mongoContext: MongoContext;
-
     private customSchema: genericSchema
 
     constructor(schema: genericSchema) {
@@ -19,12 +18,25 @@ export class Repo<T extends BaseEntity>{
     }
 
     add(entity: T) {
-        return new Promise<T>((res, rej) => {
+        return new Promise<T>((resolve, reject) => {
             let model = this.createSet();
-            return new model(entity).save().then(res => {
+            new model(entity).save().then(res => {
                 entity.id = res.id;
-            }).catch(err => rej(err));
+                return resolve(entity);
+            }).catch(err => reject(err));
         });
+    }
+
+    update(entity: T) {
+        return new Promise<any>((resolve, reject) => {
+            let model = this.createSet();
+            new model(entity).update(entity).then(res => {
+                let success = true;
+                if (res.nModified == 0)
+                    success = false;
+                return resolve(success)
+            });
+        })
     }
 
     // find(entity: T): Promise<T> {

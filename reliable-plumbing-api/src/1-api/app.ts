@@ -3,7 +3,7 @@ import { createExpressServer, Action, useContainer } from "routing-controllers";
 import { UserController } from './controllers/user-controller'
 import { Container } from "typedi";
 import { Role } from '../3-domain/domain-module'
-import { AuthorizationProvider } from './authorization/authorization-provider'
+import { AuthorizationProvider } from './authorization/authorization-provider';
 import { registerDependencies } from './utils/dependency-manager/dependency-manager';
 import { CustomErrorHandler } from './utils/error-handler/error-handler';
 

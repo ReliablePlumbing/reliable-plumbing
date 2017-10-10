@@ -7,7 +7,7 @@ import { EnvironmentService } from '../../services/environment.service';
 
 @Injectable()
 export class UserManagementService {
-  protected basePath = environment.apiUrl + 'users';
+  protected basePath = environment.apiUrl + 'users/';
 
   constructor(private http: Http, private environmentService: EnvironmentService) {
   }
@@ -22,7 +22,7 @@ export class UserManagementService {
       password: password
     }
 
-    return this.http.post(this.basePath + '/login', body)
+    return this.http.post(this.basePath + 'login', body)
       .map((response: Response) => {
         if (response.status == 401)
           return false;
@@ -37,10 +37,16 @@ export class UserManagementService {
   }
 
   register(user): Observable<boolean> {
-    return this.http.post(this.basePath + '/register', user)
+    return this.http.post(this.basePath + 'register', user)
       .map((response: Response) => {
 
         return true;
       })
+  }
+
+  activateMail(token): Observable<boolean>{
+    return this.http.get(this.basePath + 'activateMail?token=' + token)
+    .map((response: Response) => response.json())
+    // .catch((error: Error) => console.log(error))
   }
 }

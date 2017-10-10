@@ -8,13 +8,14 @@ import { UserManagementService } from './services/user-management.service';
 // components
 import { LoginComponent } from './login/login.component';
 import { RegisterationComponent } from './registeration/registeration.component';
+import { ActivateMailComponent } from './activate-mail/activate-mail.component';
 
 @NgModule({
   imports: [
     CommonModule, FormsModule, HttpModule, ReactiveFormsModule,
     UserManagementRoutingModule
   ],
-  declarations: [LoginComponent, RegisterationComponent],
+  declarations: [LoginComponent, RegisterationComponent, ActivateMailComponent],
   providers: [UserManagementService]
 })
 

@@ -1,6 +1,8 @@
-import { User } from '../../3-domain/domain-module';
+import { Service } from 'typedi';
 import { Repo } from './repo';
 import { userSchema } from '../schemas/user-schema';
+import { MongoContext } from '../mongo-context';
+import { User } from '../../3-domain/domain-module';
 
 export class UserRepo extends Repo<User> {
 
@@ -8,9 +10,9 @@ export class UserRepo extends Repo<User> {
         super(userSchema)
     }
     
-    findByUserName(user: User): Promise<User> {
+    findByUserName(username: string): Promise<User | null> {
         let model = this.createSet();
-        return new model(user).collection.findOne({ username: user.username });
+        return new model().collection.findOne({ username: username });
     }
 
 }

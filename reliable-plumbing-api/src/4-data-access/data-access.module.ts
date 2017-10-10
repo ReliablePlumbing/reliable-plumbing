@@ -1,3 +1,5 @@
 export { MongoContext } from './mongo-context';
-export { UserRepo } from './repos/user-repo';
-export * from './schemas/user-schema';
+
+// repos
+export * from './repos/user-repo';
+export * from './repos/mail-log-repo';

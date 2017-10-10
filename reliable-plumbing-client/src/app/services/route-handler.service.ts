@@ -16,7 +16,7 @@ export class RouteHandlerService {
 
   routeToDefault() {
     let currentUser = this.environmentService.currentUser;
-    this.router.navigate(['/home'])
+    this.router.navigate(['/'])
     
     // switch (currentUser.userTypeEnum) {
     //   case UserTypeEnum.admin:
