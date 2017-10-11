@@ -6,15 +6,15 @@ export interface Config {
 
     db: {
         mongoConnectionString: string
-    }
+    };
+
+    mailSettings: {
+        service: string,
+        auth: {
+            user: string,
+            pass: string
+        }
+    };
+
+    activationMailUrl: string;
 }
-
-
-// interface authorization {
-//     tokenKey: string;
-//     tokenExpiration: string
-// }
-
-// interface db {
-//     mongoConnectionString: string
-// }

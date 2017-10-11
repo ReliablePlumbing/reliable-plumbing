@@ -7,7 +7,7 @@ import { EnvironmentService } from '../../services/environment.service';
 
 @Injectable()
 export class UserManagementService {
-  protected basePath = environment.apiUrl + 'users';
+  protected basePath = environment.apiUrl + 'users/';
 
   constructor(private http: Http, private environmentService: EnvironmentService) {
   }
@@ -22,7 +22,7 @@ export class UserManagementService {
       password: password
     }
 
-    return this.http.post(this.basePath + '/login', body)
+    return this.http.post(this.basePath + 'login', body)
       .map((response: Response) => {
         if (response.status == 401)
           return false;
@@ -37,10 +37,29 @@ export class UserManagementService {
   }
 
   register(user): Observable<boolean> {
-    return this.http.post(this.basePath + '/register', user)
-      .map((response: Response) => {
+    return this.http.post(this.basePath + 'register', user)
+      .map((response: Response) => response.json())
+  }
 
-        return true;
-      })
+  checkEmailExistence(email: string): Observable<boolean> {
+    return this.http.get(this.basePath + 'checkEmailExistence?email=' + email)
+      .map((response: Response) => response.json());
+  }
+
+  activateMail(token): Observable<boolean> {
+    return this.http.get(this.basePath + 'activateMail?token=' + token)
+      .map((response: Response) => response.json());
+    // .catch((error: Error) => console.log(error))
+  }
+
+  // todo: change http with http client 
+  getAllSystemUsers() {
+    return this.http.get(this.basePath + 'getAllSystemUsers')
+      .map((response: Response) => response.json());
+  }
+
+  deleteUserById(id) {
+    return this.http.delete(this.basePath + 'deleteUserById?id=' + id)
+      .map((response: Response) => response.json());
   }
 }

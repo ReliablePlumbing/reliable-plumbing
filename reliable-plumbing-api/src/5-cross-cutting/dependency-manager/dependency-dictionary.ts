@@ -7,10 +7,11 @@ import { Container } from 'typedi';
     export const dependcies = {
         // business
         UserManager: 'business.UserManager',
-
+        mailNotifierManager: 'business.MailNotifier',
         // data
         UserRepo: 'data.UserRepo',
-        unitOfWork: 'data.MongoContext'
+        MailLogRepo: 'data.MailLogRepo',
+        MongoContext: 'data.MongoContext'
 
     }
 

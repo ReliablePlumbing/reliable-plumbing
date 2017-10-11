@@ -1,0 +1,42 @@
+
+<h3>System users</h3>
+
+<button (click)="addUser(register)">Add User</button>
+
+<table>
+  <thead>
+    <th>Name</th>
+    <th>Type</th>
+    <th>Email</th>
+    <th>Mobile No.</th>
+    <th>Account Creation Date</th>
+    <th>Edit</th>
+    <th>Delete</th>
+  </thead>
+  <tbody>
+    <tr *ngFor="let user of users">
+      <td>{{user.firstName + ' ' + user.lastName}}</td>
+      <td>{{user.rolesString}}</td>
+      <td>{{user.email}}</td>
+      <td>{{user.mobile}}</td>
+      <td>{{user.creationDate | date}}</td>
+      <td><button>edit</button></td>
+      <td><button (click)="deleteUser(user)">delete</button></td>
+    </tr>
+  </tbody>
+</table>
+
+
+
+<ng-template #register let-c="close" let-d="dismiss">
+    <div class="modal-header">
+      <!-- <h4 class="modal-title">Modal title</h4> -->
+      <button type="button" class="close" aria-label="Close" (click)="d()">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <rb-registeration [adminMode]="true" (userAdded)="userAdded($event)"></rb-registeration>
+    </div>
+
+  </ng-template>

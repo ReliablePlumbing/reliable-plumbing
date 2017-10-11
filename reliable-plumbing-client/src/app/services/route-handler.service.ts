@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { EnvironmentService } from './environment.service';
-import { UserTypeEnum } from '../models/enums';
+import { Role } from '../models/enums';
 import { Location } from '@angular/common'
 
 @Injectable()
@@ -16,7 +16,7 @@ export class RouteHandlerService {
 
   routeToDefault() {
     let currentUser = this.environmentService.currentUser;
-    this.router.navigate(['/home'])
+    this.router.navigate(['/'])
     
     // switch (currentUser.userTypeEnum) {
     //   case UserTypeEnum.admin:

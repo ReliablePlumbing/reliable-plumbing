@@ -1,10 +1,12 @@
 /*** Entities ***/
-export * from './entities/user';
 export * from './entities/base/base-entity';
+export * from './entities/user';
+export * from './entities/mail-log';
 
 /*** Enums ***/
 export * from './enums/role';
 export * from './enums/error-type';
+export * from './enums/mail-status';
 
 /*** Errors ***/
 export * from './errors/errors';

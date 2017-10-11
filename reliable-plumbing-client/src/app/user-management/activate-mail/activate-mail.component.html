@@ -1,0 +1,9 @@
+
+<h3 *ngIf="loading">Loading...</h3>
+
+<div *ngIf="!loading">
+  <h3 *ngIf="emailActivated">Email Activated Successfully</h3>
+  <h3 *ngIf="!emailActivated">Link is expired, please login and request for another activation link from your profile</h3>
+
+  <h3 [routerLink]="['/']">Go to home</h3>
+</div>

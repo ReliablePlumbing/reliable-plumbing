@@ -22,7 +22,7 @@ export class AuthorizationProvider {
         let key = ConfigService.config.authorization.tokenKey; // get the key from the configuration
         let expiresIn = ConfigService.config.authorization.tokenExpiration;
         let payload = {
-            username: user.username
+            email: user.email
         }
         return {
             token: jwt.sign(payload, key, {
