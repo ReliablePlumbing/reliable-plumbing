@@ -1,78 +1,100 @@
 <section class="register">
-    <div class="register-container">
-        <div class="container">
-            <form [formGroup]="registerForm" novalidate>
-                <div class="row">
-                    <div class="col-md-12">
-                        <h3>Register Now</h3>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label for="username" class="">Username <i *ngIf="getControlValidation('username','required')">*</i></label>
-                            <input type="text" name="username" class="form-control" formControlName="username" [(ngModel)]="user.username" />
-                            <br/>
-                            <span class="error-message" *ngIf="getControlValidation('username','maxlength', false)">username must be less than 30 characters</span>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label for="firstName" class="">FirstName<i *ngIf="getControlValidation('firstName','required')">*</i></label>
-                            <input type="text" name="firstName" class="form-control" formControlName="firstName" [(ngModel)]="user.firstName" />
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label for="lastName" class="">LastName</label>
-                            <input type="text" name="lastName" class="form-control" formControlName="lastName" [(ngModel)]="user.lastName" />
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label for="email" class="">Email<i *ngIf="getControlValidation('email','required')">*</i></label>
-                            <input type="email" name="email" class="form-control" formControlName="email" [(ngModel)]="user.email" /> ex: exmple@domain.com
-                            <br/>
-                            <span class="error-message" *ngIf="getControlValidation('email','email', false)">Please enter a valid email</span>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label for="mobile" class="">Mobile<i *ngIf="getControlValidation('mobile','required')">*</i></label>
-                            <input type="tel" name="mobile" class="form-control" formControlName="mobile" [(ngModel)]="user.mobile" />
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label for="tel" class="">Tel</label>
-                            <input type="tel" name="tel" class="form-control" formControlName="tel" [(ngModel)]="user.tel" />
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label for="password" class="">Password<i *ngIf="getControlValidation('password','required')">*</i></label>
-                            <input type="text" name="password" class="form-control" formControlName="password" [(ngModel)]="user.password" />
-                            <br/>
-                            <span class="error-message" *ngIf="getControlValidation('password','pattern')">Password invalid</span>
-                        </div>
-                    </div>
-                    <div class="col-md-12">
-                        <div>
-                            <p>Password length must not be less than 8 characters and contains the following:</p>
-                            <ul>
-                                <li>At least one upper case English letter</li>
-                                <li>At least one lower case English letter</li>
-                                <li>At least one digit</li>
-                                <li>At least one special character</li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="col-md-12">
-                        <button type="submit" (click)="userRegister()" class="btn btn-success">Sign up</button> &nbsp;
-                        <!-- <button type="reset" (click)="revert()" class="btn btn-danger">Clear</button> -->
-                    </div>
-                </div>
-            </form>
+  <div class="register-container">
+    <div class="container">
+      <form [formGroup]="registerForm" novalidate>
+        <div class="row">
+          <div class="col-md-12">
+            <h3>Sign up</h3>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group">
+              <label for="email" class="">Email
+                <i *ngIf="getControlValidation('email','required')">*</i>
+              </label>
+              <input type="email" name="email" class="form-control" placeholder="ex: exmple@domain.com" formControlName="email" [(ngModel)]="user.email"
+              />
+              <span class="error-message" *ngIf="getControlValidation('email','email', false)">Please enter a valid email</span>
+              <span class="error-message" *ngIf="getControlValidation('email','emailExists')">Email already exists :
+                <a class="" [routerLink]="['/login']">Sign in</a>
+              </span>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group">
+              <label for="mobile" class="">Mobile
+                <i *ngIf="getControlValidation('mobile','required')">*</i>
+              </label>
+              <input type="tel" name="mobile" class="form-control" formControlName="mobile" [(ngModel)]="user.mobile" />
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group">
+              <label for="firstName" class="">First Name
+                <i *ngIf="getControlValidation('firstName','required')">*</i>
+              </label>
+              <input type="text" name="firstName" class="form-control" formControlName="firstName" [(ngModel)]="user.firstName" />
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group">
+              <label for="lastName" class="">Last Name </label>
+              <input type="text" name="lastName" class="form-control" formControlName="lastName" [(ngModel)]="user.lastName" />
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group">
+              <label for="password" class="">Password
+                <i *ngIf="getControlValidation('password','required')">*</i>
+              </label>
+              <input type="password" name="password" class="form-control" formControlName="password" [(ngModel)]="user.password" />
+              <span class="error-message" *ngIf="getControlValidation('password','pattern', false)">Password invalid</span>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group">
+              <label for="confirmPassword" class="">Confirm Password
+                <i *ngIf="getControlValidation('confirmPassword','required')">*</i>
+              </label>
+              <input type="password" name="confirmPassword" class="form-control" formControlName="confirmPassword" [(ngModel)]="user.confirmPassword"
+              />
+              <span class="error-message" *ngIf="getControlValidation('confirmPassword','matchOther', false)">Passwords are not the same</span>
+            </div>
+          </div>
+          <div *ngIf="adminMode" class="col-md-6">
+            <div class="form-group" formGroupName="roles">
+              <label>Roles</label>
+              <div class="form-check form-check-inline">
+                <label class="form-check-label">
+                  <input class="form-check-input" type="checkbox" formControlName="technician" [value]="role.Technician"> Technician
+                </label>
+              </div>
+              <div class="form-check form-check-inline">
+                <label class="form-check-label">
+                  <input class="form-check-input" type="checkbox" formControlName="admin" [value]="role.Admin"> Admin
+                </label>
+              </div>
+              <span class="error-message" *ngIf="trySubmit && registerForm.hasError('noRole','roles')">Please select at least one role</span>
+            </div>
+          </div>
+          <div class="col-md-12">
+            <div>
+              <p>Password length must not be less than 8 characters and contains the following :</p>
+              <ul>
+                <li>At least one upper case English letter</li>
+                <li>At least one lower case English letter</li>
+                <li>At least one digit</li>
+                <li>At least one special character</li>
+              </ul>
+            </div>
+          </div>
+          <div class="col-md-12">
+            <button type="submit" (click)="userRegister()" class="btn btn-success">Sign up</button> &nbsp;
+            <button type="reset" (click)="resetForm()" class="btn btn-danger">Clear</button>
+          </div>
         </div>
+      </form>
     </div>
-    <!-- /.registeration-container -->
+  </div>
+  <!-- /.registeration-container -->
 </section>
 <!-- /.registeration -->

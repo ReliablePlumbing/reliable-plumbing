@@ -12,7 +12,7 @@ export class UserManager {
     @Inject(dependcies.mailNotifierManager)
     private mailNotifier: MailNotifierManager;
 
-    registerUser(user: User): Promise<User> {
+    registerUser(user: User): Promise<any> {
         if (user == null)
             throw new Error('user cann\'t be null');
 
@@ -24,11 +24,11 @@ export class UserManager {
         user.salt = AccountSecurity.generateSalt();
         user.hashedPassword = AccountSecurity.hashPassword(user.password, user.salt);
         user.creationDate = new Date();
-        if (user.roles == null)
+        if (user.roles == null || user.roles.length == 0)
             user.roles = [Role.Customer];
 
         return new Promise<User>((resolve, error) => {
-            this.userRepo.findByUserName(user.username).then(firstResult => {
+            this.userRepo.findByEmail(user.email).then(firstResult => {
                 if (firstResult != null)
                     return error(new AppError('user already exists', ErrorType.validation));
 
@@ -37,7 +37,7 @@ export class UserManager {
                     this.mailNotifier.sendMail(user.email, emailContent.subject, emailContent.content);
                     return resolve(result);
                 });
-           });
+            });
         });
     }
 
@@ -45,10 +45,10 @@ export class UserManager {
     authenticateUser(user: User): Promise<boolean> {
         let loginError = new Error('username or password is incorrect');
         return new Promise<boolean>((resolve, reject) => {
-            if (user == null || user.username == null || user.password == null)
+            if (user == null || user.email == null || user.password == null)
                 reject(loginError);
             else {
-                this.userRepo.findByUserName(user.username).then(result => {
+                this.userRepo.findByEmail(user.email).then(result => {
                     if (result == null)
                         return reject(loginError);
 
@@ -63,18 +63,27 @@ export class UserManager {
         })
     }
 
-    activateMail(token: string): Promise<boolean>{
+    checkEmailExistence(email: string) {
+        return new Promise<boolean>((resolve, reject) => {
+            this.userRepo.findByEmail(email).then(result => {
+                resolve(result != null);
+            });
+
+        });
+    }
+
+    activateMail(token: string): Promise<boolean> {
         return new Promise<boolean>((resolve, reject) => {
             TokenManager.decodeToken(token).then(decodedToken => {
-                if(decodedToken == null)
+                if (decodedToken == null)
                     return resolve(false);
-                let username = decodedToken.username;
+                // let username = decodedToken.username;
                 let email = decodedToken.email;
 
-                this.userRepo.findByUserName(username).then(user => {
-                    if(user == null || user.email == null || user.email.toLowerCase() != email.toLowerCase() || user.isEmailVerfied)
+                this.userRepo.findByEmail(email).then(user => {
+                    if (user == null || user.email == null || user.email.toLowerCase() != email.toLowerCase() || user.isEmailVerfied)
                         return resolve(false);
-                    
+
                     user.isEmailVerfied = true;
                     this.userRepo.update(user).then(res => {
                         return resolve(true);
@@ -84,22 +93,43 @@ export class UserManager {
         });
     }
 
+    getAllSystemUsers() {
+        return new Promise<User[]>((resolve, reject) => {
+            let roles = [Role.Admin, Role.Technician, Role.Customer];
+
+            this.userRepo.getUserWithRoles(roles).then(result => {
+                if(result == null)
+                    return resolve([]);
+
+                return resolve(result);
+            });
+        });
+    }
+
+    deleteUserById(id: string){
+        return new Promise<boolean>((resolve, reject) => {
+            this.userRepo.deleteById(id).then(result => {
+                return resolve(result);
+            })
+        });
+    }
+    // region private methods
     private validateUser(user: User): string[] {
         let errors: string[] = []
-        if (user.username == null || user.username.length == 0)
-            errors.push('username cann\'t be empty');
-        if (user.username != null && user.username.length > 30)
-            errors.push('username must be less than 30 characters');
-        if (user.password == null || user.password.length == 0)
-            errors.push('password cann\'t be empty');
-        errors = errors.concat(this.validatePasswordFormat(user.password));
-        if (user.firstName == null || user.firstName.length == 0)
-            errors.push('first name cann\'t be empty');
+        // if (user.username == null || user.username.length == 0)
+        //     errors.push('username cann\'t be empty');
+        // if (user.username != null && user.username.length > 30)
+        //     errors.push('username must be less than 30 characters');
         if (user.email == null || user.email.length == 0)
             errors.push('email cann\'t be empty');
         // let emailRegex = new RegExp('');
         // if (!emailRegex.test(user.email))
         //     errors.push('email is invalid');
+        if (user.password == null || user.password.length == 0)
+            errors.push('password cann\'t be empty');
+        errors = errors.concat(this.validatePasswordFormat(user.password));
+        if (user.firstName == null || user.firstName.length == 0)
+            errors.push('first name cann\'t be empty');
         if (user.mobile == null || user.mobile.length == 0)
             errors.push('mobile cann\'t be empty');
         // let mobileRegex = new RegExp('');
@@ -125,7 +155,7 @@ export class UserManager {
 
     private constructVerificationMail(user: User) {
         let token = TokenManager.generateToken({
-            username: user.username,
+            // username: user.username,
             email: user.email
         })
         let url = ConfigService.config.activationMailUrl + token;
@@ -140,4 +170,6 @@ export class UserManager {
             content: content
         }
     }
+
+    // endregion
 }

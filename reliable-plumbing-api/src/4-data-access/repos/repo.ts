@@ -39,6 +39,15 @@ export class Repo<T extends BaseEntity>{
         })
     }
 
+    deleteById(id: string){
+        return new Promise<boolean>((resolve, reject)=>{
+            let model = this.createSet();
+            model.findByIdAndRemove(id, (err, res) => {
+                if(err == null)
+                    return resolve(true);
+            })
+        });
+    }
     // find(entity: T): Promise<T> {
     //     return this.model.collection.findOne(entity.id);
     // }

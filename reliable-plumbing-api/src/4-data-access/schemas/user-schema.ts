@@ -3,7 +3,6 @@ import { genericSchema } from './generic-schema';
 
 export var userSchema: genericSchema = {
     schema: new Schema({
-        username: { type: String, required: true },
         hashedPassword: { type: String, required: true },
         salt: { type: String, required: true },
         firstName: { type: String, required: false },
@@ -11,7 +10,6 @@ export var userSchema: genericSchema = {
         email: { type: String, required: true },
         isEmailVerfied: { type: Boolean, required: true, default: false },
         mobile: { type: String, required: true },
-        tel: { type: String, required: true },
         roles: { type: Array, required: true },
         creationDate: { type: Date, required: true },
         createdByUserId: { type: String, required: false }

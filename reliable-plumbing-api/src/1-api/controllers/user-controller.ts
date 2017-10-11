@@ -8,7 +8,7 @@ import { AuthorizationProvider } from '../authorization/authorization-provider';
 @JsonController('/users')
 export class UserController {
 
-    @Inject(dependcies.UserManager) 
+    @Inject(dependcies.UserManager)
     private userManager: UserManager;
 
     @Post('/register')
@@ -35,13 +35,40 @@ export class UserController {
         });
     }
 
+    @Get('/checkEmailExistence')
+    checkEmailExistence( @QueryParam('email') email: string) {
+        return new Promise<boolean>((resolve, reject) => {
+            this.userManager.checkEmailExistence(email).then(result => resolve(result))
+        })
+    }
+
+
     @Get('/activateMail')
-    activateMail(@QueryParam('token') token: string){
+    activateMail( @QueryParam('token') token: string) {
         return new Promise<boolean>((resolve, reject) => {
             this.userManager.activateMail(token).then(result => resolve(result))
         })
     }
 
+    @Get("/getAllSystemUsers")
+    getAllSystemUsers() {
+        return new Promise((resolve, reject) => {
+            this.userManager.getAllSystemUsers().then(result => {
+                let lightModels = [];
+                for(let user of result)
+                    lightModels.push(user.toLightModel());
+                
+                return resolve(lightModels);
+            })
+        })
+    }
+
+    @Delete('/deleteUserById')
+    deleteUserById(@QueryParam('id') id: string){
+        return new Promise((resolve, reject) => {
+            this.userManager.deleteUserById(id).then(result => resolve(result));
+        })
+    }
     @Get("/validateToken")
     @Authorized()
     validateToken() {
