@@ -7,7 +7,7 @@
     // "outDir": "dist",
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
-    "strict": true,
+    "strict": false,
     "typeRoots": [
       "node_modules/@types"
     ],

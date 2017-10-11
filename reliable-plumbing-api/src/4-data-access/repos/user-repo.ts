@@ -8,7 +8,7 @@ export class UserRepo extends Repo<User> {
         super(userSchema)
     }
     
-    findByUserName(user: User): Promise<User> {
+    findByUserName(user: User): Promise<User|null> {
         let model = this.createSet();
         return new model(user).collection.findOne({ username: user.username });
     }
