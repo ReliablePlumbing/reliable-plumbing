@@ -12,8 +12,9 @@ import { RouteHandlerService } from '../../services/route-handler.service';
 })
 export class LoginComponent {
   trySubmit = false;
-  userName: string;
+  userEmail: string;
   userPassword: string;
+  rememberMe: boolean = false;
   constructor(
     private userManagementService: UserManagementService, private notificationService: NotificationService, private environmentService: EnvironmentService,
     private routeHandler: RouteHandlerService
@@ -22,17 +23,17 @@ export class LoginComponent {
   userLogin(loginForm: any) {
     this.trySubmit = true;
     if (loginForm.valid) {
-      this.userManagementService.login(this.userName, this.userPassword)
+      this.userManagementService.login(this.userEmail, this.userPassword, this.rememberMe)
         .subscribe(result => {
           this.environmentService.currentUser = null;
           if (result) {
             this.routeHandler.routeToDefault();
           }
           else
-            this.notificationService.printErrorMessage('username or password is incorrect');
+            this.notificationService.printErrorMessage('Email or password is incorrect');
         },
         error => {
-          this.notificationService.printErrorMessage('username or password is incorrect');
+          this.notificationService.printErrorMessage('Email or password is incorrect');
         });
     }
   }

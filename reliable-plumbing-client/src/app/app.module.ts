@@ -8,18 +8,21 @@ import { ServicesModule } from './services/services.module';
 // components
 import { AppComponent } from './app.component';
 import { HomeComponent } from './home/home.component';
+import { TestComponent } from './test/test.component';
+import { TestService } from './test/test.service';
 
 
 @NgModule({
   declarations: [
     AppComponent,
-    HomeComponent
+    HomeComponent,
+    TestComponent
   ],
   imports: [
     BrowserModule/*.withServerTransition({appId: 'ang4-seo-pre'})*/,
     AppRoutingModule, ServicesModule, UserManagementModule
   ],
-  providers: [],
+  providers: [TestService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

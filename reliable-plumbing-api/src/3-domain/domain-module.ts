@@ -2,6 +2,7 @@
 export * from './entities/base/base-entity';
 export * from './entities/user';
 export * from './entities/mail-log';
+export * from './entities/user-login';
 
 /*** Enums ***/
 export * from './enums/role';

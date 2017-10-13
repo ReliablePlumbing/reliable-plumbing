@@ -9,12 +9,13 @@ const dbContext: data.MongoContext = new data.MongoContext();
 
 export function registerDependencies() {
 
-    /*** Business ***/ 
+    /*** Business ***/
     Container.registerService({ id: dependcies.UserManager, type: business.UserManager });
     Container.registerService({ id: dependcies.mailNotifierManager, type: business.MailNotifierManager });
 
     /*** Data Access ***/
     Container.registerService({ id: dependcies.MongoContext, type: data.MongoContext, instance: dbContext });
     Container.registerService({ id: dependcies.UserRepo, type: data.UserRepo });
+    Container.registerService({ id: dependcies.UserLoginRepo, type: data.UserLoginRepo });
     Container.registerService({ id: dependcies.MailLogRepo, type: data.MailLogRepo });
 }

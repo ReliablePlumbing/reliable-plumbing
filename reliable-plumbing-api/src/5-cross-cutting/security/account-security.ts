@@ -16,7 +16,12 @@ export class AccountSecurity {
         hash.update(password);
 
         return hash.digest('hex');
-
     }
 
+    static hashValidator(validator: string, salt: string): string {
+        let hash = crypto.createHmac('sha512', salt);
+        hash.update(validator);
+
+        return hash.digest('hex');
+    }
 }

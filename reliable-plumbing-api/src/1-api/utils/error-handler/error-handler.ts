@@ -6,6 +6,8 @@ export class CustomErrorHandler implements ExpressErrorMiddlewareInterface {
 
     error(error: any, request: any, response: Response, next: (err: any) => any) {
         let statusCode = 500;
+        if (error.httpCode)
+            statusCode = error.httpCode;
         let body = error.message; // check for the environemt here
 
         if (error.errorType != null) {

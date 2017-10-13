@@ -1,5 +1,6 @@
-import { User, Role, AppError, ErrorType } from '../../3-domain/domain-module';
+import { User, Role, AppError, ErrorType, UserLogin } from '../../3-domain/domain-module';
 import { UserRepo } from '../../4-data-access/data-access.module';
+import { UserLoginRepo } from '../../4-data-access/data-access.module';
 import { MailNotifierManager } from '../mail-notifier/mail-notifier-manager';
 import { AccountSecurity, dependcies, TokenManager, ConfigService } from '../../5-cross-cutting/cross-cutting.module';
 import { Inject } from 'typedi';
@@ -8,6 +9,9 @@ export class UserManager {
 
     @Inject(dependcies.UserRepo)
     private userRepo: UserRepo;
+
+    @Inject(dependcies.UserLoginRepo)
+    private userLoginRepo: UserLoginRepo;
 
     @Inject(dependcies.mailNotifierManager)
     private mailNotifier: MailNotifierManager;
@@ -41,10 +45,49 @@ export class UserManager {
         });
     }
 
+    authenticatePersistentLogin(userLogin: UserLogin): Promise<any> {
+        let loginError = new Error('email or password is incorrect');
+        return new Promise<any>((resolve, reject) => {
+            if (userLogin == null || userLogin.email == null || userLogin.selector == null || userLogin.validator == null)
+                reject(loginError);
+            else {
+                this.userLoginRepo.findLogin(userLogin.selector).then(login => {
+                    if (login == null) // saved logins deleted
+                        return reject(loginError);
+                    let validatorHash = AccountSecurity.hashValidator(userLogin.validator, userLogin.email);
+                    if (login.hashedValidator != validatorHash)// A theft is assumed // clear all user saved logins
+                        reject(loginError);
+                    else { // Update saved login and authenticate user
+                        this.userRepo.findByEmail(userLogin.email).then(user => {
+                            if (user == null)
+                                return reject(loginError);
+                            resolve(user);
+                        });
+                    }
+                });
+            }
+        })
+    }
 
-    authenticateUser(user: User): Promise<boolean> {
-        let loginError = new Error('username or password is incorrect');
-        return new Promise<boolean>((resolve, reject) => {
+    updatePersistentUserLogin(userLogin: UserLogin) {
+        return new Promise<UserLogin>((resolve, reject) => {
+            let validator = TokenManager.generateRandomSeries();
+            userLogin.validator = validator;
+            userLogin.id = userLogin.selector; //must have atm
+            userLogin.hashedValidator = AccountSecurity.hashValidator(validator, userLogin.email);
+            this.userLoginRepo.findOneAndUpdate(userLogin).then(result => {
+                //check if updated successfully
+                if (result != null) {
+                    result.validator = validator;
+                    return resolve(result);
+                }
+            });
+        });
+    }
+
+    authenticateUser(user: User): Promise<any> {
+        let loginError = new Error('email or password is incorrect');
+        return new Promise<any>((resolve, reject) => {
             if (user == null || user.email == null || user.password == null)
                 reject(loginError);
             else {
@@ -57,7 +100,7 @@ export class UserManager {
                     if (result.hashedPassword != passwordHash)
                         reject(loginError);
 
-                    resolve(true);
+                    resolve(result);
                 });
             }
         })
@@ -98,7 +141,7 @@ export class UserManager {
             let roles = [Role.Admin, Role.Technician, Role.Customer];
 
             this.userRepo.getUserWithRoles(roles).then(result => {
-                if(result == null)
+                if (result == null)
                     return resolve([]);
 
                 return resolve(result);
@@ -106,7 +149,7 @@ export class UserManager {
         });
     }
 
-    deleteUserById(id: string){
+    deleteUserById(id: string) {
         return new Promise<boolean>((resolve, reject) => {
             this.userRepo.deleteById(id).then(result => {
                 return resolve(result);
@@ -169,6 +212,21 @@ export class UserManager {
             subject: subject,
             content: content
         }
+    }
+
+    createPersistentUserLogin(user: User) {
+        let validator = TokenManager.generateRandomSeries();
+        let userLogin: UserLogin = new UserLogin({
+            email: user.email,
+            validator: validator,
+            hashedValidator: AccountSecurity.hashValidator(validator, user.email),
+            creationDate: new Date()
+        });
+        return new Promise<UserLogin>((resolve, reject) => {
+            this.userLoginRepo.add(userLogin).then(result => {
+                return resolve(result);
+            });
+        });
     }
 
     // endregion

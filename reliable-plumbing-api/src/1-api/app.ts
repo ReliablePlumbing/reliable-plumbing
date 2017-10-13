@@ -17,13 +17,13 @@ export class App {
         return createExpressServer({
             routePrefix: '/api',
             cors: {
-                allowedHeaders: ["Origin", "X-Requested-With", "Content-Type", "Accept", "X-Access-Token"],
+                allowedHeaders: ["Origin", "X-Requested-With", "Content-Type", "Accept", "X-Access-Token", "authorization"],
                 // "Access-Control-Allow-Origin","Access-Control-Allow-Headers","Origin, X-Requested-With, Content-Type", "CORELATION_ID"],
-                 credentials: true,
-                 methods: "GET,HEAD,OPTIONS,PUT,PATCH,POST,DELETE",
-                 origin: '*', // allow only for angular app when deployment, social media login
-                 preflightContinue: false
-            }, 
+                credentials: true,
+                methods: "GET,HEAD,OPTIONS,PUT,PATCH,POST,DELETE",
+                origin: '*', // allow only for angular app when deployment, social media login
+                preflightContinue: false
+            },
             defaultErrorHandler: false,
             controllers: this.registerControllers(),
             middlewares: [CustomErrorHandler],

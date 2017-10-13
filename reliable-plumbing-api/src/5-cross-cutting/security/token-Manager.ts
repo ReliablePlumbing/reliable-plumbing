@@ -1,4 +1,5 @@
 import * as jwt from 'jsonwebtoken';
+import * as crypto from 'crypto';
 import { ConfigService } from '../config/config-service';
 
 export class TokenManager {
@@ -23,5 +24,12 @@ export class TokenManager {
         return jwt.sign(payload, key, {
             expiresIn: expiresIn,
         });
+    }
+
+    static generateRandomSeries(): string {
+        let length = 255; // get it from configuration
+        return crypto.randomBytes(Math.ceil(length / 2))
+            .toString('hex')
+            .slice(0, length);
     }
 }

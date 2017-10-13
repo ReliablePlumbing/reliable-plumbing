@@ -10,6 +10,7 @@ import { Container } from 'typedi';
         mailNotifierManager: 'business.MailNotifier',
         // data
         UserRepo: 'data.UserRepo',
+        UserLoginRepo: 'data.UserLoginRepo',
         MailLogRepo: 'data.MailLogRepo',
         MongoContext: 'data.MongoContext'
 

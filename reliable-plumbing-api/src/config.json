@@ -1,7 +1,7 @@
 {
     "authorization":{
         "tokenKey": "nodeStarterTokenKeyShouldBeUniqueAndLongString",
-        "tokenExpiration": "1 day"
+        "tokenExpiration": "1h"
     },
     "db": {
         "mongoConnectionString": "mongodb://localhost:27017/developmentDb"

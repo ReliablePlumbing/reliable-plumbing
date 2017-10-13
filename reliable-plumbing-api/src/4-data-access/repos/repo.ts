@@ -39,11 +39,33 @@ export class Repo<T extends BaseEntity>{
         })
     }
 
-    deleteById(id: string){
-        return new Promise<boolean>((resolve, reject)=>{
+    // findOneAndUpdate(entity: T) {
+    //     return new Promise<any>((resolve, reject) => {
+    //         let model = this.createSet();
+    //         model.update()
+    //         new model(entity).update(entity).then(res => {
+    //             let success = true;
+    //             if (res.nModified == 0)
+    //                 success = false;
+    //             return resolve(success)
+    //         });
+    //     })
+    // }
+
+    findOneAndUpdate(entity: T) {
+        let model = this.createSet();
+        return new Promise<any>((resolve, reject) => {
+            let aa = model.findOneAndUpdate({ _id: entity.id }, entity, { new: true }, (err, result) => {
+                return resolve(result);
+            });
+        });
+    }
+
+    deleteById(id: string) {
+        return new Promise<boolean>((resolve, reject) => {
             let model = this.createSet();
             model.findByIdAndRemove(id, (err, res) => {
-                if(err == null)
+                if (err == null)
                     return resolve(true);
             })
         });
