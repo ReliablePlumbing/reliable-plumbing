@@ -1,24 +1,42 @@
-<div>
-  <div>current user</div>
-  <form #loginForm="ngForm" (ngSubmit)="userLogin(loginForm)" novalidate>
-
-    <input type="text" name="userEmail" #userEmailControl="ngModel" [(ngModel)]="userEmail" placeholder="Email" required/>
-    <label *ngIf="!userEmailControl.valid && (userEmailControl.dirty || trySubmit)" class="alert alert-danger">* required</label>
-
-    <input type="password" name="userPassword" #userPasswordControl="ngModel" [(ngModel)]="userPassword" placeholder="password....."
-      required/>
-    <label *ngIf="!userPasswordControl.valid && (userPasswordControl.dirty || trySubmit)" class="alert alert-danger">* required</label>
-
-    <a href="#forgot-password-url" class="login-form__forgot-password">forgot password</a>
-
-    <button type="submit">Login</button>
-
-    <input type="checkbox" id="rememberMe" [checked]="rememberMe" (change)="rememberMe = !rememberMe" />
-    <label for="rememberMe">remember me</label>
-  </form>
-</div>
-
-<div>
-  <div>New user</div>
-  <a href="#" [routerLink]="['/register']">Sign up</a>
-</div>
+<section class="register">
+    <div class="register-container">
+        <div class="container">
+            <form #loginForm="ngForm" (ngSubmit)="userLogin(loginForm)" novalidate>
+                <div class="row">
+                    <div class="col-md-12">
+                        <h3>Login</h3>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label>Username / Email:</label>
+                            <input class="form-control" type="text" name="userEmail" #userEmailControl="ngModel" [(ngModel)]="userEmail" placeholder="Enter Your Email" required/>
+                            <span class="error-message" *ngIf="!userEmailControl.valid && (userEmailControl.dirty || trySubmit)">* required</span>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label>password:</label>
+                            <input class="form-control" type="password" name="userPassword" #userPasswordControl="ngModel" [(ngModel)]="userPassword" placeholder="Enter Your Password" required/>
+                            <span class="error-message" *ngIf="!userPasswordControl.valid && (userPasswordControl.dirty || trySubmit)">* required</span>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <a href="#forgot-password-url" class="login-form__forgot-password forget-password">forgot password</a>
+                    </div>
+                    <div class="col-md-12">
+                        <button type="submit" class="btn btn-success">Login</button>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <input type="checkbox" id="rememberMe" [checked]="rememberMe" (change)="rememberMe = !rememberMe" />
+                            <label for="rememberMe">remember me</label>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div>New User ? <a href="#" [routerLink]="['/register']">Sign up</a></div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>

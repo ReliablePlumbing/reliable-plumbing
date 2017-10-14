@@ -211,3 +211,16 @@ body {
         }
     }
 }
+
+.top-nav {
+    display: inline-block !important;
+    width: 100%;
+    text-align: right;
+    li {
+        float: right;
+        a {
+            padding: 0px 15px;
+            font-size: 14px;
+        }
+    }
+}
