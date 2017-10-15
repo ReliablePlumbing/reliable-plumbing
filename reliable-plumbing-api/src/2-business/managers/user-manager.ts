@@ -3,8 +3,9 @@ import { UserRepo } from '../../4-data-access/data-access.module';
 import { UserLoginRepo } from '../../4-data-access/data-access.module';
 import { MailNotifierManager } from '../mail-notifier/mail-notifier-manager';
 import { AccountSecurity, dependcies, TokenManager, ConfigService } from '../../5-cross-cutting/cross-cutting.module';
-import { Inject } from 'typedi';
+import { Inject, Service } from 'typedi';
 
+@Service()
 export class UserManager {
 
     @Inject(dependcies.UserRepo)
@@ -20,16 +21,23 @@ export class UserManager {
         if (user == null)
             throw new Error('user cann\'t be null');
 
-        let errors = this.validateUser(user);
+        let errors = this.validateUser(user, !this.isSystemUser(user.roles));
         if (errors.length > 0) {
             throw new AppError(errors, ErrorType.validation);
         }
 
-        user.salt = AccountSecurity.generateSalt();
-        user.hashedPassword = AccountSecurity.hashPassword(user.password, user.salt);
+        if (user.password != null) {
+            user.salt = AccountSecurity.generateSalt();
+            user.hashedPassword = AccountSecurity.hashPassword(user.password, user.salt);
+        }
         user.creationDate = new Date();
-        if (user.roles == null || user.roles.length == 0)
+        if (user.roles == null || user.roles.length == 0) {
             user.roles = [Role.Customer];
+            user.isActivated = true;
+            user.activationDate = new Date();
+        }
+        else
+            user.isActivated = false;
 
         return new Promise<User>((resolve, error) => {
             this.userRepo.findByEmail(user.email).then(firstResult => {
@@ -116,21 +124,58 @@ export class UserManager {
     }
 
     activateMail(token: string): Promise<boolean> {
-        return new Promise<boolean>((resolve, reject) => {
+        return new Promise<any>((resolve, reject) => {
             TokenManager.decodeToken(token).then(decodedToken => {
+
                 if (decodedToken == null)
-                    return resolve(false);
-                // let username = decodedToken.username;
+                    return resolve({ success: false, message: 'Activation Link is Expired', user: null });
                 let email = decodedToken.email;
 
                 this.userRepo.findByEmail(email).then(user => {
-                    if (user == null || user.email == null || user.email.toLowerCase() != email.toLowerCase() || user.isEmailVerfied)
-                        return resolve(false);
+                    if (user == null)
+                        return resolve({ success: false, message: 'User doesn\'t Exist', user: null });
+                    if (user.isEmailVerfied && user.isActivated)
+                        return resolve({ success: true, message: 'Email is activated', user: user.toLightModel() });
 
                     user.isEmailVerfied = true;
+                    user.emailActivationDate = new Date();
                     this.userRepo.update(user).then(res => {
-                        return resolve(true);
-                    })
+                        return resolve({ success: true, message: 'Email is activated', user: user.toLightModel() });
+                    });
+                })
+            });
+        });
+    }
+
+    completeUserRegistration(userWithToken) {
+        return new Promise<boolean>((resolve, reject) => {
+            let token = userWithToken.token;
+            let editedUser = userWithToken.user;
+
+            TokenManager.decodeToken(token).then(decodedToken => {
+
+                if (decodedToken == null)
+                    return reject(new AppError('Not Allowed', ErrorType.validation));
+                let email = decodedToken.email;
+
+                this.userRepo.findByEmail(email).then(user => {
+                    if (user == null)
+                        return reject(new AppError('User doesn\'t Exist', ErrorType.validation));
+                    if (user.isActivated)
+                        return reject(new AppError('User already activated', ErrorType.validation));
+
+                    let errors = this.validateUser(editedUser);
+                    if (errors.length > 0)
+                        throw new AppError(errors, ErrorType.validation);
+
+                    editedUser.salt = AccountSecurity.generateSalt();
+                    editedUser.hashedPassword = AccountSecurity.hashPassword(editedUser.password, editedUser.salt);
+                    editedUser.isActivated = true;
+                    editedUser.activationDate = new Date();
+                    this.userRepo.findOneAndUpdate(editedUser).then(res => {
+
+                        return resolve(res != null);
+                    });
                 })
             });
         });
@@ -138,7 +183,7 @@ export class UserManager {
 
     getAllSystemUsers() {
         return new Promise<User[]>((resolve, reject) => {
-            let roles = [Role.Admin, Role.Technician, Role.Customer];
+            let roles = [Role.Admin, Role.Technician];
 
             this.userRepo.getUserWithRoles(roles).then(result => {
                 if (result == null)
@@ -156,8 +201,23 @@ export class UserManager {
             })
         });
     }
+
+    checkUserRoles(email: string, roles: Role[]) {
+        return new Promise<boolean>((resolve, reject) => {
+            this.userRepo.findByEmail(email).then(user => {
+                if (!user.isActivated)
+                    return resolve(false);
+                for (let userRole of user.roles)
+                    for (let role of roles)
+                        if (userRole == role)
+                            return resolve(true);
+
+                resolve(false);
+            })
+        });
+    }
     // region private methods
-    private validateUser(user: User): string[] {
+    private validateUser(user: User, validatePassword = true): string[] {
         let errors: string[] = []
         // if (user.username == null || user.username.length == 0)
         //     errors.push('username cann\'t be empty');
@@ -168,9 +228,11 @@ export class UserManager {
         // let emailRegex = new RegExp('');
         // if (!emailRegex.test(user.email))
         //     errors.push('email is invalid');
-        if (user.password == null || user.password.length == 0)
-            errors.push('password cann\'t be empty');
-        errors = errors.concat(this.validatePasswordFormat(user.password));
+        if (validatePassword) {
+            if (user.password == null || user.password.length == 0)
+                errors.push('password cann\'t be empty');
+            errors = errors.concat(this.validatePasswordFormat(user.password));
+        }
         if (user.firstName == null || user.firstName.length == 0)
             errors.push('first name cann\'t be empty');
         if (user.mobile == null || user.mobile.length == 0)
@@ -180,6 +242,17 @@ export class UserManager {
         //     errors.push('mobile is invalid');
 
         return errors;
+    }
+
+    private isSystemUser(roles: Role[]) {
+        if (roles == null || roles.length == 0)
+            return false
+
+        for (let role of roles)
+            if (role == Role.Admin || role == Role.Technician)
+                return true;
+
+        return false;
     }
 
     private validatePasswordFormat(password: string): string[] {
@@ -198,15 +271,16 @@ export class UserManager {
 
     private constructVerificationMail(user: User) {
         let token = TokenManager.generateToken({
-            // username: user.username,
             email: user.email
         })
         let url = ConfigService.config.activationMailUrl + token;
-        let subject = 'Email Activation';
+        let isSystemUser = user.roles.findIndex(role => role == Role.Customer) == -1;
+        let subject = isSystemUser ? 'Account & Email ' : 'Email ' + 'Activation';
 
+        let contentMessage = isSystemUser ? 'Account & Email Activation' : 'Email Activation';
         // todo: get template
-        let content = `<h3>please follow the link bellow to activate your mail address<h3>\n
-                        <a href="${url}">Activate Email<a>`;
+        let content = `<h3>please follow the link bellow to activate your ${subject}<h3>\n
+                        <a href="${url}">${subject}<a>`;
 
         return {
             subject: subject,

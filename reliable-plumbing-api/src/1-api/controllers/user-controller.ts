@@ -31,10 +31,11 @@ export class UserController {
 
             this.userManager.authenticateUser(loginCredentials.user).then((result: User) => {
                 let user = new User(result);
+                let tokenPayload = { email: user.email, roles: user.roles };
                 if (loginCredentials.rememberMe) {
                     this.userManager.createPersistentUserLogin(loginCredentials.user).then((userLogin: UserLogin) => {
                         resolve({
-                            token: AuthorizationProvider.generateToken(result),
+                            token: AuthorizationProvider.generateToken(tokenPayload),
                             user: user.toLightModel(),
                             rememberMe: userLogin.toLightModel()
                         });
@@ -42,7 +43,7 @@ export class UserController {
                 }
                 else {
                     resolve({
-                        token: AuthorizationProvider.generateToken(result),
+                        token: AuthorizationProvider.generateToken(tokenPayload),
                         user: user.toLightModel(),
                         rememberMe: null
                     });
@@ -85,7 +86,15 @@ export class UserController {
         })
     }
 
+    @Post('/completeUserRegistration')
+    completeUserRegistration( @Body() userWithToken: string) {
+        return new Promise<boolean>((resolve, reject) => {
+            this.userManager.completeUserRegistration(userWithToken).then(result => resolve(result))
+        })
+    }
+
     @Get("/getAllSystemUsers")
+    @Authorized([Role.Admin])
     getAllSystemUsers() {
         return new Promise((resolve, reject) => {
             this.userManager.getAllSystemUsers().then(result => {
@@ -99,6 +108,7 @@ export class UserController {
     }
 
     @Delete('/deleteUserById')
+    @Authorized([Role.Admin])
     deleteUserById( @QueryParam('id') id: string) {
         return new Promise((resolve, reject) => {
             this.userManager.deleteUserById(id).then(result => resolve(result));

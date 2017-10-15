@@ -1,10 +1,10 @@
-import { Component, OnInit, EventEmitter, Input } from '@angular/core';
+import { Component, OnInit, EventEmitter, Input, Output } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 import { UserManagementService } from '../services/user-management.service';
 import { NotificationService } from '../../services/notification.service';
 import { EnvironmentService } from '../../services/environment.service';
 import { RouteHandlerService } from '../../services/route-handler.service';
-import { Role } from '../../models/enums';
+import { Role, RegistrationMode } from '../../models/enums';
 
 @Component({
   selector: 'rb-registeration',
@@ -13,12 +13,13 @@ import { Role } from '../../models/enums';
 })
 export class RegisterationComponent implements OnInit {
 
-  @Input() adminMode: boolean = false;
+  @Input() mode: RegistrationMode = RegistrationMode.signup;
   registerForm: FormGroup;
   trySubmit: boolean = false;
-  userAdded: EventEmitter<any> = new EventEmitter<any>();
+  @Output() userAdded: EventEmitter<any> = new EventEmitter<any>();
   role = Role;
-  user = {
+  registrationModes = RegistrationMode;
+  @Input() user = {
     password: null,
     confirmPassword: null,
     firstName: null,
@@ -38,32 +39,38 @@ export class RegisterationComponent implements OnInit {
   createForm() {
     this.registerForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.pattern('^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$')]],
-      confirmPassword: ['', [Validators.required, this.matchOtherValidator('password')]],
+      //   password: ['', [Validators.required, Validators.pattern('^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$')]],
+      //    confirmPassword: ['', [Validators.required, this.matchOtherValidator('password')]],
       firstName: ['', Validators.required],
       lastName: [''],
       mobile: ['', Validators.required],//, Validators.pattern('^(\([0-9]{3}\)|[0-9]{3}-)[0-9]{3}-[0-9]{4}$')],
     });
 
-    if (this.adminMode)
-      this.registerForm.addControl('roles', this.fb.group({
-        technician: [''],
-        admin: ['']
-      }, {
-          validator: (group: FormGroup) => {
-            return (group.controls.technician.value == true || group.controls.technician.value == true) ?
-              null : { noRole: true };
-          }
-        }));
+    if (this.mode == RegistrationMode.admin) {
+      this.registerForm.addControl('roles', this.fb.group({ technician: [''], admin: [''] }, {
+        validator: (group: FormGroup) => {
+          return (group.controls.technician.value == true || group.controls.technician.value == true) ? null : { noRole: true };
+        }
+      }));
+    }
+    else {
+      this.registerForm.addControl('password', new FormControl(null, [Validators.required, Validators.pattern('^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$')]))
+      this.registerForm.addControl('confirmPassword', new FormControl(null, [Validators.required, this.matchOtherValidator('password')]));
+    }
 
-    this.registerForm.controls['email'].valueChanges.subscribe(x => {
-      let control = this.registerForm.controls['email']
-      let emailErrors = control.hasError('email') || control.hasError('required');
-      if (!emailErrors) return null;
+    if (this.mode != RegistrationMode.completeProfile)
+      this.registerForm.controls['email'].valueChanges.subscribe(x => {
+        let control = this.registerForm.controls['email']
+        let emailErrors = control.hasError('email') || control.hasError('required');
+        if (emailErrors) return null;
 
-      this.userManagementService.checkEmailExistence(this.user.email)
-        .subscribe(exists => control.setErrors({ emailExists: exists }));
-    })
+        this.userManagementService.checkEmailExistence(this.user.email)
+          .subscribe(exists => {
+            if (!exists) return null;
+            else
+              control.setErrors({ emailExists: exists })
+          });
+      })
   }
 
   matchOtherValidator(otherControlName: string) {
@@ -91,16 +98,29 @@ export class RegisterationComponent implements OnInit {
     }
   }
 
+  handleRolesChange(event) {
+    let checked = event.target.checked;
+    let value = parseInt(event.target.value);
+
+    if (checked)
+      this.user.roles.push(value);
+    else
+      this.user.roles = this.user.roles.filter(role => role != value);
+  }
+
   userRegister() {
     this.trySubmit = true;
     if (this.registerForm.invalid)
       return;
 
-    this.userManagementService.register(this.user).subscribe(x => {
+    if (this.mode != RegistrationMode.completeProfile)
+      this.userManagementService.register(this.user).subscribe(x => {
 
-      this.user.password = this.user.confirmPassword = null;
+        this.user.password = this.user.confirmPassword = null;
+        this.userAdded.emit(this.user)
+      })
+    else
       this.userAdded.emit(this.user)
-    })
   }
 
   getControlValidation(controlName, errorName, beforeSubmit = true) {

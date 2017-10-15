@@ -3,3 +3,9 @@ export enum Role {
     Technician,
     Customer
 } 
+
+export enum RegistrationMode {
+    signup,
+    admin,
+    completeProfile
+}

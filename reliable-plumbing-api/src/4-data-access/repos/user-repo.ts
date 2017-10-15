@@ -13,8 +13,16 @@ export class UserRepo extends Repo<User> {
     }
 
     findByEmail(email: string): Promise<User | null> {
-        let model = this.createSet();
-        return new model().collection.findOne({ email: email });
+        return new Promise<User | null>((resolve, reject) => {
+            let model = this.createSet();
+            return model.findOne({ email: email }, (err, result) => {
+                if (result == null)
+                    return resolve(null);
+                let user = new User(result.toObject({ transform: Object }));
+                return resolve(user);
+
+            });
+        });
     }
 
     getUserWithRoles(roles: Role[]): Promise<User[]> {
@@ -23,14 +31,13 @@ export class UserRepo extends Repo<User> {
         return new Promise<User[]>((resolve, reject) => {
             let aa = model.find({ roles: { $in: roles } }, (err, results) => {
 
-                // .then(results => {
                 let users = [];
                 for (let userModel of results) {
-                    let user = new User(userModel.toObject({transform: Object}));
+                    let user = new User(userModel.toObject({ transform: Object }));
                     users.push(user);
 
                 }
-                return resolve(users)
+                return resolve(users);
             })
                 .catch(err => {
                     let aa = err;

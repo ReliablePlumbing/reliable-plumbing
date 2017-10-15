@@ -13,7 +13,7 @@ export class EnvironmentService {
     }
 
     public get token(): string {
-        return localStorage.getItem(this.tokenVariableName);
+        return JSON.parse(localStorage.getItem(this.tokenVariableName)).token;
     }
 
     public get serializedToken() {

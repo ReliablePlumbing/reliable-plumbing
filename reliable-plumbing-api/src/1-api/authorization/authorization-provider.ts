@@ -1,19 +1,27 @@
 // https://paragonie.com/blog/2015/04/secure-authentication-php-with-long-term-persistence#title.2
 import * as jwt from 'jsonwebtoken';
+import { Inject, Container } from 'typedi';
 import { Role, User } from '../../3-domain/domain-module';
-import { ConfigService } from '../../5-cross-cutting/cross-cutting.module';
+import { ConfigService, dependcies } from '../../5-cross-cutting/cross-cutting.module';
+import { UserManager } from '../../2-business/business.module';
 
 export class AuthorizationProvider {
 
+    @Inject(dependcies.UserManager)
+    private usermanager: UserManager;
 
     static validateToken(token: string, roles?: Role[]) {
         return new Promise<boolean>(resolve => {
             let key = ConfigService.config.authorization.tokenKey;
-            jwt.verify(token, key, (err, decoded) => {
+            jwt.verify(token, key, (err, decoded: any) => {
                 if (err)
                     return resolve(false);
+                if (roles != null && roles.length == 0)
+                    return resolve(true);
 
-                return resolve(true);
+                let usermanager: UserManager = Container.get(dependcies.UserManager);
+
+                usermanager.checkUserRoles(decoded.email, decoded.roles).then(hasRole => resolve(hasRole));
             });
         });
     }

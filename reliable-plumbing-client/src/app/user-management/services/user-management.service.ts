@@ -5,12 +5,14 @@ import 'rxjs/add/operator/map';
 import { environment } from '../../../environments/environment';
 import { EnvironmentService } from '../../services/environment.service';
 import { NotificationService } from "../../services/notification.service";
+import { HttpExtensionService } from "../../services/http-extension.service";
 
 @Injectable()
 export class UserManagementService {
   protected basePath = environment.apiUrl + 'users/';
 
-  constructor(private http: Http, private environmentService: EnvironmentService, private notificationService: NotificationService) {
+  constructor(private http: Http, private environmentService: EnvironmentService, private notificationService: NotificationService,
+    private httpExtensionService: HttpExtensionService) {
   }
 
   login(email: string, password: string, rememberMe: boolean): Observable<any> {
@@ -52,7 +54,7 @@ export class UserManagementService {
 
   register(user): Observable<boolean> {
     return this.http.post(this.basePath + 'register', user)
-      .map((response: Response) => response.json())
+      .map((response: Response) => response.json());
   }
 
   checkEmailExistence(email: string): Observable<boolean> {
@@ -60,7 +62,7 @@ export class UserManagementService {
       .map((response: Response) => response.json());
   }
 
-  activateMail(token): Observable<boolean> {
+  activateMail(token): Observable<any> {
     return this.http.get(this.basePath + 'activateMail?token=' + token)
       .map((response: Response) => response.json());
     // .catch((error: Error) => console.log(error))
@@ -68,13 +70,18 @@ export class UserManagementService {
 
   // todo: change http with http client 
   getAllSystemUsers() {
-    return this.http.get(this.basePath + 'getAllSystemUsers')
+    return this.httpExtensionService.get(this.basePath + 'getAllSystemUsers')
       .map((response: Response) => response.json());
   }
 
   deleteUserById(id) {
-    return this.http.delete(this.basePath + 'deleteUserById?id=' + id)
+    return this.httpExtensionService.delete(this.basePath + 'deleteUserById?id=' + id)
       .map((response: Response) => response.json());
+  }
+
+  completeUserRegistration(userWithToken){
+    return this.http.post(this.basePath + 'completeUserRegistration', userWithToken)
+    .map((response: Response) => response.json())
   }
 
   handleError(error: Response | any) {

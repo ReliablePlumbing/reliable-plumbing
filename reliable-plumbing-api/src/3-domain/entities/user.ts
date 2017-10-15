@@ -10,10 +10,13 @@ export class User extends BaseEntity {
   lastName: string;
   email: string;
   isEmailVerfied: boolean;
+  emailActivationDate?: Date;
   mobile: string;
   roles?: Role[];
   creationDate: Date;
-  createdByUserId?: string
+  createdByUserId?: string;
+  isActivated: boolean;
+  activationDate?: Date;
 
   constructor(user?: any) {
     super();
@@ -23,6 +26,7 @@ export class User extends BaseEntity {
       this.lastName = user.lastName;
       this.email = user.email;
       this.isEmailVerfied = user.isEmailVerfied;
+      this.emailActivationDate = user.emailActivationDate;
       this.mobile = user.mobile;
       this.roles = user.roles;
       this.creationDate = user.creationDate;
@@ -30,6 +34,8 @@ export class User extends BaseEntity {
       this.password = user.password;
       this.salt = user.salt;
       this.createdByUserId = user.createdByUserId;
+      this.isActivated = user.isActivated;
+      this.activationDate = user.activationDate;
     }
   }
 
@@ -40,9 +46,13 @@ export class User extends BaseEntity {
       lastName: this.lastName,
       email: this.email,
       isEmailVerfied: this.isEmailVerfied,
+      emailActivationDate: this.emailActivationDate,
       mobile: this.mobile,
-      roles: this.mapRoles(),
-      creationDate: this.creationDate
+      roles: this.roles,
+      rolesObj: this.mapRoles(),
+      creationDate: this.creationDate,
+      isActivated: this.isActivated,
+      activationDate: this.activationDate
     }
   }
 

@@ -2,8 +2,20 @@
 <h3 *ngIf="loading">Loading...</h3>
 
 <div *ngIf="!loading">
-  <h3 *ngIf="emailActivated">Email Activated Successfully</h3>
-  <h3 *ngIf="!emailActivated">Link is expired, please login and request for another activation link from your profile</h3>
-
+  <h3>{{displayMessage}}</h3>
   <h3 [routerLink]="['/']">Go to home</h3>
 </div>
+
+
+<ng-template #register let-c="close" let-d="dismiss">
+  <div class="modal-header">
+    <!-- <h4 class="modal-title">Modal title</h4> -->
+    <button type="button" class="close" aria-label="Close" (click)="d()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+      <rb-registeration [mode]="registrationMode" [user]="user" (userAdded)="userAdded($event)"></rb-registeration>
+  </div>
+
+</ng-template>

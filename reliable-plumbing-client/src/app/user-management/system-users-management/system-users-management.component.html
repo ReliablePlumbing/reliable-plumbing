@@ -1,5 +1,5 @@
-
-<h3>System users</h3>
+<h3>
+  System users</h3>
 
 <button (click)="addUser(register)">Add User</button>
 
@@ -20,8 +20,12 @@
       <td>{{user.email}}</td>
       <td>{{user.mobile}}</td>
       <td>{{user.creationDate | date}}</td>
-      <td><button>edit</button></td>
-      <td><button (click)="deleteUser(user)">delete</button></td>
+      <td>
+        <button>edit</button>
+      </td>
+      <td>
+        <button (click)="deleteUser(user)">delete</button>
+      </td>
     </tr>
   </tbody>
 </table>
@@ -29,14 +33,14 @@
 
 
 <ng-template #register let-c="close" let-d="dismiss">
-    <div class="modal-header">
-      <!-- <h4 class="modal-title">Modal title</h4> -->
-      <button type="button" class="close" aria-label="Close" (click)="d()">
-        <span aria-hidden="true">&times;</span>
-      </button>
-    </div>
-    <div class="modal-body">
-      <rb-registeration [adminMode]="true" (userAdded)="userAdded($event)"></rb-registeration>
-    </div>
+  <div class="modal-header">
+    <!-- <h4 class="modal-title">Modal title</h4> -->
+    <button type="button" class="close" aria-label="Close" (click)="d()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <rb-registeration [mode]="registrationMode" (userAdded)="userAdded($event)"></rb-registeration>
+  </div>
 
-  </ng-template>
+</ng-template>

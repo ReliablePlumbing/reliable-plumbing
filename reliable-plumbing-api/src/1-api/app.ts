@@ -29,10 +29,7 @@ export class App {
             middlewares: [CustomErrorHandler],
             authorizationChecker: async (action: Action, roles: Role[]) => {
                 let token = action.request.headers["authorization"];
-                return await AuthorizationProvider.validateToken(token)
-
-
-                // return false;
+                return await AuthorizationProvider.validateToken(token, roles)
             }
         });
     }

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { UserManagementService } from '../services/user-management.service';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { RegistrationMode } from '../../models/enums';
 
 @Component({
   selector: 'rb-system-users-management',
@@ -11,6 +12,8 @@ export class SystemUsersManagementComponent implements OnInit {
 
   users = [];
   registerModelRef: NgbModalRef;
+  registrationMode: RegistrationMode = RegistrationMode.admin;
+
   constructor(private userManagementService: UserManagementService, private modalService: NgbModal) { }
 
   ngOnInit() {
@@ -22,8 +25,8 @@ export class SystemUsersManagementComponent implements OnInit {
       this.users = results;
       for (let user of this.users) {
         user.rolesString = '';
-        for (let i = 0; i < user.roles.length; i++) {
-          let role = user.roles[i];
+        for (let i = 0; i < user.rolesObj.length; i++) {
+          let role = user.rolesObj[i];
           user.rolesString += role.name;
           if (i < user.roles.length - 1)
             user.rolesString += ', ';
@@ -42,7 +45,7 @@ export class SystemUsersManagementComponent implements OnInit {
     this.registerModelRef.close();
   }
 
-  deleteUser(user){
+  deleteUser(user) {
     debugger;
     this.userManagementService.deleteUserById(user.id).subscribe(success => {
 

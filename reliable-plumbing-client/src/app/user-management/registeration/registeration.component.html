@@ -41,36 +41,38 @@
               <input type="text" name="lastName" class="form-control" formControlName="lastName" [(ngModel)]="user.lastName" />
             </div>
           </div>
-          <div class="col-md-6">
-            <div class="form-group">
-              <label for="password" class="">Password
-                <i *ngIf="getControlValidation('password','required')">*</i>
-              </label>
-              <input type="password" name="password" class="form-control" formControlName="password" [(ngModel)]="user.password" />
-              <span class="error-message" *ngIf="getControlValidation('password','pattern', false)">Password invalid</span>
+          <ng-container *ngIf="mode != registrationModes.admin">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="password" class="">Password
+                  <i *ngIf="getControlValidation('password','required')">*</i>
+                </label>
+                <input type="password" name="password" class="form-control" formControlName="password" [(ngModel)]="user.password" />
+                <span class="error-message" *ngIf="getControlValidation('password','pattern', false)">Password invalid</span>
+              </div>
             </div>
-          </div>
-          <div class="col-md-6">
-            <div class="form-group">
-              <label for="confirmPassword" class="">Confirm Password
-                <i *ngIf="getControlValidation('confirmPassword','required')">*</i>
-              </label>
-              <input type="password" name="confirmPassword" class="form-control" formControlName="confirmPassword" [(ngModel)]="user.confirmPassword"
-              />
-              <span class="error-message" *ngIf="getControlValidation('confirmPassword','matchOther', false)">Passwords are not the same</span>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="confirmPassword" class="">Confirm Password
+                  <i *ngIf="getControlValidation('confirmPassword','required')">*</i>
+                </label>
+                <input type="password" name="confirmPassword" class="form-control" formControlName="confirmPassword" [(ngModel)]="user.confirmPassword"
+                />
+                <span class="error-message" *ngIf="getControlValidation('confirmPassword','matchOther', false)">Passwords are not the same</span>
+              </div>
             </div>
-          </div>
-          <div *ngIf="adminMode" class="col-md-6">
+          </ng-container>
+          <div *ngIf="mode == registrationModes.admin" class="col-md-6">
             <div class="form-group" formGroupName="roles">
               <label>Roles</label>
               <div class="form-check form-check-inline">
                 <label class="form-check-label">
-                  <input class="form-check-input" type="checkbox" formControlName="technician" [value]="role.Technician"> Technician
+                  <input class="form-check-input" type="checkbox" (click)="handleRolesChange($event)" formControlName="technician" [value]="role.Technician"> Technician
                 </label>
               </div>
               <div class="form-check form-check-inline">
                 <label class="form-check-label">
-                  <input class="form-check-input" type="checkbox" formControlName="admin" [value]="role.Admin"> Admin
+                  <input class="form-check-input" type="checkbox" (click)="handleRolesChange($event)" formControlName="admin" [value]="role.Admin"> Admin
                 </label>
               </div>
               <span class="error-message" *ngIf="trySubmit && registerForm.hasError('noRole','roles')">Please select at least one role</span>
