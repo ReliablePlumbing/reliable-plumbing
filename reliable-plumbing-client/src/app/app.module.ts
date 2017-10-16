@@ -1,6 +1,8 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { AppRoutingModule } from './app-routing.module';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+
 // our modules
 import { UserManagementModule } from './user-management/user-management.module';
 import { ServicesModule } from './services/services.module';
@@ -20,6 +22,7 @@ import { TestService } from './test/test.service';
   ],
   imports: [
     BrowserModule/*.withServerTransition({appId: 'ang4-seo-pre'})*/,
+    NgbModule.forRoot(),
     AppRoutingModule, ServicesModule, UserManagementModule
   ],
   providers: [TestService],

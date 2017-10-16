@@ -17,10 +17,7 @@ export class UserController {
         return new Promise((resolve, reject) => {
 
             this.userManager.registerUser(user).then((result: User) => {
-                resolve({
-                    user: result.toLightModel(),
-                    authorization: AuthorizationProvider.generateToken(user)
-                })
+                return resolve(user.toLightModel());
             }).catch((error: Error) => reject(error));
         });
     }

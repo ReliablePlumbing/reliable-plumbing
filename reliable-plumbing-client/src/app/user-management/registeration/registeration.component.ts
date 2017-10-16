@@ -123,6 +123,10 @@ export class RegisterationComponent implements OnInit {
       this.userAdded.emit(this.user)
   }
 
+  openLogin(){
+    this.userAdded.emit({});
+  }
+
   getControlValidation(controlName, errorName, beforeSubmit = true) {
     if (this.registerForm == null)
       return false;

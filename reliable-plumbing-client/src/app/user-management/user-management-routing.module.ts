@@ -5,12 +5,13 @@ import { RegisterationComponent } from './registeration/registeration.component'
 import { ActivateMailComponent } from './activate-mail/activate-mail.component';
 import { SystemUsersManagementComponent } from './system-users-management/system-users-management.component';
 import { LoginAuthGuard } from "../services/auth-guard.service";
+import { Role } from '../models/enums';
 
 const routes: Routes = [
-  { path: 'login', component: LoginComponent, canActivate: [LoginAuthGuard] },
-  { path: 'register', component: RegisterationComponent, canActivate: [LoginAuthGuard] },
+  { path: 'login', component: LoginComponent },
+  { path: 'register', component: RegisterationComponent },
   { path: 'activate-mail', component: ActivateMailComponent },
-  { path: 'system-users-management', component: SystemUsersManagementComponent }
+  { path: 'system-users-management', component: SystemUsersManagementComponent, canActivate: [LoginAuthGuard], data: { roles: [Role.Admin] } }
 ];
 
 @NgModule({

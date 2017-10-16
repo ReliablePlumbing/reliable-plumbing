@@ -3,14 +3,15 @@
 
 <button (click)="addUser(register)">Add User</button>
 
-<table>
+<table class="table">
   <thead>
     <th>Name</th>
     <th>Type</th>
     <th>Email</th>
     <th>Mobile No.</th>
     <th>Account Creation Date</th>
-    <th>Edit</th>
+    <th>Activated</th>
+    <th>Activation Date</th>
     <th>Delete</th>
   </thead>
   <tbody>
@@ -20,9 +21,8 @@
       <td>{{user.email}}</td>
       <td>{{user.mobile}}</td>
       <td>{{user.creationDate | date}}</td>
-      <td>
-        <button>edit</button>
-      </td>
+      <td>{{user.isActivated ? 'Yes' : 'No'}}</td>
+      <td>{{user.activationDate == null ? 'not activated yet' : user.activationDate | date }}</td>
       <td>
         <button (click)="deleteUser(user)">delete</button>
       </td>

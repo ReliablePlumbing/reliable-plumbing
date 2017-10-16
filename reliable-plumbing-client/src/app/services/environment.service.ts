@@ -13,7 +13,9 @@ export class EnvironmentService {
     }
 
     public get token(): string {
-        return JSON.parse(localStorage.getItem(this.tokenVariableName)).token;
+        let tokenObj = JSON.parse(localStorage.getItem(this.tokenVariableName))
+            
+        return tokenObj == null ? null : tokenObj.token;
     }
 
     public get serializedToken() {

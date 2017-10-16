@@ -15,7 +15,7 @@
               />
               <span class="error-message" *ngIf="getControlValidation('email','email', false)">Please enter a valid email</span>
               <span class="error-message" *ngIf="getControlValidation('email','emailExists')">Email already exists :
-                <a class="" [routerLink]="['/login']">Sign in</a>
+                <a *ngIf="mode != registrationModes.admin" class="pointer" (click)="openLogin()">Sign in</a>
               </span>
             </div>
           </div>

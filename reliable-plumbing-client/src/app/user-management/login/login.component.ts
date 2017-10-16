@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { Router } from '@angular/router';
 import { UserManagementService } from '../services/user-management.service';
 import { NotificationService } from '../../services/notification.service';
@@ -12,9 +12,11 @@ import { RouteHandlerService } from '../../services/route-handler.service';
 })
 export class LoginComponent {
   trySubmit = false;
-  userEmail: string;
+  @Input() userEmail: string = null;
   userPassword: string;
   rememberMe: boolean = false;
+  @Output() userLoggedIn: EventEmitter<any> = new EventEmitter<any>();
+
   constructor(
     private userManagementService: UserManagementService, private notificationService: NotificationService, private environmentService: EnvironmentService,
     private routeHandler: RouteHandlerService
@@ -25,9 +27,10 @@ export class LoginComponent {
     if (loginForm.valid) {
       this.userManagementService.login(this.userEmail, this.userPassword, this.rememberMe)
         .subscribe(result => {
-          this.environmentService.currentUser = null;
+          // this.environmentService.currentUser = null;
           if (result) {
-            this.routeHandler.routeToDefault();
+            this.userLoggedIn.emit();
+            // this.routeHandler.routeToDefault();
           }
           else
             this.notificationService.printErrorMessage('Email or password is incorrect');

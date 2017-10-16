@@ -18,7 +18,8 @@ import { SystemUsersManagementComponent } from './system-users-management/system
     UserManagementRoutingModule, NgbModule.forRoot()
   ],
   declarations: [LoginComponent, RegisterationComponent, ActivateMailComponent, SystemUsersManagementComponent],
-  providers: [UserManagementService]
+  providers: [UserManagementService],
+  exports: [LoginComponent, RegisterationComponent]
 })
 
 export class UserManagementModule { }

@@ -21,7 +21,7 @@ export class AuthorizationProvider {
 
                 let usermanager: UserManager = Container.get(dependcies.UserManager);
 
-                usermanager.checkUserRoles(decoded.email, decoded.roles).then(hasRole => resolve(hasRole));
+                usermanager.checkUserRoles(decoded.email, roles).then(hasRole => resolve(hasRole));
             });
         });
     }

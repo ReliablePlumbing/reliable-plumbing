@@ -1,4 +1,7 @@
-import { Component, OnInit, AfterViewInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { EnvironmentService } from '../services/environment.service';
 
 @Component({
   selector: 'rb-home',
@@ -7,9 +10,21 @@ import { Component, OnInit, AfterViewInit } from '@angular/core';
 })
 export class HomeComponent implements OnInit, AfterViewInit {
 
-  constructor() { }
+  @ViewChild('registeration') registerationTemplate: ElementRef;
+  registerModelRef: NgbModalRef;
+
+  @ViewChild('login') loginTemplate: ElementRef;
+  loginModelRef: NgbModalRef;
+  registeredUserEmail = null;
+
+  isUserLoggedIn: boolean = false;
+  currentUser = null;
+
+  constructor(private activatedRoute: ActivatedRoute, private modalService: NgbModal, private environmentService: EnvironmentService) { }
 
   ngOnInit() {
+    this.isUserLoggedIn = this.environmentService.isUserLoggedIn;
+    this.currentUser = this.environmentService.currentUser;
   }
 
   ngAfterViewInit() {
@@ -120,5 +135,31 @@ export class HomeComponent implements OnInit, AfterViewInit {
       return false;
     });
 
+  }
+
+  userRegistered(user) {
+    this.registerModelRef.close();
+    this.registeredUserEmail = user.email;
+    this.openLoginPopup();
+  }
+  
+  userLoggedIn(){
+    this.loginModelRef.close();
+    this.isUserLoggedIn = this.environmentService.isUserLoggedIn;
+    this.currentUser = this.environmentService.currentUser;
+  }
+  
+  openRegisterPopup() {
+    this.registerModelRef = this.modalService.open(this.registerationTemplate, { size: 'lg' })
+  }
+  
+  openLoginPopup() {
+    this.loginModelRef = this.modalService.open(this.loginTemplate, { size: 'lg' })
+  }
+
+  logout(){
+    this.environmentService.destroyLoginInfo();
+    this.isUserLoggedIn = this.environmentService.isUserLoggedIn;
+    this.currentUser = this.environmentService.currentUser;
   }
 }

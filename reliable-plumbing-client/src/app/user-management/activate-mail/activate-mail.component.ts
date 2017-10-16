@@ -51,7 +51,10 @@ export class ActivateMailComponent implements OnInit {
       token: this.token,
       user: user
     }
-    this.userManagementService.completeUserRegistration(body).subscribe((result) => alert(result));
+    this.userManagementService.completeUserRegistration(body).subscribe((result) => {
+      this.registerModelRef.close();
+      this.routeToDefault();
+    });
   }
 
   routeToDefault() {
