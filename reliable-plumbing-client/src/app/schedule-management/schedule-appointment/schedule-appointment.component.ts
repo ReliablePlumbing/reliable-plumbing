@@ -1,8 +1,7 @@
 import { Component, OnInit, EventEmitter, Input, Output } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators, AbstractControl } from '@angular/forms';
-import { NotificationService } from '../../services/notification.service';
-import { EnvironmentService } from '../../services/environment.service';
-import { RouteHandlerService } from '../../services/route-handler.service';
+import { NotificationService, EnvironmentService, RouteHandlerService, LookupsService } from '../../services/services.exports';
+import { convertFromBootstrapDate } from '../../utils/helpers';
 
 @Component({
   selector: 'rb-schedule-appointment',
@@ -11,19 +10,27 @@ import { RouteHandlerService } from '../../services/route-handler.service';
 })
 export class ScheduleAppointmentComponent implements OnInit {
   appointmentForm: FormGroup;
+  appointmentTypes = [];
+  timeList = [];
   trySubmit: boolean = false;
   isLoggedIn: boolean = false;
-  appointment = {
-    appointmentType: -1,
-    time: -1
+  appointment: any = {
+    typeId: '-1',
+    time: '-1'
   };
 
-  constructor(private fb: FormBuilder, private notificationService: NotificationService,
+  constructor(private fb: FormBuilder, private notificationService: NotificationService, private lookupsService: LookupsService,
     private environmentService: EnvironmentService, private routeHandler: RouteHandlerService) { }
 
 
   ngOnInit() {
+    this.timeList = [
+      { timeStr: '08:00 am', hour: 8, mins: 0 },
+      { timeStr: '08:30 am', hour: 8, mins: 30 },
+      { timeStr: '09:00 am', hour: 9, mins: 0 }
+    ]
     this.isLoggedIn = this.environmentService.isUserLoggedIn;
+    this.getLookups();
     this.createForm();
   }
 
@@ -58,11 +65,17 @@ export class ScheduleAppointmentComponent implements OnInit {
 
   scheduleAppointment() {
     this.trySubmit = true;
+    if (this.appointmentForm.invalid)
+      return;
+
+    this.appointment.date = convertFromBootstrapDate(this.appointment.dateObj, this.appointment.time);
+    if (this.isLoggedIn)
+      this.appointment.userId = this.environmentService.currentUser.id;
     // call service to send the appointement data
   }
 
   resetForm() {
-    this.appointment.appointmentType = -1;
+    this.appointment.typeId = '-1';
     this.appointment.time = -1;
     this.appointment['date'] = null;
     if (!this.isLoggedIn) {
@@ -70,6 +83,10 @@ export class ScheduleAppointmentComponent implements OnInit {
       this.appointment['email'] = null;
       this.appointment['mobile'] = null;
     }
+  }
+
+  getLookups() {
+    this.lookupsService.getAllAppointmentTypes().subscribe(results => this.appointmentTypes = results);
   }
 
 

@@ -40,8 +40,8 @@
               <label for="date" class="">Pick a date
                 <i *ngIf="getControlValidation('date','required')">*</i>
               </label>
-              <input class="form-control" placeholder="yyyy-mm-dd" name="date" formControlName="date" [(ngModel)]="appointment.date" ngbDatepicker
-                #d="ngbDatepicker">
+              <input class="form-control" placeholder="yyyy-mm-dd" name="date" formControlName="date" [(ngModel)]="appointment.dateObj"
+                ngbDatepicker #d="ngbDatepicker">
               <button class="input-group-addon" (click)="d.toggle()" type="button">
                 <img src="img/calendar-icon.svg" style="width: 1.2rem; height: 1rem; cursor: pointer;" />
               </button>
@@ -51,15 +51,13 @@
 
           <div class="col-md-6">
             <div class="form-group">
-                <label for="time" class="">Pick a time
-                    <i *ngIf="getControlValidation('time','req')">*</i>
-                  </label>
-                  <select name="time" formControlName="time" [(ngModel)]="appointment.time">
-                    <option disabled value="-1" selected>select time</option>
-                    <option value="1">8:00 am</option>
-                    <option value="2">8:30 am</option>
-                    <option value="3">9:00 am</option>
-                  </select>
+              <label for="time" class="">Pick a time
+                <i *ngIf="getControlValidation('time','req')">*</i>
+              </label>
+              <select name="time" formControlName="time" [(ngModel)]="appointment.time">
+                <option disabled value="-1" selected>select time</option>
+                <option *ngFor="let time of timeList" [ngValue]="time">{{time.timeStr}}</option>
+              </select>
             </div>
           </div>
 
@@ -70,11 +68,9 @@
               <label for="appointmentType" class="">Appointment Type
                 <i *ngIf="getControlValidation('appointmentType','req')">*</i>
               </label>
-              <select name="appointmentType" formControlName="appointmentType" [(ngModel)]="appointment.appointmentType">
+              <select name="appointmentType" formControlName="appointmentType" [(ngModel)]="appointment.typeId">
                 <option disabled selected value="-1">select Type</option>
-                <option value="1">type 1</option>
-                <option value="2">type 2</option>
-                <option value="3">type 3</option>
+                <option *ngFor="let appoinType of appointmentTypes" [value]="appoinType.id">{{appoinType.name}}</option>
               </select>
             </div>
           </div>

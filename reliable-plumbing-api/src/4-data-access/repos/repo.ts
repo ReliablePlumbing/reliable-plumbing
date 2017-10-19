@@ -74,7 +74,7 @@ export class Repo<T extends BaseEntity>{
     //     return this.model.collection.findOne(entity.id);
     // }
 
-    createSet(): mongoose.Model<GenericModel<T>> {
+    protected createSet(): mongoose.Model<GenericModel<T>> {
         return this.mongoContext.createModel<T>(this.customSchema);
     }
 

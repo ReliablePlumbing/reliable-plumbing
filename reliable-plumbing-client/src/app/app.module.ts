@@ -7,6 +7,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { UserManagementModule } from './user-management/user-management.module';
 import { ServicesModule } from './services/services.module';
 import { ScheduleManagementModule } from './schedule-management/schedule-management.module';
+import { AdminPanelModule } from './admin-panel/admin-panel.module';
 
 // components
 import { AppComponent } from './app.component';
@@ -22,7 +23,7 @@ import { TestService } from './test/test.service';
   imports: [
     BrowserModule/*.withServerTransition({appId: 'ang4-seo-pre'})*/,
     NgbModule.forRoot(),
-    AppRoutingModule, ServicesModule, UserManagementModule, ScheduleManagementModule
+    AppRoutingModule, ServicesModule, AdminPanelModule, UserManagementModule, ScheduleManagementModule
   ],
   providers: [TestService],
   bootstrap: [AppComponent]

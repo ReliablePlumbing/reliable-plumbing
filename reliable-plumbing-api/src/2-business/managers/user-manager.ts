@@ -1,6 +1,5 @@
 import { User, Role, AppError, ErrorType, UserLogin } from '../../3-domain/domain-module';
-import { UserRepo } from '../../4-data-access/data-access.module';
-import { UserLoginRepo } from '../../4-data-access/data-access.module';
+import { UserRepo, UserLoginRepo } from '../../4-data-access/data-access.module';
 import { MailNotifierManager } from '../mail-notifier/mail-notifier-manager';
 import { AccountSecurity, dependcies, TokenManager, ConfigService } from '../../5-cross-cutting/cross-cutting.module';
 import { Inject, Service } from 'typedi';

@@ -4,17 +4,21 @@ import { Container } from 'typedi';
 // import * as data from '../../4-data-access/data-access.module';
 
 
-    export const dependcies = {
-        // business
-        UserManager: 'business.UserManager',
-        mailNotifierManager: 'business.MailNotifier',
-        // data
-        UserRepo: 'data.UserRepo',
-        UserLoginRepo: 'data.UserLoginRepo',
-        MailLogRepo: 'data.MailLogRepo',
-        MongoContext: 'data.MongoContext'
+export const dependcies = {
+    // business
+    UserManager: 'business.UserManager',
+    mailNotifierManager: 'business.MailNotifier',
+    AppointmentManager: 'business.AppointmentManager',
+    LookupsManager: 'business.LookupsManager',
+    // data
+    MongoContext: 'data.MongoContext',
+    UserRepo: 'data.UserRepo',
+    UserLoginRepo: 'data.UserLoginRepo',
+    MailLogRepo: 'data.MailLogRepo',
+    AppointmentRepo: 'data.AppointmentRepo',
+    AppointmentTypeRepo: 'data.AppointmentTypeRepo',
 
-    }
+}
 
     /*** simulate singletone pattern ***/
 //     static dbContext: data.MongoContext = new data.MongoContext();

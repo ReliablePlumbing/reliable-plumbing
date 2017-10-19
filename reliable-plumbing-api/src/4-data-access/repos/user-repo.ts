@@ -1,10 +1,7 @@
-import { Service } from 'typedi';
 import { Repo } from './repo';
 import { userSchema } from '../schemas/user-schema';
-import { MongoContext } from '../mongo-context';
 import { User, Role } from '../../3-domain/domain-module';
 import { GenericModel } from '../models/model';
-import * as mongoose from 'mongoose';
 
 export class UserRepo extends Repo<User> {
 
