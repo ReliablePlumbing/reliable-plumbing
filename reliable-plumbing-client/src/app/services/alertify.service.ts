@@ -27,4 +27,12 @@ export class AlertifyService {
   showSuccessPopup(message: string) {
     this.notifier.alert(message);
   }
+
+  notify(message) {
+    this.notifier
+    .closeLogOnClick(true)
+    .log(message, ev => {
+      this.notifier.log('clicked');
+    });
+  }
 }

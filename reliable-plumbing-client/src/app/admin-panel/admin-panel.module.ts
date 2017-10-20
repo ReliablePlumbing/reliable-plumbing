@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 
 // our modules
 import { ServicesModule } from '../services/services.module';
+import { UserManagementModule } from '../user-management/user-management.module';
 
 // components
 import { AdminPanelRoutingModule } from './admin-panel-routing.module';
@@ -14,7 +15,7 @@ import { ScheduleManagementComponent } from './schedule-management/schedule-mana
 
 @NgModule({
   imports: [
-    CommonModule, AdminPanelRoutingModule, ServicesModule, NgbModule, FormsModule
+    CommonModule, AdminPanelRoutingModule, ServicesModule, NgbModule, FormsModule, UserManagementModule
   ],
   declarations: [AppointmentTypesManagementComponent, AdminPanelComponent, ScheduleManagementComponent]
 })

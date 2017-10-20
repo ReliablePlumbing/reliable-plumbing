@@ -8,10 +8,7 @@ import { LoginAuthGuard } from "../services/auth-guard.service";
 import { Role } from '../models/enums';
 
 const routes: Routes = [
-  { path: 'login', component: LoginComponent },
-  { path: 'register', component: RegisterationComponent },
   { path: 'activate-mail', component: ActivateMailComponent },
-  { path: 'system-users-management', component: SystemUsersManagementComponent, canActivate: [LoginAuthGuard], data: { roles: [Role.Admin] } }
 ];
 
 @NgModule({

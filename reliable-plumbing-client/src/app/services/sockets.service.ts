@@ -5,6 +5,7 @@ import { environment } from '../../environments/environment';
 import { HttpExtensionService } from './http-extension.service';
 import { EnvironmentService } from './environment.service';
 import { NotificationService } from './notification.service';
+import * as uuid from 'uuid'
 
 @Injectable()
 export class SocketsService {
@@ -33,11 +34,14 @@ export class SocketsService {
         this.socketsSettings = settings;
 
         this.socketsonnection = io.connect(this.socketsUrl);
-        this.socketsonnection.emit(this.socketsSettings.registerConnection, currentUser.id);
+        
+        let connection = { clientId: uuid(), userId: currentUser.id };
+
+        this.socketsonnection.emit(this.socketsSettings.registerConnection, connection);
 
         this.socketsonnection.on('reconnect', () => {
           console.log('Reconnected to the server');
-          this.socketsonnection.emit(this.socketsSettings.registerConnection, currentUser.id);
+          this.socketsonnection.emit(this.socketsSettings.registerConnection, connection);
         });
 
         this.socketsonnection.on('disconnect', _ => console.log('disconnected'))

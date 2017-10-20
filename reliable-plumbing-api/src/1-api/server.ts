@@ -17,9 +17,28 @@ App.createServer(app);
 server.listen(port);
 
 SocketContext.io.on('connection', (socket) => {
-  socket.on(ConfigService.config.socketsSettings.registerConnection, (userId) => {
-    let aa = SocketContext.connections;
-    SocketContext.connections[userId] = socket;
+  socket.on(ConfigService.config.socketsSettings.registerConnection, (connection) => {
+    let clientId = connection.clientId,
+      userId = connection.userId;
+
+    if (SocketContext.connections[userId] == null)
+      SocketContext.connections[userId] = [];
+
+    // check if this new connection or reconnect
+    let userClient = SocketContext.connections[userId].find(conn => conn.clientId == clientId);
+
+    if (userClient == null) // if new push it the users connections
+      SocketContext.connections[userId].push({ clientId: clientId, socket: socket });
+    else // if reconnect replace the socket with the new socket
+      userClient.socket = socket;
+
+    // remove disconnected connections from user connections
+    let connectedClientsForUser = [];
+    for (let client of SocketContext.connections[userId])
+      if (client.socket.connected)
+        connectedClientsForUser.push(client)
+        
+    SocketContext.connections[userId] = connectedClientsForUser;
   });
 });
 

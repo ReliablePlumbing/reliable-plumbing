@@ -16,9 +16,18 @@ export class SocketsNotifier {
     handleBroadcast(notification: Notification) {
         let notificationsEvent = ConfigService.config.socketsSettings.notificationsEvent;
         let asd = SocketContext.connections;
-        for (let id of notification.notifeeIds)
-            SocketContext.connections[id].emit(notificationsEvent, notification.toLightModel());
-
+        for (let id of notification.notifeeIds) {
+            if (SocketContext.connections[id] == null || SocketContext.connections[id].length == 0)
+                continue;
+            let connectedClientsForUser = [];
+            for (let client of SocketContext.connections[id]) {
+                if (client.socket.connected) {
+                    client.socket.emit(notificationsEvent, notification.toLightModel());
+                    connectedClientsForUser.push(client)
+                }
+            }
+            SocketContext.connections[id] = connectedClientsForUser;
+        }
     }
 
 }
