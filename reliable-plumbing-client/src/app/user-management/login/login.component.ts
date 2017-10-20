@@ -1,9 +1,7 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { Router } from '@angular/router';
 import { UserManagementService } from '../services/user-management.service';
-import { NotificationService } from '../../services/notification.service';
-import { EnvironmentService } from '../../services/environment.service';
-import { RouteHandlerService } from '../../services/route-handler.service';
+import { AlertifyService, EnvironmentService, RouteHandlerService, NotificationService } from '../../services/services.exports';
 
 @Component({
   selector: 'rb-login',
@@ -18,8 +16,8 @@ export class LoginComponent {
   @Output() userLoggedIn: EventEmitter<any> = new EventEmitter<any>();
 
   constructor(
-    private userManagementService: UserManagementService, private notificationService: NotificationService, private environmentService: EnvironmentService,
-    private routeHandler: RouteHandlerService
+    private userManagementService: UserManagementService, private alertifyService: AlertifyService,
+    private environmentService: EnvironmentService, private routeHandler: RouteHandlerService, private notificationService: NotificationService
   ) { }
 
   userLogin(loginForm: any) {
@@ -29,14 +27,15 @@ export class LoginComponent {
         .subscribe(result => {
           // this.environmentService.currentUser = null;
           if (result) {
+            this.notificationService.connectSockets();
             this.userLoggedIn.emit();
             // this.routeHandler.routeToDefault();
           }
           else
-            this.notificationService.printErrorMessage('Email or password is incorrect');
+            this.alertifyService.printErrorMessage('Email or password is incorrect');
         },
         error => {
-          this.notificationService.printErrorMessage('Email or password is incorrect');
+          this.alertifyService.printErrorMessage('Email or password is incorrect');
         });
     }
   }

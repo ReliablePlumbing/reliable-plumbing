@@ -1,17 +1,16 @@
 import { Injectable, Injector } from '@angular/core'
-import { Response } from '@angular/http'
+import { Response, Http } from '@angular/http'
 import { Observable } from 'rxjs/Observable'
 import { Router } from '@angular/router';
 import { EnvironmentService } from './environment.service';
-import { UserManagementService } from '../user-management/services/user-management.service';
-import { NotificationService } from './notification.service';
+import { AlertifyService } from './alertify.service';
 import { environment } from '../../environments/environment';
 
 @Injectable()
 export class ExceptionHandlingService {
 
-    constructor(private injector: Injector, private environmentService: EnvironmentService,
-        private notificationService: NotificationService, private userManagementService: UserManagementService) {
+    constructor(private injector: Injector, private environmentService: EnvironmentService, private http: Http,
+        private alertifyService: AlertifyService) {
     }
 
     public get router(): Router {
@@ -29,7 +28,7 @@ export class ExceptionHandlingService {
             if (persistentLogin == null || persistentLogin == undefined || persistentLogin.selector == null || persistentLogin.selector == undefined)
                 this.unauthorize(errorObj);
             else
-                this.userManagementService.persistentLogin().subscribe(result => {
+                this.persistentLogin().subscribe(result => {
                     if (!result) {
                         this.unauthorize(errorObj);
                     }
@@ -40,13 +39,13 @@ export class ExceptionHandlingService {
             errorObj.message = errorBody.message;
             errorObj.invalidProperties = errorBody.invalidProperties;
             if (errorBody.code == 400) { // for bad request, handled exception
-                this.notificationService.printErrorMessage(errorBody.message)
+                this.alertifyService.printErrorMessage(errorBody.message)
             }
             else if (errorBody.code == 500) { // unhandled exception
                 if (environment.production)
-                    this.notificationService.printErrorMessage('حدث خطأ غير متوقع, برجاء المحاولة في وقت لاحق');
+                    this.alertifyService.printErrorMessage('حدث خطأ غير متوقع, برجاء المحاولة في وقت لاحق');
                 else
-                    this.notificationService.printErrorMessage(errorBody.message);
+                    this.alertifyService.printErrorMessage(errorBody.message);
             }
         }
         return Observable.throw(errorObj);
@@ -58,5 +57,19 @@ export class ExceptionHandlingService {
             return;
         this.router.navigate(['/']);//, { queryParams: { returnUrl: this.router.url } });
     }
+
+    persistentLogin(): Observable<any> {
+        return this.http.post(environment.apiUrl + 'users/persistentLogin', this.environmentService.persistentLogin)
+          .map((response: Response) => {
+            if (response.status == 401)
+              return false;
+            let resData = response.json();
+            if (resData == null || resData.token == null || resData.user == null)
+              return false;
+            this.environmentService.setUserLoginInfo(resData);
+            return true;
+          })
+          .catch((error: any) => this.handleError(error));
+      }
 
 }

@@ -4,3 +4,5 @@ export * from './config/config-service';
 
 export * from './security/account-security';
 export * from './security/token-manager';
+
+export * from './socket-io/socket-context';

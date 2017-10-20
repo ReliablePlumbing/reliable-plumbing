@@ -1,18 +1,19 @@
 import { JsonController, Param, QueryParam, Body, Get, Post, Put, Delete, Authorized } from "routing-controllers";
-import { Role } from '../../3-domain/domain-module';
+import { Role, Appointment } from '../../3-domain/domain-module';
 import { AppointmentManager } from '../../2-business/business.module';
-import { dependcies } from '../../5-cross-cutting/cross-cutting.module';
+import { dependencies } from '../../5-cross-cutting/cross-cutting.module';
 import { Inject } from 'typedi';
 
 
 @JsonController('/appointments')
 export class AppointmentController {
 
-    @Inject(dependcies.AppointmentManager)
+    @Inject(dependencies.AppointmentManager)
     private appointmentManager: AppointmentManager;
 
-    @Post('./addAppointment')
-    addAppointment( @Body() appointment) {
+    @Post('/addAppointment')
+    addAppointment( @Body() appointmentModel) {
+        let appointment = new Appointment(appointmentModel);
         return new Promise<any>((resolve, reject) => {
 
             this.appointmentManager.addAppointment(appointment).then(result => {

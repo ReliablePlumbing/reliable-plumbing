@@ -1,6 +1,6 @@
 import { Component, OnInit, EventEmitter, Input, Output } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators, AbstractControl } from '@angular/forms';
-import { NotificationService, EnvironmentService, RouteHandlerService, LookupsService } from '../../services/services.exports';
+import { AlertifyService, EnvironmentService, RouteHandlerService, LookupsService, AppointmentService } from '../../services/services.exports';
 import { convertFromBootstrapDate } from '../../utils/helpers';
 
 @Component({
@@ -19,8 +19,8 @@ export class ScheduleAppointmentComponent implements OnInit {
     time: '-1'
   };
 
-  constructor(private fb: FormBuilder, private notificationService: NotificationService, private lookupsService: LookupsService,
-    private environmentService: EnvironmentService, private routeHandler: RouteHandlerService) { }
+  constructor(private fb: FormBuilder, private alertifyService: AlertifyService, private lookupsService: LookupsService,
+    private environmentService: EnvironmentService, private routeHandler: RouteHandlerService, private appointmentService: AppointmentService) { }
 
 
   ngOnInit() {
@@ -72,6 +72,10 @@ export class ScheduleAppointmentComponent implements OnInit {
     if (this.isLoggedIn)
       this.appointment.userId = this.environmentService.currentUser.id;
     // call service to send the appointement data
+    this.appointmentService.addAppointment(this.appointment).subscribe(result => {
+      if(result.id != null)
+        this.alertifyService.printSuccessMessage('Your appointment has been submitted, one of our representatives will contact you soon');
+    })
   }
 
   resetForm() {

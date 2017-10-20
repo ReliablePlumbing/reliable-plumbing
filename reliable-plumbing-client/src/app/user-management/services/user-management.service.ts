@@ -1,18 +1,16 @@
 import { Injectable } from '@angular/core';
-import { Http, Headers, Response, URLSearchParams } from '@angular/http';
+import { Http, Response, URLSearchParams } from '@angular/http';
 import { Observable } from 'rxjs';
 import 'rxjs/add/operator/map';
 import { environment } from '../../../environments/environment';
-import { EnvironmentService } from '../../services/environment.service';
-import { NotificationService } from "../../services/notification.service";
-import { HttpExtensionService } from "../../services/http-extension.service";
+import { EnvironmentService, AlertifyService, HttpExtensionService } from '../../services/services.exports';
 
 @Injectable()
 export class UserManagementService {
   protected basePath = environment.apiUrl + 'users/';
 
-  constructor(private http: Http, private environmentService: EnvironmentService, private notificationService: NotificationService,
-    private httpExtensionService: HttpExtensionService) {
+  constructor(private environmentService: EnvironmentService, private alertifyService: AlertifyService,
+    private httpExtensionService: HttpExtensionService, private http: Http) {
   }
 
   login(email: string, password: string, rememberMe: boolean): Observable<any> {
@@ -99,13 +97,13 @@ export class UserManagementService {
       errorObj.message = errorBody.message;
       errorObj.invalidProperties = errorBody.invalidProperties;
       if (errorBody.code == 400) { // for bad request, handled exception
-        this.notificationService.printErrorMessage(errorBody.message)
+        this.alertifyService.printErrorMessage(errorBody.message)
       }
       else if (errorBody.code == 500) { // unhandled exception
         if (environment.production)
-          this.notificationService.printErrorMessage('حدث خطأ غير متوقع, برجاء المحاولة في وقت لاحق');
+          this.alertifyService.printErrorMessage('حدث خطأ غير متوقع, برجاء المحاولة في وقت لاحق');
         else
-          this.notificationService.printErrorMessage(errorBody.message);
+          this.alertifyService.printErrorMessage(errorBody.message);
       }
     }
 

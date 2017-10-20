@@ -2,13 +2,10 @@
 import * as jwt from 'jsonwebtoken';
 import { Inject, Container } from 'typedi';
 import { Role, User } from '../../3-domain/domain-module';
-import { ConfigService, dependcies } from '../../5-cross-cutting/cross-cutting.module';
+import { ConfigService, dependencies } from '../../5-cross-cutting/cross-cutting.module';
 import { UserManager } from '../../2-business/business.module';
 
 export class AuthorizationProvider {
-
-    @Inject(dependcies.UserManager)
-    private usermanager: UserManager;
 
     static validateToken(token: string, roles?: Role[]) {
         return new Promise<boolean>(resolve => {
@@ -19,7 +16,7 @@ export class AuthorizationProvider {
                 if (roles != null && roles.length == 0)
                     return resolve(true);
 
-                let usermanager: UserManager = Container.get(dependcies.UserManager);
+                let usermanager: UserManager = Container.get(dependencies.UserManager);
 
                 usermanager.checkUserRoles(decoded.email, roles).then(hasRole => resolve(hasRole));
             });

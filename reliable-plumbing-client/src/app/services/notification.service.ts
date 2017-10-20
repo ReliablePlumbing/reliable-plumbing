@@ -1,30 +1,23 @@
 import { Injectable } from '@angular/core';
-import * as alertify from 'alertify.js';
+import { EnvironmentService } from './environment.service';
+import { Subject, Observable } from 'rxjs'
 
 @Injectable()
 export class NotificationService {
-  private notifier: any = alertify;
 
-  constructor() { }
+  constructor(private environmentService: EnvironmentService) { }
 
-  confirmDialog(message: string, okCallback: () => any) {
-    this.notifier.confirm(message, function (e) {
-      if (e) {
-        okCallback();
-      } else {
-      }
-    });
+  private connectionSource$: Subject<any> = new Subject<any>();
+  connectionRequested: Observable<any> = this.connectionSource$.asObservable();
+  connectSockets() {
+    this.connectionSource$.next();
   }
 
-  printSuccessMessage(message: string) {
-    this.notifier.success(message);
-  }
+  private notificationRecieverSource$: Subject<any> = new Subject<any>();
+  notificationRecieved: Observable<any> = this.notificationRecieverSource$.asObservable();
 
-  printErrorMessage(message: string) {
-    this.notifier.error(message);
-  }
-
-  showSuccessPopup(message: string) {
-    this.notifier.alert(message);
+  broadcastNotification(notification) {
+    alert(notification.message);
+    this.notificationRecieverSource$.next(notification);
   }
 }

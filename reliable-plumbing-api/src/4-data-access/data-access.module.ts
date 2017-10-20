@@ -6,3 +6,4 @@ export * from './repos/user-login-repo';
 export * from './repos/mail-log-repo';
 export * from './repos/appointment-repo';
 export * from './repos/appointment-type-repo';
+export * from './repos/notification-repo';

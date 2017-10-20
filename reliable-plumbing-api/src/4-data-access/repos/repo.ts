@@ -1,6 +1,6 @@
 import { BaseEntity } from '../../3-domain/domain-module';
 import { Inject } from 'typedi';
-import { dependcies } from '../../5-cross-cutting/cross-cutting.module';
+import { dependencies } from '../../5-cross-cutting/cross-cutting.module';
 import { MongoContext } from '../mongo-context';
 import * as bluebird from 'bluebird';
 import { GenericModel } from '../models/model';
@@ -9,7 +9,7 @@ import * as mongoose from 'mongoose';
 
 export class Repo<T extends BaseEntity>{
 
-    @Inject(dependcies.MongoContext)
+    @Inject(dependencies.MongoContext)
     private mongoContext: MongoContext;
     private customSchema: genericSchema
 

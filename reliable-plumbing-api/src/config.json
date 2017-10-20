@@ -1,5 +1,5 @@
 {
-    "authorization":{
+    "authorization": {
         "tokenKey": "nodeStarterTokenKeyShouldBeUniqueAndLongString",
         "tokenExpiration": "1 day"
     },
@@ -13,5 +13,9 @@
             "pass": "asdasd123123"
         }
     },
-    "activationMailUrl": "http://localhost:4200/activate-mail?token="
+    "activationMailUrl": "http://localhost:4200/activate-mail?token=",
+    "socketsSettings": {
+        "registerConnection": "registerConnectionWithUserId",
+        "notificationsEvent": "notifications"
+    }
 }

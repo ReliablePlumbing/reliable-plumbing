@@ -1,5 +1,8 @@
 import "reflect-metadata"; // this shim is required
-import { createExpressServer, Action, useContainer } from "routing-controllers";
+import * as express from 'express';
+import * as socketio from 'socket.io';
+import * as http from 'http';
+import { createExpressServer, Action, useContainer, useExpressServer } from "routing-controllers";
 import { UserController } from './controllers/user-controller'
 import { Container } from "typedi";
 import { Role } from '../3-domain/domain-module'
@@ -11,21 +14,24 @@ export class App {
 
     constructor() { }
 
-    createServer() {
+    static createServer(expressApp) {
+
         registerDependencies();
         useContainer(Container);
-        return createExpressServer({
+        useExpressServer(expressApp, {
             routePrefix: '/api',
             cors: {
                 allowedHeaders: ["Origin", "X-Requested-With", "Content-Type", "Accept", "X-Access-Token", "authorization"],
                 // "Access-Control-Allow-Origin","Access-Control-Allow-Headers","Origin, X-Requested-With, Content-Type", "CORELATION_ID"],
                 credentials: true,
                 methods: "GET,HEAD,OPTIONS,PUT,PATCH,POST,DELETE",
-                origin: '*', // allow only for angular app when deployment, social media login
+                origin: 'http://localhost:4200', // allow only angular app when deployment, social media login
                 preflightContinue: false
             },
             defaultErrorHandler: false,
-            controllers: this.registerControllers(),
+            controllers: [
+                __dirname + "/controllers/**/*.js"
+            ],
             middlewares: [CustomErrorHandler],
             authorizationChecker: async (action: Action, roles: Role[]) => {
                 let token = action.request.headers["authorization"];
@@ -34,12 +40,10 @@ export class App {
         });
     }
 
-    private registerControllers(): Function[] | string[] {
+    private staregisterControllers(): Function[] | string[] {
         return [
             __dirname + "/controllers/**/*.js"
         ]
     }
 
 }
-
-//export default new App().Options;

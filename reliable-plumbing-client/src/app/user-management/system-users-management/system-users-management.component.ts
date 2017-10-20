@@ -1,9 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { UserManagementService } from '../services/user-management.service';
-import { EnvironmentService } from '../../services/environment.service';
+import { EnvironmentService, AlertifyService } from '../../services/services.exports';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { RegistrationMode } from '../../models/enums';
-import { NotificationService } from '../../services/notification.service';
 
 @Component({
   selector: 'rb-system-users-management',
@@ -17,7 +16,7 @@ export class SystemUsersManagementComponent implements OnInit {
   registrationMode: RegistrationMode = RegistrationMode.admin;
 
   constructor(private userManagementService: UserManagementService, private modalService: NgbModal,
-    private environmentService: EnvironmentService, private notificationSerive: NotificationService) { }
+    private environmentService: EnvironmentService, private alertifyService: AlertifyService) { }
 
   ngOnInit() {
     this.getAllSystemUsers();
@@ -52,11 +51,11 @@ export class SystemUsersManagementComponent implements OnInit {
 
   deleteUser(user) {
     let message = 'Are you sure you want delete ' + user.firstName + ' ' + user.lastName;
-    this.notificationSerive.confirmDialog(message, () => {
+    this.alertifyService.confirmDialog(message, () => {
       this.userManagementService.deleteUserById(user.id).subscribe(success => {
         if (success) {
           this.users = this.users.filter(u => user.id != u.id);
-          this.notificationSerive.printSuccessMessage('User deleted succefully');
+          this.alertifyService.printSuccessMessage('User deleted succefully');
         }
       });
 

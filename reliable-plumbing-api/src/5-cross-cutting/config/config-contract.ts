@@ -17,4 +17,9 @@ export interface Config {
     };
 
     activationMailUrl: string;
+
+    socketsSettings: {
+        registerConnection: string,
+        notificationsEvent: string
+    };
 }

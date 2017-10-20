@@ -23,7 +23,8 @@ import { TestService } from './test/test.service';
   imports: [
     BrowserModule/*.withServerTransition({appId: 'ang4-seo-pre'})*/,
     NgbModule.forRoot(),
-    AppRoutingModule, ServicesModule, AdminPanelModule, UserManagementModule, ScheduleManagementModule
+    AppRoutingModule, ServicesModule, AdminPanelModule, UserManagementModule, ScheduleManagementModule,
+    
   ],
   providers: [TestService],
   bootstrap: [AppComponent]

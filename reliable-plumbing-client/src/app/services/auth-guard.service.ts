@@ -25,9 +25,12 @@ export class LoginAuthGuard implements CanActivate {
         let roles = activatedRoute.data.roles;
         let isUserLoggedIn = this.environmentService.isUserLoggedIn;
 
+        if (!isUserLoggedIn) {
+            this.router.navigate(['/']);
+            return false;
+        }
+
         if (roles == null || roles.length == 0) {
-            if (!isUserLoggedIn)
-                this.router.navigate(['/']);
             return isUserLoggedIn;
         }
         else {
@@ -35,7 +38,10 @@ export class LoginAuthGuard implements CanActivate {
             for (let userRole of currentUser.roles)
                 for (let role of roles)
                     if (role == userRole)
-                        return true
+                        return true;
+
+            this.router.navigate(['/']);
+            return false;
         }
     }
 }

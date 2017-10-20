@@ -1,13 +1,13 @@
 import { JsonController, Param, QueryParam, Body, Get, Post, Put, Delete, Authorized } from "routing-controllers";
 import { Role } from '../../3-domain/domain-module';
 import { LookupsManager } from '../../2-business/business.module';
-import { dependcies } from '../../5-cross-cutting/cross-cutting.module';
+import { dependencies } from '../../5-cross-cutting/cross-cutting.module';
 import { Inject } from 'typedi';
 
 @JsonController('/lookups')
 export class LookupsController {
 
-    @Inject(dependcies.LookupsManager)
+    @Inject(dependencies.LookupsManager)
     private lookupsManager: LookupsManager;
 
     @Post('/addEditAppointmentType')

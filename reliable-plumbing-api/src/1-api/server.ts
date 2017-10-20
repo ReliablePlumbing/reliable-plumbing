@@ -1,14 +1,28 @@
 import * as debug from 'debug';
+import * as express from 'express';
+import * as socketio from 'socket.io';
+import * as http from 'http';
 import { App } from './App';
+import { SocketContext, ConfigService } from '../5-cross-cutting/cross-cutting.module';
 
 debug('ts-express:server');
 
 const port = normalizePort(process.env.PORT || 3000);
 
-const app = new App();
-const server = app.createServer();
+var app = express();
+var server = http.createServer(app);
+SocketContext.io = socketio().listen(server);
+App.createServer(app);
 
 server.listen(port);
+
+SocketContext.io.on('connection', (socket) => {
+  socket.on(ConfigService.config.socketsSettings.registerConnection, (userId) => {
+    let aa = SocketContext.connections;
+    SocketContext.connections[userId] = socket;
+  });
+});
+
 server.on('error', onError);
 server.on('listening', onListening);
 

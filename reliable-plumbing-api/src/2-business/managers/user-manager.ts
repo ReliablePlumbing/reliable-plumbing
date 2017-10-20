@@ -1,20 +1,26 @@
-import { User, Role, AppError, ErrorType, UserLogin } from '../../3-domain/domain-module';
+import { User, Role, AppError, ErrorType, UserLogin, Notification, NotificationType } from '../../3-domain/domain-module';
 import { UserRepo, UserLoginRepo } from '../../4-data-access/data-access.module';
 import { MailNotifierManager } from '../mail-notifier/mail-notifier-manager';
-import { AccountSecurity, dependcies, TokenManager, ConfigService } from '../../5-cross-cutting/cross-cutting.module';
+import { AccountSecurity, dependencies, TokenManager, ConfigService } from '../../5-cross-cutting/cross-cutting.module';
 import { Inject, Service } from 'typedi';
+import { NotificationManager } from './notification-manager';
 
 @Service()
 export class UserManager {
 
-    @Inject(dependcies.UserRepo)
+    // region dependencies
+    @Inject(dependencies.UserRepo)
     private userRepo: UserRepo;
 
-    @Inject(dependcies.UserLoginRepo)
+    @Inject(dependencies.UserLoginRepo)
     private userLoginRepo: UserLoginRepo;
 
-    @Inject(dependcies.mailNotifierManager)
+    @Inject(dependencies.mailNotifierManager)
     private mailNotifier: MailNotifierManager;
+
+    @Inject(dependencies.NotificationManager)
+    private notificationManager: NotificationManager;
+    // endregion dependencies
 
     registerUser(user: User): Promise<any> {
         if (user == null)
@@ -106,7 +112,7 @@ export class UserManager {
 
                     if (result.hashedPassword != passwordHash)
                         reject(loginError);
-
+                        
                     resolve(result);
                 });
             }

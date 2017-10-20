@@ -1,10 +1,8 @@
 import { Component, OnInit, EventEmitter, Input, Output } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 import { UserManagementService } from '../services/user-management.service';
-import { NotificationService } from '../../services/notification.service';
-import { EnvironmentService } from '../../services/environment.service';
-import { RouteHandlerService } from '../../services/route-handler.service';
 import { Role, RegistrationMode } from '../../models/enums';
+import { AlertifyService, EnvironmentService, RouteHandlerService } from '../../services/services.exports';
 
 @Component({
   selector: 'rb-registeration',
@@ -28,7 +26,7 @@ export class RegisterationComponent implements OnInit {
     mobile: null,
     roles: []
   }
-  constructor(private fb: FormBuilder, private userManagementService: UserManagementService, private notificationService: NotificationService,
+  constructor(private fb: FormBuilder, private userManagementService: UserManagementService, private alertifyService: AlertifyService,
     private environmentService: EnvironmentService, private routeHandler: RouteHandlerService) { }
 
   ngOnInit() {
@@ -123,7 +121,7 @@ export class RegisterationComponent implements OnInit {
       this.userAdded.emit(this.user)
   }
 
-  openLogin(){
+  openLogin() {
     this.userAdded.emit({});
   }
 

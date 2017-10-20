@@ -3,15 +3,14 @@ import { Http, Headers, Response, URLSearchParams } from '@angular/http';
 import { Observable } from 'rxjs';
 import 'rxjs/add/operator/map';
 import { environment } from '../../environments/environment';
-import { EnvironmentService } from '../services/environment.service';
-import { NotificationService } from "../services/notification.service";
-import { ExceptionHandlingService } from "../services/exception-handling.service";
+import { EnvironmentService, AlertifyService, ExceptionHandlingService } from '../services/services.exports';
 
 @Injectable()
 export class TestService {
     protected basePath = environment.apiUrl + 'users/';
 
-    constructor(private http: Http, private environmentService: EnvironmentService, private notificationService: NotificationService, private handleExceptionService: ExceptionHandlingService) {
+    constructor(private http: Http, private environmentService: EnvironmentService, private alertifyService: AlertifyService, 
+        private handleExceptionService: ExceptionHandlingService) {
     }
 
     createAuthorizationHeader(headers: Headers) {

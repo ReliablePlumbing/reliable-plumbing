@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-import { LookupsService, NotificationService, EnvironmentService } from '../../services/services.exports';
+import { LookupsService, AlertifyService, EnvironmentService } from '../../services/services.exports';
 
 // todo: priority ordering edit, display all info
 @Component({
@@ -15,7 +15,7 @@ export class AppointmentTypesManagementComponent implements OnInit {
   addEditType: any = {};
 
   constructor(private lookupsService: LookupsService, private modalService: NgbModal,
-    private notificationService: NotificationService, private environmentService: EnvironmentService) { }
+    private alertifyService: AlertifyService, private environmentService: EnvironmentService) { }
 
   ngOnInit() {
     this.lookupsService.getAllAppointmentTypes().subscribe((results: any[]) => {
@@ -50,26 +50,26 @@ export class AppointmentTypesManagementComponent implements OnInit {
         this.types[index] = this.addEditType;
       }
       else {
-        this.notificationService.printErrorMessage('unknown error happened, please try again');
+        this.alertifyService.printErrorMessage('unknown error happened, please try again');
         return;
       }
       this.addEditType = {};
       this.addEditTypeModalRef.close();
-      this.notificationService.printSuccessMessage('Appointment Type has been successfully saved');
+      this.alertifyService.printSuccessMessage('Appointment Type has been successfully saved');
     })
   }
 
   deleteType(appointype) {
-    this.notificationService.confirmDialog('Confirm delete', () => {
+    this.alertifyService.confirmDialog('Confirm delete', () => {
       appointype.lastModifiedBy = this.environmentService.currentUser.id;
       appointype.isDeleted = true;
       this.lookupsService.addEditAppointmentType(appointype).subscribe(result => {
         if (result == true) {
           this.types = this.types.filter(t => t.id != appointype.id);
-          this.notificationService.printSuccessMessage('Appointment Type has been successfully deleted');
+          this.alertifyService.printSuccessMessage('Appointment Type has been successfully deleted');
         }
         else
-          this.notificationService.printErrorMessage('unknown error happened, please try again');
+          this.alertifyService.printErrorMessage('unknown error happened, please try again');
 
       });
     });

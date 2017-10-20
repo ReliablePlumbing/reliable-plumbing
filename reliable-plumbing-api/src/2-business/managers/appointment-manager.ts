@@ -1,13 +1,13 @@
 import { AppError, ErrorType, Appointment } from '../../3-domain/domain-module';
 import { AppointmentRepo } from '../../4-data-access/data-access.module';
 import { MailNotifierManager } from '../mail-notifier/mail-notifier-manager';
-import { AccountSecurity, dependcies, TokenManager, ConfigService } from '../../5-cross-cutting/cross-cutting.module';
+import { AccountSecurity, dependencies, TokenManager, ConfigService } from '../../5-cross-cutting/cross-cutting.module';
 import { Inject, Service } from 'typedi';
 
 @Service()
 export class AppointmentManager {
 
-    @Inject(dependcies.AppointmentRepo)
+    @Inject(dependencies.AppointmentRepo)
     private appointmentRepo: AppointmentRepo;
 
     addAppointment(appointment: Appointment) {

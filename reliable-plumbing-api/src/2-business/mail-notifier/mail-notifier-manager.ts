@@ -1,12 +1,12 @@
 import * as nodemailer from 'nodemailer';
 import { Inject } from 'typedi';
 import { MailLog, MailStatus } from '../../3-domain/domain-module';
-import { ConfigService, dependcies } from '../../5-cross-cutting/cross-cutting.module';
+import { ConfigService, dependencies } from '../../5-cross-cutting/cross-cutting.module';
 import { MailLogRepo } from '../../4-data-access/data-access.module';
 
 export class MailNotifierManager {
 
-    @Inject(dependcies.MailLogRepo)
+    @Inject(dependencies.MailLogRepo)
     private emailLogRepo: MailLogRepo
 
     constructor() {
