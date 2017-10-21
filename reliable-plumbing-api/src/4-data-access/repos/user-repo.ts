@@ -22,7 +22,7 @@ export class UserRepo extends Repo<User> {
         });
     }
 
-    getUserWithRoles(roles: Role[]): Promise<User[]> {
+    getUsersByRoles(roles: Role[]): Promise<User[]> {
         let model = this.createSet();
 
         return new Promise<User[]>((resolve, reject) => {

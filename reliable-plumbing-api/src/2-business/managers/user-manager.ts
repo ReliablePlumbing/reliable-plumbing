@@ -112,7 +112,7 @@ export class UserManager {
 
                     if (result.hashedPassword != passwordHash)
                         reject(loginError);
-                        
+
                     resolve(result);
                 });
             }
@@ -188,9 +188,9 @@ export class UserManager {
 
     getAllSystemUsers() {
         return new Promise<User[]>((resolve, reject) => {
-            let roles = [Role.Admin, Role.Technician];
+            let roles = [Role.Manager, Role.Technician];
 
-            this.userRepo.getUserWithRoles(roles).then(result => {
+            this.userRepo.getUsersByRoles(roles).then(result => {
                 if (result == null)
                     return resolve([]);
 
@@ -254,7 +254,7 @@ export class UserManager {
             return false
 
         for (let role of roles)
-            if (role == Role.Admin || role == Role.Technician)
+            if (role == Role.Manager || role == Role.Technician)
                 return true;
 
         return false;

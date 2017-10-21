@@ -22,4 +22,10 @@ export interface Config {
         registerConnection: string,
         notificationsEvent: string
     };
+
+    notification: {
+        messages: {
+            appointmentCreated: string
+        }
+    }
 }

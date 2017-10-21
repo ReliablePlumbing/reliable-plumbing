@@ -22,4 +22,13 @@ export class LookupsService {
 
   }
 
+  getAppointmentSettings(): Observable<any> {
+    return this.httpService.get(this.basePath + 'getAppointmentSettings', false)
+      .map((response: Response) => response.json());
+  }
+
+  saveAppointmentSettings(settings): Observable<any> {
+    return this.httpService.post(this.basePath + 'addEditAppointmentSettings', settings)
+      .map((response: Response) => response.json());
+  }
 }

@@ -32,10 +32,10 @@ export class LoginComponent {
             // this.routeHandler.routeToDefault();
           }
           else
-            this.alertifyService.printErrorMessage('Email or password is incorrect');
+            this.alertifyService.error('Email or password is incorrect');
         },
         error => {
-          this.alertifyService.printErrorMessage('Email or password is incorrect');
+          this.alertifyService.error('Email or password is incorrect');
         });
     }
   }

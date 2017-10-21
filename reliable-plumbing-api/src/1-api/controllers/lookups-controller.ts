@@ -11,7 +11,7 @@ export class LookupsController {
     private lookupsManager: LookupsManager;
 
     @Post('/addEditAppointmentType')
-    @Authorized([Role.Admin])
+    @Authorized([Role.Manager])
     addAppointmentType( @Body() appointmentType) {
         return new Promise<any>((resolve, reject) => {
             this.lookupsManager.addEditAppointmentType(appointmentType).then(res => resolve(res));
@@ -28,6 +28,21 @@ export class LookupsController {
                     models.push(type.toLightModel());
                 return resolve(models);
             });
+        });
+    }
+
+    @Get('/getAppointmentSettings')
+    getAppointmentSettings() {
+        return new Promise<any>((resolve, reject) => {
+            this.lookupsManager.getAppointmentSettings().then(result => resolve(result));
+        });
+    }
+
+    @Post('/addEditAppointmentSettings')
+    @Authorized([Role.Manager])
+    addEditAppointmentSettings( @Body() appointmentSettings) {
+        return new Promise<any>((resolve, reject) => {
+            this.lookupsManager.addEditAppointmentSettings(appointmentSettings).then(result => resolve(result));
         });
     }
 

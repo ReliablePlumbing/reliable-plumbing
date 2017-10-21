@@ -1,4 +1,3 @@
-import { Role } from '../enums/role';
 import { BaseEntity } from './base/base-entity';
 
 export class AppointmentType extends BaseEntity {

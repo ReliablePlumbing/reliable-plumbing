@@ -74,7 +74,7 @@ export class ScheduleAppointmentComponent implements OnInit {
     // call service to send the appointement data
     this.appointmentService.addAppointment(this.appointment).subscribe(result => {
       if(result.id != null)
-        this.alertifyService.printSuccessMessage('Your appointment has been submitted, one of our representatives will contact you soon');
+        this.alertifyService.success('Your appointment has been submitted, one of our representatives will contact you soon');
     })
   }
 

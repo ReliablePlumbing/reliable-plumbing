@@ -97,13 +97,13 @@ export class UserManagementService {
       errorObj.message = errorBody.message;
       errorObj.invalidProperties = errorBody.invalidProperties;
       if (errorBody.code == 400) { // for bad request, handled exception
-        this.alertifyService.printErrorMessage(errorBody.message)
+        this.alertifyService.error(errorBody.message)
       }
       else if (errorBody.code == 500) { // unhandled exception
         if (environment.production)
-          this.alertifyService.printErrorMessage('حدث خطأ غير متوقع, برجاء المحاولة في وقت لاحق');
+          this.alertifyService.error('حدث خطأ غير متوقع, برجاء المحاولة في وقت لاحق');
         else
-          this.alertifyService.printErrorMessage(errorBody.message);
+          this.alertifyService.error(errorBody.message);
       }
     }
 

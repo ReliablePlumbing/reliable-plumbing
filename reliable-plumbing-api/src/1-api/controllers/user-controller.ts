@@ -91,7 +91,7 @@ export class UserController {
     }
 
     @Get("/getAllSystemUsers")
-    @Authorized([Role.Admin])
+    @Authorized([Role.Manager])
     getAllSystemUsers() {
         return new Promise((resolve, reject) => {
             this.userManager.getAllSystemUsers().then(result => {
@@ -105,7 +105,7 @@ export class UserController {
     }
 
     @Delete('/deleteUserById')
-    @Authorized([Role.Admin])
+    @Authorized([Role.Manager])
     deleteUserById( @QueryParam('id') id: string) {
         return new Promise((resolve, reject) => {
             this.userManager.deleteUserById(id).then(result => resolve(result));

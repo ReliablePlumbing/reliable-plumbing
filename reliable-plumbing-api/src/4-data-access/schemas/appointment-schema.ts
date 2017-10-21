@@ -10,6 +10,7 @@ export var appointmentSchema: genericSchema = {
         userId: { type: String, required: false },
         date: { type: Date, required: true },
         typeId: { type: String, required: true },
+        status: { type: Number, required: true }
     }),
     collectionName: 'appointments'
 };

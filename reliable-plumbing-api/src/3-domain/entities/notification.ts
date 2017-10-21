@@ -1,6 +1,6 @@
 import { BaseEntity } from './base/base-entity';
 import { NotificationType } from '../enums/notification-type';
-import { ObjectType } from '../enums/objectType';
+import { ObjectType } from '../enums/object-type';
 
 export class Notification extends BaseEntity {
 

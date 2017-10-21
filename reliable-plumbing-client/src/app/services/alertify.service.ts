@@ -16,16 +16,12 @@ export class AlertifyService {
     });
   }
 
-  printSuccessMessage(message: string) {
+  success(message: string) {
     this.notifier.success(message);
   }
 
-  printErrorMessage(message: string) {
+  error(message: string) {
     this.notifier.error(message);
-  }
-
-  showSuccessPopup(message: string) {
-    this.notifier.alert(message);
   }
 
   notify(message) {

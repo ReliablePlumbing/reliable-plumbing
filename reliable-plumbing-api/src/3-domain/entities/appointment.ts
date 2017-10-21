@@ -1,4 +1,5 @@
 import { BaseEntity } from './base/base-entity';
+import { AppointmentStatus } from '../enums/appointment-status';
 
 export class Appointment extends BaseEntity {
 
@@ -9,6 +10,7 @@ export class Appointment extends BaseEntity {
     userId?: string;
     date: Date;
     typeId: string;
+    status: AppointmentStatus;
 
     constructor(appointment: any) {
         super();
@@ -21,6 +23,7 @@ export class Appointment extends BaseEntity {
         this.userId = appointment.userId;
         this.date = appointment.date;
         this.typeId = appointment.typeId;
+        this.status = appointment.status;
     }
 
     toLightModel() {
@@ -32,7 +35,8 @@ export class Appointment extends BaseEntity {
             mobile: this.mobile,
             userId: this.userId,
             date: this.date,
-            typeId: this.typeId
+            typeId: this.typeId,
+            status: this.status
         }
     }
 }

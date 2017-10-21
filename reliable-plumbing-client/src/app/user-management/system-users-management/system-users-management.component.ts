@@ -55,7 +55,7 @@ export class SystemUsersManagementComponent implements OnInit {
       this.userManagementService.deleteUserById(user.id).subscribe(success => {
         if (success) {
           this.users = this.users.filter(u => user.id != u.id);
-          this.alertifyService.printSuccessMessage('User deleted succefully');
+          this.alertifyService.success('User deleted succefully');
         }
       });
 

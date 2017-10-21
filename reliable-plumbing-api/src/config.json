@@ -17,5 +17,10 @@
     "socketsSettings": {
         "registerConnection": "registerConnectionWithUserId",
         "notificationsEvent": "notifications"
+    },
+    "notification": {
+        "messages": {
+            "appointmentCreated": "New call has been scheduled"
+        }
     }
 }
