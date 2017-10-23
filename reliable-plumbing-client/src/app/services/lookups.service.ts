@@ -31,4 +31,11 @@ export class LookupsService {
     return this.httpService.post(this.basePath + 'addEditAppointmentSettings', settings)
       .map((response: Response) => response.json());
   }
+
+  getAppointmentSettingsAndTypes(): Observable<any> {
+    return this.httpService.get(this.basePath + 'getAppointmentSettingsAndTypes', false)
+      .map((response: Response) => response.json());
+  }
+
+
 }

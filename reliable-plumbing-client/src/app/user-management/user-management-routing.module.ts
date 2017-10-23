@@ -9,6 +9,7 @@ import { Role } from '../models/enums';
 
 const routes: Routes = [
   { path: 'activate-mail', component: ActivateMailComponent },
+  { path: 'login', component: LoginComponent } 
 ];
 
 @NgModule({

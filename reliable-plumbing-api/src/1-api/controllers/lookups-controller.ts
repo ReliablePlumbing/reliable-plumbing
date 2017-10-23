@@ -46,4 +46,11 @@ export class LookupsController {
         });
     }
 
+    @Get('/getAppointmentSettingsAndTypes')
+    getAppointmentSettingsAndTypes() {
+        return new Promise<any>((resolve, reject) => {
+            this.lookupsManager.getAppointmentSettingsAndTypes().then(result => resolve(result));
+        });
+    }
+
 }

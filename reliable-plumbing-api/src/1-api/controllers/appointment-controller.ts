@@ -21,4 +21,19 @@ export class AppointmentController {
             })
         })
     }
+
+    @Post('/getAppointmentsFiltered')
+    @Authorized([Role.Manager, Role.Technician])
+    getAppointmentsFiltered( @Body() filters) {
+        return new Promise<Appointment[]>((resolve, reject) => {
+            this.appointmentManager.getAppointmentFiltered(filters).then(appointments => {
+                // to light models here
+                let models = [];
+                for (let appointment of appointments)
+                    models.push(appointment.toLightModel());
+
+                resolve(models);
+            })
+        })
+    }
 }

@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { FormsModule } from '@angular/forms';
+import { SelectModule } from 'ng2-select';
 
 // our modules
 import { ServicesModule } from '../services/services.module';
@@ -16,7 +17,7 @@ import { ScheduleManagementComponent } from './schedule-management/schedule-mana
 
 @NgModule({
   imports: [
-    CommonModule, AdminPanelRoutingModule, ServicesModule, NgbModule, FormsModule, UserManagementModule, SharedModule
+    CommonModule, AdminPanelRoutingModule, ServicesModule, NgbModule, FormsModule, UserManagementModule, SharedModule, SelectModule
   ],
   declarations: [AppointmentSettingsomponent, AdminPanelComponent, ScheduleManagementComponent]
 })

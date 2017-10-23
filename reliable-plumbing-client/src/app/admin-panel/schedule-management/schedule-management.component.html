@@ -1,3 +1,57 @@
-<p>
-  schedule-management works!
-</p>
+<loader *ngIf="loading"></loader>
+
+<ng-container *ngIf="!loading">
+  <!-- filters -->
+  <section>
+    <div class="row">
+      <div class="col-sm-5">
+        <div class="form-group">
+          <multi-select-datepicker></multi-select-datepicker>
+        </div>
+      </div>
+
+      <div class="col-sm-7">
+        <div class="row">
+          <div class="col-sm-6">
+            <div class="form-group">
+              <label for="time" class="">From</label>
+              <ngb-timepicker [(ngModel)]="filters.time.from" [meridian]="true"></ngb-timepicker>
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <div class="form-group">
+              <label for="time" class=""></label>To
+              <ngb-timepicker [(ngModel)]="filters.time.to" [meridian]="true"></ngb-timepicker>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-sm-6">
+            <div class="form-group">
+              <label for="appointmentType" class="">Appointment Type</label>
+              <ng-select [multiple]="true" [items]="lookups.types" [active]="filters.types" (selected)="selected($event, filters.types)"
+                (removed)="removed($event, 'types')" placeholder="empty filter, means all selected"></ng-select>
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <div class="form-group">
+              <label for="status" class="">Status</label>
+              <ng-select [multiple]="true" [items]="lookups.status" [active]="filters.status" (selected)="selected($event, filters.status)"
+              (removed)="removed($event, 'status')" placeholder="empty filter, means all selected"></ng-select>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <button class="btn btn-primary" (click)="filter()" >Filter</button>
+  </section>
+
+  <section>
+    <!-- appointments -->
+
+  </section>
+
+</ng-container>

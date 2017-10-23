@@ -27,6 +27,7 @@
     "@ngrx/core": "^1.2.0",
     "alertify.js": "^1.0.12",
     "core-js": "^2.4.1",
+    "ng2-select": "^1.2.0",
     "rxjs": "^5.4.3",
     "socket.io": "^2.0.3",
     "socket.io-client": "^2.0.3",

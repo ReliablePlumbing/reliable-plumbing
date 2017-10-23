@@ -15,5 +15,10 @@ export class AppointmentService {
     return this.httpService.post(this.basePath + 'addAppointment', appointment, false)
       .map((response: Response) => response.json())
   }
+
+  getAppointmentsFiltered(filters): Observable<any> {
+    return this.httpService.post(this.basePath + 'getAppointmentsFiltered', filters)
+      .map((response: Response) => response.json())
+  }
 }
 

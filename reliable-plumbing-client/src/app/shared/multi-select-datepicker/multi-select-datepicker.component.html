@@ -1,0 +1,13 @@
+<!-- 
+  <input class="form-control" (ngModelChange)="onDateChange($event)" placeholder="yyyy-mm-dd" name="dp" [displayMonths]="2" [dayTemplate]="t"
+  ngbDatepicker #dp="ngbDatepicker"> -->
+<ngb-datepicker #dp ngModel (ngModelChange)="onDateChange($event)" [displayMonths]="2" [dayTemplate]="t" [navigation]="true">
+</ngb-datepicker>
+
+
+<ng-template #t let-date="date" let-focused="focused">
+  <span class="custom-day" [class.focused]="focused" [class.range]="isFrom(date) || isTo(date) || isInside(date) || isHovered(date)"
+    [class.faded]="isHovered(date) || isInside(date)" (mouseenter)="hoveredDate = date" (mouseleave)="hoveredDate = null">
+    {{ date.day }}
+  </span>
+</ng-template>

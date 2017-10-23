@@ -51,7 +51,7 @@ export class LookupsManager {
 
     addEditAppointmentSettings(settings: AppointmentSettings) {
         let isNew = settings.id == null;
-      
+
         return new Promise<AppointmentSettings | boolean>((resolve, reject) => {
             let promise;
             if (isNew)
@@ -64,10 +64,21 @@ export class LookupsManager {
     }
 
     getAppointmentSettings() {
-        return new Promise<AppointmentSettings | boolean>((resolve, reject) => {
+        return new Promise<AppointmentSettings>((resolve, reject) => {
             this.appointmentSettingsRepo.getSettings().then(result => resolve(result));
         });
     }
 
     // endregion appointment settings
+
+    getAppointmentSettingsAndTypes() {
+        return new Promise<{ settings: AppointmentSettings, types: AppointmentType[] }>((resolve, reject) => {
+            Promise.all([this.getAppointmentSettings(), this.getAllAppointmentTypes()]).then((values) => {
+                return resolve({
+                    settings: values[0],
+                    types: values[1]
+                });
+            });
+        });
+    }
 }

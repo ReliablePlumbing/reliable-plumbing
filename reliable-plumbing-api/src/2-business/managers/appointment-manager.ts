@@ -43,6 +43,23 @@ export class AppointmentManager {
         });
     }
 
+    getAppointmentFiltered(filters) {
+
+        let fromDate = this.constructAppointemntDate(filters.date.from, filters.time.from);
+        let toDate = this.constructAppointemntDate(filters.date.to, filters.time.to);
+        return new Promise<Appointment[]>((resolve, reject) => {
+            this.appointmentRepo.getAppointmentsFilteredByDatesAndStatusAndType(fromDate, toDate, filters.status, filters.types).then(results => {
+
+
+
+                return resolve(results);
+            })
+
+
+        })
+    }
+
+    // region Private Methords
     private validateAppointment(appointment: Appointment) {
         let errors = [];
 
@@ -80,4 +97,14 @@ export class AppointmentManager {
         })
 
     }
+
+    private constructAppointemntDate(date: string, time: { h: number, min: number }) {
+        let returnDate = new Date(date);
+        returnDate.setHours(time.h);
+        returnDate.setMinutes(time.min);
+        returnDate.setSeconds(0);
+
+        return returnDate;
+    }
+    // endregion private methods
 }
