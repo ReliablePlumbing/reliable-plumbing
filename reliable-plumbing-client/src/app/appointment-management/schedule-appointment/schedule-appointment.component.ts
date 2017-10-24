@@ -1,7 +1,7 @@
 import { Component, OnInit, EventEmitter, Input, Output } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators, AbstractControl } from '@angular/forms';
 import { AlertifyService, EnvironmentService, RouteHandlerService, LookupsService, AppointmentService } from '../../services/services.exports';
-import { convertFromBootstrapDate } from '../../utils/helpers';
+import { convertFromBootstrapDate } from '../../utils/date-helpers';
 
 @Component({
   selector: 'rb-schedule-appointment',

@@ -7,7 +7,7 @@ export var appointmentSchema: genericSchema = {
         fullName: { type: String, required: false },
         email: { type: String, required: false },
         mobile: { type: String, required: false },
-        userId: { type: String, required: false },
+        userId: { type: String, required: false, ref: 'users' },
         date: { type: Date, required: true },
         typeId: { type: String, required: true },
         status: { type: Number, required: true }

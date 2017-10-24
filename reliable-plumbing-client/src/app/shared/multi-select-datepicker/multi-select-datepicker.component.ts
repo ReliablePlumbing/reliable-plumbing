@@ -23,7 +23,7 @@ export class MultiSelectDatepickerComponent {
   fromDate: NgbDateStruct;
   toDate: NgbDateStruct;
 
-  @Output() dateChanged: EventEmitter<any> = new EventEmitter<any>();
+  @Output() datesChanged: EventEmitter<any> = new EventEmitter<any>();
 
   constructor(calendar: NgbCalendar) {
     this.fromDate = calendar.getToday();
@@ -40,7 +40,7 @@ export class MultiSelectDatepickerComponent {
       this.fromDate = date;
     }
 
-    this.dateChanged.emit({
+    this.datesChanged.emit({
       from: this.fromDate,
       to: this.toDate
     })

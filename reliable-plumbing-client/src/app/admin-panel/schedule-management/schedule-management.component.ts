@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { AppointmentStatus } from '../../models/enums';
 import { LookupsService, AppointmentService } from '../../services/services.exports';
-import { getTimeArray, getEnumEntries } from '../../utils/helpers';
+import { getTimeArray, getEnumEntries, getDatesArray, getDateString } from '../../utils/date-helpers';
+import * as moment from 'moment';
 
 @Component({
   selector: 'rb-schedule-management',
@@ -12,6 +13,9 @@ export class ScheduleManagementComponent implements OnInit {
 
 
   loading: boolean = true;
+  loadingFiltered = true;
+  appointments = {};
+  datesArrayBetweenFilterDates;
   filters: {
     date: {
       from: { day: number, month: number, year: number },
@@ -54,7 +58,7 @@ export class ScheduleManagementComponent implements OnInit {
         },
         types: []
       }
-      this.loading = false;
+      this.filter()
     });
   }
 
@@ -73,6 +77,11 @@ export class ScheduleManagementComponent implements OnInit {
     return mappedTypes;
   }
 
+  updateDates(dates) {
+    this.filters.date.from = dates.from;
+    this.filters.date.to = dates.to;
+  }
+
   selected(item, items) {
     if (items == null)
       items = [];
@@ -84,6 +93,7 @@ export class ScheduleManagementComponent implements OnInit {
   }
 
   filter() {
+    this.loadingFiltered = true;
     let requestFilters = {
       date: {
         from: this.filters.date.from == null ? null : new Date(this.filters.date.from.year, this.filters.date.from.month - 1, this.filters.date.from.day),
@@ -103,6 +113,40 @@ export class ScheduleManagementComponent implements OnInit {
 
     this.appointmentService.getAppointmentsFiltered(requestFilters).subscribe(results => {
       console.log(results);
+
+      this.mapAndGroupAppointmentsByDay(results);
+      this.loading = false;
+      this.loadingFiltered = false;
+
     })
   }
+
+  mapAndGroupAppointmentsByDay(appointments) {
+    // todo: map to an object for display in card
+    for (let appointment of appointments) {
+
+      let appointmentDay = moment(appointment.date, 'YYYY-MM-DD').format('MM-DD-YYYY');
+
+      if (this.appointments[appointmentDay] == null)
+        this.appointments[appointmentDay] = [];
+
+      this.appointments[appointmentDay].push(appointment);
+
+    }
+    this.constructDaysArrayBetweenFilterDates();
+  }
+
+  constructDaysArrayBetweenFilterDates() {
+    let from = getDateString(this.filters.date.from);
+    let to = this.filters.date.to == null ? from : getDateString(this.filters.date.to);
+
+    let startDate = moment(from, 'MM-DD-YYYY');
+    let endDate = moment(to, 'MM-DD-YYYY');
+
+    this.datesArrayBetweenFilterDates = getDatesArray(startDate, endDate);
+
+  }
+
+
 }
+

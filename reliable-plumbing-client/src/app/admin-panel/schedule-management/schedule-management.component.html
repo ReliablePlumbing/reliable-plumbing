@@ -6,7 +6,7 @@
     <div class="row">
       <div class="col-sm-5">
         <div class="form-group">
-          <multi-select-datepicker></multi-select-datepicker>
+          <multi-select-datepicker (datesChanged)="updateDates($event)"></multi-select-datepicker>
         </div>
       </div>
 
@@ -38,7 +38,7 @@
             <div class="form-group">
               <label for="status" class="">Status</label>
               <ng-select [multiple]="true" [items]="lookups.status" [active]="filters.status" (selected)="selected($event, filters.status)"
-              (removed)="removed($event, 'status')" placeholder="empty filter, means all selected"></ng-select>
+                (removed)="removed($event, 'status')" placeholder="empty filter, means all selected"></ng-select>
             </div>
           </div>
 
@@ -46,11 +46,25 @@
       </div>
     </div>
 
-    <button class="btn btn-primary" (click)="filter()" >Filter</button>
+    <button class="btn btn-primary" (click)="filter()">Filter</button>
   </section>
 
+
   <section>
-    <!-- appointments -->
+    <loader *ngIf="loadingFiltered"></loader>
+    <!-- appointments Listing -->
+    <ng-container *ngIf="!loadingFiltered">
+
+      <ng-container *ngFor="let date of datesArrayBetweenFilterDates">
+        <h4>{{date | date}}</h4>
+        <no-data *ngIf="appointments[date] == null || appointments[date].length == 0" [message]="'no appointemts for this day'"></no-data>
+        <ng-container *ngFor="let appointment of appointments[date]">
+          <h1 ><b>
+            {{appointment.user == null ? appointment.fullName : appointment.user.firstName}}
+          </b></h1>
+        </ng-container>
+      </ng-container>
+    </ng-container>
 
   </section>
 

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { LookupsService, AlertifyService, EnvironmentService } from '../../services/services.exports';
-import { convertTimeTo24, convertTimeTo12 } from '../../utils/helpers';
+import { convertTimeTo24, convertTimeTo12 } from '../../utils/date-helpers';
 
 // todo: priority ordering edit, display all info
 @Component({

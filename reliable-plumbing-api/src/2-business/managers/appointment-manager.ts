@@ -46,20 +46,46 @@ export class AppointmentManager {
     getAppointmentFiltered(filters) {
 
         let fromDate = this.constructAppointemntDate(filters.date.from, filters.time.from);
-        let toDate = this.constructAppointemntDate(filters.date.to, filters.time.to);
+        let toDate = filters.date.to == null ? null : this.constructAppointemntDate(filters.date.to, filters.time.to);
         return new Promise<Appointment[]>((resolve, reject) => {
-            this.appointmentRepo.getAppointmentsFilteredByDatesAndStatusAndType(fromDate, toDate, filters.status, filters.types).then(results => {
+            this.appointmentRepo.getAppointmentsFilteredByDatesAndStatusAndType(fromDate, toDate, filters.status, filters.typeIds).then(results => {
+
+                let filteredAppointments = this.filterAppointmentsByTime(filters.time.from, filters.time.to, results);
 
 
-
-                return resolve(results);
+                return resolve(filteredAppointments);
             })
 
 
         })
     }
 
-    // region Private Methords
+    // region Private Methods
+    private filterAppointmentsByTime(from, to, appointments: Appointment[]) {
+        let filteredAppointments = [];
+        let toModified = {
+            h: to.h == 0 ? 24 : to.h,
+            min: to.min
+        }
+        for (let appoint of appointments) {
+            let appointHour = appoint.date.getHours();
+            let appointMins = appoint.date.getMinutes();
+            let isValid = true;
+
+            if (appointHour < from.h || appointHour > toModified.h)
+                isValid = false;
+            if (appointHour == from.h && appointMins < from.min)
+                isValid = false;
+            if (appointHour == toModified.h && appointMins > toModified.min)
+                isValid = false;
+
+            if (isValid)
+                filteredAppointments.push(appoint);
+        }
+
+        return filteredAppointments;
+    }
+
     private validateAppointment(appointment: Appointment) {
         let errors = [];
 

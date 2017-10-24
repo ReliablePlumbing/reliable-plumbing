@@ -70,6 +70,21 @@ export function getTimeArray(span, from, to) {
     return timeArr;
 }
 
+export function getDatesArray(startDate, endDate) {
+    var now = startDate.clone(),
+        dates = [];
+
+    while (now.isBefore(endDate) || now.isSame(endDate)) {
+        dates.push(now.format('M-D-YYYY'));
+        now.add('days', 1);
+    }
+    return dates;
+}
+
+export function getDateString(datObj) {
+    return datObj.month + '-' + datObj.day + '-' + datObj.year;
+}
+
 export function getEnumEntries(yourEnum: any) {
     let enumObjArr = [];
     for (let enumMember in yourEnum) {

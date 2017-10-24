@@ -5,8 +5,9 @@ import { LoaderComponent } from './loader/loader.component';
 import { MultiSelectDatepickerComponent } from './multi-select-datepicker/multi-select-datepicker.component';
 import { InputNumberDirective } from './directives/input-number.directive';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NoDataComponent } from './no-data/no-data.component';
 
-let components = [LoaderComponent, InputNumberDirective, MultiSelectDatepickerComponent]
+let components = [LoaderComponent, InputNumberDirective, MultiSelectDatepickerComponent, NoDataComponent]
 
 @NgModule({
   imports: [
