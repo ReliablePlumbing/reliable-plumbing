@@ -1,11 +1,12 @@
 import { Inject, Service } from 'typedi';
 import {
     AppError, ErrorType, Appointment, AppointmentStatus, AppointmentType, NotificationType,
-    Notification, ObjectType, Role
+    Notification, ObjectType, Role, TechnicianStatus, User
 } from '../../3-domain/domain-module';
 import { AppointmentRepo, UserRepo } from '../../4-data-access/data-access.module';
 import { NotificationManager } from './notification-manager';
 import { AccountSecurity, dependencies, TokenManager, ConfigService } from '../../5-cross-cutting/cross-cutting.module';
+import * as moment from 'moment';
 
 @Service()
 export class AppointmentManager {
@@ -60,7 +61,80 @@ export class AppointmentManager {
         })
     }
 
+    getTechniciansWithStatusInTime(appointmentId: string) {
+        return new Promise<{
+            technician: User,
+            status: TechnicianStatus,
+            appointments: Appointment[]
+        }[]>((resolve, reject) => {
+            let appointmentPromise = this.appointmentRepo.findById(appointmentId);
+            let usersPromise = this.userRepo.getUsersByRoles([Role.Technician]);
+            Promise.all([appointmentPromise, usersPromise]).then(values => {
+                let appointemnt = values[0];
+                let technicians = values[1];
+
+                // todo: get boundaries from settings
+                let boundaryDates = this.getPossibleOverlappingDates(appointemnt.date, 4);
+                let filterStatus = [AppointmentStatus.Pending, AppointmentStatus.NotAvailable, AppointmentStatus.Confirmed]
+                let technicianIds = technicians.map(tech => tech.id);
+
+                this.appointmentRepo.getAppointmentsFilteredByDatesAndStatusAndType(boundaryDates.from, boundaryDates.to, filterStatus, null)
+                    .then(results => {
+                        let techniciansWithAppointmentsAndStatus = [];
+
+                        for (let technician of technicians) {
+                            let technicianAppointments = results.filter(appoint => appoint.userId == technician.id);
+
+                            techniciansWithAppointmentsAndStatus.push({
+                                technician: technician,
+                                status: this.getTechnicianStatus(appointemnt, technicianAppointments),
+                                appointments: technicianAppointments
+                            });
+                        }
+
+                        return resolve(techniciansWithAppointmentsAndStatus)
+
+                    });
+            });
+        });
+
+    }
+
+
     // region Private Methods
+
+    private getTechnicianStatus(appointment: Appointment, technicianAppointments: Appointment[]) {
+        // todo: get interval from settings
+        let possibleBusyInterval = 2;
+        let boundary2HourDates = this.getPossibleOverlappingDates(appointment.date, 2);
+        let boundary4HourDates = this.getPossibleOverlappingDates(appointment.date, 4);
+
+        let status = TechnicianStatus.Available;
+        for (let appoint of technicianAppointments) {
+            if (appoint.date == appoint.date) {
+                status = TechnicianStatus.Busy
+                break;
+            };
+            if (appoint.date >= boundary2HourDates.from || appoint.date <= boundary2HourDates.to)
+                status = TechnicianStatus.PossibleBusy;
+            if (status != TechnicianStatus.PossibleBusy && (appoint.date >= boundary4HourDates.from || appoint.date <= boundary4HourDates.to))
+                status = TechnicianStatus.HardlyBusy;
+        }
+
+        return status;
+    }
+
+    private getPossibleOverlappingDates(date, interval) {
+
+        let momentDate = moment(date);
+        let from = momentDate.clone().add(-interval, 'hours');
+        let to = momentDate.clone().add(interval, 'hours');
+
+        return {
+            from: new Date(from.toISOString()),
+            to: new Date(to.toISOString())
+        }
+    }
     private filterAppointmentsByTime(from, to, appointments: Appointment[]) {
         let filteredAppointments = [];
         let toModified = {

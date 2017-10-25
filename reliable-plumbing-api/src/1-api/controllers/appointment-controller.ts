@@ -36,4 +36,25 @@ export class AppointmentController {
             })
         })
     }
+
+    @Get('/getTechniciansWithStatusInTime')
+    @Authorized([Role.Manager])
+    getTechniciansWithStatusInTime( @QueryParam('appointmentId') appointmentId: string) {
+        return new Promise((resolve, reject) => {
+
+            this.appointmentManager.getTechniciansWithStatusInTime(appointmentId).then(results => {
+                let models = [];
+                for (let entity of results) {
+                    models.push({
+                        technician: entity.technician.toLightModel(),
+                        status: entity.status,
+                        appointments: entity.appointments.map(appoint => appoint.toLightModel())
+                    });
+                }
+
+                return resolve(models);
+            });
+
+        })
+    }
 }

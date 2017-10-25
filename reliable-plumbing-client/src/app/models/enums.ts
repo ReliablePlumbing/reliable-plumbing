@@ -17,3 +17,10 @@ export enum AppointmentStatus {
     Rescheduled,
     Canceled
 }
+
+export enum TechnicianStatus {
+    Available = 1,
+    Busy,
+    PossibleBusy,
+    HardlyBusy
+}

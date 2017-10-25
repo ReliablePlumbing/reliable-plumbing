@@ -15,6 +15,7 @@ export * from './enums/mail-status';
 export * from './enums/notification-type';
 export * from './enums/appointment-status';
 export * from './enums/object-type';
+export * from './enums/technician-status';
 
 /*** Errors ***/
 export * from './errors/errors';

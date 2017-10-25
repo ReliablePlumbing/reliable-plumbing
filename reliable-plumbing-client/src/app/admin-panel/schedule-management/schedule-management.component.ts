@@ -1,9 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Router } from '@angular/router';
 import { AppointmentStatus } from '../../models/enums';
 import { LookupsService, AppointmentService } from '../../services/services.exports';
 import { getTimeArray, getEnumEntries, getDatesArray, getDateString } from '../../utils/date-helpers';
 import * as moment from 'moment';
+import { NgbModalRef, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
+// todo: refactor dates to use moment and default offset is week
 @Component({
   selector: 'rb-schedule-management',
   templateUrl: './schedule-management.component.html',
@@ -11,37 +14,25 @@ import * as moment from 'moment';
 })
 export class ScheduleManagementComponent implements OnInit {
 
-
+  @ViewChild('appointmentDetails') appointmentDetailsTemplate: ElementRef;
+  appointmentDetailsModalRef: NgbModalRef;
+  selectedAppointment = null;
   loading: boolean = true;
   loadingFiltered = true;
   appointments = {};
   datesArrayBetweenFilterDates;
-  filters: {
-    date: {
-      from: { day: number, month: number, year: number },
-      to: { day: number, month: number, year: number }
-    },
-    time: {
-      from: { hour: number, minute: number },
-      to: { hour: number, minute: number }
-    },
-    types: { id: string, text: string }[],
-    status: { id: string, text: string }[]
-  }
-
+  filters: any = {};
   lookups: {
-    // times: any[],
     types: { id: string, text: string }[],
     status: any[]
-  }
-  constructor(private lookupsService: LookupsService, private appointmentService: AppointmentService) { }
+  };
 
+  constructor(private lookupsService: LookupsService, private appointmentService: AppointmentService,
+    private modalService: NgbModal, private router: Router) { }
 
   ngOnInit() {
     this.lookupsService.getAppointmentSettingsAndTypes().subscribe(results => {
-      console.log(results);
       this.lookups = {
-        // times: getTimeArray(results.settings.timeSpan, results.settings.workHours.from, results.settings.workHours.to),
         types: this.mapTypes(results.types),
         status: getEnumEntries(AppointmentStatus)
       };
@@ -123,6 +114,7 @@ export class ScheduleManagementComponent implements OnInit {
 
   mapAndGroupAppointmentsByDay(appointments) {
     // todo: map to an object for display in card
+    this.appointments = {};
     for (let appointment of appointments) {
 
       let appointmentDay = moment(appointment.date, 'YYYY-MM-DD').format('MM-DD-YYYY');
@@ -145,6 +137,29 @@ export class ScheduleManagementComponent implements OnInit {
 
     this.datesArrayBetweenFilterDates = getDatesArray(startDate, endDate);
 
+  }
+
+  openAppointmentDetailsModal(appointment) {
+    this.selectedAppointment = appointment;
+    let url = this.router.url;
+    this.router.navigate([url, { id: appointment.id }])
+    this.appointmentDetailsModalRef = this.modalService.open(this.appointmentDetailsTemplate, { size: 'lg'});
+    this.appointmentDetailsModalRef.result.then(_ => {
+
+      this.selectedAppointment = null;
+      let url = this.router.url.split(';')[0];
+      this.router.navigate([url]);
+    }, _ => {
+
+      this.selectedAppointment = null;
+      let url = this.router.url.split(';')[0];
+      this.router.navigate([url]);
+      this.appointmentDetailsModalRef.close();
+    });
+  }
+
+  closeAppointmentDetailsModal() {
+    this.appointmentDetailsModalRef.close();
   }
 
 

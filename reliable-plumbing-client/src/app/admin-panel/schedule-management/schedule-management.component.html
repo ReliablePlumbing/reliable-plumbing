@@ -59,7 +59,7 @@
         <h4>{{date | date}}</h4>
         <no-data *ngIf="appointments[date] == null || appointments[date].length == 0" [message]="'no appointemts for this day'"></no-data>
         <ng-container *ngFor="let appointment of appointments[date]">
-          <h1 ><b>
+          <h1 (click)="openAppointmentDetailsModal(appointment)"><b>
             {{appointment.user == null ? appointment.fullName : appointment.user.firstName}}
           </b></h1>
         </ng-container>
@@ -69,3 +69,18 @@
   </section>
 
 </ng-container>
+
+
+<ng-template #appointmentDetails let-c="close" let-d="dismiss">
+  <div class="modal-header">
+    <h4 class="modal-title">Appointment Details</h4>
+    <button type="button" class="close" aria-label="Close" (click)="closeAppointmentDetailsModal()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <appointment-details [appointment]="selectedAppointment"></appointment-details>
+  </div>
+
+</ng-template>
+

@@ -20,6 +20,12 @@ export function convertTimeTo12(h, min) {
 
 }
 
+export function convertTimeTo12String(h, min) {
+    let time12 = convertTimeTo12(h, min);
+
+    return convertTimeToString(time12.h, time12.min, time12.amPm);
+}
+
 export function convertTimeTo24(h, min, amPm) {
     if (h == 12 && amPm == 1)
         h = 0;
@@ -32,7 +38,7 @@ export function convertTimeTo24(h, min, amPm) {
 export function convertTimeToString(h, min, amPm) {
     let hStr = h < 10 ? '0' + h : h.toString();
     let minStr = min < 10 ? '0' + min : min.toString();
-    let amPmStr = amPm == 1 ? 'am' : 'pm';
+    let amPmStr = amPm == 1 ? 'AM' : 'PM';
 
     return hStr + ':' + minStr + ' ' + amPmStr
 }

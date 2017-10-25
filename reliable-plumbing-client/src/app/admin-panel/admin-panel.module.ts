@@ -8,6 +8,7 @@ import { SelectModule } from 'ng2-select';
 import { ServicesModule } from '../services/services.module';
 import { UserManagementModule } from '../user-management/user-management.module';
 import { SharedModule }from '../shared/shared.module';
+import { AppointmentManagementModule } from '../appointment-management/appointment-management.module';
 
 // components
 import { AdminPanelRoutingModule } from './admin-panel-routing.module';
@@ -17,7 +18,8 @@ import { ScheduleManagementComponent } from './schedule-management/schedule-mana
 
 @NgModule({
   imports: [
-    CommonModule, AdminPanelRoutingModule, ServicesModule, NgbModule, FormsModule, UserManagementModule, SharedModule, SelectModule
+    CommonModule, AdminPanelRoutingModule, ServicesModule, NgbModule, FormsModule, UserManagementModule, 
+    SharedModule, SelectModule, AppointmentManagementModule
   ],
   declarations: [AppointmentSettingsomponent, AdminPanelComponent, ScheduleManagementComponent]
 })

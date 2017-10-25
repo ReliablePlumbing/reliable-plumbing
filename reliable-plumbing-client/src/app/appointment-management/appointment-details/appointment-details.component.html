@@ -1,0 +1,31 @@
+<h1>{{appointment.user == null ? appointment.fullName : appointment.user.firstName}}</h1>
+<h2>Date: {{mappedAppointment?.date | date}}</h2>
+<h2>Time: {{mappedAppointment?.time}}</h2>
+<h2>Status: {{mappedAppointment?.status.text}}</h2>
+<h3>Assignees: <span *ngFor="let assignee of mappedAppointment.assignees">{{assignee.firstName}}, </span></h3>
+
+<table class="table">
+  <thead>
+    <th>Name</th>
+    <th>Email</th>
+    <th>Status</th>
+    <th>Appointments That Day</th>
+    <th>Assign</th>
+  </thead>
+  <tbody>
+    <tr *ngFor="let tech of mappedTechnicians">
+      <td>{{tech?.technician.firstName}}</td>
+      <td>{{tech?.technician.email}}</td>
+      <td><span class="status" [ngClass]="tech?.status.color">{{tech?.status.text}}</span></td>
+      <td>
+        <ng-container>
+          <span *ngFor="let appoint of tech.appointments">{{appoint?.time}}</span>
+        </ng-container>
+        <span *ngIf="tech.appointments.length == 0">no appointments</span>
+      </td>
+      <td>
+        <button class="btn btn-success" (click)="assign(tech)">Assign</button>
+      </td>
+    </tr>
+  </tbody>
+</table>

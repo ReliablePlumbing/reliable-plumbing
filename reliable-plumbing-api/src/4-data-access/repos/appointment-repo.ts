@@ -21,9 +21,9 @@ export class AppointmentRepo extends Repo<Appointment> {
         if (status != null && status.length > 0)
             filterObj.status = { $in: status };
         if (typeids != null && typeids.length > 0)
-            filterObj.typeId = { $in: typeids }; 
+            filterObj.typeId = { $in: typeids };
 
-        return new Promise<any>((resolve, reject) => {
+        return new Promise<Appointment[]>((resolve, reject) => {
 
             model.find(filterObj).populate('userId').exec((err, results) => {
                 if (err != null)
@@ -34,13 +34,36 @@ export class AppointmentRepo extends Repo<Appointment> {
         });
     }
 
+    findById(id) {
+        let model = this.createSet();
+        return new Promise<Appointment>((resolve, reject) => {
+            model.findById(id, (err, result) => {
+                if (err != null)
+                    return reject(err);
+
+                return resolve(this.mapModelToEntity(result));
+            });
+        });
+    }
+
+    // getAppointmentsFiltredByStatusAndDate(status: AppointmentStatus[], from, date){
+    //     let model = this.createSet();
+    //     return new Promise((resolve, reject) => {
+    //         model.find({})
+
+    //     });
+
+    // }
+
     private mapModelToEntity(appointmentModel: GenericModel<Appointment>) {
         let obj: any = appointmentModel.toObject({ transform: Object });
         let appointment = new Appointment(obj);
-        if (obj.userId != null) {
+        if (obj.userId != null && typeof obj.userId == 'object') {
             appointment.user = new User(obj.userId);
             appointment.userId = appointment.user.id;
         }
+        else
+            appointment.userId = obj.userId;
 
         return appointment;
     }

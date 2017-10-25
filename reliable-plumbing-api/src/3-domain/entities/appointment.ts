@@ -13,7 +13,9 @@ export class Appointment extends BaseEntity {
     date: Date;
     typeId: string;
     status: AppointmentStatus;
+    assineeIds?: string[];
     user?: User;
+    assignees?: User[];
 
     constructor(appointment: any) {
         super();
@@ -27,6 +29,7 @@ export class Appointment extends BaseEntity {
         this.date = appointment.date;
         this.typeId = appointment.typeId;
         this.status = appointment.status;
+        this.assineeIds = appointment.assineeIds;
     }
 
     toLightModel() {
