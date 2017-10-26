@@ -40,7 +40,7 @@ export class AppointmentController {
     @Get('/getTechniciansWithStatusInTime')
     @Authorized([Role.Manager])
     getTechniciansWithStatusInTime( @QueryParam('appointmentId') appointmentId: string) {
-        return new Promise((resolve, reject) => {
+        return new Promise<any>((resolve, reject) => {
 
             this.appointmentManager.getTechniciansWithStatusInTime(appointmentId).then(results => {
                 let models = [];
@@ -57,4 +57,15 @@ export class AppointmentController {
 
         })
     }
+
+    @Post('/updateAppointmentStatusAndAssignees')
+    @Authorized([Role.Manager, Role.Technician])
+    updateAppointmentStatusAndAssignees( @Body() appointment) {
+        return new Promise<any>((resolve, reject) => {
+            this.appointmentManager.updateAppointmentStatusAndAssignees(appointment).then(appointment => {
+                return resolve(appointment.toLightModel());
+            });
+        });
+    }
+
 }

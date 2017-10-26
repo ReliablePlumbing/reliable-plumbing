@@ -26,4 +26,18 @@ export class NotificationManager {
             });
         });
     }
+
+    addNotifications(notifications: Notification[]) {
+        let creationDate = new Date();
+        return new Promise<any>((resolve, reject) => {
+            for (let notf of notifications) {
+                notf.creationDate = creationDate;
+                notf.seen = false;
+                this.notificationRepo.add(notf).then(result => {
+                    this.notificationBroadcastingService.broadcast(result);
+                });
+            }
+            return resolve(true);
+        });
+    }
 }

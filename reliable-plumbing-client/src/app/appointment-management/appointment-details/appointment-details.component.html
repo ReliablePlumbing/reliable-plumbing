@@ -2,7 +2,27 @@
 <h2>Date: {{mappedAppointment?.date | date}}</h2>
 <h2>Time: {{mappedAppointment?.time}}</h2>
 <h2>Status: {{mappedAppointment?.status.text}}</h2>
-<h3>Assignees: <span *ngFor="let assignee of mappedAppointment.assignees">{{assignee.firstName}}, </span></h3>
+<div>
+  <label>
+    <input type="radio" name="appointmentStatus" [checked]="mappedAppointment.status.id == appointmentStatusEnum.Pending" 
+      (click)="changeAppointmentStatus(appointmentStatusEnum.Pending)"/>Pending
+  </label>
+  <label>
+    <input type="radio" name="appointmentStatus" [checked]="mappedAppointment.status.id == appointmentStatusEnum.Confirmed" 
+      (click)="changeAppointmentStatus(appointmentStatusEnum.Confirmed)"/>Confirm
+  </label>
+  <label>
+    <input type="radio" name="appointmentStatus" [checked]="mappedAppointment.status.id == appointmentStatusEnum.NotAvailable" 
+    (click)="changeAppointmentStatus(appointmentStatusEnum.NotAvailable)"/>Not available
+  </label>
+  <label>
+    <input type="radio" name="appointmentStatus" [checked]="mappedAppointment.status.id == appointmentStatusEnum.Rejected" 
+    (click)="changeAppointmentStatus(appointmentStatusEnum.Rejected)"/>Reject
+  </label>
+</div>
+<h3>Assignees: 
+  <span *ngFor="let assignee of mappedAppointment.assignees">{{assignee.technician.firstName}} <span (click)="removeAssignee(assignee)">x</span>, </span>
+</h3>
 
 <table class="table">
   <thead>
@@ -29,3 +49,5 @@
     </tr>
   </tbody>
 </table>
+
+<button class="btn btn-primary" (click)="save()">Save</button>

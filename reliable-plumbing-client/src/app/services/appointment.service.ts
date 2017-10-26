@@ -25,5 +25,10 @@ export class AppointmentService {
     return this.httpService.get(this.basePath + 'getTechniciansWithStatusInTime?appointmentId=' + id)
       .map((response: Response) => response.json());
   }
+
+  updateAppointmentStatusAndAssignees(appointment): Observable<any> {
+    return this.httpService.post(this.basePath + 'updateAppointmentStatusAndAssignees', appointment)
+      .map((response: Response) => response.json());
+  }
 }
 

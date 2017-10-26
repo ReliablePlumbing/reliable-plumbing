@@ -1,7 +1,7 @@
 import { Inject, Service } from 'typedi';
 import {
     AppError, ErrorType, Appointment, AppointmentStatus, AppointmentType, NotificationType,
-    Notification, ObjectType, Role, TechnicianStatus, User
+    Notification, ObjectType, Role, TechnicianStatus, User, StatusHistory
 } from '../../3-domain/domain-module';
 import { AppointmentRepo, UserRepo } from '../../4-data-access/data-access.module';
 import { NotificationManager } from './notification-manager';
@@ -32,7 +32,11 @@ export class AppointmentManager {
         // initialize appointment data creation date, initial status etc..
         appointment.creationDate = new Date();
         appointment.status = AppointmentStatus.Pending;
-
+        appointment.statusHistory = [new StatusHistory({
+            status: AppointmentStatus.Pending,
+            creationDate: new Date(),
+            createdByUserId: appointment.userId
+        })];
         return new Promise<Appointment>((resolve, error) => {
             this.appointmentRepo.add(appointment).then(result => {
                 let notifier = appointment.userId == null ? [] : appointment.userId;
@@ -100,8 +104,42 @@ export class AppointmentManager {
 
     }
 
+    updateAppointmentStatusAndAssignees(appointment: Appointment) {
+        return new Promise<Appointment>((resolve, reject) => {
+            this.appointmentRepo.findById(appointment.id).then(oldAppointment => {
+                let oldStatus = oldAppointment.status;
+                let newStatus = appointment.status;
+                if (oldAppointment.statusHistory.length != appointment.statusHistory.length) {
+                    for (let status of appointment.statusHistory) {
+                        if (status.id == null)
+                            status.creationDate = new Date();
+                    }
+                    oldAppointment.statusHistory = appointment.statusHistory;
+                    oldAppointment.status = this.getAppointmentCurrentStatus(oldAppointment.statusHistory);
+                }
+                let oldAssignees = oldAppointment.assigneeIds;
+                let newAssignees = appointment.assigneeIds;
+                oldAppointment.assigneeIds = appointment.assigneeIds;
+
+                this.appointmentRepo.updateAppointment(oldAppointment).then(result => {
+                    this.sendAppointmentUpdatedNotification(oldStatus, newStatus, oldAssignees, newAssignees, appointment);
+                    resolve(result);
+                })
+            });
+        });
+    }
 
     // region Private Methods
+
+    private getAppointmentCurrentStatus(statusHistory: any[]) {
+        let sortedArr = statusHistory.sort((a, b) => {
+            if (a.creationDate == b.creationDate) return 0;
+            else if (a.creationDate > b.creationDate) return 1;
+            else if (a.creationDate < b.creationDate) return -1;
+        });
+
+        return sortedArr[sortedArr.length - 1].status;
+    }
 
     private getTechnicianStatus(appointment: Appointment, technicianAppointments: Appointment[]) {
         // todo: get interval from settings
@@ -205,6 +243,67 @@ export class AppointmentManager {
         returnDate.setSeconds(0);
 
         return returnDate;
+    }
+
+    private sendAppointmentUpdatedNotification(oldStatus: AppointmentStatus, newStatus: AppointmentStatus,
+        oldAssignees: string[], newAssignees: string[], appointment: Appointment) {
+        let addedAssignees = [];
+        let removedAssignees = [];
+        let sameAssignees = [];
+
+        for (let oldAssignee of oldAssignees) {
+            let exists = false;
+            for (let newAssignee of newAssignees)
+                if (oldAssignee == newAssignee) {
+                    exists = true; break;
+                }
+            exists ? sameAssignees.push(oldAssignee) : removedAssignees.push(oldAssignee);
+        }
+        for (let newAssignee of newAssignees) {
+            let exists = false;
+            for (let oldAssignee of oldAssignees)
+                if (oldAssignee == newAssignee) {
+                    exists = true; break;
+                }
+            if (!exists)
+                addedAssignees.push(newAssignee);
+        }
+
+        let notifications = [];
+
+        if (addedAssignees.length > 0)
+            notifications.push(new Notification({
+                message: ConfigService.config.notification.messages.assgineeAdded,
+                notifeeIds: addedAssignees,
+                objectId: appointment.id,
+                objectType: ObjectType.Appointment,
+                type: NotificationType.AssigneeAdded
+            }));
+
+        if (removedAssignees.length > 0)
+            notifications.push(new Notification({
+                message: ConfigService.config.notification.messages.assgineeRemoved,
+                notifeeIds: removedAssignees,
+                objectId: appointment.id,
+                objectType: ObjectType.Appointment,
+                type: NotificationType.AssigneeRemoved
+            }));
+
+        if (oldStatus != newStatus) {
+            let changedNotification = new Notification({
+                message: ConfigService.config.notification.messages.appointmentChanged,
+                notifeeIds: sameAssignees,
+                objectId: appointment.id,
+                objectType: ObjectType.Appointment,
+                type: NotificationType.AssigneeRemoved
+            });
+            appointment.userId != null ? changedNotification.notifeeIds.push(appointment.userId) :
+                changedNotification.unregisterdEmail = appointment.email;
+
+            notifications.push(changedNotification);
+        }
+
+        this.notificationManager.addNotifications(notifications);
     }
     // endregion private methods
 }

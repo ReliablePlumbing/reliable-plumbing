@@ -15,7 +15,8 @@ export enum AppointmentStatus {
     Confirmed,
     NotAvailable,
     Rescheduled,
-    Canceled
+    Canceled,
+    Rejected
 }
 
 export enum TechnicianStatus {

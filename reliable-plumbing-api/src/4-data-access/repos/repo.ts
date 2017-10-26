@@ -55,7 +55,7 @@ export class Repo<T extends BaseEntity>{
     findOneAndUpdate(entity: T) {
         let model = this.createSet();
         return new Promise<any>((resolve, reject) => {
-            let aa = model.findOneAndUpdate({ _id: entity.id }, entity, { new: true }, (err, result) => {
+            model.findOneAndUpdate({ _id: entity.id }, entity, { new: true }, (err, result) => {
                 return resolve(result);
             });
         });

@@ -20,7 +20,10 @@
     },
     "notification": {
         "messages": {
-            "appointmentCreated": "New call has been scheduled"
+            "appointmentCreated": "New call has been scheduled",
+            "assgineeAdded": "You have been assigned",
+            "assgineeRemoved": "You have been unassigned",
+            "appointmentChanged": "Appointment changed"
         }
     }
 }

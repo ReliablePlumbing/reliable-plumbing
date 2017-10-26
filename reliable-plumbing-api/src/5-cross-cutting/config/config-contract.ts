@@ -25,7 +25,10 @@ export interface Config {
 
     notification: {
         messages: {
-            appointmentCreated: string
+            appointmentCreated: string,
+            assgineeAdded: string,
+            assgineeRemoved: string,
+            appointmentChanged: string
         }
     }
 }

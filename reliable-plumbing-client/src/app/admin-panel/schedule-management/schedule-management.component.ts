@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { AppointmentStatus } from '../../models/enums';
 import { LookupsService, AppointmentService } from '../../services/services.exports';
 import { getTimeArray, getEnumEntries, getDatesArray, getDateString } from '../../utils/date-helpers';
@@ -17,6 +17,8 @@ export class ScheduleManagementComponent implements OnInit {
   @ViewChild('appointmentDetails') appointmentDetailsTemplate: ElementRef;
   appointmentDetailsModalRef: NgbModalRef;
   selectedAppointment = null;
+  selectedDate = null;
+  urlIdParam = null;
   loading: boolean = true;
   loadingFiltered = true;
   appointments = {};
@@ -28,9 +30,10 @@ export class ScheduleManagementComponent implements OnInit {
   };
 
   constructor(private lookupsService: LookupsService, private appointmentService: AppointmentService,
-    private modalService: NgbModal, private router: Router) { }
+    private modalService: NgbModal, private router: Router, private activatedRoute: ActivatedRoute) { }
 
   ngOnInit() {
+    this.urlIdParam = this.activatedRoute.snapshot.params['id'];
     this.lookupsService.getAppointmentSettingsAndTypes().subscribe(results => {
       this.lookups = {
         types: this.mapTypes(results.types),
@@ -42,7 +45,7 @@ export class ScheduleManagementComponent implements OnInit {
           from: { day: nowDate.getDate(), month: nowDate.getMonth() + 1, year: nowDate.getFullYear() },
           to: { day: nowDate.getDate(), month: nowDate.getMonth() + 2, year: nowDate.getFullYear() },
         },
-        status: [{ id: AppointmentStatus.Pending.toString(), text: AppointmentStatus[AppointmentStatus.Pending] }],
+        status: [],
         time: {
           from: { hour: results.settings.workHours.from.h, minute: results.settings.workHours.from.min },
           to: { hour: results.settings.workHours.to.h, minute: results.settings.workHours.to.min }
@@ -117,12 +120,15 @@ export class ScheduleManagementComponent implements OnInit {
     this.appointments = {};
     for (let appointment of appointments) {
 
-      let appointmentDay = moment(appointment.date, 'YYYY-MM-DD').format('MM-DD-YYYY');
+      let appointmentDate = moment(appointment.date, 'YYYY-MM-DD').format('MM-DD-YYYY');
 
-      if (this.appointments[appointmentDay] == null)
-        this.appointments[appointmentDay] = [];
+      if (this.appointments[appointmentDate] == null)
+        this.appointments[appointmentDate] = [];
 
-      this.appointments[appointmentDay].push(appointment);
+      this.appointments[appointmentDate].push(appointment);
+      if(this.urlIdParam != null && appointment.id == this.urlIdParam){
+        this.openAppointmentDetailsModal(appointment, appointmentDate);
+      }
 
     }
     this.constructDaysArrayBetweenFilterDates();
@@ -139,29 +145,41 @@ export class ScheduleManagementComponent implements OnInit {
 
   }
 
-  openAppointmentDetailsModal(appointment) {
+  openAppointmentDetailsModal(appointment, date) {
     this.selectedAppointment = appointment;
+    this.selectedDate = date;
     let url = this.router.url;
     this.router.navigate([url, { id: appointment.id }])
-    this.appointmentDetailsModalRef = this.modalService.open(this.appointmentDetailsTemplate, { size: 'lg'});
+    this.appointmentDetailsModalRef = this.modalService.open(this.appointmentDetailsTemplate, { size: 'lg' });
     this.appointmentDetailsModalRef.result.then(_ => {
 
       this.selectedAppointment = null;
+      this.selectedDate = null;
       let url = this.router.url.split(';')[0];
       this.router.navigate([url]);
     }, _ => {
-
-      this.selectedAppointment = null;
       let url = this.router.url.split(';')[0];
       this.router.navigate([url]);
-      this.appointmentDetailsModalRef.close();
+      this.closeAppointmentDetailsModal();
     });
   }
 
   closeAppointmentDetailsModal() {
+    this.selectedAppointment = null;
+    this.selectedDate = null;
+    this.urlIdParam = null;
     this.appointmentDetailsModalRef.close();
   }
 
+  appointmentUpdated(appointment) {
+    let index = this.appointments[this.selectedDate].filter(appoint => appoint.id == appointment.id);
+
+    this.appointments[this.selectedDate][index] = appointment;
+
+    this.selectedAppointment = null;
+    this.selectedDate = null;
+    this.appointmentDetailsModalRef.close();
+  }
 
 }
 

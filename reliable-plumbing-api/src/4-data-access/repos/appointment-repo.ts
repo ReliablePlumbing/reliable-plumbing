@@ -1,6 +1,6 @@
 import { Repo } from './repo';
 import { appointmentSchema } from '../schemas/appointment-schema';
-import { Appointment, AppointmentStatus, User } from '../../3-domain/domain-module';
+import { Appointment, AppointmentStatus, User, StatusHistory } from '../../3-domain/domain-module';
 import { GenericModel } from '../models/model';
 
 
@@ -46,14 +46,14 @@ export class AppointmentRepo extends Repo<Appointment> {
         });
     }
 
-    // getAppointmentsFiltredByStatusAndDate(status: AppointmentStatus[], from, date){
-    //     let model = this.createSet();
-    //     return new Promise((resolve, reject) => {
-    //         model.find({})
-
-    //     });
-
-    // }
+    updateAppointment(appointment) {
+        let model = this.createSet();
+        return new Promise<Appointment>((resolve, reject) => {
+            model.findOneAndUpdate({ _id: appointment.id }, appointment, { new: true }, (err, result) => {
+                return resolve(this.mapModelToEntity(result));
+            });
+        });
+    }
 
     private mapModelToEntity(appointmentModel: GenericModel<Appointment>) {
         let obj: any = appointmentModel.toObject({ transform: Object });
@@ -65,7 +65,25 @@ export class AppointmentRepo extends Repo<Appointment> {
         else
             appointment.userId = obj.userId;
 
+        appointment.statusHistory = this.mapStatusHistory(obj.statusHistory)
+
         return appointment;
+    }
+
+    mapStatusHistory(statusHistory: any[]) {
+        if (statusHistory == null || statusHistory.length == 0)
+            return [];
+        return statusHistory.map(s => {
+            let status = new StatusHistory(s);
+            if (s.createdByUserId != null && typeof s.createdByUserId == 'object') {
+                status.createdBy = new User(s.createdByUserId);
+                status.createdByUserId = status.createdBy.id;
+            }
+            else
+                status.createdByUserId = s.createdByUserId;
+
+            return status;
+        })
     }
 
     private mapModelToEntities(appointmentModels: GenericModel<Appointment>[]) {

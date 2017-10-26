@@ -13,6 +13,7 @@ export class Notification extends BaseEntity {
     seenDate: Date;
     objectType?: ObjectType;
     objectId?: string;
+    unregisterdEmail?: string;
 
     constructor(notification?: any) {
         super();
@@ -27,6 +28,10 @@ export class Notification extends BaseEntity {
             this.objectType = notification.objectType;
             this.objectId = notification.objectId;
         }
+        if (this.notifeeIds == null)
+            this.notifeeIds = [];
+        if (this.notifierIds == null)
+            this.notifierIds = []
     }
 
 
