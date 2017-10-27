@@ -3,36 +3,17 @@
 --------------------------------------------------------------*/
 
 
-/* Nav Menu Essentials */
+/* navbar */
 
-.nav-menu {
-    margin: 0;
-    padding: 0;
-    list-style: none;
-    ul {
-        position: absolute;
-        display: none;
-        top: 100%;
-        left: 0;
-        z-index: 99;
-    }
-    li {
-        position: relative;
-        white-space: nowrap;
-    }
-    >li {
-        float: left;
-    }
-    li:hover>ul,
-    li.sfHover>ul {
-        display: block;
-    }
-    ul ul {
-        top: 0;
-        left: 100%;
-    }
-    ul li {
-        min-width: 180px;
+.navbar {
+    .navbar-collapse {
+        .navbar-nav {
+            li {
+                a {
+                    color: #fff;
+                }
+            }
+        }
     }
 }
 

@@ -89,7 +89,6 @@ h1, h2, h3, h4, h5, h6 {
     margin: 30px 0 10px 0;
     font-weight: 700;
     line-height: 48px;
-    text-transform: uppercase;
     color: #fff; }
     @media (max-width: 768px) {
       #hero h1 {
@@ -138,7 +137,6 @@ h1, h2, h3, h4, h5, h6 {
 --------------------------------------------------------------*/
 #header {
   background: #111;
-  padding: 10px 0;
   height: initial; }
   #header #logo {
     float: left; }
@@ -177,30 +175,9 @@ h1, h2, h3, h4, h5, h6 {
 /*--------------------------------------------------------------
 # Navigation Menu
 --------------------------------------------------------------*/
-/* Nav Menu Essentials */
-.nav-menu {
-  margin: 0;
-  padding: 0;
-  list-style: none; }
-  .nav-menu ul {
-    position: absolute;
-    display: none;
-    top: 100%;
-    left: 0;
-    z-index: 99; }
-  .nav-menu li {
-    position: relative;
-    white-space: nowrap; }
-  .nav-menu > li {
-    float: left; }
-  .nav-menu li:hover > ul,
-  .nav-menu li.sfHover > ul {
-    display: block; }
-  .nav-menu ul ul {
-    top: 0;
-    left: 100%; }
-  .nav-menu ul li {
-    min-width: 180px; }
+/* navbar */
+.navbar .navbar-collapse .navbar-nav li a {
+  color: #fff; }
 
 /* Nav Menu Arrows */
 .sf-arrows .sf-with-ul {
@@ -372,7 +349,7 @@ body.mobile-nav-active {
   background: #fff;
   padding: 80px 0; }
   #about .about-container {
-    background: url(../img/about-img.jpg) left top no-repeat; }
+    background: url(../img/about-img.jpg) right top no-repeat; }
   #about .about-content {
     background: #fff; }
   #about .about-title {
@@ -594,7 +571,9 @@ body.mobile-nav-active {
     padding: 15px;
     font-weight: 600;
     margin-bottom: 15px; }
-  #contact .form #sendmessage.show, #contact .form #errormessage.show, #contact .form .show {
+  #contact .form #sendmessage.show,
+  #contact .form #errormessage.show,
+  #contact .form .show {
     display: block; }
   #contact .form .validation {
     color: red;
@@ -602,7 +581,8 @@ body.mobile-nav-active {
     margin: 0 0 20px;
     font-weight: 400;
     font-size: 13px; }
-  #contact .form input, #contact .form textarea {
+  #contact .form input,
+  #contact .form textarea {
     border-radius: 0;
     box-shadow: none; }
   #contact .form button[type="submit"] {
@@ -615,41 +595,31 @@ body.mobile-nav-active {
       background: #6cb9e6; }
 
 .register {
-  width: 100%;
-  height: 100vh;
-  background: url(../../../assets/img/hero-bg.jpg) top center fixed;
-  background-size: cover; }
-  .register .register-container {
-    background: rgba(0, 0, 0, 0.8);
-    height: 100vh; }
-    .register .register-container form {
-      display: block;
-      margin: auto;
-      width: 70%;
-      padding-top: 30px;
-      background: #fff;
-      margin-top: 6%;
-      padding: 30px;
-      border-radius: 4px; }
-      .register .register-container form p {
-        margin-bottom: 5px; }
-      .register .register-container form .form-group {
-        min-height: 85px;
-        margin-bottom: 5px; }
-        .register .register-container form .form-group .form-control {
-          border-radius: 0;
-          height: 40px; }
-        .register .register-container form .form-group i {
-          color: red; }
-        .register .register-container form .form-group .error-message {
-          color: red; }
-      .register .register-container form button {
-        background: #40a4df;
+  width: 100%; }
+  .register .register-container form {
+    display: block;
+    margin: auto;
+    background: #fff;
+    border-radius: 4px; }
+    .register .register-container form p {
+      margin-bottom: 5px; }
+    .register .register-container form .form-group {
+      min-height: 85px;
+      margin-bottom: 5px; }
+      .register .register-container form .form-group .form-control {
         border-radius: 0;
-        border: 0;
-        padding: 10px 24px;
-        color: #fff;
-        transition: 0.4s; }
+        height: 40px; }
+      .register .register-container form .form-group i {
+        color: red; }
+      .register .register-container form .form-group .error-message {
+        color: red; }
+    .register .register-container form button {
+      background: #40a4df;
+      border-radius: 0;
+      border: 0;
+      padding: 10px 24px;
+      color: #fff;
+      transition: 0.4s; }
 
 form .btn {
   margin-bottom: 10px; }
