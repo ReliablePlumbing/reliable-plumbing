@@ -1,5 +1,6 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
 import { NgbDateStruct, NgbCalendar } from '@ng-bootstrap/ng-bootstrap';
+import * as moment from 'moment';
 
 const equals = (one: NgbDateStruct, two: NgbDateStruct) =>
   one && two && two.year === one.year && two.month === one.month && two.day === one.day;
@@ -23,11 +24,26 @@ export class MultiSelectDatepickerComponent {
   fromDate: NgbDateStruct;
   toDate: NgbDateStruct;
 
+  @Input() dates: {
+    from: { day: number, month: number, year: number },
+    to: { day: number, month: number, year: number }
+  }
+
   @Output() datesChanged: EventEmitter<any> = new EventEmitter<any>();
 
-  constructor(calendar: NgbCalendar) {
-    this.fromDate = calendar.getToday();
-    this.toDate = calendar.getNext(calendar.getToday(), 'd', 10);
+  constructor(private calendar: NgbCalendar) {
+  }
+
+  ngOnInit() {
+    if (this.dates == null || this.dates.from == null || this.compareBootstrapDate(this.dates.from, this.dates.to) >= 0) {
+      this.fromDate = this.calendar.getToday();
+      this.toDate = this.calendar.getNext(this.calendar.getToday(), 'd', 7);
+    }
+    else {
+      this.fromDate = this.dates.from;
+      this.toDate = this.dates.to;
+    }
+    // this
   }
 
   onDateChange(date: NgbDateStruct) {
@@ -51,5 +67,12 @@ export class MultiSelectDatepickerComponent {
   isFrom = date => equals(date, this.fromDate);
   isTo = date => equals(date, this.toDate);
 
+  compareBootstrapDate(from, to) {
+    if (to == null)
+      return 0;
+    let fromMomentDate = moment(from.year + '-' + from.month + '-' + from.day, 'YYYY-MM-DD');
+    let toMomentDate = moment(to.year + '-' + to.month + '-' + to.day, 'YYYY-MM-DD');
 
+    return toMomentDate.diff(fromMomentDate);
+  }
 }

@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { FormControl } from '@angular/forms';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { LookupsService, AlertifyService, EnvironmentService } from '../../services/services.exports';
 import { convertTimeTo24, convertTimeTo12 } from '../../utils/date-helpers';
@@ -17,7 +18,7 @@ export class AppointmentSettingsomponent implements OnInit {
   addEditType: any = {};
   settings: any = {
     workDays: [1, 2, 3, 4, 5],
-    workHours: { from: { h: 12, min: 0, amPm: 1 }, to: { h: 12, min: 0, amPm: 1 } },
+    workHours: { from: { hour: 0, minute: 0 }, to: { hour: 0, minute: 0 } },
     timeSpan: 30
   }
   days = [
@@ -28,7 +29,22 @@ export class AppointmentSettingsomponent implements OnInit {
   constructor(private lookupsService: LookupsService, private modalService: NgbModal,
     private alertifyService: AlertifyService, private environmentService: EnvironmentService) { }
 
+  timeto: FormControl;
+  timeFrom: FormControl;
   ngOnInit() {
+    this.timeto = this.timeFrom = new FormControl('', (control: FormControl) => {
+      let from = this.settings.workHours.from;
+      let to = this.settings.workHours.to;
+
+      if (to.hour < from.hour)
+        return { afterFrom: true };
+      else if (from.hour == to.hour) {
+        if (to.minute < from.minute)
+          return { afterFrom: true };
+      }
+
+      return null;
+    });
     this.loaders.push(true);
     this.lookupsService.getAllAppointmentTypes().subscribe((results: any[]) => {
       this.types = results.sort((a, b) => {
@@ -53,10 +69,6 @@ export class AppointmentSettingsomponent implements OnInit {
   mapSettings(settings) {
     for (let day of settings.workDays)
       this.days[day - 1].checked = true;
-    let from = this.settings.workHours.from,
-      to = this.settings.workHours.to;
-    this.settings.workHours.from = convertTimeTo12(from.h, from.min);
-    this.settings.workHours.to = convertTimeTo12(to.h, to.min);
   }
 
   saveAppointmentSettings() {
@@ -64,10 +76,6 @@ export class AppointmentSettingsomponent implements OnInit {
     for (let day of this.days)
       if (day.checked) workDays.push(day.id);
     this.settings.workDays = workDays;
-    let from = this.settings.workHours.from,
-      to = this.settings.workHours.to;
-    this.settings.workHours.from = convertTimeTo24(from.h, from.min, from.amPm);
-    this.settings.workHours.to = convertTimeTo24(to.h, to.min, to.amPm);
     this.settings.lastModifiedBy = this.environmentService.currentUser.id;
     this.lookupsService.saveAppointmentSettings(this.settings).subscribe(result => {
       this.settings = result;

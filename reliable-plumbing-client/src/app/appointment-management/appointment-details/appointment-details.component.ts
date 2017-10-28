@@ -37,7 +37,7 @@ export class AppointmentDetailsComponent implements OnInit {
 
   mapAppointment(appointment) {
 
-    let apppointmentDate = moment(this.appointment.date);
+    let apppointmentDate = moment(appointment.date);
 
     return {
       date: this.appointment.date,

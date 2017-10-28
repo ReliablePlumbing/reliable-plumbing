@@ -1,5 +1,5 @@
-import { AppError, ErrorType, AppointmentType, Notification, NotificationType, AppointmentSettings } from '../../3-domain/domain-module';
-import { AppointmentTypeRepo, AppointmentSettingsRepo } from '../../4-data-access/data-access.module';
+import { AppError, ErrorType, AppointmentType, Notification, NotificationType, Settings } from '../../3-domain/domain-module';
+import { AppointmentTypeRepo, SettingsRepo } from '../../4-data-access/data-access.module';
 import { AccountSecurity, dependencies, TokenManager, ConfigService } from '../../5-cross-cutting/cross-cutting.module';
 import { Inject, Service } from 'typedi';
 
@@ -10,8 +10,8 @@ export class LookupsManager {
     @Inject(dependencies.AppointmentTypeRepo)
     private appointmentTypeRepo: AppointmentTypeRepo;
 
-    @Inject(dependencies.AppointmentSettingsRepo)
-    private appointmentSettingsRepo: AppointmentSettingsRepo;
+    @Inject(dependencies.SettingsRepo)
+    private appointmentSettingsRepo: SettingsRepo;
 
     // region appointment types
     addEditAppointmentType(appointmentType: AppointmentType) {
@@ -47,32 +47,32 @@ export class LookupsManager {
 
     // endregion appointment types
 
-    // region appointment settings
+    // region settings
 
-    addEditAppointmentSettings(settings: AppointmentSettings) {
+    addEditAppointmentSettings(settings: Settings) {
         let isNew = settings.id == null;
 
-        return new Promise<AppointmentSettings | boolean>((resolve, reject) => {
+        return new Promise<Settings | boolean>((resolve, reject) => {
             let promise;
             if (isNew)
                 this.appointmentSettingsRepo.add(settings).then(result => resolve(result));
             else {
                 settings.lastModifiedDate = new Date();
-                this.appointmentSettingsRepo.findOneAndUpdate(settings).then(result => resolve(new AppointmentSettings(result)));
+                this.appointmentSettingsRepo.findOneAndUpdate(settings).then(result => resolve(new Settings(result)));
             }
         });
     }
 
     getAppointmentSettings() {
-        return new Promise<AppointmentSettings>((resolve, reject) => {
+        return new Promise<Settings>((resolve, reject) => {
             this.appointmentSettingsRepo.getSettings().then(result => resolve(result));
         });
     }
 
-    // endregion appointment settings
+    // endregion settings
 
     getAppointmentSettingsAndTypes() {
-        return new Promise<{ settings: AppointmentSettings, types: AppointmentType[] }>((resolve, reject) => {
+        return new Promise<{ settings: Settings, types: AppointmentType[] }>((resolve, reject) => {
             Promise.all([this.getAppointmentSettings(), this.getAllAppointmentTypes()]).then((values) => {
                 return resolve({
                     settings: values[0],

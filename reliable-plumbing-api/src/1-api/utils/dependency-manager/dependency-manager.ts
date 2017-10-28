@@ -26,7 +26,7 @@ export function registerDependencies() {
     Container.registerService({ id: dependencies.AppointmentRepo, type: data.AppointmentRepo });
     Container.registerService({ id: dependencies.AppointmentTypeRepo, type: data.AppointmentTypeRepo });
     Container.registerService({ id: dependencies.NotificationRepo, type: data.NotificationRepo });
-    Container.registerService({ id: dependencies.AppointmentSettingsRepo, type: data.AppointmentSettingsRepo });
+    Container.registerService({ id: dependencies.SettingsRepo, type: data.SettingsRepo });
 
     /*** Business Notifiers ***/
     Container.registerService({ id: dependencies.NotificationBroadcastingService, type: business.NotificationBroadcastingService, instance: notificationBroadcastingService });

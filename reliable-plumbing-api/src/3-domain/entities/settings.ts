@@ -1,11 +1,11 @@
 import { BaseEntity } from './base/base-entity';
 
-export class AppointmentSettings extends BaseEntity {
+export class Settings extends BaseEntity {
 
     workDays: number[];
     workHours: {
-        from: { h: number, min: number },
-        to: { h: number, min: number }
+        from: { hour: number, minute: number },
+        to: { hour: number, minute: number }
     }
     timeSpan: number;
     lastModifiedDate?: Date;

@@ -87,7 +87,7 @@ export class AppointmentManager {
                         let techniciansWithAppointmentsAndStatus = [];
 
                         for (let technician of technicians) {
-                            let technicianAppointments = results.filter(appoint => appoint.userId == technician.id);
+                            let technicianAppointments = results.filter(appoint => appoint.assigneeIds.findIndex(assignId => assignId == technician.id) != -1);
 
                             techniciansWithAppointmentsAndStatus.push({
                                 technician: technician,
@@ -149,7 +149,7 @@ export class AppointmentManager {
 
         let status = TechnicianStatus.Available;
         for (let appoint of technicianAppointments) {
-            if (appoint.date == appoint.date) {
+            if (appoint.date == appointment.date) {
                 status = TechnicianStatus.Busy
                 break;
             };
@@ -176,19 +176,19 @@ export class AppointmentManager {
     private filterAppointmentsByTime(from, to, appointments: Appointment[]) {
         let filteredAppointments = [];
         let toModified = {
-            h: to.h == 0 ? 24 : to.h,
-            min: to.min
+            hour: to.hour == 0 ? 24 : to.hour,
+            minute: to.minute
         }
         for (let appoint of appointments) {
             let appointHour = appoint.date.getHours();
             let appointMins = appoint.date.getMinutes();
             let isValid = true;
 
-            if (appointHour < from.h || appointHour > toModified.h)
+            if (appointHour < from.hour || appointHour > toModified.hour)
                 isValid = false;
-            if (appointHour == from.h && appointMins < from.min)
+            if (appointHour == from.hour && appointMins < from.minute)
                 isValid = false;
-            if (appointHour == toModified.h && appointMins > toModified.min)
+            if (appointHour == toModified.hour && appointMins > toModified.minute)
                 isValid = false;
 
             if (isValid)
@@ -236,10 +236,10 @@ export class AppointmentManager {
 
     }
 
-    private constructAppointemntDate(date: string, time: { h: number, min: number }) {
+    private constructAppointemntDate(date: string, time: { hour: number, minute: number }) {
         let returnDate = new Date(date);
-        returnDate.setHours(time.h);
-        returnDate.setMinutes(time.min);
+        returnDate.setHours(time.hour);
+        returnDate.setMinutes(time.minute);
         returnDate.setSeconds(0);
 
         return returnDate;

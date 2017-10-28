@@ -39,17 +39,15 @@ export class ScheduleManagementComponent implements OnInit {
         types: this.mapTypes(results.types),
         status: getEnumEntries(AppointmentStatus)
       };
-      let nowDate = new Date();
+      let nowDate = moment();
+      let afterWeekDate = moment().add(1, 'week');
       this.filters = {
         date: {
-          from: { day: nowDate.getDate(), month: nowDate.getMonth() + 1, year: nowDate.getFullYear() },
-          to: { day: nowDate.getDate(), month: nowDate.getMonth() + 2, year: nowDate.getFullYear() },
+          from: { day: nowDate.date(), month: nowDate.month() + 1, year: nowDate.year() },
+          to: { day: afterWeekDate.date(), month: afterWeekDate.month() + 1, year: afterWeekDate.year() },
         },
         status: [],
-        time: {
-          from: { hour: results.settings.workHours.from.h, minute: results.settings.workHours.from.min },
-          to: { hour: results.settings.workHours.to.h, minute: results.settings.workHours.to.min }
-        },
+        time: results.settings.workHours,
         types: []
       }
       this.filter()
@@ -93,10 +91,7 @@ export class ScheduleManagementComponent implements OnInit {
         from: this.filters.date.from == null ? null : new Date(this.filters.date.from.year, this.filters.date.from.month - 1, this.filters.date.from.day),
         to: this.filters.date.to == null ? null : new Date(this.filters.date.to.year, this.filters.date.to.month - 1, this.filters.date.to.day),
       },
-      time: {
-        from: { h: this.filters.time.from.hour, min: this.filters.time.from.minute },
-        to: { h: this.filters.time.to.hour, min: this.filters.time.to.minute }
-      },
+      time: this.filters.time,
       status: [],
       typeIds: []
     }
@@ -126,7 +121,7 @@ export class ScheduleManagementComponent implements OnInit {
         this.appointments[appointmentDate] = [];
 
       this.appointments[appointmentDate].push(appointment);
-      if(this.urlIdParam != null && appointment.id == this.urlIdParam){
+      if (this.urlIdParam != null && appointment.id == this.urlIdParam) {
         this.openAppointmentDetailsModal(appointment, appointmentDate);
       }
 

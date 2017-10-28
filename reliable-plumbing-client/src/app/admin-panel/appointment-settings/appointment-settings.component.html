@@ -18,30 +18,13 @@
 
 
     <div class="row">
-
-      <div class="col-sm-6 input-group">From
-        <span class="input-group-addon">h</span>
-        <input type="text" number [max-number]="12" [min-number]="1" class="form-control" placeholder="h" [(ngModel)]="settings.workHours.from.h">
-        <span class="input-group-addon">min</span>
-        <input type="text" number [max-number]="12" [min-number]="1" class="form-control" placeholder="min" [(ngModel)]="settings.workHours.from.min">
-        <span class="input-group-addon"></span>
-        <select class="form-control" name="time" [(ngModel)]="settings.workHours.from.amPm">
-          <option [ngValue]="1">{{'am'}}</option>
-          <option [ngValue]="2">{{'pm'}}</option>
-        </select>
-      </div>
-
-      <div class="col-sm-6 input-group">To
-        <span class="input-group-addon">h</span>
-        <input type="text" number [max-number]="12" [min-number]="1" class="form-control" placeholder="h" [(ngModel)]="settings.workHours.to.h">
-        <span class="input-group-addon">min</span>
-        <input type="text" number [max-number]="12" [min-number]="1" class="form-control" placeholder="min" [(ngModel)]="settings.workHours.to.min">
-        <span class="input-group-addon"></span>
-        <select class="form-control" name="time" [(ngModel)]="settings.workHours.to.amPm">
-          <option [ngValue]="1">{{'am'}}</option>
-          <option [ngValue]="2">{{'pm'}}</option>
-        </select>
-      </div>
+      <label>From:
+        <ngb-timepicker [formControl]="timeFrom" [(ngModel)]="settings.workHours.from" [meridian]="true"></ngb-timepicker>
+      </label>
+      <label>To:
+        <ngb-timepicker [formControl]="timeto" [(ngModel)]="settings.workHours.to" [meridian]="true"></ngb-timepicker>
+      </label>
+      <label *ngIf="timeto.invalid || timeFrom.invalid" class="red">"to time" can't be before "from time"</label>
     </div>
 
     <div class="row">
@@ -49,7 +32,7 @@
       <input type="number" min="0" class="form-control" placeholder="time span for appointments" [(ngModel)]="settings.timeSpan">
     </div>
 
-    <button class="btn btn-primary btn-lg" (click)="saveAppointmentSettings()">save</button>
+    <button class="btn btn-primary btn-lg" [disabled]="timeto.invalid || timeFrom.invalid" (click)="saveAppointmentSettings()">save</button>
   </section>
   <br/>
   <br/>

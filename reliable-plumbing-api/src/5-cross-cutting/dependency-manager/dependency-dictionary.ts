@@ -19,5 +19,5 @@ export const dependencies = {
     AppointmentRepo: 'data.AppointmentRepo',
     AppointmentTypeRepo: 'data.AppointmentTypeRepo',
     NotificationRepo: 'data.NotificationRepo',
-    AppointmentSettingsRepo: 'data.AppointmentSettingsRepo',
+    SettingsRepo: 'data.SettingsRepo',
 }
