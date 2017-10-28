@@ -81,7 +81,7 @@ export function getDatesArray(startDate, endDate) {
         dates = [];
 
     while (now.isBefore(endDate) || now.isSame(endDate)) {
-        dates.push(now.format('M-D-YYYY'));
+        dates.push(now.format('MM-DD-YYYY'));
         now.add(1, 'days');
     }
     return dates;
