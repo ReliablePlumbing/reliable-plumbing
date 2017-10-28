@@ -75,8 +75,8 @@ Hero Section
                 <span class="rotating">Free Visits and Estimates!, Residential and Commercial, Drain Cleaning, Plumbing</span>
             </h2>
             <div class="actions">
-                <a href="#about" class="btn-get-started">Schedule a Call</a>
-                <a href="#services" class="btn-services">Our Services</a>
+                <a (click)="openScheduleCallPopup()" class="btn-get-started pointer">Schedule a Call</a>
+                <a href="#services" class="btn-services pointer">Our Services</a>
             </div>
         </div>
     </div>
@@ -595,7 +595,7 @@ registeration popup
 ============================-->
 <ng-template #registeration let-c="close" let-d="dismiss">
     <div class="modal-header">
-        <!-- <h4 class="modal-title">Modal title</h4> -->
+        <h4 class="modal-title">Register</h4>
         <button type="button" class="close" aria-label="Close" (click)="d()">
       <span aria-hidden="true">&times;</span>
     </button>
@@ -611,13 +611,29 @@ login popup
 ============================-->
 <ng-template #login let-c="close" let-d="dismiss">
     <div class="modal-header">
-        <!-- <h4 class="modal-title">Modal title</h4> -->
+        <h4 class="modal-title">Login</h4>
         <button type="button" class="close" aria-label="Close" (click)="d()">
       <span aria-hidden="true">&times;</span>
     </button>
     </div>
     <div class="modal-body">
         <rb-login [userEmail]="registeredUserEmail" (userLoggedIn)="userLoggedIn()"></rb-login>
+    </div>
+
+</ng-template>
+
+<!--==========================
+schedule call popup
+============================-->
+<ng-template #scheduleCall let-c="close" let-d="dismiss">
+    <div class="modal-header">
+        <h4 class="modal-title">Schedule a call</h4>
+        <button type="button" class="close" aria-label="Close" (click)="d()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+    </div>
+    <div class="modal-body">
+        <rb-schedule-appointment></rb-schedule-appointment>
     </div>
 
 </ng-template>

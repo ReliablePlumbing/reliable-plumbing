@@ -11,11 +11,14 @@ import { EnvironmentService } from '../services/environment.service';
 export class HomeComponent implements OnInit, AfterViewInit {
 
   @ViewChild('registeration') registerationTemplate: ElementRef;
-  registerModelRef: NgbModalRef;
+  registerModalRef: NgbModalRef;
 
   @ViewChild('login') loginTemplate: ElementRef;
-  loginModelRef: NgbModalRef;
+  loginModalRef: NgbModalRef;
   registeredUserEmail = null;
+
+  @ViewChild('scheduleCall') scheduleCallTemplate: ElementRef;
+  scheduleCallModalRef: NgbModalRef;
 
   isUserLoggedIn: boolean = false;
   currentUser = null;
@@ -138,26 +141,30 @@ export class HomeComponent implements OnInit, AfterViewInit {
   }
 
   userRegistered(user) {
-    this.registerModelRef.close();
+    this.registerModalRef.close();
     this.registeredUserEmail = user.email;
     this.openLoginPopup();
   }
-  
-  userLoggedIn(){
-    this.loginModelRef.close();
+
+  userLoggedIn() {
+    this.loginModalRef.close();
     this.isUserLoggedIn = this.environmentService.isUserLoggedIn;
     this.currentUser = this.environmentService.currentUser;
   }
-  
+
   openRegisterPopup() {
-    this.registerModelRef = this.modalService.open(this.registerationTemplate, { size: 'lg' })
-  }
-  
-  openLoginPopup() {
-    this.loginModelRef = this.modalService.open(this.loginTemplate, { size: 'lg' })
+    this.registerModalRef = this.modalService.open(this.registerationTemplate, { size: 'lg' })
   }
 
-  logout(){
+  openLoginPopup() {
+    this.loginModalRef = this.modalService.open(this.loginTemplate)
+  }
+
+  openScheduleCallPopup() {
+    this.scheduleCallModalRef = this.modalService.open(this.scheduleCallTemplate, { size: 'lg' });
+  }
+
+  logout() {
     this.environmentService.destroyLoginInfo();
     this.isUserLoggedIn = this.environmentService.isUserLoggedIn;
     this.currentUser = this.environmentService.currentUser;
