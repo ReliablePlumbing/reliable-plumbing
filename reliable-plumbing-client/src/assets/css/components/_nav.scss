@@ -205,3 +205,11 @@ body {
         }
     }
 }
+
+.nav-item.panel-link {
+    background-color: #40a4df;
+    padding: 0px 2px;
+    a {
+        padding: 8px;
+    }
+}

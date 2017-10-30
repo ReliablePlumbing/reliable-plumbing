@@ -3,11 +3,11 @@
 <ng-container *ngIf="!loading">
     <!-- filters -->
     <section>
-        <div class="row">
-            <button class="btn btn-primary filters-toggle-btn" type="button" data-toggle="collapse" data-target="#filter-toggle" aria-expanded="false" aria-controls="filter-toggle">                    
+        <div class="">
+            <button class="btn btn-primary filters-toggle-btn pointer" type="button" data-toggle="collapse" data-target="#filter-toggle" aria-expanded="false" aria-controls="filter-toggle">                    
                 <i class="fa fa-filter" aria-hidden="true"></i>filters
             </button>
-            <div class="col-sm-12" class="filters-container collapse" id="filter-toggle">
+            <div class="filters-container collapse" id="filter-toggle">
                 <div class="row">
                     <div class="col-sm-6">
                         <div class="form-group">
@@ -24,16 +24,6 @@
                                 <ngb-timepicker [(ngModel)]="filters.time.from" [meridian]="true"></ngb-timepicker>
                             </div>
                         </div>
-                    </div>
-                    <div class="col-sm-3">
-                        <div class="form-group">
-                            <h5>select from to:</h5>
-                            <div>
-                                <ngb-timepicker [(ngModel)]="filters.time.to" [meridian]="true"></ngb-timepicker>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-sm-3">
                         <div class="form-group">
                             <h5>Appointment Type:</h5>
                             <div>
@@ -43,40 +33,56 @@
                     </div>
                     <div class="col-sm-3">
                         <div class="form-group">
+                            <h5>select from to:</h5>
+                            <div>
+                                <ngb-timepicker [(ngModel)]="filters.time.to" [meridian]="true"></ngb-timepicker>
+                            </div>
+                        </div>
+                        <div class="form-group">
                             <h5>Status:</h5>
                             <div>
                                 <ng-select [multiple]="true" [items]="lookups.status" [active]="filters.status" (selected)="selected($event, filters.status)" (removed)="removed($event, 'status')" placeholder="empty filter, means all selected"></ng-select>
                             </div>
                         </div>
                     </div>
-                    <div class="col-sm-3">
-                        <button class="btn btn-primary" (click)="filter()">Filter</button>
+                    <div class="col-sm-12">
+                        <button class="btn btn-primary filters-toggle-btn pull-right" (click)="filter()">Filter</button>
                     </div>
                 </div>
             </div>
-            <div class="col-sm-12">
+            <div>
                 <div class="row">
-                    <section>
+                    <section class="appointemts-sec" class="col-sm-12">
                         <loader *ngIf="loadingFiltered"></loader>
                         <!-- appointments Listing -->
                         <ng-container *ngIf="!loadingFiltered">
-
-                            <ng-container *ngFor="let date of datesArrayBetweenFilterDates">
+                            <br />
+                            <h3>Appointemts List:</h3>
+                            <div class="appointemts-list" *ngFor="let date of datesArrayBetweenFilterDates">
                                 <h5>{{date | date}}</h5>
                                 <no-data *ngIf="appointments[date] == null || appointments[date].length == 0" [message]="'no appointemts for this day'"></no-data>
-                                <ng-container *ngFor="let appointment of appointments[date]">
-                                    <h1 (click)="openAppointmentDetailsModal(appointment, date)"><b>
-                            {{appointment.user == null ? appointment.fullName : appointment.user.firstName}}
-                          </b></h1>
-                                </ng-container>
-                            </ng-container>
+                                <div class="row">
+                                    <div class="col-sm-4" *ngFor="let appointment of appointments[date]">
+                                        <div class="appointemt-card pointer" (click)="openAppointmentDetailsModal(appointment, date)">
+                                            <h6>
+                                                <span class="appointemt-status green" placement="top" ngbTooltip="Available"></span>
+                                                <b>{{appointment.user == null ? appointment.fullName : appointment.user.firstName}}</b>
+                                            </h6>
+                                            <div class="appointemt-time">
+                                                <span>09:00 AM</span>
+                                            </div>
+                                            <div class="appointemt-type">
+                                                <span>some very long dummy type</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </ng-container>
-
                     </section>
                 </div>
             </div>
         </div>
-
     </section>
 </ng-container>
 

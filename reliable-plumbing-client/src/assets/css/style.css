@@ -320,6 +320,12 @@ body.mobile-nav-active {
       padding: 0px 15px;
       font-size: 14px; }
 
+.nav-item.panel-link {
+  background-color: #40a4df;
+  padding: 0px 2px; }
+  .nav-item.panel-link a {
+    padding: 8px; }
+
 /*--------------------------------------------------------------
 # Sections
 --------------------------------------------------------------*/

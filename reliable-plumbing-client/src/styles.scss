@@ -1,8 +1,72 @@
 /* You can add global styles to this file, and also import other style files */
 
-.modal-content{
-  margin-top: 110px;
+.modal-content {
+    margin-top: 110px;
 }
-.pointer{
-  cursor: pointer;
+
+.pointer {
+    cursor: pointer;
+}
+
+.dropdown-menu {
+    display: inherit !important;
+}
+
+button {
+    cursor: pointer;
+    border-radius: 0 !important;
+}
+
+a {
+    cursor: pointer;
+}
+
+select {
+    width: 100%;
+    padding: .5rem .75rem;
+    font-size: 1rem;
+    line-height: 1.25;
+    color: #464a4c;
+    background-color: #fff;
+    border: 1px solid rgba(0, 0, 0, .15);
+}
+
+.fa-calendar {
+    color: #fff !important;
+}
+
+.date-picker-cont {
+    .form-control {
+        display: inline-block;
+        width: calc(100% - 69px);
+    }
+    button {
+        display: inline-block;
+    }
+}
+
+.ngb-dp-header {
+    .btn-link {
+        cursor: pointer;
+        outline: 0;
+        padding: 3px 11px !important;
+    }
+}
+
+.appointemt-status {
+    width: 12px;
+    height: 12px;
+    background-color: #fff;
+    border-radius: 50%;
+    display: inline-block;
+    margin-right: 5px;
+    vertical-align: inherit;
+}
+
+.appointemt-status.green {
+    background-color: #4CD964;
+}
+
+.appointemt-status.red {
+    background-color: #FF3B30;
 }

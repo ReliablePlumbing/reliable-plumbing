@@ -5,8 +5,8 @@ Header Section
     <div class="container-fluid">
         <nav class="navbar navbar-toggleable-md">
             <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
+                  <span class="navbar-toggler-icon"></span>
+                </button>
             <a id="logo" class="navbar-brand" [routerLink]="['/']">
                 <h1>
                     <a [routerLink]="['/']">Reliable Plumbing</a>
@@ -34,17 +34,19 @@ Header Section
     </div>
 </header>
 <!-- #header -->
-<div class="container-fluid">
-    <div class="row">
-        <div class="col-sm-3">
-            <ul class="list-group">
-                <li class="list-group-item pointer" [routerLink]="['./']">Schedule Management</li>
-                <li class="list-group-item pointer" [routerLink]="['./appointment-settings']">Appointment Settings & Types</li>
-                <li class="list-group-item pointer" [routerLink]="['./system-users-management']">System Users</li>
-            </ul>
-        </div>
-        <div class="col-sm-9">
-            <router-outlet></router-outlet>
+<div class="admin-panel">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-3">
+                <ul class="list-group">
+                    <li class="list-group-item pointer" [routerLink]="['./']">Schedule Management</li>
+                    <li class="list-group-item pointer" [routerLink]="['./appointment-settings']">Appointment Settings & Types</li>
+                    <li class="list-group-item pointer" [routerLink]="['./system-users-management']">System Users</li>
+                </ul>
+            </div>
+            <div class="col-sm-9">
+                <router-outlet></router-outlet>
+            </div>
         </div>
     </div>
 </div>
