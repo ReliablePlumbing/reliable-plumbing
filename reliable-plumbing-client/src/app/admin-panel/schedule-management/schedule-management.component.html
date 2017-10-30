@@ -1,86 +1,95 @@
 <loader *ngIf="loading"></loader>
 
 <ng-container *ngIf="!loading">
-  <!-- filters -->
-  <section>
-    <div class="row">
-      <div class="col-sm-5">
-        <div class="form-group">
-          <multi-select-datepicker [dates]="filters.date" (datesChanged)="updateDates($event)"></multi-select-datepicker>
-        </div>
-      </div>
-
-      <div class="col-sm-7">
+    <!-- filters -->
+    <section>
         <div class="row">
-          <div class="col-sm-6">
-            <div class="form-group">
-              <label for="time" class="">From</label>
-              <ngb-timepicker [(ngModel)]="filters.time.from" [meridian]="true"></ngb-timepicker>
+            <button class="btn btn-primary filters-toggle-btn" type="button" data-toggle="collapse" data-target="#filter-toggle" aria-expanded="false" aria-controls="filter-toggle">                    
+                <i class="fa fa-filter" aria-hidden="true"></i>filters
+            </button>
+            <div class="col-sm-12" class="filters-container collapse" id="filter-toggle">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <h5>select Range Dates:</h5>
+                            <div>
+                                <multi-select-datepicker [dates]="filters.date" (datesChanged)="updateDates($event)"></multi-select-datepicker>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-3">
+                        <div class="form-group">
+                            <h5>select from time:</h5>
+                            <div>
+                                <ngb-timepicker [(ngModel)]="filters.time.from" [meridian]="true"></ngb-timepicker>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-3">
+                        <div class="form-group">
+                            <h5>select from to:</h5>
+                            <div>
+                                <ngb-timepicker [(ngModel)]="filters.time.to" [meridian]="true"></ngb-timepicker>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-3">
+                        <div class="form-group">
+                            <h5>Appointment Type:</h5>
+                            <div>
+                                <ng-select [multiple]="true" [items]="lookups.types" [active]="filters.types" (selected)="selected($event, filters.types)" (removed)="removed($event, 'types')" placeholder="empty filter, means all selected"></ng-select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-3">
+                        <div class="form-group">
+                            <h5>Status:</h5>
+                            <div>
+                                <ng-select [multiple]="true" [items]="lookups.status" [active]="filters.status" (selected)="selected($event, filters.status)" (removed)="removed($event, 'status')" placeholder="empty filter, means all selected"></ng-select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-3">
+                        <button class="btn btn-primary" (click)="filter()">Filter</button>
+                    </div>
+                </div>
             </div>
-          </div>
-          <div class="col-sm-6">
-            <div class="form-group">
-              <label for="time" class=""></label>To
-              <ngb-timepicker [(ngModel)]="filters.time.to" [meridian]="true"></ngb-timepicker>
+            <div class="col-sm-12">
+                <div class="row">
+                    <section>
+                        <loader *ngIf="loadingFiltered"></loader>
+                        <!-- appointments Listing -->
+                        <ng-container *ngIf="!loadingFiltered">
+
+                            <ng-container *ngFor="let date of datesArrayBetweenFilterDates">
+                                <h5>{{date | date}}</h5>
+                                <no-data *ngIf="appointments[date] == null || appointments[date].length == 0" [message]="'no appointemts for this day'"></no-data>
+                                <ng-container *ngFor="let appointment of appointments[date]">
+                                    <h1 (click)="openAppointmentDetailsModal(appointment, date)"><b>
+                            {{appointment.user == null ? appointment.fullName : appointment.user.firstName}}
+                          </b></h1>
+                                </ng-container>
+                            </ng-container>
+                        </ng-container>
+
+                    </section>
+                </div>
             </div>
-          </div>
         </div>
 
-        <div class="row">
-          <div class="col-sm-6">
-            <div class="form-group">
-              <label for="appointmentType" class="">Appointment Type</label>
-              <ng-select [multiple]="true" [items]="lookups.types" [active]="filters.types" (selected)="selected($event, filters.types)"
-                (removed)="removed($event, 'types')" placeholder="empty filter, means all selected"></ng-select>
-            </div>
-          </div>
-          <div class="col-sm-6">
-            <div class="form-group">
-              <label for="status" class="">Status</label>
-              <ng-select [multiple]="true" [items]="lookups.status" [active]="filters.status" (selected)="selected($event, filters.status)"
-                (removed)="removed($event, 'status')" placeholder="empty filter, means all selected"></ng-select>
-            </div>
-          </div>
-
-        </div>
-      </div>
-    </div>
-
-    <button class="btn btn-primary" (click)="filter()">Filter</button>
-  </section>
-
-
-  <section>
-    <loader *ngIf="loadingFiltered"></loader>
-    <!-- appointments Listing -->
-    <ng-container *ngIf="!loadingFiltered">
-
-      <ng-container *ngFor="let date of datesArrayBetweenFilterDates">
-        <h4>{{date | date}}</h4>
-        <no-data *ngIf="appointments[date] == null || appointments[date].length == 0" [message]="'no appointemts for this day'"></no-data>
-        <ng-container *ngFor="let appointment of appointments[date]">
-          <h1 (click)="openAppointmentDetailsModal(appointment, date)"><b>
-            {{appointment.user == null ? appointment.fullName : appointment.user.firstName}}
-          </b></h1>
-        </ng-container>
-      </ng-container>
-    </ng-container>
-
-  </section>
-
+    </section>
 </ng-container>
 
 
 <ng-template #appointmentDetails let-c="close" let-d="dismiss">
-  <div class="modal-header">
-    <h4 class="modal-title">Appointment Details</h4>
-    <button type="button" class="close" aria-label="Close" (click)="closeAppointmentDetailsModal()">
+    <div class="modal-header">
+        <h5 class="modal-title">Appointment Details</h5>
+        <button type="button" class="close" aria-label="Close" (click)="closeAppointmentDetailsModal()">
       <span aria-hidden="true">&times;</span>
     </button>
-  </div>
-  <div class="modal-body">
-    <appointment-details [appointment]="selectedAppointment" (appointmentUpdated)="appointmentUpdated($event)"></appointment-details>
-  </div>
+    </div>
+    <div class="modal-body">
+        <appointment-details [appointment]="selectedAppointment" (appointmentUpdated)="appointmentUpdated($event)"></appointment-details>
+    </div>
 
 </ng-template>
-
