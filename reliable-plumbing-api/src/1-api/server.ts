@@ -2,7 +2,7 @@ import * as debug from 'debug';
 import * as express from 'express';
 import * as socketio from 'socket.io';
 import * as http from 'http';
-import { App } from './App';
+import { App } from './app';
 import { SocketContext, ConfigService } from '../5-cross-cutting/cross-cutting.module';
 
 debug('ts-express:server');

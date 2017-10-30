@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { AppointmentStatus } from '../../models/enums';
 import { LookupsService, AppointmentService } from '../../services/services.exports';
-import { getTimeArray, getEnumEntries, getDatesArray, getDateString } from '../../utils/date-helpers';
+import { getEnumEntries, getDatesArray, getDateString } from '../../utils/date-helpers';
 import * as moment from 'moment';
 import { NgbModalRef, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 

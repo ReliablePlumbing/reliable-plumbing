@@ -2,11 +2,12 @@
   <div class="register-container">
     <div class="container">
       <form [formGroup]="appointmentForm" novalidate>
-        <div class="row">
-          <!-- <div class="col-md-12">
-            <h3>Schedule Appointment</h3>
-          </div> -->
-          <ng-container *ngIf="!isLoggedIn">
+        <!-- <div class="col-md-12">
+          <h3>Schedule Appointment</h3>
+        </div> -->
+        <ng-container *ngIf="!isLoggedIn">
+          <label>Your info.</label>
+          <div class="row">
             <div class="col-md-6">
               <div class="form-group">
                 <label for="fullName" class="">Full Name
@@ -33,7 +34,10 @@
                 <input type="tel" name="mobile" class="form-control" formControlName="mobile" [(ngModel)]="appointment.mobile" />
               </div>
             </div>
-          </ng-container>
+          </div>
+        </ng-container>
+        <div class="row">
+          <!-- <div class="row"> -->
 
           <div class="col-md-6">
             <div class="form-group">
@@ -76,7 +80,7 @@
           </div>
 
           <div class="col-md-12">
-            <div>
+            <div *ngIf="!isLoggedIn">
               <p>Please be informed that appointment will not be scheduled until a representative from the office contacts you
                 via email</p>
 

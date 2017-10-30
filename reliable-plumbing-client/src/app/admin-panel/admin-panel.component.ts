@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { EnvironmentService } from '../services/services.exports';
 
 @Component({
   selector: 'rb-admin-panel',
@@ -7,9 +8,11 @@ import { Component, OnInit } from '@angular/core';
 })
 export class AdminPanelComponent implements OnInit {
 
-  constructor() { }
+  currentUser;
+  constructor(private environmentService: EnvironmentService) { }
 
   ngOnInit() {
+    this.currentUser = this.environmentService.currentUser;
   }
 
 }
