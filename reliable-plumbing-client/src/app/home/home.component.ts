@@ -2,6 +2,7 @@ import { Component, OnInit, AfterViewInit, ViewChild, ElementRef } from '@angula
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { EnvironmentService } from '../services/environment.service';
+import { Role } from '../models/enums';
 
 @Component({
   selector: 'rb-home',
@@ -22,19 +23,24 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   isUserLoggedIn: boolean = false;
   currentUser = null;
+  isManager = false;
 
   constructor(private activatedRoute: ActivatedRoute, private modalService: NgbModal, private environmentService: EnvironmentService) { }
 
   ngOnInit() {
     this.isUserLoggedIn = this.environmentService.isUserLoggedIn;
     this.currentUser = this.environmentService.currentUser;
+    this.isManager = this.isUserLoggedIn && this.environmentService.currentUser.roles.findIndex(x => x == Role.Manager) != -1;
   }
 
   ngAfterViewInit() {
     // Preloader
-    $(window).on('load', function () {
+    // $(window).on('load', function () {
+    //   $('#preloader').delay(100).fadeOut('slow', function () { $(this).remove(); });
+    // });
+    setTimeout(() => {
       $('#preloader').delay(100).fadeOut('slow', function () { $(this).remove(); });
-    });
+    }, 10);
 
     // Hero rotating texts
     $("#hero .rotating").Morphext({
@@ -150,6 +156,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.loginModalRef.close();
     this.isUserLoggedIn = this.environmentService.isUserLoggedIn;
     this.currentUser = this.environmentService.currentUser;
+    this.isManager = this.isUserLoggedIn && this.environmentService.currentUser.roles.findIndex(x => x == Role.Manager) != -1;
   }
 
   openRegisterPopup() {
