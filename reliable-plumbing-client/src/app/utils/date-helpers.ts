@@ -2,28 +2,28 @@ export function convertFromBootstrapDate(dateObj, time = null) {
     if (time == null)
         time = '00:00:00';
 
-    let date = new Date(dateObj.year, dateObj.month - 1, dateObj.day, time.hour, time.mins, 0);
+    let date = new Date(dateObj.year, dateObj.month - 1, dateObj.day, time.hour, time.minute, 0);
 
     return date;
 }
 
 
-export function convertTimeTo12(h, min) {
-    if (h == 0 || h == 24)
-        return { h: 12, min: min, amPm: 1 };
-    else if (h < 12)
-        return { h: h, min: min, amPm: 1 };
-    else if (h == 12)
-        return { h: 12, min: min, amPm: 2 };
+export function convertTimeTo12(hour, minute) {
+    if (hour == 0 || hour == 24)
+        return { hour: 12, minute: minute, amPm: 1 };
+    else if (hour < 12)
+        return { hour: hour, minute: minute, amPm: 1 };
+    else if (hour == 12)
+        return { hour: 12, minute: minute, amPm: 2 };
     else
-        return { h: h - 12, min: min, amPm: 2 };
+        return { hour: hour - 12, minute: minute, amPm: 2 };
 
 }
 
 export function convertTimeTo12String(h, min) {
     let time12 = convertTimeTo12(h, min);
 
-    return convertTimeToString(time12.h, time12.min, time12.amPm);
+    return convertTimeToString(time12.hour, time12.minute, time12.amPm);
 }
 
 export function convertTimeTo24(h, min, amPm) {
@@ -45,31 +45,31 @@ export function convertTimeToString(h, min, amPm) {
 
 export function getTimeArray(span, from, to) {
     let timeSpanFloat = span / 60;
-    let timeSpan = { h: timeSpanFloat - timeSpanFloat % 1, min: timeSpanFloat % 1 * 60 }
+    let timeSpan = { hour: timeSpanFloat - timeSpanFloat % 1, minute: timeSpanFloat % 1 * 60 }
 
-    let firstTimeConvertedTo12 = convertTimeTo12(from.h, from.min);
+    let firstTimeConvertedTo12 = convertTimeTo12(from.hour, from.minute);
     let timeArr = [{
         id: 1,
-        h: from.h, min: from.min,
-        timeStr: convertTimeToString(firstTimeConvertedTo12.h, firstTimeConvertedTo12.min, firstTimeConvertedTo12.amPm)
+        hour: from.hour, minute: from.minute,
+        timeStr: convertTimeToString(firstTimeConvertedTo12.hour, firstTimeConvertedTo12.minute, firstTimeConvertedTo12.amPm)
     }];
 
-    let currentTimeFloat = from.h + from.min / 60;
+    let currentTimeFloat = from.hour + from.minute / 60;
 
-    while ((to.h != 0 && currentTimeFloat < to.h) || currentTimeFloat < 24) {
+    while ((to.hour != 0 && currentTimeFloat < to.hour) || currentTimeFloat < 24) {
         let lastTime = timeArr[timeArr.length - 1];
 
-        currentTimeFloat = (lastTime.h + lastTime.min / 60) + timeSpanFloat;
+        currentTimeFloat = (lastTime.hour + lastTime.minute / 60) + timeSpanFloat;
 
         let currentTime = {
-            h: currentTimeFloat - currentTimeFloat % 1,
-            min: parseInt((currentTimeFloat % 1 * 60).toFixed())
+            hour: currentTimeFloat - currentTimeFloat % 1,
+            minute: parseInt((currentTimeFloat % 1 * 60).toFixed())
         };
-        let convertedTo12 = convertTimeTo12(currentTime.h, currentTime.min);
+        let convertedTo12 = convertTimeTo12(currentTime.hour, currentTime.minute);
         timeArr.push({
             id: lastTime.id + 1,
-            h: currentTime.h, min: currentTime.min,
-            timeStr: convertTimeToString(convertedTo12.h, convertedTo12.min, convertedTo12.amPm)
+            hour: currentTime.hour, minute: currentTime.minute,
+            timeStr: convertTimeToString(convertedTo12.hour, convertedTo12.minute, convertedTo12.amPm)
         });
     }
 

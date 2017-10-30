@@ -1,7 +1,7 @@
 import { Component, OnInit, EventEmitter, Input, Output } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators, AbstractControl } from '@angular/forms';
 import { AlertifyService, EnvironmentService, RouteHandlerService, LookupsService, AppointmentService } from '../../services/services.exports';
-import { convertFromBootstrapDate } from '../../utils/date-helpers';
+import { convertFromBootstrapDate, getTimeArray } from '../../utils/date-helpers';
 
 @Component({
   selector: 'rb-schedule-appointment',
@@ -24,11 +24,6 @@ export class ScheduleAppointmentComponent implements OnInit {
 
 
   ngOnInit() {
-    this.timeList = [
-      { timeStr: '08:00 am', hour: 8, mins: 0 },
-      { timeStr: '08:30 am', hour: 8, mins: 30 },
-      { timeStr: '09:00 am', hour: 9, mins: 0 }
-    ]
     this.isLoggedIn = this.environmentService.isUserLoggedIn;
     this.getLookups();
     this.createForm();
@@ -73,8 +68,8 @@ export class ScheduleAppointmentComponent implements OnInit {
       this.appointment.userId = this.environmentService.currentUser.id;
     // call service to send the appointement data
     this.appointmentService.addAppointment(this.appointment).subscribe(result => {
-      if(result.id != null)
-        this.alertifyService.success('Your appointment has been submitted, one of our representatives will contact you soon');
+      if (result.id != null)
+        this.alertifyService.success('Your appointment has been submitted');
     })
   }
 
@@ -90,9 +85,11 @@ export class ScheduleAppointmentComponent implements OnInit {
   }
 
   getLookups() {
-    this.lookupsService.getAllAppointmentTypes().subscribe(results => this.appointmentTypes = results);
+    this.lookupsService.getAppointmentSettingsAndTypes().subscribe(results => {
+
+      this.timeList = getTimeArray(results.settings.timeSpan, results.settings.workHours.from, results.settings.workHours.to);
+      this.appointmentTypes = results.types;
+    })
   }
-
-
 }
 
