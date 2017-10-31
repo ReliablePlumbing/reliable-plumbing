@@ -110,7 +110,6 @@ export class ScheduleManagementComponent implements OnInit {
   }
 
   mapAndGroupAppointmentsByDay(appointments) {
-    // todo: map to an object for display in card
     this.appointments = {};
     for (let appointment of appointments) {
 
@@ -118,6 +117,10 @@ export class ScheduleManagementComponent implements OnInit {
 
       if (this.appointments[appointmentDate] == null)
         this.appointments[appointmentDate] = [];
+
+      let typeIndex = this.lookups.types.findIndex(t => t.id == appointment.typeId)
+      if (typeIndex != -1)
+        appointment.typeObj = this.lookups.types[typeIndex]
 
       this.appointments[appointmentDate].push(appointment);
       if (this.urlIdParam != null && appointment.id == this.urlIdParam) {

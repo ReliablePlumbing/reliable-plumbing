@@ -51,11 +51,7 @@ export class AppointmentDetailsComponent implements OnInit {
     let mappedTechs = technicians.map(tech => {
       return {
         technician: tech.technician,
-        status: {
-          id: tech.status,
-          text: TechnicianStatus[tech.status],
-          color: this.getTechnicianStatusColor(tech.status)
-        },
+        status:  tech.status,
         appointments: tech.appointments.map(appoint => this.mapAppointment(appoint)),
       }
     });
@@ -69,22 +65,6 @@ export class AppointmentDetailsComponent implements OnInit {
     }
     mappedTechs = mappedTechs.filter(tech => !tech.selected)
     return mappedTechs;
-  }
-
-  getTechnicianStatusColor(status) {
-    switch (status) {
-      case TechnicianStatus.Available:
-        return 'green';
-      case TechnicianStatus.Busy:
-        return 'red';
-      case TechnicianStatus.PossibleBusy:
-        return 'yellow';
-      case TechnicianStatus.HardlyBusy:
-        return 'orange';
-
-      default:
-        break;
-    }
   }
 
   assign(tech) {
