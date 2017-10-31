@@ -31,7 +31,7 @@
         }
     }
     @media (max-width: 768px) {
-        height: 80px;
+        //height: 80px;
         #logo {
             h1 {
                 font-size: 26px;
@@ -40,12 +40,15 @@
                 max-height: 40px;
             }
         }
+        #header-sticky-wrapper {
+            height: inherit !important;
+        }
     }
     .is-sticky & {
         background: rgba(0, 0, 0, 0.85);
     }
 }
 
-.header-sticky-wrapper {
+#header-sticky-wrapper {
     height: inherit !important;
 }

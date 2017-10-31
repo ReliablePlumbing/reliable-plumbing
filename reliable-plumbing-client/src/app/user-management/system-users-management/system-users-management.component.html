@@ -1,46 +1,46 @@
 <h3>
-  System users</h3>
+    System users</h3>
 
-<button (click)="addUser(register)">Add User</button>
+<button class="btn btn-primary filters-toggle-btn" (click)="addUser(register)">Add User</button>
 
 <table class="table">
-  <thead>
-    <th>Name</th>
-    <th>Type</th>
-    <th>Email</th>
-    <th>Mobile No.</th>
-    <th>Account Creation Date</th>
-    <th>Activated</th>
-    <th>Activation Date</th>
-    <th>Delete</th>
-  </thead>
-  <tbody>
-    <tr *ngFor="let user of users">
-      <td>{{user.firstName + ' ' + user.lastName}}</td>
-      <td>{{user.rolesString}}</td>
-      <td>{{user.email}}</td>
-      <td>{{user.mobile}}</td>
-      <td>{{user.creationDate | date}}</td>
-      <td>{{user.isActivated ? 'Yes' : 'No'}}</td>
-      <td>{{user.activationDate == null ? 'not activated yet' : user.activationDate | date }}</td>
-      <td>
-        <button (click)="deleteUser(user)">delete</button>
-      </td>
-    </tr>
-  </tbody>
+    <thead>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Email</th>
+        <th>Mobile No.</th>
+        <th>Account Creation Date</th>
+        <th>Activated</th>
+        <th>Activation Date</th>
+        <th>Delete</th>
+    </thead>
+    <tbody>
+        <tr *ngFor="let user of users">
+            <td>{{user.firstName + ' ' + user.lastName}}</td>
+            <td>{{user.rolesString}}</td>
+            <td>{{user.email}}</td>
+            <td>{{user.mobile}}</td>
+            <td>{{user.creationDate | date}}</td>
+            <td>{{user.isActivated ? 'Yes' : 'No'}}</td>
+            <td>{{user.activationDate == null ? 'not activated yet' : user.activationDate | date }}</td>
+            <td>
+                <button class="btn btn-danger filters-toggle-btn" (click)="deleteUser(user)">delete</button>
+            </td>
+        </tr>
+    </tbody>
 </table>
 
 
 
 <ng-template #register let-c="close" let-d="dismiss">
-  <div class="modal-header">
-    <!-- <h4 class="modal-title">Modal title</h4> -->
-    <button type="button" class="close" aria-label="Close" (click)="d()">
+    <div class="modal-header">
+        <!-- <h4 class="modal-title">Modal title</h4> -->
+        <button type="button" class="close" aria-label="Close" (click)="d()">
       <span aria-hidden="true">&times;</span>
     </button>
-  </div>
-  <div class="modal-body">
-    <rb-registeration [mode]="registrationMode" (userAdded)="userAdded($event)"></rb-registeration>
-  </div>
+    </div>
+    <div class="modal-body">
+        <rb-registeration [mode]="registrationMode" (userAdded)="userAdded($event)"></rb-registeration>
+    </div>
 
 </ng-template>

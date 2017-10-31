@@ -1,94 +1,93 @@
 <loader *ngIf="loaders.length > 0"></loader>
 
 <ng-container *ngIf="loaders.length == 0">
-  <!-- Settings -->
-  <section>
+    <!-- Settings -->
+    <section class="settings">
+        <div class="row">
+            <div class="col-sm-12 col-xs-12">
+                <div class="form-group">
+                    <h5>Work Days:</h5>
+                    <!-- todo: make them in one row -->
+                    <div *ngFor="let day of days" class="form-check form-check-inline">
+                        <label class="form-check-label">
+                    <input class="form-check-input" type="checkbox" (click)="toggleCheck(day)" [checked]="day.checked" [value]="day.id"> {{day.day}}
+                  </label>
+                    </div>
+                </div>
+            </div>
 
-    <div class="row">
-      <div class="form-group">
-        <label>Work Days: </label>
-        <!-- todo: make them in one row -->
-        <div *ngFor="let day of days" class="form-check form-check-inline">
-          <label class="form-check-label">
-            <input class="form-check-input" type="checkbox" (click)="toggleCheck(day)" [checked]="day.checked" [value]="day.id"> {{day.day}}
-          </label>
+            <div class="col-sm-6 col-xs-12">
+                <h5>From:</h5>
+                <ngb-timepicker [formControl]="timeFrom" [(ngModel)]="settings.workHours.from" [meridian]="true"></ngb-timepicker>
+            </div>
+            <div class="col-sm-6 col-xs-12">
+                <h5>To:</h5>
+                <ngb-timepicker [formControl]="timeto" [(ngModel)]="settings.workHours.to" [meridian]="true"></ngb-timepicker>
+                <label *ngIf="timeto.invalid || timeFrom.invalid" class="red">"to time" can't be before "from time"</label>
+            </div>
+            <div class="col-sm-6 col-xs-12">
+                <h5>time span for appointments:</h5>
+                <input type="number" min="0" class="form-control" placeholder="time span for appointments" [(ngModel)]="settings.timeSpan">
+            </div>
+            <div class="col-sm-12 col-xs-12">
+                <button class="btn btn-primary filters-toggle-btn" [disabled]="timeto.invalid || timeFrom.invalid" (click)="saveAppointmentSettings()">save</button>
+            </div>
         </div>
-      </div>
-    </div>
 
+    </section>
+    <br/>
+    <br/>
+    <br/>
+    <!-- appointment types -->
+    <section>
+        <button class="btn btn-primary filters-toggle-btn" (click)="openAddEditTypePopup(addEditPopup)">add new type</button>
 
-    <div class="row">
-      <label>From:
-        <ngb-timepicker [formControl]="timeFrom" [(ngModel)]="settings.workHours.from" [meridian]="true"></ngb-timepicker>
-      </label>
-      <label>To:
-        <ngb-timepicker [formControl]="timeto" [(ngModel)]="settings.workHours.to" [meridian]="true"></ngb-timepicker>
-      </label>
-      <label *ngIf="timeto.invalid || timeFrom.invalid" class="red">"to time" can't be before "from time"</label>
-    </div>
+        <table class="table">
+            <thead>
+                <th>name</th>
+                <th>edit</th>
+                <th>Delete</th>
+            </thead>
+            <tbody>
+                <tr *ngFor="let type of types">
+                    <td>{{type.name}}</td>
+                    <td>
+                        <button class="btn btn-primary filters-toggle-btn" (click)="openAddEditTypePopup(addEditPopup, type)">edit</button>
+                    </td>
+                    <td>
+                        <button class="btn btn-danger filters-toggle-btn" (click)="deleteType(type)">delete</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
 
-    <div class="row">
-      <label>time span for appointments</label>
-      <input type="number" min="0" class="form-control" placeholder="time span for appointments" [(ngModel)]="settings.timeSpan">
-    </div>
-
-    <button class="btn btn-primary btn-lg" [disabled]="timeto.invalid || timeFrom.invalid" (click)="saveAppointmentSettings()">save</button>
-  </section>
-  <br/>
-  <br/>
-  <br/>
-  <!-- appointment types -->
-  <section>
-    <button (click)="openAddEditTypePopup(addEditPopup)">add new type</button>
-
-    <table class="table">
-      <thead>
-        <th>name</th>
-        <th>edit</th>
-        <th>Delete</th>
-      </thead>
-      <tbody>
-        <tr *ngFor="let type of types">
-          <td>{{type.name}}</td>
-          <td>
-            <button (click)="openAddEditTypePopup(addEditPopup, type)">edit</button>
-          </td>
-          <td>
-            <button (click)="deleteType(type)">delete</button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-
-    <ng-template #addEditPopup let-c="close">
-      <div class="modal-header">
-        <h4 class="modal-title">{{addEditType.id == null ? 'New appointment type' : 'Edit appointment type'}}</h4>
-        <button type="button" class="close" aria-label="Close" (click)="c(); addEditType={}">
+        <ng-template #addEditPopup let-c="close">
+            <div class="modal-header">
+                <h4 class="modal-title">{{addEditType.id == null ? 'New appointment type' : 'Edit appointment type'}}</h4>
+                <button type="button" class="close" aria-label="Close" (click)="c(); addEditType={}">
           <span aria-hidden="true">&times;</span>
         </button>
-      </div>
-      <div class="modal-body">
-        <div class="form-group">
-          <label for="name" class="">Name
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="name" class="">Name
             <i *ngIf="true">*</i>
           </label>
-          <input type="text" name="name" class="form-control" placeholder="appointment type name.." [(ngModel)]="addEditType.name"
-          />
-        </div>
-        <div class="form-group">
-          <label for="description" class="">Description</label>
-          <input type="text" name="description" class="form-control" placeholder="appointment type description.." [(ngModel)]="addEditType.description"
-          />
-        </div>
+                    <input type="text" name="name" class="form-control" placeholder="appointment type name.." [(ngModel)]="addEditType.name" />
+                </div>
+                <div class="form-group">
+                    <label for="description" class="">Description</label>
+                    <input type="text" name="description" class="form-control" placeholder="appointment type description.." [(ngModel)]="addEditType.description" />
+                </div>
 
-        <div class="col-md-12">
-          <button type="submit" (click)="saveAppointmentType()" class="btn btn-success">Save</button> &nbsp;
-          <button type="reset" (click)="c(); addEditType = {}" class="btn btn-danger">Cancel</button>
-        </div>
-      </div>
+                <div class="col-md-12">
+                    <button type="submit" (click)="saveAppointmentType()" class="btn btn-success">Save</button> &nbsp;
+                    <button type="reset" (click)="c(); addEditType = {}" class="btn btn-danger">Cancel</button>
+                </div>
+            </div>
 
-    </ng-template>
+        </ng-template>
 
-  </section>
+    </section>
 
 </ng-container>
