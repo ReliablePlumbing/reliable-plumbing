@@ -7,13 +7,20 @@ import { InputNumberDirective } from './directives/input-number.directive';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NoDataComponent } from './no-data/no-data.component';
 
-let components = [LoaderComponent, InputNumberDirective, MultiSelectDatepickerComponent, NoDataComponent]
+// pipes 
+import { AppointmentStatusColor, AppointmentStatusTxt } from './pipes/appointment-status-pipes';
+import { TechnicianStatusColor, TechnicianStatusTxt } from './pipes/technician-status-pipes';
+
+let components: any[] = [LoaderComponent, InputNumberDirective, MultiSelectDatepickerComponent, NoDataComponent];
+let pipes: any[] = [AppointmentStatusColor, AppointmentStatusTxt, TechnicianStatusColor, TechnicianStatusTxt];
+
+let declarations = components.concat(pipes);
 
 @NgModule({
   imports: [
     CommonModule, FormsModule, NgbModule
   ],
-  declarations: components,
-  exports: components
+  declarations: declarations,
+  exports: declarations
 })
 export class SharedModule { }

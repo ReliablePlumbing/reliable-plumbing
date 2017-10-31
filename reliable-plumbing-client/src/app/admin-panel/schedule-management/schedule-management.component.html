@@ -65,14 +65,14 @@
                                     <div class="col-sm-4" *ngFor="let appointment of appointments[date]">
                                         <div class="appointemt-card pointer" (click)="openAppointmentDetailsModal(appointment, date)">
                                             <h6>
-                                                <span class="appointemt-status green" placement="top" ngbTooltip="Available"></span>
+                                                <span class="appointemt-status pending" [ngClass]="appointment.status | appointmentStatusColor" placement="top" ngbTooltip="{{appointment.status | appointmentStatusTxt}}"></span>
                                                 <b>{{appointment.user == null ? appointment.fullName : appointment.user.firstName}}</b>
                                             </h6>
                                             <div class="appointemt-time">
                                                 <span>09:00 AM</span>
                                             </div>
                                             <div class="appointemt-type">
-                                                <span>some very long dummy type</span>
+                                                <span>{{appointment.typeObj?.text}}</span>
                                             </div>
                                         </div>
                                     </div>

@@ -1,24 +1,24 @@
 /* You can add global styles to this file, and also import other style files */
 
 .modal-content {
-    margin-top: 110px;
+  margin-top: 110px;
 }
 
 .pointer {
-    cursor: pointer;
+  cursor: pointer;
 }
 
 .dropdown-menu {
-    display: inherit !important;
+  display: inherit !important;
 }
 
 button {
-    cursor: pointer;
-    border-radius: 0 !important;
+  cursor: pointer;
+  border-radius: 0 !important;
 }
 
 a {
-    cursor: pointer;
+  cursor: pointer;
 }
 
 .navbar-toggler-icon {
@@ -28,51 +28,59 @@ a {
 }
 
 select {
-    width: 100%;
-    padding: .5rem .75rem;
-    font-size: 1rem;
-    line-height: 1.25;
-    color: #464a4c;
-    background-color: #fff;
-    border: 1px solid rgba(0, 0, 0, .15);
+  width: 100%;
+  padding: .5rem .75rem;
+  font-size: 1rem;
+  line-height: 1.25;
+  color: #464a4c;
+  background-color: #fff;
+  border: 1px solid rgba(0, 0, 0, .15);
 }
 
 .fa-calendar {
-    color: #fff !important;
+  color: #fff !important;
 }
 
 .date-picker-cont {
-    .form-control {
-        display: inline-block;
-        width: calc(100% - 69px);
-    }
-    button {
-        display: inline-block;
-    }
+  .form-control {
+    display: inline-block;
+    width: calc(100% - 69px);
+  }
+  button {
+    display: inline-block;
+  }
 }
 
 .ngb-dp-header {
-    .btn-link {
-        cursor: pointer;
-        outline: 0;
-        padding: 3px 11px !important;
-    }
+  .btn-link {
+    cursor: pointer;
+    outline: 0;
+    padding: 3px 11px !important;
+  }
 }
 
 .appointemt-status {
-    width: 12px;
-    height: 12px;
-    background-color: #fff;
-    border-radius: 50%;
-    display: inline-block;
-    margin-right: 5px;
-    vertical-align: inherit;
+  width: 12px;
+  height: 12px;
+  background-color: #fff;
+  border-radius: 50%;
+  display: inline-block;
+  margin-right: 5px;
+  vertical-align: inherit;
 }
 
-.appointemt-status.green {
-    background-color: #4CD964;
+.appointemt-status.pending {
+  background-color: #d1c8e3;
 }
 
-.appointemt-status.red {
-    background-color: #FF3B30;
+.appointemt-status.confirmed {
+  background-color: #719ad2;
+}
+
+.appointemt-status.not-available {
+  background-color: #93745f;
+}
+
+.appointemt-status.rejected {
+  background-color: #FF3B30;
 }

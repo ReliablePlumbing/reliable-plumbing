@@ -38,7 +38,7 @@
             <td>{{tech?.technician.firstName}}</td>
             <td>{{tech?.technician.email}}</td>
             <td>
-                <p><span class="appointemt-status" [ngClass]="tech?.status.color"></span><span>{{tech?.status.text}}</span></p>
+                <p><span class="appointemt-status" [ngClass]="tech?.status | technicianStatusColor"></span><span>{{tech?.status | technicianStatusTxt}}</span></p>
             </td>
             <td>
                 <ng-container>
