@@ -66,7 +66,6 @@ export class UserManagementService {
     // .catch((error: Error) => console.log(error))
   }
 
-  // todo: change http with http client 
   getAllSystemUsers() {
     return this.httpExtensionService.get(this.basePath + 'getAllSystemUsers')
       .map((response: Response) => response.json());

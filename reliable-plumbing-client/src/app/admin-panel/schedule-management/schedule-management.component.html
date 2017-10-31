@@ -11,7 +11,7 @@
                 <div class="row">
                     <div class="col-sm-6">
                         <div class="form-group">
-                            <h5>select Range Dates:</h5>
+                            <h5>select Range Dates</h5>
                             <div>
                                 <multi-select-datepicker [dates]="filters.date" (datesChanged)="updateDates($event)"></multi-select-datepicker>
                             </div>
@@ -19,13 +19,13 @@
                     </div>
                     <div class="col-sm-3">
                         <div class="form-group">
-                            <h5>select from time:</h5>
+                            <h5>select from time</h5>
                             <div>
                                 <ngb-timepicker [(ngModel)]="filters.time.from" [meridian]="true"></ngb-timepicker>
                             </div>
                         </div>
                         <div class="form-group">
-                            <h5>Appointment Type:</h5>
+                            <h5>Appointment Type</h5>
                             <div>
                                 <ng-select [multiple]="true" [items]="lookups.types" [active]="filters.types" (selected)="selected($event, filters.types)" (removed)="removed($event, 'types')" placeholder="empty filter, means all selected"></ng-select>
                             </div>
@@ -33,13 +33,13 @@
                     </div>
                     <div class="col-sm-3">
                         <div class="form-group">
-                            <h5>select from to:</h5>
+                            <h5>select from to</h5>
                             <div>
                                 <ngb-timepicker [(ngModel)]="filters.time.to" [meridian]="true"></ngb-timepicker>
                             </div>
                         </div>
                         <div class="form-group">
-                            <h5>Status:</h5>
+                            <h5>Status</h5>
                             <div>
                                 <ng-select [multiple]="true" [items]="lookups.status" [active]="filters.status" (selected)="selected($event, filters.status)" (removed)="removed($event, 'status')" placeholder="empty filter, means all selected"></ng-select>
                             </div>

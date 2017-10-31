@@ -1,5 +1,5 @@
 export const environment = {
   production: true,
-  apiUrl: 'http://localhost:3000/api/',
-  socketsUrl: 'http://localhost:3000'
+  apiUrl: 'http://reliableplumbingapi.azurewebsites.net/api/',
+  socketsUrl: 'http://reliableplumbingapi.azurewebsites.net'
 };

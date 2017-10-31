@@ -6,7 +6,6 @@ import { getEnumEntries, getDatesArray, getDateString } from '../../utils/date-h
 import * as moment from 'moment';
 import { NgbModalRef, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
-// todo: refactor dates to use moment and default offset is week
 @Component({
   selector: 'rb-schedule-management',
   templateUrl: './schedule-management.component.html',

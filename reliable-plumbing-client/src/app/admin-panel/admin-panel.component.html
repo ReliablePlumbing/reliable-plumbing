@@ -13,11 +13,11 @@ Header Section
                 </h1>
             </a>
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav m-auto">
+                <!-- <ul class="navbar-nav m-auto">
                     <li class="nav-item">
                         <a class="nav-link" [routerLink]="['/']">Home</a>
                     </li>
-                </ul>
+                </ul> -->
                 <ul class="navbar-nav ml-auto">
                     <li class="nav-item">
                         <a class="nav-link pointer">{{currentUser.firstName + ' ' + currentUser.lastName}}</a>
@@ -25,8 +25,8 @@ Header Section
                     <li class="nav-item">
                         <a class="nav-link pointer" (click)="logout()">Log out</a>
                     </li>
-                    <li *ngIf="isManager" class="nav-item">
-                        <a [routerLink]="['/admin-panel']" class="nav-link pointer">Go to App</a>
+                    <li class="nav-item panel-link">
+                        <a [routerLink]="['/']" class="nav-link pointer">Go to Website</a>
                     </li>
                 </ul>
             </div>
