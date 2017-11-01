@@ -6,11 +6,13 @@
 /* navbar */
 
 .navbar {
+    padding: 0;
     .navbar-collapse {
         .navbar-nav {
             li {
                 a {
                     color: #fff;
+                    font-weight: 400;
                 }
             }
         }
@@ -207,7 +209,7 @@ body {
 }
 
 .nav-item.panel-link {
-    background-color: #40a4df;
+    background-color: #1893dc;
     padding: 0px 2px;
     a {
         padding: 8px;

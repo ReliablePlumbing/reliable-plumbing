@@ -72,6 +72,14 @@ h6 {
     background: #40a4df;
     color: #fff; }
 
+.learn-more-btn {
+  background-color: transparent;
+  border-radius: 0;
+  display: inline-block;
+  margin: auto;
+  border: 2px solid #fff;
+  color: #fff !important; }
+
 /*--------------------------------------------------------------
 # Welcome
 --------------------------------------------------------------*/
@@ -143,7 +151,7 @@ h6 {
 # Header
 --------------------------------------------------------------*/
 #header {
-  background: #111;
+  background-color: rgba(15, 144, 228, 0.8);
   height: initial; }
   #header #logo {
     float: left; }
@@ -165,7 +173,7 @@ h6 {
     #header #logo img {
       padding: 0;
       margin: 0;
-      max-height: 50px; }
+      max-height: 60px; }
   @media (max-width: 768px) {
     #header #logo h1 {
       font-size: 26px; }
@@ -174,7 +182,7 @@ h6 {
     #header #header-sticky-wrapper {
       height: inherit !important; } }
   .is-sticky #header {
-    background: rgba(0, 0, 0, 0.85); }
+    background-color: rgba(15, 144, 228, 0.8); }
 
 #header-sticky-wrapper {
   height: inherit !important; }
@@ -183,8 +191,11 @@ h6 {
 # Navigation Menu
 --------------------------------------------------------------*/
 /* navbar */
-.navbar .navbar-collapse .navbar-nav li a {
-  color: #fff; }
+.navbar {
+  padding: 0; }
+  .navbar .navbar-collapse .navbar-nav li a {
+    color: #fff;
+    font-weight: 400; }
 
 /* Nav Menu Arrows */
 .sf-arrows .sf-with-ul {
@@ -328,7 +339,7 @@ body.mobile-nav-active {
       font-size: 14px; }
 
 .nav-item.panel-link {
-  background-color: #40a4df;
+  background-color: #1893dc;
   padding: 0px 2px; }
   .nav-item.panel-link a {
     padding: 8px; }
@@ -381,7 +392,9 @@ body.mobile-nav-active {
   background-size: cover;
   padding: 80px 0 60px 0; }
   #services .service-item {
-    margin-bottom: 20px; }
+    margin-bottom: 30px;
+    background-color: rgba(15, 144, 228, 0.5);
+    padding: 15px; }
   #services .service-icon {
     float: left;
     background: #40a4df;
@@ -402,10 +415,12 @@ body.mobile-nav-active {
     margin-bottom: 15px;
     text-transform: uppercase; }
     #services .service-title a {
-      color: #111; }
+      color: #fff; }
   #services .service-description {
     margin-left: 80px;
-    line-height: 24px; }
+    line-height: 24px;
+    color: #fff;
+    margin-bottom: 10px; }
 
 /* Subscribe Section
 --------------------------------*/
@@ -645,7 +660,7 @@ form .btn {
 # Footer
 --------------------------------------------------------------*/
 #footer {
-  background: #111;
+  background: #D22E1D;
   padding: 30px 0;
   color: #fff; }
   #footer .copyright {
