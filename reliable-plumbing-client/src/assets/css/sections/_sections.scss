@@ -61,10 +61,49 @@
     background: linear-gradient(rgba(255, 255, 255, .9), rgba(255, 255, 255, .9)), url("../img/services-bg.jpg") fixed center center;
     background-size: cover;
     padding: 80px 0 60px 0;
+    .row {
+        .col-md-6 {
+            &:nth-child(2) {
+                .service-item {
+                    background-color: rgba(210, 46, 29, 0.8);
+                    .service-icon {
+                        background: #D22E1D;
+                        border: 1px solid #D22E1D;
+                    }
+                    &:hover {
+                        .service-icon {
+                            background: #fff;
+                            i {
+                                color: $accent-color;
+                            }
+                        }
+                    }
+                }
+            }
+            &:nth-child(3) {
+                .service-item {
+                    background-color: rgba(210, 46, 29, 0.8);
+                    .service-icon {
+                        background: #D22E1D;
+                        border: 1px solid #D22E1D;
+                    }
+                    &:hover {
+                        .service-icon {
+                            background: #fff;
+                            i {
+                                color: #D22E1D;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
     .service-item {
         margin-bottom: 30px;
-        background-color: rgba(15, 144, 228, 0.5);
+        background-color: rgba(15, 144, 228, 0.8);
         padding: 15px;
+        //
     }
     .service-icon {
         float: left;

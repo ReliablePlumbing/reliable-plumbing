@@ -391,9 +391,27 @@ body.mobile-nav-active {
   background: linear-gradient(rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.9)), url("../img/services-bg.jpg") fixed center center;
   background-size: cover;
   padding: 80px 0 60px 0; }
+  #services .row .col-md-6:nth-child(2) .service-item {
+    background-color: rgba(210, 46, 29, 0.8); }
+    #services .row .col-md-6:nth-child(2) .service-item .service-icon {
+      background: #D22E1D;
+      border: 1px solid #D22E1D; }
+    #services .row .col-md-6:nth-child(2) .service-item:hover .service-icon {
+      background: #fff; }
+      #services .row .col-md-6:nth-child(2) .service-item:hover .service-icon i {
+        color: #40a4df; }
+  #services .row .col-md-6:nth-child(3) .service-item {
+    background-color: rgba(210, 46, 29, 0.8); }
+    #services .row .col-md-6:nth-child(3) .service-item .service-icon {
+      background: #D22E1D;
+      border: 1px solid #D22E1D; }
+    #services .row .col-md-6:nth-child(3) .service-item:hover .service-icon {
+      background: #fff; }
+      #services .row .col-md-6:nth-child(3) .service-item:hover .service-icon i {
+        color: #D22E1D; }
   #services .service-item {
     margin-bottom: 30px;
-    background-color: rgba(15, 144, 228, 0.5);
+    background-color: rgba(15, 144, 228, 0.8);
     padding: 15px; }
   #services .service-icon {
     float: left;
