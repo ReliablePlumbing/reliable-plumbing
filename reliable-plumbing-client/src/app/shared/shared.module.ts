@@ -11,10 +11,9 @@ import { NoDataComponent } from './no-data/no-data.component';
 import { AppointmentStatusColor, AppointmentStatusTxt } from './pipes/appointment-status-pipes';
 import { TechnicianStatusColor, TechnicianStatusTxt } from './pipes/technician-status-pipes';
 
-let components: any[] = [LoaderComponent, InputNumberDirective, MultiSelectDatepickerComponent, NoDataComponent];
-let pipes: any[] = [AppointmentStatusColor, AppointmentStatusTxt, TechnicianStatusColor, TechnicianStatusTxt];
-
-let declarations = components.concat(pipes);
+let declarations = [LoaderComponent, InputNumberDirective, MultiSelectDatepickerComponent, NoDataComponent, 
+  // pipes
+  AppointmentStatusColor, AppointmentStatusTxt, TechnicianStatusColor, TechnicianStatusTxt];
 
 @NgModule({
   imports: [

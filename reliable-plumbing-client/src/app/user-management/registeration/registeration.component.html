@@ -72,7 +72,7 @@
               </div>
               <div class="form-check form-check-inline">
                 <label class="form-check-label">
-                  <input class="form-check-input" type="checkbox" (click)="handleRolesChange($event)" formControlName="admin" [value]="role.Admin"> Admin
+                  <input class="form-check-input" type="checkbox" (click)="handleRolesChange($event)" formControlName="admin" [value]="role.Manager"> Manager
                 </label>
               </div>
               <span class="error-message" *ngIf="trySubmit && registerForm.hasError('noRole','roles')">Please select at least one role</span>

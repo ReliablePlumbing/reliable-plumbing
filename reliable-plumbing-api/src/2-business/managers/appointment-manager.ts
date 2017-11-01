@@ -149,13 +149,14 @@ export class AppointmentManager {
 
         let status = TechnicianStatus.Available;
         for (let appoint of technicianAppointments) {
-            if (appoint.date == appointment.date) {
+            if (appoint.date.getTime() == appointment.date.getTime()) {
                 status = TechnicianStatus.Busy
                 break;
             };
-            if (appoint.date >= boundary2HourDates.from || appoint.date <= boundary2HourDates.to)
+            if (appoint.date.getTime() >= boundary2HourDates.from.getTime() || appoint.date.getTime() <= boundary2HourDates.to.getTime())
                 status = TechnicianStatus.PossibleBusy;
-            if (status != TechnicianStatus.PossibleBusy && (appoint.date >= boundary4HourDates.from || appoint.date <= boundary4HourDates.to))
+            if ((appoint.date.getTime() >= boundary4HourDates.from.getTime() && appoint.date.getTime() < boundary2HourDates.from.getTime())|| 
+                appoint.date.getTime() <= boundary4HourDates.to.getTime() && appoint.date.getTime() > boundary2HourDates.to.getTime())
                 status = TechnicianStatus.HardlyBusy;
         }
 

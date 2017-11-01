@@ -5,6 +5,7 @@ import { LookupsService, AppointmentService } from '../../services/services.expo
 import { getEnumEntries, getDatesArray, getDateString } from '../../utils/date-helpers';
 import * as moment from 'moment';
 import { NgbModalRef, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { convertTimeTo12String } from '../../utils/date-helpers';
 
 @Component({
   selector: 'rb-schedule-management',
@@ -121,7 +122,8 @@ export class ScheduleManagementComponent implements OnInit {
       let typeIndex = this.lookups.types.findIndex(t => t.id == appointment.typeId)
       if (typeIndex != -1)
         appointment.typeObj = this.lookups.types[typeIndex]
-
+        let appointmentDateLocalized = new Date(appointment.date);
+        appointment.time = convertTimeTo12String(appointmentDateLocalized.getHours(), appointmentDateLocalized.getMinutes());
       this.appointments[appointmentDate].push(appointment);
       if (this.urlIdParam != null && appointment.id == this.urlIdParam) {
         this.openAppointmentDetailsModal(appointment, appointmentDate);
