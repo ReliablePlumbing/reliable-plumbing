@@ -17,6 +17,13 @@ export class User extends BaseEntity {
   createdByUserId?: string;
   isActivated: boolean;
   activationDate?: Date;
+  address: {
+    coords: {
+      lat: number,
+      lng: number
+    },
+    text: string
+  }
 
   constructor(user?: any) {
     super();
@@ -36,6 +43,7 @@ export class User extends BaseEntity {
       this.createdByUserId = user.createdByUserId;
       this.isActivated = user.isActivated;
       this.activationDate = user.activationDate;
+      this.address = user.address;
     }
   }
 
@@ -52,7 +60,8 @@ export class User extends BaseEntity {
       rolesObj: this.mapRoles(),
       creationDate: this.creationDate,
       isActivated: this.isActivated,
-      activationDate: this.activationDate
+      activationDate: this.activationDate,
+      address: this.address
     }
   }
 

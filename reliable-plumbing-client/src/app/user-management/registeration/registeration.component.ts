@@ -2,6 +2,7 @@ import { Component, OnInit, EventEmitter, Input, Output } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 import { UserManagementService } from '../services/user-management.service';
 import { Role, RegistrationMode } from '../../models/enums';
+import { Marker } from '../../models/marker';
 import { AlertifyService, EnvironmentService, RouteHandlerService } from '../../services/services.exports';
 
 @Component({
@@ -24,13 +25,30 @@ export class RegisterationComponent implements OnInit {
     lastName: null,
     email: null,
     mobile: null,
-    roles: []
+    roles: [],
+    address: {
+      coords: {
+        lat: null,
+        lng: null
+      },
+      text: null
+    }
   }
+  mapMarker: Marker;
+
   constructor(private fb: FormBuilder, private userManagementService: UserManagementService, private alertifyService: AlertifyService,
     private environmentService: EnvironmentService, private routeHandler: RouteHandlerService) { }
 
   ngOnInit() {
     this.createForm();
+    let userCurrentCoords = navigator.geolocation.getCurrentPosition(position => {
+      this.mapMarker = {
+        lat: position.coords.latitude,
+        lng: position.coords.longitude,
+        draggable: true,
+        label: null
+      }
+    })
   }
 
   // todo: get regex for USA mobile
@@ -54,6 +72,8 @@ export class RegisterationComponent implements OnInit {
     else {
       this.registerForm.addControl('password', new FormControl(null, [Validators.required, Validators.pattern('^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$')]))
       this.registerForm.addControl('confirmPassword', new FormControl(null, [Validators.required, this.matchOtherValidator('password')]));
+      this.registerForm.addControl('address', new FormControl(null, [Validators.required]));
+
     }
 
     if (this.mode != RegistrationMode.completeProfile)
@@ -111,6 +131,11 @@ export class RegisterationComponent implements OnInit {
     if (this.registerForm.invalid)
       return;
 
+    this.user.address.coords = {
+      lat: this.mapMarker.lat,
+      lng: this.mapMarker.lng
+    };
+    
     if (this.mode != RegistrationMode.completeProfile)
       this.userManagementService.register(this.user).subscribe(x => {
 
@@ -142,8 +167,20 @@ export class RegisterationComponent implements OnInit {
       lastName: null,
       email: null,
       mobile: null,
-      roles: [Role.Technician]
+      roles: [Role.Technician],
+      address: {
+        coords: {
+          lat: null,
+          lng: null
+        },
+        text: null
+      }
     };
     this.trySubmit = false;
+  }
+
+  markerDragEnd(m, $event) {
+    this.mapMarker.lat = $event.coords.lat;
+    this.mapMarker.lng = $event.coords.lng;
   }
 }

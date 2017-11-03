@@ -2,6 +2,7 @@
   "files.exclude": {
     "**/node_modules": true,
     "**/dist": true,
-    "**/maps": true
+    "**/maps": true,
+    "**/previous deployment": true
   }
 }

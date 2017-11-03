@@ -1,4 +1,17 @@
-<p>
-  test works!
-</p>
-<input type="button" value="validate" (click)="validate()" />
+<div class="row">
+
+  <agm-map [latitude]="lat" [longitude]="lng" [zoom]="zoom" [disableDefaultUI]="false" [zoomControl]="true" (mapClick)="mapClicked($event)">
+
+    <agm-marker *ngFor="let m of markers; let i = index" (markerClick)="clickedMarker(m.label, i)" [latitude]="m.lat" [longitude]="m.lng"
+      [label]="m.label" [markerDraggable]="m.draggable" [openInfoWindow]="true" [title]="'Title'" (dragEnd)="markerDragEnd(m, $event)"  [iconUrl]="'/assets/anonymus.png'">
+
+      <agm-info-window>
+        <strong>InfoWindow content</strong>
+      </agm-info-window>
+
+    </agm-marker>
+
+
+  </agm-map>
+
+</div>

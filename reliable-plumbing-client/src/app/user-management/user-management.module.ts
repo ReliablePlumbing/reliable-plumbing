@@ -4,6 +4,10 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { UserManagementRoutingModule } from './user-management-routing.module';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+
+// our modules
+import { SharedModule } from '../shared/shared.module';
+
 // services
 import { UserManagementService } from './services/user-management.service';
 // components
@@ -15,7 +19,7 @@ import { SystemUsersManagementComponent } from './system-users-management/system
 @NgModule({
   imports: [
     CommonModule, FormsModule, HttpModule, ReactiveFormsModule,
-    UserManagementRoutingModule, NgbModule.forRoot()
+    UserManagementRoutingModule, NgbModule.forRoot(), SharedModule
   ],
   declarations: [LoginComponent, RegisterationComponent, ActivateMailComponent, SystemUsersManagementComponent],
   providers: [UserManagementService],

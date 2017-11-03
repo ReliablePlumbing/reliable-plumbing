@@ -3,9 +3,6 @@
     <div class="container">
       <form [formGroup]="registerForm" novalidate>
         <div class="row">
-          <!-- <div class="col-md-12">
-            <h3>Sign up</h3>
-          </div> -->
           <div class="col-md-6">
             <div class="form-group">
               <label for="email" class="">Email
@@ -87,6 +84,24 @@
                 <li>At least one digit</li>
                 <li>At least one special character</li>
               </ul>
+            </div>
+          </div>
+          <div class="col-md-12">
+            <div class="form-group">
+              <label for="address" class="">Address
+                <i *ngIf="getControlValidation('address','required')">*</i>
+              </label>
+              <input type="text" name="address" class="form-control" formControlName="address" [(ngModel)]="user.address.text" />
+            </div>
+            <div class="map-container" *ngIf="mapMarker != null">
+              <agm-map [latitude]="mapMarker.lat" [longitude]="mapMarker.lng" [zoom]="15" [disableDefaultUI]="false" [zoomControl]="true">
+                <agm-marker [latitude]="mapMarker.lat" [longitude]="mapMarker.lng" [label]="mapMarker.label" [markerDraggable]="mapMarker.draggable"
+                  (dragEnd)="markerDragEnd(m, $event)">
+                  <agm-info-window>
+                    <strong>Your Location</strong>
+                  </agm-info-window>
+                </agm-marker>
+              </agm-map>
             </div>
           </div>
           <div class="col-md-12">

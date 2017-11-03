@@ -25,7 +25,7 @@ export class App {
                 // "Access-Control-Allow-Origin","Access-Control-Allow-Headers","Origin, X-Requested-With, Content-Type", "CORELATION_ID"],
                 credentials: true,
                 methods: "GET,HEAD,OPTIONS,PUT,PATCH,POST,DELETE",
-                origin: 'http://localhost:4200', // allow only angular app when deployment, social media login
+                origin: '*', // allow only angular app when deployment, social media login http://reliableplumbing.azurewebsites.net
                 preflightContinue: false
             },
             defaultErrorHandler: false,

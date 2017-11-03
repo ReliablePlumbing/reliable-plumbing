@@ -16,6 +16,18 @@ export var userSchema: genericSchema = {
         createdByUserId: { type: String, required: false },
         isActivated: { type: Boolean, required: true },
         activationDate: { type: Date, required: false },
+        address: {
+            type: {
+                coords: {
+                    type: {
+                        lat: { type: Number, required: true },
+                        lng: { type: Number, required: true }
+                    }, required: false
+                },
+                text: { type: String, required: true }
+
+            }, required: true
+        }
     }),
     collectionName: 'users'
 };

@@ -84,3 +84,15 @@ select {
 .appointemt-status.rejected {
   background-color: #FF3B30;
 }
+
+
+.agm-map-container-inner {
+  // position: inherit !important;
+  overflow: inherit !important;
+}
+
+.map-container{
+  width: 100%;
+  height: 300px;
+  // overflow: hidden !important;
+}
