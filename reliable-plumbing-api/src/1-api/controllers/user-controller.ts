@@ -127,7 +127,9 @@ export class UserController {
                 case SocialMediaProvider.Facebook:
                     promise = this.authenticateByFacebook(bodyParams.code, bodyParams.redirectUri);
                     break;
-
+                case SocialMediaProvider.Google:
+                    promise = this.authenticateByGoogle(bodyParams.code, bodyParams.redirectUri)
+                    break;
                 default:
                     return resolve(null);
             }
@@ -139,7 +141,6 @@ export class UserController {
                 this.userManager.saveSocialMediaLogin(user).then(updatedUser => {
                     let user = new User(updatedUser);
                     let tokenPayload = { email: user.email, roles: user.roles };
-
                     return resolve({
                         token: AuthorizationProvider.generateToken(tokenPayload),
                         user: user.toLightModel(),
@@ -174,7 +175,6 @@ export class UserController {
                 request.get({ url: graphApiUrl, qs: accessToken, json: true }, function (err, response, profile) {
                     if (response.statusCode !== 200)
                         return resolve(null);
-
                     let user = new User({
                         email: profile.email,
                         firstName: profile.first_name,
@@ -188,6 +188,49 @@ export class UserController {
             });
         });
 
+    }
+
+    private authenticateByGoogle(code, redirectUri) {
+        return new Promise<User>((resolve, reject) => {
+
+            let googleConfig = ConfigService.config.socialMedia.google;
+
+            let fields = googleConfig.profileFields;
+            let accessTokenUrl = googleConfig.accessTokenUrl;
+            let peopleApiUrl = googleConfig.peopleApiUrl + fields.join(encodeURIComponent(','));
+
+            let tokenBody = 'code=' + code +
+                '&client_id=' + googleConfig.clientId +
+                '&client_secret=' + googleConfig.clientSecret +
+                '&redirect_uri=' + redirectUri +
+                '&grant_type=' + googleConfig.grantType;
+
+            request.post(accessTokenUrl, { body: tokenBody, headers: { 'Content-type': 'application/x-www-form-urlencoded' } },
+                (err, response, token) => {
+                    if (response == null)
+                        return;
+                    if (response.statusCode !== 200)
+                        return;
+
+                    let accessToken = JSON.parse(token).access_token;
+                    let headers = { Authorization: 'Bearer ' + accessToken };
+
+                    request.get({ url: peopleApiUrl, headers: headers, json: true }, function (err, response, profile) {
+                        if (response.statusCode !== 200)
+                            return resolve(null);
+                        let user = new User({
+                            email: profile.email,
+                            firstName: profile.given_name,
+                            lastName: profile.family_name,
+                            // socialMediaId: profile.id,
+                            SocialMediaProvider: SocialMediaProvider.Google
+                        });
+
+                        return resolve(user);
+
+                    });
+                });
+        });
     }
 
 }

@@ -27,5 +27,6 @@ export enum TechnicianStatus {
 }
 
 export enum SocialMediaProvider {
-    Facebook = 1
+    Facebook = 1,
+    Google
 }

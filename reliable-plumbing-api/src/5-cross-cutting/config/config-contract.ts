@@ -39,6 +39,14 @@ export interface Config {
             accessTokenUrl: string,
             graphApiUrl: string,
             profileFields: string[]
+        },
+        google: {
+            clientId: string,
+            accessTokenUrl: string,
+            peopleApiUrl: string,
+            clientSecret: string,
+            grantType: string,
+            profileFields: string[]
         }
     }
 }

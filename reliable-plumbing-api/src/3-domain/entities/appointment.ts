@@ -1,6 +1,7 @@
 import { BaseEntity } from './base/base-entity';
 import { AppointmentStatus } from '../enums/appointment-status';
 import { Role } from '../enums/role';
+import { SocialMediaProvider } from '../enums/social-media-provider';
 import { User } from './user';
 
 export class Appointment extends BaseEntity {
