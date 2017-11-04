@@ -8,3 +8,4 @@ export * from './route-handler.service';
 export * from './appointment.service';
 export * from './sockets.service';
 export * from './notification.service';
+export * from './auth.service';

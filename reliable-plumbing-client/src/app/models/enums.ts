@@ -2,7 +2,7 @@ export enum Role {
     Manager = 1,
     Technician,
     Customer
-} 
+}
 
 export enum RegistrationMode {
     signup,
@@ -24,4 +24,8 @@ export enum TechnicianStatus {
     Busy,
     PossibleBusy,
     HardlyBusy
+}
+
+export enum SocialMediaProvider {
+    Facebook = 1
 }

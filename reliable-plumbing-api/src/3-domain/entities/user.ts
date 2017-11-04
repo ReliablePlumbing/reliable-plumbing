@@ -1,5 +1,6 @@
-import { Role } from '../enums/role';
 import { BaseEntity } from './base/base-entity';
+import { SocialMediaProvider } from '../enums/social-media-provider';
+import { Role } from '../enums/role';
 
 export class User extends BaseEntity {
 
@@ -17,6 +18,8 @@ export class User extends BaseEntity {
   createdByUserId?: string;
   isActivated: boolean;
   activationDate?: Date;
+  socialMediaId?: string;
+  SocialMediaProvider?: SocialMediaProvider;
   address: {
     coords: {
       lat: number,
@@ -44,6 +47,8 @@ export class User extends BaseEntity {
       this.isActivated = user.isActivated;
       this.activationDate = user.activationDate;
       this.address = user.address;
+      this.socialMediaId = user.socialMediaId;
+      this.SocialMediaProvider = user.SocialMediaProvider;
     }
   }
 
@@ -61,15 +66,17 @@ export class User extends BaseEntity {
       creationDate: this.creationDate,
       isActivated: this.isActivated,
       activationDate: this.activationDate,
-      address: this.address
+      address: this.address,
+      socialMediaId: this.socialMediaId,
+      SocialMediaProvider: this.SocialMediaProvider
     }
   }
 
-  mapRoles(){
-    if(this.roles == null)
+  mapRoles() {
+    if (this.roles == null)
       return [];
     let rolesObjects = [];
-    for(let role of this.roles){
+    for (let role of this.roles) {
       rolesObjects.push({
         roleId: role,
         name: Role[role]

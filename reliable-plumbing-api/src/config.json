@@ -25,5 +25,14 @@
             "assgineeRemoved": "You have been unassigned",
             "appointmentChanged": "Appointment changed"
         }
+    },
+    "socialMedia": {
+        "facebook": {
+            "clientId": "1865444587114627",
+            "clientSecret": "09920adfd1bfed688845dd150d7db605",
+            "accessTokenUrl": "https://graph.facebook.com/v2.5/oauth/access_token",
+            "graphApiUrl": "https://graph.facebook.com/v2.5/me?fields=",
+            "profileFields": ["id", "email", "first_name", "last_name"]
+        }
     }
 }

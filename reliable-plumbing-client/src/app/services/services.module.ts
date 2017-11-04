@@ -10,6 +10,7 @@ import { LookupsService } from './lookups.service';
 import { AppointmentService } from './appointment.service';
 import { NotificationService } from './notification.service';
 import { SocketsService } from './sockets.service';
+import { AuthService } from './auth.service';
 
 @NgModule({
   imports: [
@@ -17,7 +18,7 @@ import { SocketsService } from './sockets.service';
   ],
   declarations: [],
   providers: [HttpExtensionService, EnvironmentService, ExceptionHandlingService, AlertifyService, RouteHandlerService,
-    AuthGuard, LoginAuthGuard, LookupsService, AppointmentService, NotificationService, SocketsService
+    AuthGuard, LoginAuthGuard, LookupsService, AppointmentService, NotificationService, SocketsService, AuthService
   ]
 })
 export class ServicesModule { }

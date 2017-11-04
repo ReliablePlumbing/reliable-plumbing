@@ -7,6 +7,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 // our modules
 import { SharedModule } from '../shared/shared.module';
+import { ServicesModule } from '../services/services.module';
 
 // services
 import { UserManagementService } from './services/user-management.service';
@@ -15,13 +16,14 @@ import { LoginComponent } from './login/login.component';
 import { RegisterationComponent } from './registeration/registeration.component';
 import { ActivateMailComponent } from './activate-mail/activate-mail.component';
 import { SystemUsersManagementComponent } from './system-users-management/system-users-management.component';
+import { SocialMediaRedirectComponent } from './social-media-redirect/social-media-redirect.component';
 
 @NgModule({
   imports: [
-    CommonModule, FormsModule, HttpModule, ReactiveFormsModule,
+    CommonModule, FormsModule, HttpModule, ReactiveFormsModule, ServicesModule, 
     UserManagementRoutingModule, NgbModule.forRoot(), SharedModule
   ],
-  declarations: [LoginComponent, RegisterationComponent, ActivateMailComponent, SystemUsersManagementComponent],
+  declarations: [LoginComponent, RegisterationComponent, ActivateMailComponent, SystemUsersManagementComponent, SocialMediaRedirectComponent],
   providers: [UserManagementService],
   exports: [LoginComponent, RegisterationComponent]
 })

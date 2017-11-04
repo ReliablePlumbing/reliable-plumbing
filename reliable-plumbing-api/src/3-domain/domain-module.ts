@@ -16,6 +16,7 @@ export * from './enums/notification-type';
 export * from './enums/appointment-status';
 export * from './enums/object-type';
 export * from './enums/technician-status';
+export * from './enums/social-media-provider';
 
 /*** Errors ***/
 export * from './errors/errors';

@@ -31,4 +31,14 @@ export interface Config {
             appointmentChanged: string
         }
     }
+
+    socialMedia: {
+        facebook: {
+            clientId: string,
+            clientSecret: string,
+            accessTokenUrl: string,
+            graphApiUrl: string,
+            profileFields: string[]
+        }
+    }
 }

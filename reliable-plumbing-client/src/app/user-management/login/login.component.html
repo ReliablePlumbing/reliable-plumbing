@@ -1,42 +1,51 @@
 <section class="register">
-    <div class="register-container">
-        <div class="container">
-            <form #loginForm="ngForm" (ngSubmit)="userLogin(loginForm)" novalidate>
-                <div class="row">
-                    <!-- <div class="col-md-12">
+  <div class="register-container">
+    <div class="container">
+      <form #loginForm="ngForm" (ngSubmit)="userLogin(loginForm)" novalidate>
+        <div class="row">
+          <!-- <div class="col-md-12">
                         <h3>Login</h3>
                     </div> -->
-                    <div class="col-md-12">
-                        <div class="form-group">
-                            <label>Username / Email:</label>
-                            <input class="form-control" type="text" name="userEmail" #userEmailControl="ngModel" [(ngModel)]="userEmail" placeholder="Enter Your Email" required/>
-                            <span class="error-message" *ngIf="!userEmailControl.valid && (userEmailControl.dirty || trySubmit)">* required</span>
-                        </div>
-                    </div>
-                    <div class="col-md-12">
-                        <div class="form-group">
-                            <label>password:</label>
-                            <input class="form-control" type="password" name="userPassword" #userPasswordControl="ngModel" [(ngModel)]="userPassword" placeholder="Enter Your Password" required/>
-                            <span class="error-message" *ngIf="!userPasswordControl.valid && (userPasswordControl.dirty || trySubmit)">* required</span>
-                        </div>
-                    </div>
-                    <div class="col-md-12">
-                        <a href="#forgot-password-url" class="login-form__forgot-password forget-password">forgot password</a>
-                    </div>
-                    <div class="col-md-12">
-                        <button type="submit" class="btn btn-success">Login</button>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <input type="checkbox" id="rememberMe" [checked]="rememberMe" (change)="rememberMe = !rememberMe" />
-                            <label for="rememberMe">remember me</label>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div>New User ? <a href="#" [routerLink]="['/register']">Sign up</a></div>
-                    </div>
-                </div>
-            </form>
+          <div class="col-md-12">
+            <div class="form-group">
+              <label>Username / Email:</label>
+              <input class="form-control" type="text" name="userEmail" #userEmailControl="ngModel" [(ngModel)]="userEmail" placeholder="Enter Your Email"
+                required/>
+              <span class="error-message" *ngIf="!userEmailControl.valid && (userEmailControl.dirty || trySubmit)">* required</span>
+            </div>
+          </div>
+          <div class="col-md-12">
+            <div class="form-group">
+              <label>password:</label>
+              <input class="form-control" type="password" name="userPassword" #userPasswordControl="ngModel" [(ngModel)]="userPassword"
+                placeholder="Enter Your Password" required/>
+              <span class="error-message" *ngIf="!userPasswordControl.valid && (userPasswordControl.dirty || trySubmit)">* required</span>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <a href="#forgot-password-url" class="login-form__forgot-password forget-password">forgot password</a>
+          </div>
+          <div class="col-md-6">
+            <div>New User ?
+              <a href="#">Sign up</a> Or</div>
+            <!-- open sign up popup -->
+          </div>
+          <div class="col-md-6">
+            <button type="submit" class="btn btn-success">Login</button>
+          </div>
+          <div class="col-md-6">
+            <div>
+              <a href="#" (click)="socialLogin(SocialMediaProvider.Facebook)">Login with facebook</a>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group">
+              <input type="checkbox" id="rememberMe" [checked]="rememberMe" (change)="rememberMe = !rememberMe" />
+              <label for="rememberMe">remember me</label>
+            </div>
+          </div>
         </div>
+      </form>
     </div>
+  </div>
 </section>

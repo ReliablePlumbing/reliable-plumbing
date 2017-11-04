@@ -1,7 +1,8 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { Router } from '@angular/router';
 import { UserManagementService } from '../services/user-management.service';
-import { AlertifyService, EnvironmentService, RouteHandlerService, NotificationService } from '../../services/services.exports';
+import { AlertifyService, EnvironmentService, RouteHandlerService, NotificationService, AuthService } from '../../services/services.exports';
+import { SocialMediaProvider } from '../../models/enums';
 
 @Component({
   selector: 'rb-login',
@@ -14,10 +15,12 @@ export class LoginComponent {
   userPassword: string;
   rememberMe: boolean = false;
   @Output() userLoggedIn: EventEmitter<any> = new EventEmitter<any>();
+  SocialMediaProvider = SocialMediaProvider;
 
   constructor(
     private userManagementService: UserManagementService, private alertifyService: AlertifyService,
-    private environmentService: EnvironmentService, private routeHandler: RouteHandlerService, private notificationService: NotificationService
+    private environmentService: EnvironmentService, private routeHandler: RouteHandlerService,
+    private notificationService: NotificationService, private authService: AuthService
   ) { }
 
   userLogin(loginForm: any) {
@@ -29,6 +32,7 @@ export class LoginComponent {
           if (result) {
             this.notificationService.connectSockets();
             this.userLoggedIn.emit();
+            this.alertifyService.success('login completed successfully');
             // this.routeHandler.routeToDefault();
           }
           else
@@ -38,5 +42,10 @@ export class LoginComponent {
           this.alertifyService.error('Email or password is incorrect');
         });
     }
+  }
+
+  socialLogin(provider: SocialMediaProvider) {
+    this.authService.redirectToSocialLogin(provider);
+
   }
 }

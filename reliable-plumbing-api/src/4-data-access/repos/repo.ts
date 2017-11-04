@@ -31,10 +31,7 @@ export class Repo<T extends BaseEntity>{
         return new Promise<boolean>((resolve, reject) => {
             let model = this.createSet();
             model.update({ _id: entity.id }, entity).then(res => {
-                let success = true;
-                if (res.nModified == 0)
-                    success = false;
-                return resolve(success)
+                return resolve(res.ok == 1)
             });
         })
     }

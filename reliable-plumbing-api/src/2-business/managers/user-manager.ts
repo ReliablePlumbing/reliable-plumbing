@@ -221,6 +221,38 @@ export class UserManager {
             })
         });
     }
+
+    saveSocialMediaLogin(user: User) {
+        return new Promise<User>((resolve, reject) => {
+            this.userRepo.findByEmail(user.email).then(result => {
+                let promise: Promise<User | boolean> = null;
+                if (result == null) {
+                    user.activationDate = user.emailActivationDate = user.creationDate = new Date();
+                    user.isActivated = user.isEmailVerfied = true;
+                    user.roles = [Role.Customer];
+                    promise = this.userRepo.add(user);
+                }
+                else {
+                    result.firstName = user.firstName;
+                    result.lastName = user.lastName;
+                    result.socialMediaId = user.socialMediaId;
+                    result.SocialMediaProvider = user.SocialMediaProvider;
+                    promise = this.userRepo.update(result);
+                }
+
+                promise.then(value => {
+                    if (result == null)
+                        return resolve(user);
+                    else if (value == true)
+                        return resolve(result);
+                    else
+                        return resolve(null);
+                });
+            });
+        });
+    }
+
+
     // region private methods
     private validateUser(user: User, validatePassword = true): string[] {
         let errors: string[] = []

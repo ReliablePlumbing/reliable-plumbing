@@ -1,10 +1,12 @@
-import { JsonController, Param, QueryParam, Body, Get, Post, Put, Delete, Authorized, UseInterceptor } from "routing-controllers";
-import { Role, User, UserLogin } from '../../3-domain/domain-module';
+import { JsonController, Controller, Param, QueryParam, Body, Get, Post, Put, Delete, Authorized, UseInterceptor, Req, Res } from "routing-controllers";
+import { Role, User, UserLogin, SocialMediaProvider } from '../../3-domain/domain-module';
 import { UserManager } from '../../2-business/business.module';
-import { dependencies } from '../../5-cross-cutting/cross-cutting.module';
+import { dependencies, ConfigService } from '../../5-cross-cutting/cross-cutting.module';
 import { Inject } from 'typedi';
 import { AuthorizationProvider } from '../authorization/authorization-provider';
 import { LoginCredentials } from "../../3-domain/entities/login-credentials";
+import { Request, Response } from "express";
+import * as request from 'request';
 
 @JsonController('/users')
 export class UserController {
@@ -117,6 +119,75 @@ export class UserController {
         return 'aaa'
     }
 
+    @Post('/socialLogin')
+    socialLogin( @Body() bodyParams: any) {
+        return new Promise<any>((resolve, reject) => {
+            let promise: Promise<User> = null;
+            switch (bodyParams.provider) {
+                case SocialMediaProvider.Facebook:
+                    promise = this.authenticateByFacebook(bodyParams.code, bodyParams.redirectUri);
+                    break;
 
+                default:
+                    return resolve(null);
+            }
+
+            if (promise == null)
+                return resolve(null);
+
+            promise.then(user => {
+                this.userManager.saveSocialMediaLogin(user).then(updatedUser => {
+                    let user = new User(updatedUser);
+                    let tokenPayload = { email: user.email, roles: user.roles };
+
+                    return resolve({
+                        token: AuthorizationProvider.generateToken(tokenPayload),
+                        user: user.toLightModel(),
+                        rememberMe: null
+                    });
+                }); // save user in db promise
+            }); // provider promise
+        });// return promise
+    }
+
+
+
+    private authenticateByFacebook(code, redirectUri) {
+        return new Promise<User>((resolve, reject) => {
+
+            let facebookConfig = ConfigService.config.socialMedia.facebook;
+
+            let fields = facebookConfig.profileFields;
+            let accessTokenUrl = facebookConfig.accessTokenUrl;
+            let graphApiUrl = facebookConfig.graphApiUrl + fields.join(',');
+
+            var params = {
+                code: code,
+                client_id: facebookConfig.clientId,
+                client_secret: facebookConfig.clientSecret,
+                redirect_uri: redirectUri
+            };
+
+            request.get({ url: accessTokenUrl, qs: params, json: true }, (err, response, accessToken) => {
+                if (response.statusCode !== 200)
+                    return resolve(null);
+                request.get({ url: graphApiUrl, qs: accessToken, json: true }, function (err, response, profile) {
+                    if (response.statusCode !== 200)
+                        return resolve(null);
+
+                    let user = new User({
+                        email: profile.email,
+                        firstName: profile.first_name,
+                        lastName: profile.last_name,
+                        socialMediaId: profile.id,
+                        SocialMediaProvider: SocialMediaProvider.Facebook
+                    });
+
+                    return resolve(user);
+                });
+            });
+        });
+
+    }
 
 }

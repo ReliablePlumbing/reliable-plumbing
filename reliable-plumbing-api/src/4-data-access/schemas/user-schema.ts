@@ -10,7 +10,7 @@ export var userSchema: genericSchema = {
         email: { type: String, required: true },
         isEmailVerfied: { type: Boolean, required: true, default: false },
         emailActivationDate: { type: Date, required: false },
-        mobile: { type: String, required: true },
+        mobile: { type: String, required: false },
         roles: { type: Array, required: true },
         creationDate: { type: Date, required: true },
         createdByUserId: { type: String, required: false },
@@ -26,8 +26,10 @@ export var userSchema: genericSchema = {
                 },
                 text: { type: String, required: true }
 
-            }, required: true
-        }
+            }, required: false
+        },
+        socialMediaId: { type: String, required: false },
+        SocialMediaProvider: { type: Number, required: false }
     }),
     collectionName: 'users'
 };
