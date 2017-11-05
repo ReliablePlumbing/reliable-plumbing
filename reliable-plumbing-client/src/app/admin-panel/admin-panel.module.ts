@@ -15,12 +15,13 @@ import { AdminPanelRoutingModule } from './admin-panel-routing.module';
 import { AppointmentSettingsomponent } from './appointment-settings/appointment-settings.component';
 import { AdminPanelComponent } from './admin-panel.component';
 import { ScheduleManagementComponent } from './schedule-management/schedule-management.component';
+import { MyAppointmentsComponent } from './my-appointments/my-appointments.component';
 
 @NgModule({
   imports: [
     CommonModule, AdminPanelRoutingModule, ServicesModule, NgbModule, FormsModule, UserManagementModule, 
     SharedModule, SelectModule, AppointmentManagementModule, ReactiveFormsModule
   ],
-  declarations: [AppointmentSettingsomponent, AdminPanelComponent, ScheduleManagementComponent]
+  declarations: [AppointmentSettingsomponent, AdminPanelComponent, ScheduleManagementComponent, MyAppointmentsComponent]
 })
 export class AdminPanelModule { }

@@ -35,7 +35,7 @@ export class MultiSelectDatepickerComponent {
   }
 
   ngOnInit() {
-    if (this.dates == null || this.dates.from == null || this.compareBootstrapDate(this.dates.from, this.dates.to) >= 0) {
+    if (this.dates == null || this.dates.from == null || this.compareBootstrapDate(this.dates.from, this.dates.to) > 0) {
       this.fromDate = this.calendar.getToday();
       this.toDate = this.calendar.getNext(this.calendar.getToday(), 'd', 7);
     }

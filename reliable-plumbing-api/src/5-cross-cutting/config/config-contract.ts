@@ -28,7 +28,8 @@ export interface Config {
             appointmentCreated: string,
             assgineeAdded: string,
             assgineeRemoved: string,
-            appointmentChanged: string
+            appointmentChanged: string,
+            appointmentCheckedIn: string
         }
     }
 

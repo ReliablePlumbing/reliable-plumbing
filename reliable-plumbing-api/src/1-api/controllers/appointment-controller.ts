@@ -23,10 +23,25 @@ export class AppointmentController {
     }
 
     @Post('/getAppointmentsFiltered')
-    @Authorized([Role.Manager, Role.Technician])
+    @Authorized([Role.Manager])
     getAppointmentsFiltered( @Body() filters) {
         return new Promise<Appointment[]>((resolve, reject) => {
             this.appointmentManager.getAppointmentFiltered(filters).then(appointments => {
+                // to light models here
+                let models = [];
+                for (let appointment of appointments)
+                    models.push(appointment.toLightModel());
+
+                resolve(models);
+            })
+        })
+    }
+
+    @Post('/getAssigneesAppointments')
+    @Authorized([Role.Manager, Role.Technician])
+    getAssigneesAppointments( @Body() filters) {
+        return new Promise<Appointment[]>((resolve, reject) => {
+            this.appointmentManager.getAssigneesAppointments(filters.assigneeIds, filters.from, filters.to).then(appointments => {
                 // to light models here
                 let models = [];
                 for (let appointment of appointments)
@@ -64,6 +79,16 @@ export class AppointmentController {
         return new Promise<any>((resolve, reject) => {
             this.appointmentManager.updateAppointmentStatusAndAssignees(appointment).then(appointment => {
                 return resolve(appointment.toLightModel());
+            });
+        });
+    }
+
+    @Post('/technicianCheckIn')
+    @Authorized([Role.Technician])
+    technicianCheckIn(@Body() checkInDetails) {
+        return new Promise<any>((resolve, reject) => {
+            this.appointmentManager.technicianCheckIn(checkInDetails).then(success => {
+                return resolve(success);
             });
         });
     }

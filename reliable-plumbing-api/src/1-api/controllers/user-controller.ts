@@ -222,7 +222,7 @@ export class UserController {
                             email: profile.email,
                             firstName: profile.given_name,
                             lastName: profile.family_name,
-                            // socialMediaId: profile.id,
+                            socialMediaId: null,
                             SocialMediaProvider: SocialMediaProvider.Google
                         });
 

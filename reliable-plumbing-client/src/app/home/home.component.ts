@@ -23,14 +23,14 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   isUserLoggedIn: boolean = false;
   currentUser = null;
-  isManager = false;
+  isSystemUser = false;
 
   constructor(private activatedRoute: ActivatedRoute, private modalService: NgbModal, private environmentService: EnvironmentService) { }
 
   ngOnInit() {
     this.isUserLoggedIn = this.environmentService.isUserLoggedIn;
     this.currentUser = this.environmentService.currentUser;
-    this.isManager = this.isUserLoggedIn && this.environmentService.currentUser.roles.findIndex(x => x == Role.Manager) != -1;
+    this.isSystemUser = this.isUserLoggedIn && this.environmentService.currentUser.roles.findIndex(x => x == Role.Manager || x == Role.Technician) != -1;
   }
 
   ngAfterViewInit() {
@@ -156,7 +156,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.loginModalRef.close();
     this.isUserLoggedIn = this.environmentService.isUserLoggedIn;
     this.currentUser = this.environmentService.currentUser;
-    this.isManager = this.isUserLoggedIn && this.environmentService.currentUser.roles.findIndex(x => x == Role.Manager) != -1;
+    this.isSystemUser = this.isUserLoggedIn && this.environmentService.currentUser.roles.findIndex(x => x == Role.Manager || x == Role.Technician) != -1;
   }
 
   openRegisterPopup() {

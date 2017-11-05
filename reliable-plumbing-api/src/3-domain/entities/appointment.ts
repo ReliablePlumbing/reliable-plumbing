@@ -3,6 +3,7 @@ import { AppointmentStatus } from '../enums/appointment-status';
 import { Role } from '../enums/role';
 import { SocialMediaProvider } from '../enums/social-media-provider';
 import { User } from './user';
+import { AppointmentType } from './appointment-type';
 
 export class Appointment extends BaseEntity {
 
@@ -16,10 +17,17 @@ export class Appointment extends BaseEntity {
     status: AppointmentStatus;
     statusHistory: StatusHistory[];
     assigneeIds?: string[];
-
+    checkInDetails: {
+        date: Date,
+        lat: number,
+        lng: number,
+        userId: string,
+        user?: User
+    };
     // navigational properties
     user?: User;
     assignees?: User[];
+    type?: AppointmentType;
 
     constructor(appointment: any) {
         super();
@@ -36,6 +44,8 @@ export class Appointment extends BaseEntity {
             this.status = appointment.status;
             this.assigneeIds = appointment.assigneeIds;
             this.user = appointment.user;
+            this.type = appointment.type;
+            this.checkInDetails = appointment.checkInDetails;
             this.statusHistory = appointment.statusHistory == null ? [] : appointment.statusHistory.map(s => {
                 return new StatusHistory({
                     id: s.id,
@@ -65,9 +75,24 @@ export class Appointment extends BaseEntity {
             typeId: this.typeId,
             status: this.status,
             user: this.user == null ? null : this.user.toLightModel(),
+            type: this.type == null ? null : this.type.toLightModel(),
             statusHistory: this.statusHistory.map(s => s.toLightModel()),
             assigneeIds: this.assigneeIds,
-            assignees: this.assignees == null ? null : this.assignees.map(a => a.toLightModel())
+            assignees: this.assignees == null ? null : this.assignees.map(a => a.toLightModel()),
+            checkInDetails: this.mapCheckInDetails(this.checkInDetails)
+        }
+    }
+
+    mapCheckInDetails(checkin){
+        if(checkin == null)
+            return null;
+
+        return {
+            date: checkin.date,
+            lat: checkin.lat,
+            lng: checkin.lng,
+            userId: checkin.userId,
+            user: checkin.user == null ? null : checkin.user.toLightModel()
         }
     }
 }

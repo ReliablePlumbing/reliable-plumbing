@@ -21,6 +21,11 @@ export class AppointmentService {
       .map((response: Response) => response.json())
   }
 
+  getAssigneesAppointments(filters): Observable<any> {
+    return this.httpService.post(this.basePath + 'getAssigneesAppointments', filters)
+      .map((response: Response) => response.json())
+  }
+
   getTechniciansWithStatusInTime(id): Observable<any> {
     return this.httpService.get(this.basePath + 'getTechniciansWithStatusInTime?appointmentId=' + id)
       .map((response: Response) => response.json());
@@ -28,6 +33,11 @@ export class AppointmentService {
 
   updateAppointmentStatusAndAssignees(appointment): Observable<any> {
     return this.httpService.post(this.basePath + 'updateAppointmentStatusAndAssignees', appointment)
+      .map((response: Response) => response.json());
+  }
+
+  technicianCheckIn(checkInDetails): Observable<any> {
+    return this.httpService.post(this.basePath + 'technicianCheckIn', checkInDetails)
       .map((response: Response) => response.json());
   }
 }

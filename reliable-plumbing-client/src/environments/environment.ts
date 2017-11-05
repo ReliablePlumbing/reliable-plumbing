@@ -7,7 +7,7 @@ export const environment = {
   production: false,
   apiUrl: 'http://localhost:3000/api/',
   socketsUrl: 'http://localhost:3000',
-  mapsApiKey: 'AIzaSyAkTlSLk6H5zLe41EpX1Lhhd0zSRfWQj7o',
+  mapsApiKey: 'AIzaSyAmYRB--nxsm_OprcUO2RzrdlJTy6qLI4c',
   socialMedia: {
     facebook: {
       clientId: '1865444587114627',

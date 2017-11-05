@@ -4,7 +4,7 @@ export const environment = {
   production: true,
   apiUrl: 'http://reliableplumbingapi.azurewebsites.net/api/',
   socketsUrl: 'http://reliableplumbingapi.azurewebsites.net',
-  mapsApiKey: 'AIzaSyAkTlSLk6H5zLe41EpX1Lhhd0zSRfWQj7o',
+  mapsApiKey: 'AIzaSyAmYRB--nxsm_OprcUO2RzrdlJTy6qLI4c',
   socialMedia: {
     facebook: {
       clientId: '1865444587114627',

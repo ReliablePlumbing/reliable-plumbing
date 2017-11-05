@@ -1,6 +1,6 @@
 import { Repo } from './repo';
 import { appointmentSchema } from '../schemas/appointment-schema';
-import { Appointment, AppointmentStatus, User, StatusHistory } from '../../3-domain/domain-module';
+import { Appointment, AppointmentStatus, User, StatusHistory, AppointmentType } from '../../3-domain/domain-module';
 import { GenericModel } from '../models/model';
 
 
@@ -55,6 +55,36 @@ export class AppointmentRepo extends Repo<Appointment> {
         });
     }
 
+    getAppointmentsFilteredByAssigneesAndDates(assigneeIds: string[], from?: Date, to?: Date) {
+
+        let model = this.createSet();
+
+        let filterObj: any = {
+            assigneeIds: { $in: assigneeIds }
+        }
+        if (from != null) {
+            if (filterObj.date == null)
+                filterObj.date = {};
+            filterObj.date.$gt = from;
+        }
+
+        if (to != null) {
+            if (filterObj.date == null)
+                filterObj.date = {};
+            filterObj.date.$lt = to;
+        }
+
+        return new Promise<Appointment[]>((resolve, reject) => {
+
+            model.find(filterObj).populate('userId').populate('typeId').exec((err, results) => {
+                if (err != null)
+                    return reject(err);
+
+                return resolve(this.mapModelToEntities(results));
+            });
+        });
+    }
+
     private mapModelToEntity(appointmentModel: GenericModel<Appointment>) {
         let obj: any = appointmentModel.toObject({ transform: Object });
         let appointment = new Appointment(obj);
@@ -65,12 +95,19 @@ export class AppointmentRepo extends Repo<Appointment> {
         else
             appointment.userId = obj.userId;
 
+        if (obj.typeId != null && typeof obj.typeId == 'object') {
+            appointment.type = new AppointmentType(obj.typeId);
+            appointment.typeId = appointment.type.id;
+        }
+        else
+            appointment.typeId = obj.typeId;
+
         appointment.statusHistory = this.mapStatusHistory(obj.statusHistory)
 
         return appointment;
     }
 
-    mapStatusHistory(statusHistory: any[]) {
+    private mapStatusHistory(statusHistory: any[]) {
         if (statusHistory == null || statusHistory.length == 0)
             return [];
         return statusHistory.map(s => {

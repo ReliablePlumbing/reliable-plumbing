@@ -50,8 +50,8 @@ export class AppointmentManager {
 
     getAppointmentFiltered(filters) {
 
-        let fromDate = this.constructAppointemntDate(filters.date.from, filters.time.from);
-        let toDate = filters.date.to == null ? null : this.constructAppointemntDate(filters.date.to, filters.time.to);
+        let fromDate = this.constructAppointmentDate(filters.date.from, filters.time.from);
+        let toDate = filters.date.to == null ? null : this.constructAppointmentDate(filters.date.to, filters.time.to);
         return new Promise<Appointment[]>((resolve, reject) => {
             this.appointmentRepo.getAppointmentsFilteredByDatesAndStatusAndType(fromDate, toDate, filters.status, filters.typeIds).then(results => {
 
@@ -65,6 +65,12 @@ export class AppointmentManager {
         })
     }
 
+    getAssigneesAppointments(assigneeIds: string[], from?: Date, to?: Date) {
+        return new Promise<Appointment[]>((resolve, reject) => {
+            this.appointmentRepo.getAppointmentsFilteredByAssigneesAndDates(assigneeIds, from, to).then(results => resolve(results));
+        });
+    }
+
     getTechniciansWithStatusInTime(appointmentId: string) {
         return new Promise<{
             technician: User,
@@ -74,11 +80,11 @@ export class AppointmentManager {
             let appointmentPromise = this.appointmentRepo.findById(appointmentId);
             let usersPromise = this.userRepo.getUsersByRoles([Role.Technician]);
             Promise.all([appointmentPromise, usersPromise]).then(values => {
-                let appointemnt = values[0];
+                let appointment = values[0];
                 let technicians = values[1];
 
                 // todo: get boundaries from settings
-                let boundaryDates = this.getPossibleOverlappingDates(appointemnt.date, 4);
+                let boundaryDates = this.getPossibleOverlappingDates(appointment.date, 4);
                 let filterStatus = [AppointmentStatus.Pending, AppointmentStatus.NotAvailable, AppointmentStatus.Confirmed]
                 let technicianIds = technicians.map(tech => tech.id);
 
@@ -91,7 +97,7 @@ export class AppointmentManager {
 
                             techniciansWithAppointmentsAndStatus.push({
                                 technician: technician,
-                                status: this.getTechnicianStatus(appointemnt, technicianAppointments),
+                                status: this.getTechnicianStatus(appointment, technicianAppointments),
                                 appointments: technicianAppointments
                             });
                         }
@@ -129,6 +135,32 @@ export class AppointmentManager {
         });
     }
 
+    technicianCheckIn(checkInDetails) {
+        if (checkInDetails.appointmentId == null)
+            throw new Error('appointmentId can\'t be null');
+        return new Promise((resolve, reject) => {
+            this.appointmentRepo.findById(checkInDetails.appointmentId).then(appointment => {
+                if (appointment == null)
+                    throw new AppError('Appointment no longer exists', ErrorType.validation);
+
+                appointment.checkInDetails = {
+                    date: new Date(),
+                    lat: checkInDetails.lat,
+                    lng: checkInDetails.lng,
+                    userId: checkInDetails.userId
+                };
+
+                this.appointmentRepo.update(appointment).then(success => {
+                    if (success)
+                        this.sendCheckInNotification(checkInDetails.appointmentId, checkInDetails.userId);
+
+                    return resolve(success);
+                })
+
+            });
+        });
+    }
+
     // region Private Methods
 
     private getAppointmentCurrentStatus(statusHistory: any[]) {
@@ -155,7 +187,7 @@ export class AppointmentManager {
             };
             if (appoint.date.getTime() >= boundary2HourDates.from.getTime() || appoint.date.getTime() <= boundary2HourDates.to.getTime())
                 status = TechnicianStatus.PossibleBusy;
-            if ((appoint.date.getTime() >= boundary4HourDates.from.getTime() && appoint.date.getTime() < boundary2HourDates.from.getTime())|| 
+            if ((appoint.date.getTime() >= boundary4HourDates.from.getTime() && appoint.date.getTime() < boundary2HourDates.from.getTime()) ||
                 appoint.date.getTime() <= boundary4HourDates.to.getTime() && appoint.date.getTime() > boundary2HourDates.to.getTime())
                 status = TechnicianStatus.HardlyBusy;
         }
@@ -233,11 +265,10 @@ export class AppointmentManager {
                 newNotification.notifeeIds = notifeesIds;
                 return resolve(newNotification);
             })
-        })
-
+        });
     }
 
-    private constructAppointemntDate(date: string, time: { hour: number, minute: number }) {
+    private constructAppointmentDate(date: string, time: { hour: number, minute: number }) {
         let returnDate = new Date(date);
         returnDate.setHours(time.hour);
         returnDate.setMinutes(time.minute);
@@ -305,6 +336,24 @@ export class AppointmentManager {
         }
 
         this.notificationManager.addNotifications(notifications);
+    }
+
+    sendCheckInNotification(appointmentId, notifierId) {
+        let newNotification = new Notification();
+        newNotification.message = ConfigService.config.notification.messages.appointmentCheckedIn;
+        newNotification.notifierIds = [notifierId];
+        newNotification.objectId = appointmentId;
+        newNotification.objectType = ObjectType.Appointment;
+        newNotification.type = NotificationType.AppointmentCheckedIn;
+
+        this.userRepo.getUsersByRoles([Role.Manager]).then(users => {
+            let notifeesIds = [];
+            for (let user of users)
+                notifeesIds.push(user.id);
+
+            newNotification.notifeeIds = notifeesIds;
+            this.notificationManager.addNotification(newNotification);
+        });
     }
     // endregion private methods
 }

@@ -101,13 +101,10 @@ export class ScheduleManagementComponent implements OnInit {
       requestFilters.typeIds.push(type.id);
 
     this.appointmentService.getAppointmentsFiltered(requestFilters).subscribe(results => {
-      console.log(results);
-
       this.mapAndGroupAppointmentsByDay(results);
       this.loading = false;
       this.loadingFiltered = false;
-
-    })
+    });
   }
 
   mapAndGroupAppointmentsByDay(appointments) {

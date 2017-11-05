@@ -41,14 +41,14 @@ export class RegisterationComponent implements OnInit {
 
   ngOnInit() {
     this.createForm();
-    let userCurrentCoords = navigator.geolocation.getCurrentPosition(position => {
+    navigator.geolocation.getCurrentPosition(position => {
       this.mapMarker = {
         lat: position.coords.latitude,
         lng: position.coords.longitude,
         draggable: true,
         label: null
       }
-    })
+    });
   }
 
   // todo: get regex for USA mobile
