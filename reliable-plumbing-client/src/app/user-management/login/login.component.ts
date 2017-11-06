@@ -1,7 +1,9 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { Router } from '@angular/router';
-import { UserManagementService } from '../services/user-management.service';
-import { AlertifyService, EnvironmentService, RouteHandlerService, NotificationService, AuthService } from '../../services/services.exports';
+import {
+  AlertifyService, EnvironmentService, RouteHandlerService,
+  NotificationService, AuthService, UserManagementService
+} from '../../services/services.exports';
 import { SocialMediaProvider } from '../../models/enums';
 
 @Component({

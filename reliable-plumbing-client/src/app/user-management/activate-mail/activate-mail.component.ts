@@ -1,7 +1,7 @@
 import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { RouteHandlerService } from '../../services/route-handler.service';
-import { UserManagementService } from '../services/user-management.service';
+import { UserManagementService } from '../../services/services.exports';
 import { RegistrationMode, Role } from '../../models/enums';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 
@@ -46,7 +46,7 @@ export class ActivateMailComponent implements OnInit {
 
   }
 
-  userAdded(user){
+  userAdded(user) {
     let body = {
       token: this.token,
       user: user

@@ -16,7 +16,12 @@
     "activationMailUrl": "http://localhost:4200/activate-mail?token=",
     "socketsSettings": {
         "registerConnection": "registerConnectionWithUserId",
-        "notificationsEvent": "notifications"
+        "notificationsEvent": "notifications",
+        "updateLocation": "updateLocation",
+        "updateTrackingMap": "updateTrackingMap",
+        "trackingsubscription": "trackingsubscription",
+        "removeTrackingSubscription": "removeTrackingSubscription",
+        "trackedUserDisconnected": "trackedUserDisconnected"
     },
     "notification": {
         "messages": {

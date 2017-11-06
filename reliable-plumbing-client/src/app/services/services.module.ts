@@ -11,13 +11,14 @@ import { AppointmentService } from './appointment.service';
 import { NotificationService } from './notification.service';
 import { SocketsService } from './sockets.service';
 import { AuthService } from './auth.service';
+import { UserManagementService } from './user-management.service';
 
 @NgModule({
   imports: [
     CommonModule
   ],
   declarations: [],
-  providers: [HttpExtensionService, EnvironmentService, ExceptionHandlingService, AlertifyService, RouteHandlerService,
+  providers: [HttpExtensionService, UserManagementService, EnvironmentService, ExceptionHandlingService, AlertifyService, RouteHandlerService,
     AuthGuard, LoginAuthGuard, LookupsService, AppointmentService, NotificationService, SocketsService, AuthService
   ]
 })

@@ -4,7 +4,7 @@ import * as socketio from 'socket.io';
 import * as http from 'http';
 import { App } from './app';
 import { SocketContext, ConfigService } from '../5-cross-cutting/cross-cutting.module';
-
+import { listenToSocketsEvents } from './socket-manager/socket-manager';
 debug('ts-express:server');
 
 const port = normalizePort(process.env.PORT || 3000);
@@ -16,31 +16,7 @@ App.createServer(app);
 
 server.listen(port);
 
-SocketContext.io.on('connection', (socket) => {
-  socket.on(ConfigService.config.socketsSettings.registerConnection, (connection) => {
-    let clientId = connection.clientId,
-      userId = connection.userId;
-
-    if (SocketContext.connections[userId] == null)
-      SocketContext.connections[userId] = [];
-
-    // check if this new connection or reconnect
-    let userClient = SocketContext.connections[userId].find(conn => conn.clientId == clientId);
-
-    if (userClient == null) // if new push it the users connections
-      SocketContext.connections[userId].push({ clientId: clientId, socket: socket });
-    else // if reconnect replace the socket with the new socket
-      userClient.socket = socket;
-
-    // remove disconnected connections from user connections
-    let connectedClientsForUser = [];
-    for (let client of SocketContext.connections[userId])
-      if (client.socket.connected)
-        connectedClientsForUser.push(client)
-        
-    SocketContext.connections[userId] = connectedClientsForUser;
-  });
-});
+SocketContext.io.on('connection', (socket) => listenToSocketsEvents(socket));
 
 server.on('error', onError);
 server.on('listening', onListening);

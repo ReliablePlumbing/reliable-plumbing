@@ -1,9 +1,8 @@
 import { Component, OnInit, EventEmitter, Input, Output } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
-import { UserManagementService } from '../services/user-management.service';
 import { Role, RegistrationMode } from '../../models/enums';
 import { Marker } from '../../models/marker';
-import { AlertifyService, EnvironmentService, RouteHandlerService } from '../../services/services.exports';
+import { AlertifyService, EnvironmentService, RouteHandlerService, UserManagementService } from '../../services/services.exports';
 
 @Component({
   selector: 'rb-registeration',

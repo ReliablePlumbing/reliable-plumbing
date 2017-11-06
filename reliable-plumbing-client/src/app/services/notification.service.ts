@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Subject, Observable } from 'rxjs'
+import { Subject, Observable } from 'rxjs';
 import { EnvironmentService } from './environment.service';
 import { AlertifyService } from './alertify.service';
 

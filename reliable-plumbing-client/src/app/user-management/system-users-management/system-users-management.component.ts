@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { UserManagementService } from '../services/user-management.service';
-import { EnvironmentService, AlertifyService } from '../../services/services.exports';
+import { EnvironmentService, AlertifyService, UserManagementService } from '../../services/services.exports';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { RegistrationMode } from '../../models/enums';
 

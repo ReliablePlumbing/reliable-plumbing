@@ -9,8 +9,6 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { SharedModule } from '../shared/shared.module';
 import { ServicesModule } from '../services/services.module';
 
-// services
-import { UserManagementService } from './services/user-management.service';
 // components
 import { LoginComponent } from './login/login.component';
 import { RegisterationComponent } from './registeration/registeration.component';
@@ -24,7 +22,6 @@ import { SocialMediaRedirectComponent } from './social-media-redirect/social-med
     UserManagementRoutingModule, NgbModule.forRoot(), SharedModule
   ],
   declarations: [LoginComponent, RegisterationComponent, ActivateMailComponent, SystemUsersManagementComponent, SocialMediaRedirectComponent],
-  providers: [UserManagementService],
   exports: [LoginComponent, RegisterationComponent]
 })
 

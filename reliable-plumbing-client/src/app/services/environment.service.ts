@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { UserInfo } from '../models/user-info';
+import { Subject, Observable } from 'rxjs'
 
 @Injectable()
 export class EnvironmentService {
@@ -8,7 +9,9 @@ export class EnvironmentService {
     private persistentLoginVariableName = 'persistentLogin';
     private _currentUser: UserInfo;
     private _persistentLogin: any;
-
+    private logoutSource$: Subject<any> = new Subject<any>();
+    userLoggedout: Observable<any> = this.logoutSource$.asObservable();
+    
     constructor() {
     }
 
@@ -62,6 +65,7 @@ export class EnvironmentService {
         localStorage.removeItem(this.tokenVariableName);
         localStorage.removeItem(this.currentUserVariableName);
         localStorage.removeItem(this.persistentLoginVariableName);
+        this.logoutSource$.next();
     }
 
 }

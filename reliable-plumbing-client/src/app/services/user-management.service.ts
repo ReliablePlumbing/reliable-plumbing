@@ -2,8 +2,11 @@ import { Injectable } from '@angular/core';
 import { Http, Response } from '@angular/http';
 import { Observable } from 'rxjs';
 import 'rxjs/add/operator/map';
-import { environment } from '../../../environments/environment';
-import { EnvironmentService, AlertifyService, HttpExtensionService } from '../../services/services.exports';
+import { environment } from '../../environments/environment';
+import { AlertifyService } from './alertify.service';
+import { EnvironmentService } from './environment.service';
+import { HttpExtensionService } from './http-extension.service';
+import { Role } from '../models/enums';
 
 @Injectable()
 export class UserManagementService {
@@ -66,9 +69,14 @@ export class UserManagementService {
     // .catch((error: Error) => console.log(error))
   }
 
-  getAllSystemUsers() {
-    return this.httpExtensionService.get(this.basePath + 'getAllSystemUsers')
-      .map((response: Response) => response.json());
+  getAllSystemUsers(roles?: Role[]) {
+    let serviceCall = null;
+    if (roles != null && roles.length > 0)
+      serviceCall = this.httpExtensionService.post(this.basePath + 'getAllSystemUsers', roles);
+    else
+      serviceCall = this.httpExtensionService.post(this.basePath + 'getAllSystemUsers');
+
+    return serviceCall.map((response: Response) => response.json());
   }
 
   deleteUserById(id) {
@@ -76,36 +84,43 @@ export class UserManagementService {
       .map((response: Response) => response.json());
   }
 
-  completeUserRegistration(userWithToken){
+  completeUserRegistration(userWithToken) {
     return this.http.post(this.basePath + 'completeUserRegistration', userWithToken)
-    .map((response: Response) => response.json())
-  }
-
-  handleError(error: Response | any) {
-    // for unauthorized
-    let errorObj = {
-      invalidProperties: null,
-      message: ''
-    };
-    if (error != null && error.status == 401) {
-      errorObj.message = 'unauthorized for this method';
-      this.environmentService.destroyLoginInfo();
+      .map((response: Response) => response.json())
     }
-    if (error != null && error.status == 500) {
-      let errorBody = error.json();
-      errorObj.message = errorBody.message;
-      errorObj.invalidProperties = errorBody.invalidProperties;
-      if (errorBody.code == 400) { // for bad request, handled exception
-        this.alertifyService.error(errorBody.message)
+    
+    handleError(error: Response | any) {
+      // for unauthorized
+      let errorObj = {
+        invalidProperties: null,
+        message: ''
+      };
+      if (error != null && error.status == 401) {
+        errorObj.message = 'unauthorized for this method';
+        this.environmentService.destroyLoginInfo();
       }
-      else if (errorBody.code == 500) { // unhandled exception
-        if (environment.production)
+      if (error != null && error.status == 500) {
+        let errorBody = error.json();
+        errorObj.message = errorBody.message;
+        errorObj.invalidProperties = errorBody.invalidProperties;
+        if (errorBody.code == 400) { // for bad request, handled exception
+          this.alertifyService.error(errorBody.message)
+        }
+        else if (errorBody.code == 500) { // unhandled exception
+          if (environment.production)
           this.alertifyService.error('حدث خطأ غير متوقع, برجاء المحاولة في وقت لاحق');
-        else
+          else
           this.alertifyService.error(errorBody.message);
+        }
       }
+      
+      return Observable.throw(errorObj);
     }
-
-    return Observable.throw(errorObj);
+    
+    getAllTechniciansWithLocations(){
+      
+      return this.httpExtensionService.get(this.basePath + 'getAllTechniciansWithLocations')
+        .map((response: Response) => response.json());
+    }
   }
-}
+  

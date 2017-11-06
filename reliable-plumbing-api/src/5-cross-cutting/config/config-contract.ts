@@ -20,7 +20,12 @@ export interface Config {
 
     socketsSettings: {
         registerConnection: string,
-        notificationsEvent: string
+        notificationsEvent: string,
+        updateLocation: string,
+        updateTrackingMap: string,
+        trackingsubscription: string,
+        trackedUserDisconnected: string,
+        removeTrackingSubscription: string
     };
 
     notification: {

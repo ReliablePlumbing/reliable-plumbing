@@ -1,7 +1,7 @@
 import { JsonController, Controller, Param, QueryParam, Body, Get, Post, Put, Delete, Authorized, UseInterceptor, Req, Res } from "routing-controllers";
 import { Role, User, UserLogin, SocialMediaProvider } from '../../3-domain/domain-module';
 import { UserManager } from '../../2-business/business.module';
-import { dependencies, ConfigService } from '../../5-cross-cutting/cross-cutting.module';
+import { dependencies, ConfigService, SocketContext } from '../../5-cross-cutting/cross-cutting.module';
 import { Inject } from 'typedi';
 import { AuthorizationProvider } from '../authorization/authorization-provider';
 import { LoginCredentials } from "../../3-domain/entities/login-credentials";
@@ -92,9 +92,9 @@ export class UserController {
         })
     }
 
-    @Get("/getAllSystemUsers")
+    @Post("/getAllSystemUsers")
     @Authorized([Role.Manager])
-    getAllSystemUsers() {
+    getAllSystemUsers( @Body() roles?: Role[]) {
         return new Promise((resolve, reject) => {
             this.userManager.getAllSystemUsers().then(result => {
                 let lightModels = [];
@@ -149,6 +149,23 @@ export class UserController {
                 }); // save user in db promise
             }); // provider promise
         });// return promise
+    }
+
+    @Get('/getAllTechniciansWithLocations')
+    @Authorized([Role.Manager])
+    getAllTechniciansWithLocations() {
+        return new Promise<any>((resolve, reject) => {
+            this.userManager.getAllSystemUsers([Role.Technician]).then(results => {
+                let models = [];
+                results.forEach(user => models.push(user.toLightModel()));
+
+                return resolve({
+                    technicians: models,
+                    onlineTechniciansWithLocations: SocketContext.trackedUsers
+                })
+            })
+
+        });
     }
 
 

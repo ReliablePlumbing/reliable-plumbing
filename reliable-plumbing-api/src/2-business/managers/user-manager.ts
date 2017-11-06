@@ -186,9 +186,10 @@ export class UserManager {
         });
     }
 
-    getAllSystemUsers() {
+    getAllSystemUsers(roles?: Role[]) {
         return new Promise<User[]>((resolve, reject) => {
-            let roles = [Role.Manager, Role.Technician];
+            if (roles == null || roles.length == 0)
+                roles = [Role.Manager, Role.Technician];
 
             this.userRepo.getUsersByRoles(roles).then(result => {
                 if (result == null)
