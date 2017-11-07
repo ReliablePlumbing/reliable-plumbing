@@ -1,36 +1,38 @@
-<ngb-tabset>
-  <ngb-tab title="Map">
-    <ng-template ngbTabContent>
-      <no-data *ngIf="markers == null || markers.length==0" [message]="'No connected technicians'"></no-data>
+<div class="tech-tracking-tabs">
+    <ngb-tabset>
+        <ngb-tab title="Map">
+            <ng-template ngbTabContent>
+                <no-data *ngIf="markers == null || markers.length==0" [message]="'No connected technicians'"></no-data>
 
-      <ng-container *ngIf="markers != null && markers.length>0">
-        <agm-map [latitude]="markers[0].lat" [longitude]="markers[0].lng" [zoom]="15" [disableDefaultUI]="false" [zoomControl]="true">
-          <agm-marker *ngFor="let marker of markers" [latitude]="marker.lat" [longitude]="marker.lng" [label]="marker.label" [markerDraggable]="false">
-            <agm-info-window>
-              <strong>{{marker.userId +' - '+marker.clientId}}</strong>
-            </agm-info-window>
-          </agm-marker>
-        </agm-map>
+                <ng-container *ngIf="markers != null && markers.length>0">
+                    <agm-map [latitude]="markers[0].lat" [longitude]="markers[0].lng" [zoom]="15" [disableDefaultUI]="false" [zoomControl]="true">
+                        <agm-marker *ngFor="let marker of markers" [latitude]="marker.lat" [longitude]="marker.lng" [label]="marker.label" [markerDraggable]="false">
+                            <agm-info-window>
+                                <strong>{{marker.userId +' - '+marker.clientId}}</strong>
+                            </agm-info-window>
+                        </agm-marker>
+                    </agm-map>
 
-      </ng-container>
-    </ng-template>
-  </ngb-tab>
-  <ngb-tab title="Technicians">
-    <ng-template ngbTabContent>
+                </ng-container>
+            </ng-template>
+        </ngb-tab>
+        <ngb-tab title="Technicians">
+            <ng-template ngbTabContent>
 
-      <h3>Online Technicians</h3>
-      <div *ngFor="let tech of technicians">
-        <span *ngIf="tech.online"> {{tech.firstName + ' ' + tech.lastName}}</span>
-      </div>
+                <h3>Online Technicians</h3>
+                <div *ngFor="let tech of technicians">
+                    <span *ngIf="tech.online"> {{tech.firstName + ' ' + tech.lastName}}</span>
+                </div>
 
 
 
-      <h3>Offline Technicians</h3>
-      <div *ngFor="let tech of technicians">
-        <span *ngIf="!tech.online"> {{tech.firstName + ' ' + tech.lastName}}</span>
-      </div>
+                <h3>Offline Technicians</h3>
+                <div *ngFor="let tech of technicians">
+                    <span *ngIf="!tech.online"> {{tech.firstName + ' ' + tech.lastName}}</span>
+                </div>
 
-    </ng-template>
-  </ngb-tab>
+            </ng-template>
+        </ngb-tab>
 
-</ngb-tabset>
+    </ngb-tabset>
+</div>

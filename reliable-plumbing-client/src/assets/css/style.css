@@ -344,6 +344,9 @@ body.mobile-nav-active {
   .nav-item.panel-link a {
     padding: 8px; }
 
+.tech-tracking-tabs .tab-content {
+  padding: 15px 0; }
+
 /*--------------------------------------------------------------
 # Sections
 --------------------------------------------------------------*/

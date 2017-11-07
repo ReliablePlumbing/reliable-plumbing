@@ -28,4 +28,26 @@
     margin-bottom: 10px;
     border-radius: 4px;
     background-color: #e7e7e7;
+    .appointemt-time {}
+    .appointemt-type {}
+    .appointemt-last-checkin {}
+    h6 {
+        margin-bottom: 5px;
+    }
+    span {
+        font-size: 14px;
+        b {
+            font-size: 13px;
+        }
+    }
+    div.text-right {
+        position: absolute;
+        right: 22px;
+        top: 2px;
+        .btn {
+            margin-top: 5px;
+            padding: 5px;
+            font-size: 12px;
+        }
+    }
 }
