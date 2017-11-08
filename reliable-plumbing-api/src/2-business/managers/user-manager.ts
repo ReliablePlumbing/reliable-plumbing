@@ -189,7 +189,7 @@ export class UserManager {
     getAllSystemUsers(roles?: Role[]) {
         return new Promise<User[]>((resolve, reject) => {
             if (roles == null || roles.length == 0)
-                roles = [Role.Manager, Role.Technician];
+                roles = [Role.Supervisor, Role.Technician];
 
             this.userRepo.getUsersByRoles(roles).then(result => {
                 if (result == null)
@@ -287,7 +287,8 @@ export class UserManager {
             return false
 
         for (let role of roles)
-            if (role == Role.Manager || role == Role.Technician)
+            if (role == Role.Supervisor || role == Role.Technician ||
+                role == Role.SystemAdmin || role == Role.Admin)
                 return true;
 
         return false;

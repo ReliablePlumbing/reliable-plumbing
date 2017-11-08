@@ -21,19 +21,32 @@ export class TechniciansTrackingComponent implements OnInit, OnDestroy {
       this.markOnlineOffLinetechnicians(results.onlineTechniciansWithLocations);
     })
 
-    this.socketService.listenToLocationUpdates((location) => this.addUpdateTrackedUserClient(location),
-      (userDetails) => { this.removeTrackedUser(userDetails) });
+    this.socketService.listenToLocationUpdates(
+      (location) => this.addUpdateTrackedUserClient(location), // subscibe to tracking
+      (userDetails) => this.removeTrackedUser(userDetails)  // unsubscribe from tracking
+    );
   }
 
   addUpdateTrackedUserClient(location) {
     let clientIndex = this.markers.findIndex(m => m.clientId == location.clientId);
 
+    let technician = null;
+    for (let tech of this.technicians)
+      if (tech.id == location.userId) {
+        technician = tech;
+        let clientIndex = tech.clients.findIndex(c => c == location.clientId);
+        if (!~clientIndex)
+          tech.clients.push(location.clientId);
+
+        tech.online = true;
+      }
     if (!~clientIndex) {
       this.markers.push({
         userId: location.userId,
         clientId: location.clientId,
         lat: parseFloat(location.lat),
         lng: parseFloat(location.lng),
+        name: technician == null? '' : technician.firstName + ' ' + technician.lastName,
         timestamp: location.timestamp
       });
     }
@@ -43,15 +56,8 @@ export class TechniciansTrackingComponent implements OnInit, OnDestroy {
       marker.lat = parseFloat(location.lat);
       marker.lng = parseFloat(location.lng);
       marker.timestamp = location.timestamp;
+      marker.name = technician == null? '' : technician.firstName + ' ' + technician.lastName;      
     }
-    for (let tech of this.technicians)
-      if (tech.id == location.userId) {
-        let clientIndex = tech.clients.findIndex(c => c == location.clientId);
-        if (!~clientIndex)
-          tech.clients.push(location.clientId);
-
-        tech.online = true;
-      }
   }
 
   markOnlineOffLinetechnicians(onlineTechniciansWithLocations) {

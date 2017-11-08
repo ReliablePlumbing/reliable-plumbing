@@ -8,7 +8,7 @@
                     <agm-map [latitude]="markers[0].lat" [longitude]="markers[0].lng" [zoom]="15" [disableDefaultUI]="false" [zoomControl]="true">
                         <agm-marker *ngFor="let marker of markers" [latitude]="marker.lat" [longitude]="marker.lng" [label]="marker.label" [markerDraggable]="false">
                             <agm-info-window>
-                                <strong>{{marker.userId +' - '+marker.clientId}}</strong>
+                                <strong>{{marker.name}}</strong>
                             </agm-info-window>
                         </agm-marker>
                     </agm-map>

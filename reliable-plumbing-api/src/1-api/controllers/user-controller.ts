@@ -93,7 +93,7 @@ export class UserController {
     }
 
     @Post("/getAllSystemUsers")
-    @Authorized([Role.Manager])
+    @Authorized([Role.Supervisor, Role.Admin, Role.SystemAdmin])
     getAllSystemUsers( @Body() roles?: Role[]) {
         return new Promise((resolve, reject) => {
             this.userManager.getAllSystemUsers().then(result => {
@@ -107,7 +107,7 @@ export class UserController {
     }
 
     @Delete('/deleteUserById')
-    @Authorized([Role.Manager])
+    @Authorized([Role.Supervisor, Role.Admin, Role.SystemAdmin])
     deleteUserById( @QueryParam('id') id: string) {
         return new Promise((resolve, reject) => {
             this.userManager.deleteUserById(id).then(result => resolve(result));
@@ -152,7 +152,7 @@ export class UserController {
     }
 
     @Get('/getAllTechniciansWithLocations')
-    @Authorized([Role.Manager])
+    @Authorized([Role.Supervisor, Role.Admin, Role.SystemAdmin])
     getAllTechniciansWithLocations() {
         return new Promise<any>((resolve, reject) => {
             this.userManager.getAllSystemUsers([Role.Technician]).then(results => {

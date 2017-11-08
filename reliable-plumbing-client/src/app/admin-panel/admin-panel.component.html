@@ -32,11 +32,11 @@ Header Section
         <div class="row">
             <div class="col-sm-3">
                 <ul class="list-group">
-                    <li class="list-group-item pointer" [routerLink]="['./']">Schedule Management</li>
-                    <li class="list-group-item pointer" [routerLink]="['./appointment-settings']">Appointment Settings & Types</li>
-                    <li class="list-group-item pointer" [routerLink]="['./system-users-management']">System Users</li>
-                    <li class="list-group-item pointer" [routerLink]="['./my-appointments']">My Appointments</li>
-                    <li class="list-group-item pointer" [routerLink]="['./technicians-tracking']">Technicians Tracking</li>
+                    <li *ngIf="tabsPremssions.scheduleManagement" class="list-group-item pointer" [routerLink]="['./schedule-management']">Schedule Management</li>
+                    <li *ngIf="tabsPremssions.settings" class="list-group-item pointer" [routerLink]="['./appointment-settings']">Appointment Settings & Types</li>
+                    <li *ngIf="tabsPremssions.systemUsers" class="list-group-item pointer" [routerLink]="['./system-users-management']">System Users</li>
+                    <li *ngIf="tabsPremssions.myAppointments" class="list-group-item pointer" [routerLink]="['./my-appointments']">My Appointments</li>
+                    <li *ngIf="tabsPremssions.tracking" class="list-group-item pointer" [routerLink]="['./technicians-tracking']">Technicians Tracking</li>
                 </ul>
             </div>
             <div class="col-sm-9">

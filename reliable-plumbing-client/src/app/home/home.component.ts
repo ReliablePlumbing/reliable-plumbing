@@ -30,7 +30,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   ngOnInit() {
     this.isUserLoggedIn = this.environmentService.isUserLoggedIn;
     this.currentUser = this.environmentService.currentUser;
-    this.isSystemUser = this.isUserLoggedIn && this.environmentService.currentUser.roles.findIndex(x => x == Role.Manager || x == Role.Technician) != -1;
+    this.isSystemUser = this.isUserLoggedIn && this.environmentService.currentUser.roles.findIndex(x => x == Role.Customer) == -1;
   }
 
   ngAfterViewInit() {
@@ -156,24 +156,25 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.loginModalRef.close();
     this.isUserLoggedIn = this.environmentService.isUserLoggedIn;
     this.currentUser = this.environmentService.currentUser;
-    this.isSystemUser = this.isUserLoggedIn && this.environmentService.currentUser.roles.findIndex(x => x == Role.Manager || x == Role.Technician) != -1;
+    this.isSystemUser = this.isUserLoggedIn && this.environmentService.currentUser.roles.findIndex(x => x == Role.Customer) == -1;
   }
-
+  
   openRegisterPopup() {
     this.registerModalRef = this.modalService.open(this.registerationTemplate, { size: 'lg' })
   }
-
+  
   openLoginPopup() {
     this.loginModalRef = this.modalService.open(this.loginTemplate)
   }
-
+  
   openScheduleCallPopup() {
     this.scheduleCallModalRef = this.modalService.open(this.scheduleCallTemplate, { size: 'lg' });
   }
-
+  
   logout() {
     this.environmentService.destroyLoginInfo();
     this.isUserLoggedIn = this.environmentService.isUserLoggedIn;
     this.currentUser = this.environmentService.currentUser;
+    this.isSystemUser = this.isUserLoggedIn && this.environmentService.currentUser.roles.findIndex(x => x == Role.Customer) == -1;
   }
 }

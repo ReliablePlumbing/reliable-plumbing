@@ -21,9 +21,9 @@
         <div>
             <div class="row">
                 <section class="appointemts-sec" class="col-sm-12">
-                    <loader *ngIf="loadingFiltered"></loader>
+                    <loader *ngIf="loading"></loader>
                     <!-- appointments Listing -->
-                    <ng-container *ngIf="!loadingFiltered">
+                    <ng-container *ngIf="!loading">
                         <br />
                         <h3>Appointemts List:</h3>
                         <div class="appointemts-list" *ngFor="let date of datesArrayBetweenFilterDates">
@@ -37,13 +37,13 @@
                                             <span>{{appointment.user == null ? appointment.fullName : appointment.user.firstName}}</span>
                                         </h6>
                                         <div class="appointemt-time">
-                                            <span><b>Appointemt time:</b> {{appointment.time}}</span>
+                                            <span><b>Time:</b> {{appointment.time}}</span>
                                         </div>
                                         <div class="appointemt-type">
-                                            <span><b>Appointemt type:</b> {{appointment.type?.name}}</span>
+                                            <span><b>Type:</b> {{appointment.type?.name}}</span>
                                         </div>
                                         <div class="appointemt-last-checkin" *ngIf="appointment.checkInDetails != null">
-                                            <span><b>last check at:</b> {{appointment.checkInDetails.date | date:'medium'}}</span>
+                                            <span><b>last check-in:</b> {{appointment.checkInDetails.date | date:'medium'}}</span>
                                         </div>
                                         <div class="text-right">
                                             <button (click)="openCheckInMap(appointment, checkInMap)" class="btn btn-primary filters-toggle-btn ">

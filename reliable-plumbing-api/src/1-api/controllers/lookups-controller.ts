@@ -11,7 +11,7 @@ export class LookupsController {
     private lookupsManager: LookupsManager;
 
     @Post('/addEditAppointmentType')
-    @Authorized([Role.Manager])
+    @Authorized([Role.Admin, Role.SystemAdmin])
     addAppointmentType( @Body() appointmentType) {
         return new Promise<any>((resolve, reject) => {
             this.lookupsManager.addEditAppointmentType(appointmentType).then(res => resolve(res));
@@ -39,7 +39,7 @@ export class LookupsController {
     }
 
     @Post('/addEditAppointmentSettings')
-    @Authorized([Role.Manager])
+    @Authorized([Role.Admin, Role.SystemAdmin])
     addEditAppointmentSettings( @Body() appointmentSettings) {
         return new Promise<any>((resolve, reject) => {
             this.lookupsManager.addEditAppointmentSettings(appointmentSettings).then(result => resolve(result));

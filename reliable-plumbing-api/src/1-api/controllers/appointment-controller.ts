@@ -23,7 +23,7 @@ export class AppointmentController {
     }
 
     @Post('/getAppointmentsFiltered')
-    @Authorized([Role.Manager])
+    @Authorized([Role.Supervisor, Role.Admin, Role.SystemAdmin])
     getAppointmentsFiltered( @Body() filters) {
         return new Promise<Appointment[]>((resolve, reject) => {
             this.appointmentManager.getAppointmentFiltered(filters).then(appointments => {
@@ -38,7 +38,7 @@ export class AppointmentController {
     }
 
     @Post('/getAssigneesAppointments')
-    @Authorized([Role.Manager, Role.Technician])
+    @Authorized([Role.Supervisor, Role.Admin, Role.SystemAdmin, Role.Technician])
     getAssigneesAppointments( @Body() filters) {
         return new Promise<Appointment[]>((resolve, reject) => {
             this.appointmentManager.getAssigneesAppointments(filters.assigneeIds, filters.from, filters.to).then(appointments => {
@@ -53,7 +53,7 @@ export class AppointmentController {
     }
 
     @Get('/getTechniciansWithStatusInTime')
-    @Authorized([Role.Manager])
+    @Authorized([Role.Supervisor, Role.Admin, Role.SystemAdmin])
     getTechniciansWithStatusInTime( @QueryParam('appointmentId') appointmentId: string) {
         return new Promise<any>((resolve, reject) => {
 
@@ -74,7 +74,7 @@ export class AppointmentController {
     }
 
     @Post('/updateAppointmentStatusAndAssignees')
-    @Authorized([Role.Manager, Role.Technician])
+    @Authorized([Role.Supervisor, Role.Admin, Role.SystemAdmin])
     updateAppointmentStatusAndAssignees( @Body() appointment) {
         return new Promise<any>((resolve, reject) => {
             this.appointmentManager.updateAppointmentStatusAndAssignees(appointment).then(appointment => {

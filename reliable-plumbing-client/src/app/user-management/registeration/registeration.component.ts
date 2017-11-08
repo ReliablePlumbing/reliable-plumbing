@@ -17,6 +17,7 @@ export class RegisterationComponent implements OnInit {
   @Output() userAdded: EventEmitter<any> = new EventEmitter<any>();
   role = Role;
   registrationModes = RegistrationMode;
+  isSystemAdmin = false;
   @Input() user = {
     password: null,
     confirmPassword: null,
@@ -62,11 +63,24 @@ export class RegisterationComponent implements OnInit {
     });
 
     if (this.mode == RegistrationMode.admin) {
-      this.registerForm.addControl('roles', this.fb.group({ technician: [''], admin: [''] }, {
+      let roles = this.environmentService.currentUser.roles;
+
+      let rolesControls: any = { technician: [''], supervisor: [''] };
+      this.isSystemAdmin = ~roles.indexOf(Role.SystemAdmin) != 0
+      if (this.isSystemAdmin) {
+        rolesControls.admin = [''];
+        rolesControls.systemAdmin = [''];
+      }
+
+      let rolesFG = this.fb.group(rolesControls, {
         validator: (group: FormGroup) => {
-          return (group.controls.technician.value == true || group.controls.technician.value == true) ? null : { noRole: true };
+          let controlNames = Object.getOwnPropertyNames(group.controls);
+          return ~controlNames.findIndex(c => group.controls[c].value == true) ? null : { noRole: true };
         }
-      }));
+      });
+
+
+      this.registerForm.addControl('roles', rolesFG);
     }
     else {
       this.registerForm.addControl('password', new FormControl(null, [Validators.required, Validators.pattern('^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$')]))
@@ -134,7 +148,7 @@ export class RegisterationComponent implements OnInit {
       lat: this.mapMarker.lat,
       lng: this.mapMarker.lng
     };
-    
+
     if (this.mode != RegistrationMode.completeProfile)
       this.userManagementService.register(this.user).subscribe(x => {
 

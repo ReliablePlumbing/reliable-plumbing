@@ -12,13 +12,13 @@ import { TechniciansTrackingComponent } from './technicians-tracking/technicians
 
 const routes: Routes = [
   {
-    path: 'admin-panel', component: AdminPanelComponent, canActivate: [LoginAuthGuard], data: { roles: [Role.Manager, Role.Technician] },
+    path: 'control-panel', component: AdminPanelComponent, canActivate: [LoginAuthGuard], data: { roles: [Role.Supervisor, Role.Technician, Role.Admin, Role.SystemAdmin] },
     children: [
-      { path: '', component: ScheduleManagementComponent },
-      { path: 'appointment-settings', component: AppointmentSettingsomponent, canActivate: [LoginAuthGuard], data: { roles: [Role.Manager] } },
-      { path: 'system-users-management', component: SystemUsersManagementComponent, canActivate: [LoginAuthGuard], data: { roles: [Role.Manager] } },
+      { path: 'schedule-management', canActivate: [LoginAuthGuard], component: ScheduleManagementComponent, data: { roles: [Role.Admin, Role.SystemAdmin, Role.Technician] } },
+      { path: 'appointment-settings', component: AppointmentSettingsomponent, canActivate: [LoginAuthGuard], data: { roles: [Role.Admin, Role.SystemAdmin] } },
+      { path: 'system-users-management', component: SystemUsersManagementComponent, canActivate: [LoginAuthGuard], data: { roles: [Role.Admin, Role.SystemAdmin] } },
       { path: 'my-appointments', component: MyAppointmentsComponent, canActivate: [LoginAuthGuard], data: { roles: [Role.Technician] } },
-      { path: 'technicians-tracking', component: TechniciansTrackingComponent, canActivate: [LoginAuthGuard], data: { roles: [Role.Manager] } }
+      { path: 'technicians-tracking', component: TechniciansTrackingComponent, canActivate: [LoginAuthGuard], data: { roles: [Role.Supervisor, Role.Admin, Role.SystemAdmin] } }
     ]
   }
 ];

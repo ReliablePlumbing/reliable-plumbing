@@ -1,7 +1,9 @@
 export enum Role {
-    Manager = 1,
+    Supervisor = 1,
     Technician,
-    Customer
+    Customer,
+    Admin, 
+    SystemAdmin
 }
 
 export enum RegistrationMode {

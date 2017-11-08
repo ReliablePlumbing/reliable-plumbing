@@ -58,7 +58,7 @@ Header Section
               <a class="nav-link pointer" (click)="logout()">Log out</a>
             </li>
             <li *ngIf="isSystemUser" class="nav-item panel-link">
-              <a [routerLink]="['/admin-panel']" class="nav-link pointer">Go to App</a>
+              <a [routerLink]="['/control-panel']" class="nav-link pointer">Go to App</a>
             </li>
           </ng-container>
         </ul>
@@ -82,7 +82,7 @@ Hero Section
         <span class="rotating">Free Visits and Estimates!, Residential and Commercial, Drain Cleaning, Plumbing</span>
       </h2>
       <div class="actions">
-        <a (click)="openScheduleCallPopup()" class="btn-get-started pointer">Schedule a Call</a>
+        <a *ngIf="!isSystemUser" (click)="openScheduleCallPopup()" class="btn-get-started pointer">Schedule a Call</a>
         <a href="#services" class="btn-services pointer">Our Services</a>
       </div>
     </div>

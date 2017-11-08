@@ -257,7 +257,7 @@ export class AppointmentManager {
         newNotification.type = NotificationType.AppointmentCreated;
 
         return new Promise<Notification>((resolve, reject) => {
-            this.userRepo.getUsersByRoles([Role.Manager]).then(users => {
+            this.userRepo.getUsersByRoles([Role.Supervisor]).then(users => {
                 let notifeesIds = [];
                 for (let user of users)
                     notifeesIds.push(user.id);
@@ -346,7 +346,7 @@ export class AppointmentManager {
         newNotification.objectType = ObjectType.Appointment;
         newNotification.type = NotificationType.AppointmentCheckedIn;
 
-        this.userRepo.getUsersByRoles([Role.Manager]).then(users => {
+        this.userRepo.getUsersByRoles([Role.Supervisor]).then(users => {
             let notifeesIds = [];
             for (let user of users)
                 notifeesIds.push(user.id);
