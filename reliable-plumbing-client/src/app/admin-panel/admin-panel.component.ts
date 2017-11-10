@@ -28,7 +28,7 @@ export class AdminPanelComponent implements OnInit {
 
   logout() {
     this.environmentService.destroyLoginInfo();
-    this.currentUser = this.environmentService.currentUser;
+    // this.currentUser = this.environmentService.currentUser;
     this.router.navigate(['/']);
   }
 

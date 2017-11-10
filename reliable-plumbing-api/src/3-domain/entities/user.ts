@@ -48,7 +48,7 @@ export class User extends BaseEntity {
       this.activationDate = user.activationDate;
       this.address = user.address;
       this.socialMediaId = user.socialMediaId;
-      this.SocialMediaProvider = user.SocialMediaProvider;
+      this.SocialMediaProvider = user.SocialMediaProvider == null ? SocialMediaProvider.None : user.SocialMediaProvider;
     }
   }
 

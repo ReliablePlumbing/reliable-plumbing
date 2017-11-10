@@ -35,7 +35,7 @@ export class LoginComponent {
             this.notificationService.connectSockets();
             this.userLoggedIn.emit();
             this.alertifyService.success('login completed successfully');
-            // this.routeHandler.routeToDefault();
+            this.routeHandler.routeToDefault();
           }
           else
             this.alertifyService.error('Email or password is incorrect');
