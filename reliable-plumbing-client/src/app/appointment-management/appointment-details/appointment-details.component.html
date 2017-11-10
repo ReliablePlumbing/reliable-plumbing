@@ -1,7 +1,39 @@
-<h5>{{appointment.user == null ? appointment.fullName : appointment.user.firstName}}</h5>
+<!-- <h5>{{appointment.user == null ? appointment.fullName : appointment.user.firstName}}</h5>
 <h5>Date: {{mappedAppointment?.date | date}}</h5>
 <h5>Time: {{mappedAppointment?.time}}</h5>
-<h5>Status: {{mappedAppointment?.status.text}}</h5>
+<h5>Status: {{mappedAppointment?.status.text}}</h5> -->
+<div class="row">
+    <div class="col-md-4">
+        <label><b>Name:</b></label>
+    </div>
+    <div class="col-md-8">
+        <span>{{appointment.user == null ? appointment.fullName : appointment.user.firstName}}</span>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-4">
+        <label><b>Appointment Date:</b></label>
+    </div>
+    <div class="col-md-8">
+        <span>{{mappedAppointment?.date | date}}</span>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-4">
+        <label><b>Appointment Time:</b></label>
+    </div>
+    <div class="col-md-8">
+        <span>{{mappedAppointment?.time}}</span>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-4">
+        <label><b>Appointment Status:</b></label>
+    </div>
+    <div class="col-md-8">
+        <span>"{{mappedAppointment?.status.text}}"</span>
+    </div>
+</div>
 <div>
     <label>
     <input type="radio" name="appointmentStatus" [checked]="mappedAppointment.status.id == appointmentStatusEnum.Pending" 
@@ -20,12 +52,15 @@
     (click)="changeAppointmentStatus(appointmentStatusEnum.Rejected)"/>Reject
   </label>
 </div>
-<br/>
-<h4>Assignees:
-    <span *ngFor="let assignee of mappedAppointment.assignees">{{assignee.technician.firstName}} <span (click)="removeAssignee(assignee)">x</span>, </span>
-</h4>
 
-<table class="table">
+<h5>Assignees:
+    <span class="tag" *ngFor="let assignee of mappedAppointment.assignees">
+        {{assignee.technician.firstName}} 
+        <span (click)="removeAssignee(assignee)">x</span>
+    </span>
+</h5>
+
+<table class="table table-bordered table-scrollable">
     <thead>
         <th>Name</th>
         <th>Email</th>

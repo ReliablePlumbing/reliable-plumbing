@@ -80,6 +80,32 @@ h6 {
   border: 2px solid #fff;
   color: #fff !important; }
 
+.btn.google-btn {
+  display: inline-block;
+  background-color: #ea4335 !important; }
+  .btn.google-btn i {
+    margin-right: 5px; }
+  .btn.google-btn:hover {
+    opacity: 0.9; }
+
+.btn.facebook-btn {
+  display: inline-block;
+  background-color: #3b5998 !important; }
+  .btn.facebook-btn i {
+    margin-right: 5px; }
+  .btn.facebook-btn:hover {
+    opacity: 0.9; }
+
+.tag {
+  background: #025aa5;
+  color: #fff;
+  padding: 4px 10px;
+  border-radius: 8px;
+  font-size: 16px; }
+  .tag span {
+    font-size: 12px;
+    cursor: pointer; }
+
 /*--------------------------------------------------------------
 # Welcome
 --------------------------------------------------------------*/
