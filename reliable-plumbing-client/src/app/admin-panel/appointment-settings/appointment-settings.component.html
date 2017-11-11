@@ -7,7 +7,6 @@
             <div class="col-sm-12 col-xs-12">
                 <div class="form-group">
                     <h5>Work Days:</h5>
-                    <!-- todo: make them in one row -->
                     <div *ngFor="let day of days" class="form-check form-check-inline">
                         <label class="form-check-label">
                     <input class="form-check-input" type="checkbox" (click)="toggleCheck(day)" [checked]="day.checked" [value]="day.id"> {{day.day}}
@@ -23,14 +22,14 @@
             <div class="col-sm-6 col-xs-12">
                 <h5>To:</h5>
                 <ngb-timepicker [formControl]="timeto" [(ngModel)]="settings.workHours.to" [meridian]="true"></ngb-timepicker>
-                <label *ngIf="timeto.invalid || timeFrom.invalid" class="red">"to time" can't be before "from time"</label>
+                <label *ngIf="timeto.invalid || timeFrom.invalid" class="error-message">"to time" can't be before "from time"</label>
             </div>
             <div class="col-sm-6 col-xs-12">
                 <h5>time span for appointments:</h5>
                 <input type="number" min="0" class="form-control" placeholder="time span for appointments" [(ngModel)]="settings.timeSpan">
             </div>
             <div class="col-sm-12 col-xs-12">
-                <button class="btn btn-primary filters-toggle-btn" [disabled]="timeto.invalid || timeFrom.invalid" (click)="saveAppointmentSettings()">save</button>
+                <button class="btn btn-primary filters-toggle-btn" [disabled]="timeto?.invalid || timeFrom?.invalid" (click)="saveAppointmentSettings()">save</button>
             </div>
         </div>
 

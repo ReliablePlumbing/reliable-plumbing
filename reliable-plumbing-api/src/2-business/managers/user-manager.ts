@@ -58,6 +58,29 @@ export class UserManager {
         });
     }
 
+    updateProfile(user: User) {
+        if (user == null)
+            throw new Error('user cann\'t be null');
+        console.log('updateProfile')
+        let errors = this.validateUser(user, false);
+        if (errors.length > 0) {
+            throw new AppError(errors, ErrorType.validation);
+        }
+        return new Promise<boolean>((resolve, error) => {
+            this.userRepo.findByEmail(user.email).then(firstResult => {
+                if (firstResult == null)
+                    return error(new AppError('user doesn\'t exist', ErrorType.validation));
+                let updatedProps = Object.getOwnPropertyNames(user);
+                updatedProps.forEach(prop => firstResult[prop] = user[prop]);
+                this.userRepo.update(firstResult).then(result => {
+                    // let emailContent = this.constructVerificationMail(user);
+                    // this.mailNotifier.sendMail(user.email, emailContent.subject, emailContent.content);
+                    return resolve(result);
+                });
+            });
+        });
+    }
+
     authenticatePersistentLogin(userLogin: UserLogin): Promise<any> {
         let loginError = new Error('email or password is incorrect');
         return new Promise<any>((resolve, reject) => {
@@ -257,15 +280,11 @@ export class UserManager {
     // region private methods
     private validateUser(user: User, validatePassword = true): string[] {
         let errors: string[] = []
-        // if (user.username == null || user.username.length == 0)
-        //     errors.push('username cann\'t be empty');
-        // if (user.username != null && user.username.length > 30)
-        //     errors.push('username must be less than 30 characters');
         if (user.email == null || user.email.length == 0)
             errors.push('email cann\'t be empty');
-        // let emailRegex = new RegExp('');
-        // if (!emailRegex.test(user.email))
-        //     errors.push('email is invalid');
+        let emailRegex = new RegExp(/^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/);
+        if (!emailRegex.test(user.email))
+            errors.push('email is invalid');
         if (validatePassword) {
             if (user.password == null || user.password.length == 0)
                 errors.push('password cann\'t be empty');
@@ -275,9 +294,9 @@ export class UserManager {
             errors.push('first name cann\'t be empty');
         if (user.mobile == null || user.mobile.length == 0)
             errors.push('mobile cann\'t be empty');
-        // let mobileRegex = new RegExp('');
-        // if (!mobileRegex.test(user.mobile))
-        //     errors.push('mobile is invalid');
+        let mobileRegex = new RegExp(/^(\([0-9]{3}\) |[0-9]{3}-)[0-9]{3}-[0-9]{4}$/);
+        if (!mobileRegex.test(user.mobile))
+            errors.push('mobile number is invalid');
 
         return errors;
     }
@@ -296,7 +315,7 @@ export class UserManager {
 
     private validatePasswordFormat(password: string): string[] {
         let errors: string[] = []
-        let passwordRegex = new RegExp('^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$');
+        let passwordRegex = new RegExp('^(?=.*?[A-Z])(?=.*?[a-z])((?=.*?[0-9])|(?=.*?[#?!@$%^&*-])).{6,32}$');
         if (!passwordRegex.test(password)) {
             errors.push('password length must not be less than 8 characters');
             errors.push('password must have at least one upper case English letter');

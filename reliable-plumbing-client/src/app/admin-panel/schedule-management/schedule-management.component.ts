@@ -6,6 +6,7 @@ import { getEnumEntries, getDatesArray, getDateString } from '../../utils/date-h
 import * as moment from 'moment';
 import { NgbModalRef, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { convertTimeTo12String } from '../../utils/date-helpers';
+import { FormControl } from '@angular/forms';
 
 @Component({
   selector: 'rb-schedule-management',
@@ -29,10 +30,27 @@ export class ScheduleManagementComponent implements OnInit {
     status: any[]
   };
 
+  timeTo: FormControl;
+  timeFrom: FormControl;
+
   constructor(private lookupsService: LookupsService, private appointmentService: AppointmentService,
     private modalService: NgbModal, private router: Router, private activatedRoute: ActivatedRoute) { }
 
   ngOnInit() {
+    this.timeTo = this.timeFrom = new FormControl('', (control: FormControl) => {
+      if(this.filters.time == null) return null;
+      let from = this.filters.time.from;
+      let to = this.filters.time.to;
+
+      if (to.hour < from.hour)
+        return { afterFrom: true };
+      else if (from.hour == to.hour) {
+        if (to.minute < from.minute)
+          return { afterFrom: true };
+      }
+
+      return null;
+    });
     this.urlIdParam = this.activatedRoute.snapshot.params['id'];
     this.lookupsService.getAppointmentSettingsAndTypes().subscribe(results => {
       this.lookups = {

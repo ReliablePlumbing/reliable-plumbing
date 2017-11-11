@@ -2,7 +2,7 @@ import { Component, OnInit, AfterViewInit, ViewChild, ElementRef } from '@angula
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { EnvironmentService } from '../services/environment.service';
-import { Role } from '../models/enums';
+import { Role, RegistrationMode } from '../models/enums';
 
 @Component({
   selector: 'rb-home',
@@ -24,6 +24,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   isUserLoggedIn: boolean = false;
   currentUser = null;
   isSystemUser = false;
+  registerMode;
 
   constructor(private activatedRoute: ActivatedRoute, private modalService: NgbModal, private environmentService: EnvironmentService) { }
 
@@ -149,7 +150,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
   userRegistered(user) {
     this.registerModalRef.close();
     this.registeredUserEmail = user.email;
-    this.openLoginPopup();
+    if (!this.isUserLoggedIn)
+      this.openLoginPopup();
   }
 
   userLoggedIn() {
@@ -158,19 +160,25 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.currentUser = this.environmentService.currentUser;
     this.isSystemUser = this.isUserLoggedIn && this.environmentService.currentUser.roles.findIndex(x => x == Role.Customer) == -1;
   }
-  
+
   openRegisterPopup() {
+    this.registerMode = RegistrationMode.signup;
     this.registerModalRef = this.modalService.open(this.registerationTemplate, { size: 'lg' })
   }
-  
+
+  openEditProfile() {
+    this.registerMode = RegistrationMode.edit;
+    this.registerModalRef = this.modalService.open(this.registerationTemplate, { size: 'lg' })
+  }
+
   openLoginPopup() {
     this.loginModalRef = this.modalService.open(this.loginTemplate)
   }
-  
+
   openScheduleCallPopup() {
     this.scheduleCallModalRef = this.modalService.open(this.scheduleCallTemplate, { size: 'lg' });
   }
-  
+
   logout() {
     this.environmentService.destroyLoginInfo();
     this.isUserLoggedIn = this.environmentService.isUserLoggedIn;

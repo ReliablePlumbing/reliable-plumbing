@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { EnvironmentService, RouteHandlerService } from '../services/services.exports';
+import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { Router } from '@angular/router';
-import { Role } from '../models/enums';
+import { Role, RegistrationMode } from '../models/enums';
 
 @Component({
   selector: 'rb-admin-panel',
@@ -10,6 +11,9 @@ import { Role } from '../models/enums';
 })
 export class AdminPanelComponent implements OnInit {
 
+  @ViewChild('registeration') registerationTemplate: ElementRef;
+  registerModalRef: NgbModalRef;
+  registerMode;
   currentUser;
   tabsPremssions = {
     scheduleManagement: false,
@@ -18,7 +22,8 @@ export class AdminPanelComponent implements OnInit {
     myAppointments: false,
     tracking: false,
   }
-  constructor(private environmentService: EnvironmentService, private router: Router, private routeHandlerService: RouteHandlerService) { }
+  constructor(private environmentService: EnvironmentService, private router: Router, private routeHandlerService: RouteHandlerService,
+    private modalService: NgbModal) { }
 
   ngOnInit() {
     this.currentUser = this.environmentService.currentUser;
@@ -46,9 +51,18 @@ export class AdminPanelComponent implements OnInit {
         this.tabsPremssions.scheduleManagement = true;
         this.tabsPremssions.tracking = true;
       }
-      if(role == Role.Technician)
+      if (role == Role.Technician)
         this.tabsPremssions.myAppointments = true;
     }
 
+  }
+
+  userRegistered(user) {
+    this.registerModalRef.close();
+  }
+
+  openEditProfile() {
+    this.registerMode = RegistrationMode.edit;
+    this.registerModalRef = this.modalService.open(this.registerationTemplate, { size: 'lg' })
   }
 }

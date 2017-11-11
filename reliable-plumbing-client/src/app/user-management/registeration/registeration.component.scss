@@ -1,3 +1,19 @@
-.display-block{
-    display: block;
+.display-block {
+  display: block;
+}
+
+.passwordInfoPopover {
+  p,
+  li {
+      color: white;
+  }
+}
+
+:host ::ng-deep .password-input-group {
+  .popover-body {
+    background-color: black;
+  }
+  .arrow:after{
+      border-top-color: black !important;
+  }
 }

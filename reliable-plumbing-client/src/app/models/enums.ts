@@ -9,7 +9,8 @@ export enum Role {
 export enum RegistrationMode {
     signup,
     admin,
-    completeProfile
+    completeProfile,
+    edit
 }
 
 export enum AppointmentStatus {

@@ -51,8 +51,8 @@ Header Section
                 <i class="fa fa-bell" style="font-size: 25px;" aria-hidden="true"></i>
               </a>
             </li>
-            <li class="nav-item">
-              <a class="nav-link pointer">{{currentUser.firstName + ' ' + currentUser.lastName}}</a>
+            <li class="nav-item" placement="bottom" ngbTooltip="Edit profile">
+              <a (click)="openEditProfile()" class="nav-link pointer">{{currentUser.firstName + ' ' + currentUser.lastName}}</a>
             </li>
             <li class="nav-item">
               <a class="nav-link pointer" (click)="logout()">Log out</a>
@@ -627,7 +627,7 @@ Footer
 </a>
 
 <!--==========================
-registeration popup
+registeration/edit profile popup
 ============================-->
 <ng-template #registeration let-c="close" let-d="dismiss">
   <div class="modal-header">
@@ -637,7 +637,7 @@ registeration popup
     </button>
   </div>
   <div class="modal-body">
-    <rb-registeration (userAdded)="userRegistered($event)"></rb-registeration>
+    <rb-registeration (userAdded)="userRegistered($event)" [mode]="registerMode"></rb-registeration>
   </div>
 
 </ng-template>

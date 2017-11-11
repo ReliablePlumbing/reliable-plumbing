@@ -71,6 +71,8 @@ export class AppointmentSettingsomponent implements OnInit {
   }
 
   saveAppointmentSettings() {
+    if(this.timeto.invalid || this.timeFrom.invalid)
+      return;
     let workDays = [];
     for (let day of this.days)
       if (day.checked) workDays.push(day.id);

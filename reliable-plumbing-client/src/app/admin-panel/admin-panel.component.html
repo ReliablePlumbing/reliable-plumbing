@@ -2,46 +2,63 @@
 Header Section
 ============================-->
 <header id="header">
-    <div class="container-fluid">
-        <nav class="navbar navbar-toggleable-md navbar-expand-lg">
-            <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                  <span class="navbar-toggler-icon"></span>
-                </button>
-            <a id="logo" class="navbar-brand" [routerLink]="['/']">
-                <img src="assets/img/rb-logo.png" />
-            </a>
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav ml-auto">
-                    <li class="nav-item">
-                        <a class="nav-link pointer">{{currentUser?.firstName + ' ' + currentUser?.lastName}}</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link pointer" (click)="logout()">Log out</a>
-                    </li>
-                    <li class="nav-item panel-link">
-                        <a [routerLink]="['/']" class="nav-link pointer">Go to Website</a>
-                    </li>
-                </ul>
-            </div>
-        </nav>
-    </div>
+  <div class="container-fluid">
+    <nav class="navbar navbar-toggleable-md navbar-expand-lg">
+      <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <a id="logo" class="navbar-brand" [routerLink]="['/']">
+        <img src="assets/img/rb-logo.png" />
+      </a>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item" placement="bottom" ngbTooltip="Edit profile">
+            <a (click)="openEditProfile()" class="nav-link pointer">{{currentUser?.firstName + ' ' + currentUser?.lastName}}</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link pointer" (click)="logout()">Log out</a>
+          </li>
+          <li class="nav-item panel-link">
+            <a [routerLink]="['/']" class="nav-link pointer">Go to Website</a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+  </div>
 </header>
 <!-- #header -->
 <div class="admin-panel">
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-sm-3">
-                <ul class="list-group">
-                    <li *ngIf="tabsPremssions.scheduleManagement" class="list-group-item pointer" [routerLink]="['./schedule-management']">Schedule Management</li>
-                    <li *ngIf="tabsPremssions.settings" class="list-group-item pointer" [routerLink]="['./appointment-settings']">Appointment Settings & Types</li>
-                    <li *ngIf="tabsPremssions.systemUsers" class="list-group-item pointer" [routerLink]="['./system-users-management']">System Users</li>
-                    <li *ngIf="tabsPremssions.myAppointments" class="list-group-item pointer" [routerLink]="['./my-appointments']">My Appointments</li>
-                    <li *ngIf="tabsPremssions.tracking" class="list-group-item pointer" [routerLink]="['./technicians-tracking']">Technicians Tracking</li>
-                </ul>
-            </div>
-            <div class="col-sm-9">
-                <router-outlet></router-outlet>
-            </div>
-        </div>
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-sm-3">
+        <ul class="list-group">
+          <li *ngIf="tabsPremssions.scheduleManagement" class="list-group-item pointer" [routerLink]="['./schedule-management']">Schedule Management</li>
+          <li *ngIf="tabsPremssions.settings" class="list-group-item pointer" [routerLink]="['./appointment-settings']">Appointment Settings & Types</li>
+          <li *ngIf="tabsPremssions.systemUsers" class="list-group-item pointer" [routerLink]="['./system-users-management']">System Users</li>
+          <li *ngIf="tabsPremssions.myAppointments" class="list-group-item pointer" [routerLink]="['./my-appointments']">My Appointments</li>
+          <li *ngIf="tabsPremssions.tracking" class="list-group-item pointer" [routerLink]="['./technicians-tracking']">Technicians Tracking</li>
+        </ul>
+      </div>
+      <div class="col-sm-9">
+        <router-outlet></router-outlet>
+      </div>
     </div>
+  </div>
 </div>
+
+<!--==========================
+registeration/edit profile popup
+============================-->
+<ng-template #registeration let-c="close" let-d="dismiss">
+  <div class="modal-header">
+    <h4 class="modal-title">Edit Profile</h4>
+    <button type="button" class="close" aria-label="Close" (click)="d()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <rb-registeration (userAdded)="userRegistered($event)" [mode]="registerMode"></rb-registeration>
+  </div>
+
+</ng-template>

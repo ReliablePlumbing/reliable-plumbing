@@ -3,126 +3,140 @@
     <div class="container">
       <form [formGroup]="registerForm" novalidate>
         <div class="row">
-          <div class="col-md-6">
-            <div class="form-group">
-              <label for="firstName" class="">First Name
-                <i *ngIf="getControlValidation('firstName','required')">*</i>
-              </label>
-              <input type="text" name="firstName" class="form-control" formControlName="firstName" [(ngModel)]="user.firstName" />
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="form-group">
-              <label for="lastName" class="">Last Name </label>
-              <input type="text" name="lastName" class="form-control" formControlName="lastName" [(ngModel)]="user.lastName" />
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="form-group">
-              <label for="email" class="">Email
-                <i *ngIf="getControlValidation('email','required')">*</i>
-              </label>
-              <input type="email" name="email" class="form-control" placeholder="ex: exmple@domain.com" formControlName="email" [(ngModel)]="user.email"
-              />
-              <span class="error-message" *ngIf="getControlValidation('email','email', false)">Please enter a valid email</span>
-              <span class="error-message" *ngIf="getControlValidation('email','emailExists')">Email already exists :
-                <a *ngIf="mode != registrationModes.admin" class="pointer" (click)="openLogin()">Sign in</a>
-              </span>
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="form-group">
-              <label for="mobile" class="">Mobile
-                <i *ngIf="getControlValidation('mobile','required')">*</i>
-              </label>
-              <input type="tel" name="mobile" class="form-control" formControlName="mobile" [(ngModel)]="user.mobile" />
-            </div>
-          </div>
-          <ng-container *ngIf="mode != registrationModes.admin">
-            <div class="col-md-6">
-              <div class="form-group">
-                <label for="password" class="">Password
-                  <i *ngIf="getControlValidation('password','required')">*</i>
-                </label>
-                <input type="password" name="password" class="form-control" formControlName="password" [(ngModel)]="user.password" />
-                <span class="error-message" *ngIf="getControlValidation('password','pattern', false)">Password invalid</span>
-              </div>
-            </div>
-            <div class="col-md-6">
-              <div class="form-group">
-                <label for="confirmPassword" class="">Confirm Password
-                  <i *ngIf="getControlValidation('confirmPassword','required')">*</i>
-                </label>
-                <input type="password" name="confirmPassword" class="form-control" formControlName="confirmPassword" [(ngModel)]="user.confirmPassword"
-                />
-                <span class="error-message" *ngIf="getControlValidation('confirmPassword','matchOther', false)">Passwords are not the same</span>
-              </div>
-            </div>
-          </ng-container>
-          <div *ngIf="mode == registrationModes.admin" class="col-md-12">
-            <div class="form-group" formGroupName="roles">
-              <div class="display-block">
-                <label>Roles: </label>
-                <div class="form-check form-check-inline">
-                  <label class="form-check-label">
-                    <input class="form-check-input" type="checkbox" (click)="handleRolesChange($event)" formControlName="technician" [value]="role.Technician"> Technician
+          <ng-container *ngFor="let control of controls">
+            <ng-container [ngSwitch]="control">
+              <div *ngSwitchCase="regControls.firstName" class="col-md-6">
+                <div class="form-group">
+                  <label for="firstName" class="">First Name
+                    <i *ngIf="getControlValidation('firstName','required')">*</i>
                   </label>
+                  <input type="text" name="firstName" class="form-control" formControlName="firstName" [(ngModel)]="user.firstName" />
                 </div>
-                <div class="form-check form-check-inline">
-                  <label class="form-check-label">
-                    <input class="form-check-input" type="checkbox" (click)="handleRolesChange($event)" formControlName="supervisor" [value]="role.Supervisor"> Supervisor
+              </div>
+              <div *ngSwitchCase="regControls.lastName" class="col-md-6">
+                <div class="form-group">
+                  <label for="lastName" class="">Last Name </label>
+                  <input type="text" name="lastName" class="form-control" formControlName="lastName" [(ngModel)]="user.lastName" />
+                </div>
+              </div>
+              <div *ngSwitchCase="regControls.email" class="col-md-6">
+                <div class="form-group">
+                  <label for="email" class="">Email
+                    <i *ngIf="getControlValidation('email','required')">*</i>
                   </label>
+                  <input type="email" name="email" class="form-control" placeholder="ex: exmple@domain.com" formControlName="email" [(ngModel)]="user.email"
+                  />
+                  <span class="error-message" *ngIf="getControlValidation('email','email', false)">Please enter a valid email</span>
+                  <span class="error-message" *ngIf="getControlValidation('email','emailExists')">Email already exists :
+                    <a *ngIf="mode != registrationModes.admin" class="pointer" (click)="openLogin()">Sign in</a>
+                  </span>
                 </div>
-                <ng-container *ngIf="isSystemAdmin">
-                  <div class="form-check form-check-inline">
-                    <label class="form-check-label">
-                      <input class="form-check-input" type="checkbox" (click)="handleRolesChange($event)" formControlName="admin" [value]="role.Admin"> Administrator
+              </div>
+              <div *ngSwitchCase="regControls.mobile" class="col-md-6">
+                <div class="form-group">
+                  <label for="mobile" class="">Mobile
+                    <i *ngIf="getControlValidation('mobile','required')">*</i>
+                  </label>
+                  <input type="tel" name="mobile" class="form-control" formControlName="mobile" [(ngModel)]="user.mobile" placeholder="ex: (123) 123-1234"
+                    [textMask]="mobileMaskOpts" /> 
+                  <span class="error-message" *ngIf="getControlValidation('mobile','pattern', false)">Please enter a valid mobile number</span>
+                </div>
+              </div>
+              <ng-container *ngSwitchCase="regControls.password" >
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="password" class="">Password
+                      <i *ngIf="getControlValidation('password','required')">*</i>
                     </label>
+                    <div class="input-group mb-2 mr-sm-2 mb-sm-0 password-input-group">
+                      <input type="password" name="password" class="form-control" formControlName="password" [(ngModel)]="user.password" [ngbPopover]="passwordValidationTemplate"
+                        triggers="manual" #passwordPopover="ngbPopover" />
+                      <div class="input-group-addon" (click)="passwordPopover.toggle()">
+                        <span class="fa fa-info-circle"></span>
+                      </div>
+                    </div>
+                    <span class="error-message" *ngIf="getControlValidation('password','pattern', false)">Password invalid</span>
                   </div>
-                  <div class="form-check form-check-inline">
-                    <label class="form-check-label">
-                      <input class="form-check-input" type="checkbox" (click)="handleRolesChange($event)" formControlName="systemAdmin" [value]="role.SystemAdmin"> SystemAdmin
+                </div>
+
+                <ng-template #passwordValidationTemplate>
+                  <div class="passwordInfoPopover">
+                    <p>Password length must be between (6,32)</p>
+                    <ul>
+                      <li>one upper case English letter</li>
+                      <li>one lower case English letter</li>
+                      <li>one digit or one special character</li>
+                    </ul>
+                  </div>
+                </ng-template>
+
+
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="confirmPassword" class="">Confirm Password
+                      <i *ngIf="getControlValidation('confirmPassword','required')">*</i>
                     </label>
+                    <input type="password" name="confirmPassword" class="form-control" formControlName="confirmPassword" [(ngModel)]="user.confirmPassword"
+                    />
+                    <span class="error-message" *ngIf="getControlValidation('confirmPassword','matchOther', false)">Passwords are not the same</span>
                   </div>
-                </ng-container>
+                </div>
+              </ng-container>
+              <div *ngSwitchCase="regControls.roles" class="col-md-12">
+                <div class="form-group" formGroupName="roles">
+                  <div class="display-block">
+                    <label>Roles: </label>
+                    <div class="form-check form-check-inline">
+                      <label class="form-check-label">
+                        <input class="form-check-input" type="checkbox" (click)="handleRolesChange($event)" formControlName="technician" [value]="role.Technician"> Technician
+                      </label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                      <label class="form-check-label">
+                        <input class="form-check-input" type="checkbox" (click)="handleRolesChange($event)" formControlName="supervisor" [value]="role.Supervisor"> Supervisor
+                      </label>
+                    </div>
+                    <ng-container *ngIf="isSystemAdmin">
+                      <div class="form-check form-check-inline">
+                        <label class="form-check-label">
+                          <input class="form-check-input" type="checkbox" (click)="handleRolesChange($event)" formControlName="admin" [value]="role.Admin"> Administrator
+                        </label>
+                      </div>
+                      <div class="form-check form-check-inline">
+                        <label class="form-check-label">
+                          <input class="form-check-input" type="checkbox" (click)="handleRolesChange($event)" formControlName="systemAdmin" [value]="role.SystemAdmin"> SystemAdmin
+                        </label>
+                      </div>
+                    </ng-container>
+                  </div>
+                  <span class="error-message" *ngIf="trySubmit && registerForm.hasError('noRole','roles')">Please select at least one role</span>
+                </div>
               </div>
-              <span class="error-message" *ngIf="trySubmit && registerForm.hasError('noRole','roles')">Please select at least one role</span>
-            </div>
-          </div>
-          <!-- <div class="col-md-12">
-            <div>
-              <p>Password length must not be less than 8 characters and contains the following :</p>
-              <ul>
-                <li>At least one upper case English letter</li>
-                <li>At least one lower case English letter</li>
-                <li>At least one digit</li>
-                <li>At least one special character</li>
-              </ul>
-            </div>
-          </div> -->
-          <ng-container *ngIf="mode != registrationModes.admin">
-            <div class="col-md-12">
-              <div class="form-group">
-                <label for="address" class="">Address
-                  <i *ngIf="getControlValidation('address','required')">*</i>
-                </label>
-                <input type="text" name="address" class="form-control" formControlName="address" [(ngModel)]="user.address.text" />
-              </div>
-              <div class="map-container" *ngIf="mapMarker != null">
-                <agm-map [latitude]="mapMarker.lat" [longitude]="mapMarker.lng" [zoom]="15" [disableDefaultUI]="false" [zoomControl]="true">
-                  <agm-marker [latitude]="mapMarker.lat" [longitude]="mapMarker.lng" [label]="mapMarker.label" [markerDraggable]="mapMarker.draggable"
-                    (dragEnd)="markerDragEnd(m, $event)">
-                    <agm-info-window>
-                      <strong>Your Location</strong>
-                    </agm-info-window>
-                  </agm-marker>
-                </agm-map>
-              </div>
-            </div>
+              <ng-container *ngSwitchCase="regControls.address" >
+                <div class="col-md-12">
+                  <div class="form-group">
+                    <label for="address" class="">Address
+                      <i *ngIf="getControlValidation('address','required')">*</i>
+                    </label>
+                    <input type="text" name="address" class="form-control" formControlName="address" [(ngModel)]="user.address.text" />
+                  </div>
+                  <div class="map-container" *ngIf="mapMarker != null">
+                    <agm-map [latitude]="mapMarker.lat" [longitude]="mapMarker.lng" [zoom]="15" [disableDefaultUI]="false" [zoomControl]="true">
+                      <agm-marker [latitude]="mapMarker.lat" [longitude]="mapMarker.lng" [label]="mapMarker.label" [markerDraggable]="mapMarker.draggable"
+                        (dragEnd)="markerDragEnd(m, $event)">
+                        <agm-info-window>
+                          <strong>Your Location</strong>
+                        </agm-info-window>
+                      </agm-marker>
+                    </agm-map>
+                  </div>
+                </div>
+              </ng-container>
+            </ng-container>
           </ng-container>
           <div class="col-md-12">
-            <button type="submit" (click)="userRegister()" class="btn btn-success">Register</button> &nbsp;
-            <button type="reset" (click)="resetForm()" class="btn btn-danger">Reset</button>
+            <button type="submit" (click)="userRegister()" class="btn btn-success">{{registerBtnText}}</button> &nbsp;
+            <button *ngIf="showResetBtn" type="reset" (click)="resetForm()" class="btn btn-danger">Reset</button>
           </div>
         </div>
       </form>

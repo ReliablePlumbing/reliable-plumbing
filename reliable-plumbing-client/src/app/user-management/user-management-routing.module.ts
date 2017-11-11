@@ -10,7 +10,7 @@ import { SocialMediaRedirectComponent } from './social-media-redirect/social-med
 
 const routes: Routes = [
   { path: 'activate-mail', component: ActivateMailComponent },
-  { path: 'social-media-authenticate', component: SocialMediaRedirectComponent }
+  { path: 'social-media-authenticate', component: SocialMediaRedirectComponent },
 ];
 
 @NgModule({

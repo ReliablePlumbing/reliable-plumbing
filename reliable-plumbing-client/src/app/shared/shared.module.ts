@@ -1,28 +1,39 @@
 import { NgModule } from '@angular/core';
+import { AgmCoreModule } from '@agm/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { LoaderComponent } from './loader/loader.component';
-import { MultiSelectDatepickerComponent } from './multi-select-datepicker/multi-select-datepicker.component';
-import { InputNumberDirective } from './directives/input-number.directive';
+import { TextMaskModule } from 'angular2-text-mask';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { environment } from '../../environments/environment';
+
+// components
+import { LoaderComponent } from './loader/loader.component';
 import { NoDataComponent } from './no-data/no-data.component';
 import { NotificationsComponent } from './notifications/notifications.component';
-import { AgmCoreModule } from '@agm/core';
-import { environment } from '../../environments/environment';
+import { MultiSelectDatepickerComponent } from './multi-select-datepicker/multi-select-datepicker.component';
+// directives
+import { ModelCharsReplaceDirective } from './directives/model-chars-replace.directive';
+import { InputNumberDirective } from './directives/input-number.directive';
 // pipes 
-import { AppointmentStatusColor, AppointmentStatusTxt } from './pipes/appointment-status-pipes';
 import { TechnicianStatusColor, TechnicianStatusTxt } from './pipes/technician-status-pipes';
+import { AppointmentStatusColor, AppointmentStatusTxt } from './pipes/appointment-status-pipes';
 
-let declarations = [LoaderComponent, InputNumberDirective, MultiSelectDatepickerComponent, NoDataComponent, NotificationsComponent,
+let declarations = [
+  // components
+  LoaderComponent, MultiSelectDatepickerComponent, NoDataComponent, NotificationsComponent,
   // pipes
-  AppointmentStatusColor, AppointmentStatusTxt, TechnicianStatusColor, TechnicianStatusTxt];
+  AppointmentStatusColor, AppointmentStatusTxt, TechnicianStatusColor, TechnicianStatusTxt,
+  // directives
+  ModelCharsReplaceDirective, InputNumberDirective
+];
 
 
 @NgModule({
   imports: [
-    CommonModule, FormsModule, NgbModule, AgmCoreModule.forRoot({ apiKey: environment.mapsApiKey })
+    CommonModule, FormsModule, NgbModule, TextMaskModule,
+    AgmCoreModule.forRoot({ apiKey: environment.mapsApiKey })
   ],
   declarations: declarations,
-  exports: [declarations, AgmCoreModule]
+  exports: [declarations, AgmCoreModule, TextMaskModule]
 })
 export class SharedModule { }

@@ -24,6 +24,16 @@ export class UserController {
         });
     }
 
+    @Post('/updateProfile')
+    updateProfile( @Body() user: User) {
+        return new Promise((resolve, reject) => {
+
+            this.userManager.updateProfile(user).then((result: boolean) => {
+                return resolve(result);
+            }).catch((error: Error) => reject(error));
+        });
+    }
+
     @Post("/login")
     login( @Body() loginCredentials: LoginCredentials) {
         return new Promise<any>((resolve, reject) => {

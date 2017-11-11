@@ -27,6 +27,7 @@
     "@ng-bootstrap/ng-bootstrap": "^1.0.0-beta.5",
     "@ngrx/core": "^1.2.0",
     "alertify.js": "^1.0.12",
+    "angular2-text-mask": "^8.0.4",
     "core-js": "^2.4.1",
     "moment": "^2.19.1",
     "ng2-select": "^1.2.0",

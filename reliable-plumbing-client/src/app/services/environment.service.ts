@@ -58,6 +58,11 @@ export class EnvironmentService {
             localStorage.setItem(this.persistentLoginVariableName, JSON.stringify(responseData.rememberMe));
     }
 
+    updateCurrentUserInfo(user){
+        this._currentUser = null; 
+        localStorage.setItem(this.currentUserVariableName, JSON.stringify(user));       
+    }
+
     public destroyLoginInfo() {
         this._currentUser = null;
         this._persistentLogin = null;
