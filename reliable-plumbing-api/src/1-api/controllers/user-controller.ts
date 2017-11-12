@@ -38,7 +38,7 @@ export class UserController {
     login( @Body() loginCredentials: LoginCredentials) {
         return new Promise<any>((resolve, reject) => {
 
-            this.userManager.authenticateUser(loginCredentials.user).then((result: User) => {
+            this.userManager.authenticateUser(loginCredentials.user.email, loginCredentials.user.password).then((result: User) => {
                 let user = new User(result);
                 let tokenPayload = { email: user.email, roles: user.roles };
                 if (loginCredentials.rememberMe) {
@@ -178,6 +178,21 @@ export class UserController {
         });
     }
 
+    @Get('/resendActivationLink')
+    @Authorized()
+    resendActivationLink( @QueryParam('email') email: string) {
+        this.userManager.resendActivationLink(email);
+    }
+
+    @Post('/changePassword')
+    @Authorized()
+    changePassword( @Body() changePasswordArgs) {
+        return new Promise<boolean>((resolve, reject) => {
+            this.userManager.changePassword(changePasswordArgs).then((result: any) => {
+                return resolve(result);
+            });
+        });
+    }
 
 
     private authenticateByFacebook(code, redirectUri) {

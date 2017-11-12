@@ -51,8 +51,15 @@ Header Section
                 <i class="fa fa-bell" style="font-size: 25px;" aria-hidden="true"></i>
               </a>
             </li>
-            <li class="nav-item" placement="bottom" ngbTooltip="Edit profile">
-              <a (click)="openEditProfile()" class="nav-link pointer">{{currentUser.firstName + ' ' + currentUser.lastName}}</a>
+            <li class="nav-item">
+              <div ngbDropdown>
+                <a class="nav-link pointer" ngbDropdownToggle>{{currentUser.firstName + ' ' + currentUser.lastName}}</a>
+                <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+                  <button class="dropdown-item" (click)="openChangePassword()">Change Password</button>
+                  <button class="dropdown-item" (click)="openEditProfile()">Edit Profile</button>
+                </div>
+              </div>
+              <!-- <a (click)="openEditProfile()" class="nav-link pointer">{{currentUser.firstName + ' ' + currentUser.lastName}}</a> -->
             </li>
             <li class="nav-item">
               <a class="nav-link pointer" (click)="logout()">Log out</a>
@@ -631,7 +638,7 @@ registeration/edit profile popup
 ============================-->
 <ng-template #registeration let-c="close" let-d="dismiss">
   <div class="modal-header">
-    <h4 class="modal-title">Register</h4>
+    <h4 class="modal-title">{{isUserLoggedIn? 'Edit Profile' : 'Register'}}</h4>
     <button type="button" class="close" aria-label="Close" (click)="d()">
       <span aria-hidden="true">&times;</span>
     </button>
@@ -672,6 +679,21 @@ schedule call popup
     <rb-schedule-appointment></rb-schedule-appointment>
   </div>
 
+</ng-template>
+
+<!--==========================
+change password popup
+============================-->
+<ng-template #changePassword let-c="close" let-d="dismiss">
+  <div class="modal-header">
+    <h4 class="modal-title">Change Password</h4>
+    <button type="button" class="close" aria-label="Close" (click)="d()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <rb-change-password (passwordChanged)="passwordChanged()"></rb-change-password>
+  </div>
 </ng-template>
 
 

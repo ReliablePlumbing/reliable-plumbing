@@ -13,6 +13,10 @@ export class AdminPanelComponent implements OnInit {
 
   @ViewChild('registeration') registerationTemplate: ElementRef;
   registerModalRef: NgbModalRef;
+  
+  @ViewChild('changePassword') changePasswordTemplate: ElementRef;
+  changePasswordModalRef: NgbModalRef;
+
   registerMode;
   currentUser;
   tabsPremssions = {
@@ -64,5 +68,14 @@ export class AdminPanelComponent implements OnInit {
   openEditProfile() {
     this.registerMode = RegistrationMode.edit;
     this.registerModalRef = this.modalService.open(this.registerationTemplate, { size: 'lg' })
+  }
+
+  
+  openChangePassword() {
+    this.changePasswordModalRef = this.modalService.open(this.changePasswordTemplate);
+  }
+
+  passwordChanged() {
+    this.changePasswordModalRef.close();
   }
 }

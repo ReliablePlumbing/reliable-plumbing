@@ -21,6 +21,9 @@ export class HomeComponent implements OnInit, AfterViewInit {
   @ViewChild('scheduleCall') scheduleCallTemplate: ElementRef;
   scheduleCallModalRef: NgbModalRef;
 
+  @ViewChild('changePassword') changePasswordTemplate: ElementRef;
+  changePasswordModalRef: NgbModalRef;
+
   isUserLoggedIn: boolean = false;
   currentUser = null;
   isSystemUser = false;
@@ -184,5 +187,13 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.isUserLoggedIn = this.environmentService.isUserLoggedIn;
     this.currentUser = this.environmentService.currentUser;
     this.isSystemUser = this.isUserLoggedIn && this.environmentService.currentUser.roles.findIndex(x => x == Role.Customer) == -1;
+  }
+
+  openChangePassword() {
+    this.changePasswordModalRef = this.modalService.open(this.changePasswordTemplate);
+  }
+
+  passwordChanged() {
+    this.changePasswordModalRef.close();
   }
 }

@@ -225,7 +225,7 @@ export class RegisterationComponent implements OnInit {
 
     let control = this.registerForm.controls[controlName];
 
-    return (beforeSubmit || this.trySubmit) && !control.valid && control.errors[errorName];
+    return (beforeSubmit || this.trySubmit) && !control.valid && control.errors && control.errors[errorName];
   }
 
   resetForm() {
@@ -326,6 +326,16 @@ export class RegisterationComponent implements OnInit {
   }
 
   regControls = regControls;
+
+  resendActivationLink() {
+    let user: any = this.environmentService.currentUser;
+    this.userManagementService.resendActivationLink(user.email).subscribe(success => {
+      if (success)
+        this.alertifyService.success('activation link sent to your mail');
+      else
+        this.alertifyService.success('try again');
+    })
+  }
 }
 
 

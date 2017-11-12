@@ -127,4 +127,16 @@ export class UserManagementService {
     return this.httpExtensionService.get(this.basePath + 'getAllTechniciansWithLocations')
       .map((response: Response) => response.json());
   }
+
+  resendActivationLink(email) {
+    return this.httpExtensionService.get(this.basePath + 'resendActivationLink?email=' + email)
+      .map((response: Response) => response.json());
+  }
+
+  changePassword(args) {
+    return this.httpExtensionService.post(this.basePath + 'changePassword', args)
+      .map((response: Response) => response.json());
+  }
+
+
 }

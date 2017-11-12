@@ -28,7 +28,10 @@
                   />
                   <span class="error-message" *ngIf="getControlValidation('email','email', false)">Please enter a valid email</span>
                   <span class="error-message" *ngIf="getControlValidation('email','emailExists')">Email already exists :
-                    <a *ngIf="mode != registrationModes.admin" class="pointer" (click)="openLogin()">Sign in</a>
+                    <a *ngIf="mode != registrationModes.admin" class="btn-link pointer" (click)="openLogin()">Sign in</a>
+                  </span>
+                  <span *ngIf="mode != registrationModes.edit" class="">Email not activated
+                    <a class="pointer" (click)="resendActivationLink()">Resend activation link</a>
                   </span>
                 </div>
               </div>
@@ -38,11 +41,11 @@
                     <i *ngIf="getControlValidation('mobile','required')">*</i>
                   </label>
                   <input type="tel" name="mobile" class="form-control" formControlName="mobile" [(ngModel)]="user.mobile" placeholder="ex: (123) 123-1234"
-                    [textMask]="mobileMaskOpts" /> 
+                    [textMask]="mobileMaskOpts" />
                   <span class="error-message" *ngIf="getControlValidation('mobile','pattern', false)">Please enter a valid mobile number</span>
                 </div>
               </div>
-              <ng-container *ngSwitchCase="regControls.password" >
+              <ng-container *ngSwitchCase="regControls.password">
                 <div class="col-md-6">
                   <div class="form-group">
                     <label for="password" class="">Password
@@ -112,7 +115,7 @@
                   <span class="error-message" *ngIf="trySubmit && registerForm.hasError('noRole','roles')">Please select at least one role</span>
                 </div>
               </div>
-              <ng-container *ngSwitchCase="regControls.address" >
+              <ng-container *ngSwitchCase="regControls.address">
                 <div class="col-md-12">
                   <div class="form-group">
                     <label for="address" class="">Address
@@ -135,7 +138,7 @@
             </ng-container>
           </ng-container>
           <div class="col-md-12">
-            <button type="submit" (click)="userRegister()" class="btn btn-success">{{registerBtnText}}</button> &nbsp;
+            <button type="submit" [disabled]="!registerForm.dirty" (click)="userRegister()" class="btn btn-success">{{registerBtnText}}</button> &nbsp;
             <button *ngIf="showResetBtn" type="reset" (click)="resetForm()" class="btn btn-danger">Reset</button>
           </div>
         </div>

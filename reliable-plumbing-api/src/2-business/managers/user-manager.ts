@@ -25,7 +25,7 @@ export class UserManager {
     registerUser(user: User): Promise<any> {
         if (user == null)
             throw new Error('user cann\'t be null');
-
+        user.email = user.email.toLowerCase();
         let errors = this.validateUser(user, !this.isSystemUser(user.roles));
         if (errors.length > 0) {
             throw new AppError(errors, ErrorType.validation);
@@ -61,7 +61,7 @@ export class UserManager {
     updateProfile(user: User) {
         if (user == null)
             throw new Error('user cann\'t be null');
-        console.log('updateProfile')
+        user.email = user.email.toLowerCase();
         let errors = this.validateUser(user, false);
         if (errors.length > 0) {
             throw new AppError(errors, ErrorType.validation);
@@ -121,17 +121,18 @@ export class UserManager {
         });
     }
 
-    authenticateUser(user: User): Promise<any> {
+    authenticateUser(email, password): Promise<any> {
         let loginError = new Error('email or password is incorrect');
         return new Promise<any>((resolve, reject) => {
-            if (user == null || user.email == null || user.password == null)
+            if (email == null || password == null)
                 reject(loginError);
             else {
-                this.userRepo.findByEmail(user.email).then(result => {
+                email = email.toLowerCase();
+                this.userRepo.findByEmail(email).then(result => {
                     if (result == null)
                         return reject(loginError);
 
-                    let passwordHash = AccountSecurity.hashPassword(user.password, result.salt);
+                    let passwordHash = AccountSecurity.hashPassword(password, result.salt);
 
                     if (result.hashedPassword != passwordHash)
                         reject(loginError);
@@ -139,10 +140,11 @@ export class UserManager {
                     resolve(result);
                 });
             }
-        })
+        });
     }
 
     checkEmailExistence(email: string) {
+        email = email.toLowerCase();
         return new Promise<boolean>((resolve, reject) => {
             this.userRepo.findByEmail(email).then(result => {
                 resolve(result != null);
@@ -157,7 +159,7 @@ export class UserManager {
 
                 if (decodedToken == null)
                     return resolve({ success: false, message: 'Activation Link is Expired', user: null });
-                let email = decodedToken.email;
+                let email = decodedToken.email.toLowerCase();
 
                 this.userRepo.findByEmail(email).then(user => {
                     if (user == null)
@@ -184,7 +186,7 @@ export class UserManager {
 
                 if (decodedToken == null)
                     return reject(new AppError('Not Allowed', ErrorType.validation));
-                let email = decodedToken.email;
+                let email = decodedToken.email.toLowerCase();
 
                 this.userRepo.findByEmail(email).then(user => {
                     if (user == null)
@@ -232,6 +234,7 @@ export class UserManager {
     }
 
     checkUserRoles(email: string, roles: Role[]) {
+        email = email.toLowerCase();
         return new Promise<boolean>((resolve, reject) => {
             this.userRepo.findByEmail(email).then(user => {
                 if (!user.isActivated)
@@ -248,6 +251,7 @@ export class UserManager {
 
     saveSocialMediaLogin(user: User) {
         return new Promise<User>((resolve, reject) => {
+            user.email = user.email.toLowerCase();
             this.userRepo.findByEmail(user.email).then(result => {
                 let promise: Promise<User | boolean> = null;
                 if (result == null) {
@@ -276,6 +280,39 @@ export class UserManager {
         });
     }
 
+    resendActivationLink(email) {
+        email = email.toLowerCase();
+
+        return new Promise<boolean>((resolve, reject) => {
+            this.userRepo.findByEmail(email).then((result) => {
+                if (result == null)
+                    throw new AppError('user doesn\'t exist', ErrorType.validation);
+                if (result.isActivated)
+                    throw new AppError('email already active', ErrorType.validation);
+
+                let mailContent = this.constructVerificationMail(result);
+                this.mailNotifier.sendMail(result.email, mailContent.subject, mailContent.content);
+                return resolve(true);
+            });
+        });
+    }
+
+    changePassword(args) {
+        return new Promise<boolean>((resolve, reject) => {
+            this.authenticateUser(args.email, args.oldPassword).then((user: any) => {
+                let errors = [];
+                if (args.newPassword == null || args.newPassword.length == 0)
+                    errors.push('password cann\'t be empty');
+                errors = errors.concat(this.validatePasswordFormat(args.newPassword));
+
+                user.salt = AccountSecurity.generateSalt();
+                user.hashedPassword = AccountSecurity.hashPassword(args.newPassword, user.salt);
+
+                this.userRepo.update(user).then((result: boolean) => resolve(result));
+            });
+
+        });
+    }
 
     // region private methods
     private validateUser(user: User, validatePassword = true): string[] {
@@ -317,11 +354,10 @@ export class UserManager {
         let errors: string[] = []
         let passwordRegex = new RegExp('^(?=.*?[A-Z])(?=.*?[a-z])((?=.*?[0-9])|(?=.*?[#?!@$%^&*-])).{6,32}$');
         if (!passwordRegex.test(password)) {
-            errors.push('password length must not be less than 8 characters');
+            errors.push('password length must be between 6 and 32 characters');
             errors.push('password must have at least one upper case English letter');
             errors.push('password must have at least one lower case English letter');
-            errors.push('password must have at least one digit');
-            errors.push('password must have at least one special character');
+            errors.push('password must have at least one digit or one special character');
         }
 
         return errors;
@@ -349,7 +385,7 @@ export class UserManager {
     createPersistentUserLogin(user: User) {
         let validator = TokenManager.generateRandomSeries();
         let userLogin: UserLogin = new UserLogin({
-            email: user.email,
+            email: user.email.toLowerCase(),
             validator: validator,
             hashedValidator: AccountSecurity.hashValidator(validator, user.email),
             creationDate: new Date()

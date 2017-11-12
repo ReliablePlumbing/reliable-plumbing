@@ -1,32 +1,36 @@
 .filters-container {
-    background-color: #f6f6f6;
-    padding: 20px;
-    margin-top: 15px;
+  background-color: #f6f6f6;
+  padding: 20px;
+  margin-top: 15px;
 }
 
 .filters-toggle-btn {
-    background: #40a4df;
-    border-color: #40a4df;
-    border-radius: 0;
-    outline: none;
-    i {
-        margin-right: 5px;
-    }
+  background: #40a4df;
+  border-color: #40a4df;
+  border-radius: 0;
+  outline: none;
+  i {
+    margin-right: 5px;
+  }
 }
 
 .appointemts-sec {}
 
 .appointemts-list {
-    background-color: #f6f6f6;
-    padding: 15px;
-    margin-bottom: 15px;
-    border-radius: 4px;
+  background-color: #f6f6f6;
+  padding: 15px;
+  margin-bottom: 15px;
+  border-radius: 4px;
 }
 
 .appointemt-card {
-    padding: 10px;
-    margin-bottom: 10px;
-    border-radius: 4px;
-    background-color: #e7e7e7;
-    box-shadow: 1px 2px 8px #c4c4c4;
+  padding: 10px;
+  margin-bottom: 10px;
+  border-radius: 4px;
+  background-color: #e7e7e7;
+  box-shadow: 1px 2px 8px #c4c4c4;
+}
+
+:host ::ng-deep .dropdown-menu {
+  display: inherit !important;
 }
