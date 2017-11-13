@@ -253,12 +253,14 @@ export class AppointmentManager {
         newNotification.type = NotificationType.AppointmentCreated;
 
         return new Promise<Notification>((resolve, reject) => {
-            this.userRepo.getUsersByRoles([Role.Supervisor]).then(users => {
+            this.userRepo.getUsersByRoles([Role.Supervisor, Role.Admin, Role.SystemAdmin]).then(users => {
                 let notifeesIds = [];
                 for (let user of users)
                     notifeesIds.push(user.id);
 
-                newNotification.notifeeIds = notifeesIds;
+                newNotification.notifees = notifeesIds.map(id => {
+                    return { userId: id, seen: false }
+                });
                 return resolve(newNotification);
             }).catch((error: Error) => reject(error));
         });
@@ -325,7 +327,7 @@ export class AppointmentManager {
                 objectType: ObjectType.Appointment,
                 type: NotificationType.AssigneeRemoved
             });
-            appointment.userId != null ? changedNotification.notifeeIds.push(appointment.userId) :
+            appointment.userId != null ? changedNotification.notifees.push({ userId: appointment.userId, seen: false }) :
                 changedNotification.unregisterdEmail = appointment.email;
 
             notifications.push(changedNotification);
@@ -347,7 +349,9 @@ export class AppointmentManager {
             for (let user of users)
                 notifeesIds.push(user.id);
 
-            newNotification.notifeeIds = notifeesIds;
+            newNotification.notifees = notifeesIds.map(id => {
+                return { userId: id, seen: false }
+            });
             this.notificationManager.addNotification(newNotification);
         }).catch((error: Error) => console.log(error));;
     }

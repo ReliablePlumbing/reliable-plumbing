@@ -43,4 +43,31 @@ export class UserRepo extends Repo<User> {
         })
     }
 
+    findUsersByIds(ids) {
+        let model = this.createSet();
+        return new Promise<User[]>((resolve, reject) => {
+            model.find({ _id: { $in: ids } }, (err, results) => {
+                if (err != null)
+                    return reject(err);
+
+                let users = this.mapModelsToEntities(results);
+                return resolve(users);
+            })
+
+        });
+    }
+
+    private mapModelToEntity(userModel: GenericModel<User>) {
+        let userObj = userModel.toObject({ transform: Object });
+
+        return new User(userObj);
+    }
+
+    private mapModelsToEntities(userModels: GenericModel<User>[]) {
+        let users = [];
+        for (let userModel of userModels) {
+            users.push(this.mapModelToEntity(userModel))
+        }
+        return users;
+    }
 }

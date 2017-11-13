@@ -8,16 +8,16 @@ import { dependencies } from '../../../5-cross-cutting/cross-cutting.module';
 const dbContext: data.MongoContext = new data.MongoContext();
 const notificationBroadcastingService: business.NotificationBroadcastingService = new business.NotificationBroadcastingService();
 const socketsNotifier: business.SocketsNotifier = new business.SocketsNotifier(notificationBroadcastingService);
+const mailNotifier: business.MailNotifier = new business.MailNotifier(notificationBroadcastingService);
 
 export function registerDependencies() {
 
     /*** Business ***/
     Container.registerService({ id: dependencies.UserManager, type: business.UserManager });
-    Container.registerService({ id: dependencies.mailNotifierManager, type: business.MailNotifierManager });
     Container.registerService({ id: dependencies.AppointmentManager, type: business.AppointmentManager });
     Container.registerService({ id: dependencies.LookupsManager, type: business.LookupsManager });
     Container.registerService({ id: dependencies.NotificationManager, type: business.NotificationManager });
-
+    
     /*** Data Access ***/
     Container.registerService({ id: dependencies.MongoContext, type: data.MongoContext, instance: dbContext });
     Container.registerService({ id: dependencies.UserRepo, type: data.UserRepo });
@@ -27,8 +27,9 @@ export function registerDependencies() {
     Container.registerService({ id: dependencies.AppointmentTypeRepo, type: data.AppointmentTypeRepo });
     Container.registerService({ id: dependencies.NotificationRepo, type: data.NotificationRepo });
     Container.registerService({ id: dependencies.SettingsRepo, type: data.SettingsRepo });
-
+    
     /*** Business Notifiers ***/
     Container.registerService({ id: dependencies.NotificationBroadcastingService, type: business.NotificationBroadcastingService, instance: notificationBroadcastingService });
     Container.registerService({ id: dependencies.SocketsNotifier, type: business.SocketsNotifier, instance: socketsNotifier });
+    Container.registerService({ id: dependencies.mailNotifier, type: business.MailNotifier });
 }

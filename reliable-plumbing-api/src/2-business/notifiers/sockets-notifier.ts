@@ -16,17 +16,17 @@ export class SocketsNotifier {
     handleBroadcast(notification: Notification) {
         let notificationsEvent = ConfigService.config.socketsSettings.notificationsEvent;
         let asd = SocketContext.connections;
-        for (let id of notification.notifeeIds) {
-            if (SocketContext.connections[id] == null || SocketContext.connections[id].length == 0)
+        for (let notifee of notification.notifees) {
+            if (SocketContext.connections[notifee.userId] == null || SocketContext.connections[notifee.userId].length == 0)
                 continue;
             let connectedClientsForUser = [];
-            for (let client of SocketContext.connections[id]) {
+            for (let client of SocketContext.connections[notifee.userId]) {
                 if (client.socket.connected) {
                     client.socket.emit(notificationsEvent, notification.toLightModel());
                     connectedClientsForUser.push(client)
                 }
             }
-            SocketContext.connections[id] = connectedClientsForUser;
+            SocketContext.connections[notifee.userId] = connectedClientsForUser;
         }
     }
 

@@ -1,6 +1,6 @@
 import { User, Role, AppError, ErrorType, UserLogin, Notification, NotificationType } from '../../3-domain/domain-module';
 import { UserRepo, UserLoginRepo } from '../../4-data-access/data-access.module';
-import { MailNotifierManager } from '../mail-notifier/mail-notifier-manager';
+import { MailNotifier } from '../notifiers/mail-notifier';
 import { AccountSecurity, dependencies, TokenManager, ConfigService } from '../../5-cross-cutting/cross-cutting.module';
 import { Inject, Service } from 'typedi';
 import { NotificationManager } from './notification-manager';
@@ -15,8 +15,8 @@ export class UserManager {
     @Inject(dependencies.UserLoginRepo)
     private userLoginRepo: UserLoginRepo;
 
-    @Inject(dependencies.mailNotifierManager)
-    private mailNotifier: MailNotifierManager;
+    @Inject(dependencies.mailNotifier)
+    private mailNotifier: MailNotifier;
 
     @Inject(dependencies.NotificationManager)
     private notificationManager: NotificationManager;
@@ -73,8 +73,8 @@ export class UserManager {
                 let updatedProps = Object.getOwnPropertyNames(user);
                 updatedProps.forEach(prop => firstResult[prop] = user[prop]);
                 this.userRepo.update(firstResult).then(result => {
-                    // let emailContent = this.constructVerificationMail(user);
-                    // this.mailNotifier.sendMail(user.email, emailContent.subject, emailContent.content);
+                    let emailContent = this.constructVerificationMail(user);
+                    this.mailNotifier.sendMail(user.email, emailContent.subject, emailContent.content);
                     return resolve(result);
                 }).catch((error: Error) => reject(error));;
             }).catch((error: Error) => reject(error));

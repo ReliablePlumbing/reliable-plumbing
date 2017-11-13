@@ -2,14 +2,14 @@ export const dependencies = {
 
     // business
     UserManager: 'business.UserManager',
-    mailNotifierManager: 'business.MailNotifier',
     AppointmentManager: 'business.AppointmentManager',
     LookupsManager: 'business.LookupsManager',
     NotificationManager: 'business.NotificationManager',
-
+    
     // business notifiers
     NotificationBroadcastingService: 'business.notifier.NotificationBroadcastingService',
     SocketsNotifier: 'business.notifier.SocketsNotifier',
+    mailNotifier: 'business.MailNotifier',
 
     // data
     MongoContext: 'data.MongoContext',

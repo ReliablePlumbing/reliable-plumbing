@@ -15,9 +15,9 @@ export class NotificationManager {
 
     addNotification(notification: Notification) {
 
-        notification.creationDate = new Date();
-        notification.seen = false;
+        notification.notifees.forEach(notifee => notifee.seen = false);
 
+        notification.creationDate = new Date();
         return new Promise<Notification>((resolve, reject) => {
 
             this.notificationRepo.add(notification).then(result => {
@@ -32,12 +32,20 @@ export class NotificationManager {
         return new Promise<any>((resolve, reject) => {
             for (let notf of notifications) {
                 notf.creationDate = creationDate;
-                notf.seen = false;
                 this.notificationRepo.add(notf).then(result => {
                     this.notificationBroadcastingService.broadcast(result);
                 }).catch((error: Error) => reject(error));
             }
             return resolve(true);
+        });
+    }
+
+    getUserNotifications(id) {
+        return new Promise<Notification[]>((resolve, reject) => {
+            this.notificationRepo.getNotificationsByNotifeeIds([id])
+                .then((result) => resolve(result))
+                .catch((error: Error) => reject(error));
+
         });
     }
 }

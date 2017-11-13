@@ -7,12 +7,15 @@ export class Notification extends BaseEntity {
     creationDate: Date;
     type: NotificationType;
     message: string;
-    notifeeIds: string[];
+    notifees: {
+        userId: string,
+        seen: boolean,
+        seenDate?: Date
+    }[];
     notifierIds: string[];
-    seen: boolean;
-    seenDate: Date;
     objectType?: ObjectType;
     objectId?: string;
+    object?: any;
     unregisterdEmail?: string;
 
     constructor(notification?: any) {
@@ -21,15 +24,19 @@ export class Notification extends BaseEntity {
             this.creationDate = notification.creationDate;
             this.type = notification.type;
             this.message = notification.message;
-            this.notifeeIds = notification.notifeeIds;
+            this.notifees = notification.notifees == null ? null : notification.notifees.map(notifee => {
+                return {
+                    userId: notifee.userId,
+                    seen: notifee.seen,
+                    seenDate: notifee.seenDate
+                };
+            });
             this.notifierIds = notification.notifierIds;
-            this.seen = notification.seen;
-            this.seenDate = notification.seenDat;
             this.objectType = notification.objectType;
             this.objectId = notification.objectId;
         }
-        if (this.notifeeIds == null)
-            this.notifeeIds = [];
+        if (this.notifees == null)
+            this.notifees = [];
         if (this.notifierIds == null)
             this.notifierIds = []
     }
@@ -40,10 +47,10 @@ export class Notification extends BaseEntity {
             creationDate: this.creationDate,
             type: this.type,
             message: this.message,
-            seen: this.seen,
-            seenDate: this.seenDate,
             objectType: this.objectType,
-            objectId: this.objectId
+            objectId: this.objectId,
+            notifees: this.notifees,
+            object: this.object
         }
     }
 

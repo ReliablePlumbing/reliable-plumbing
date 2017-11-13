@@ -6,7 +6,13 @@ export var notificationSchema: genericSchema = {
         creationDate: { type: Date, required: true },
         type: { type: Number, required: true },
         message: { type: String, required: true },
-        notifeeIds: { type: [], required: true },
+        notifees: {
+            type: [{
+                userId: { type: String, required: true, ref: 'users' },
+                seen: { type: Boolean, required: true, default: false },
+                seenDate: { type: Date, required: false }
+            }], required: true
+        },
         notifierIds: { type: [], required: false },
         seen: { type: Boolean, required: true, default: false },
         seenDate: { type: Date, required: false },
