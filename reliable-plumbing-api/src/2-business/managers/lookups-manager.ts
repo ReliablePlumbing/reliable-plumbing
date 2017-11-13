@@ -34,15 +34,24 @@ export class LookupsManager {
             if (isNew)
                 this.appointmentTypeRepo.getLastPriority().then(lastPriority => {
                     appointmentType.priority = ++lastPriority;
-                    this.appointmentTypeRepo.add(appointmentType).then(addedType => resolve(addedType));
-                });
+                    this.appointmentTypeRepo.add(appointmentType)
+                        .then(addedType => resolve(addedType))
+                        .catch((error: Error) => reject(error));
+                }).catch((error: Error) => reject(error));
             else
-                this.appointmentTypeRepo.update(appointmentType).then(success => resolve(success));
+                this.appointmentTypeRepo.update(appointmentType)
+                    .then(success => resolve(success))
+                    .catch((error: Error) => reject(error));
         });
     }
 
     getAllAppointmentTypes() {
-        return this.appointmentTypeRepo.getAllAppointments();
+        return new Promise<AppointmentType[]>((resolve, reject) => {
+
+            return this.appointmentTypeRepo.getAllAppointments()
+                .then((result: AppointmentType[]) => resolve(result))
+                .catch((error: Error) => reject(error));
+        });
     }
 
     // endregion appointment types
@@ -55,17 +64,23 @@ export class LookupsManager {
         return new Promise<Settings | boolean>((resolve, reject) => {
             let promise;
             if (isNew)
-                this.appointmentSettingsRepo.add(settings).then(result => resolve(result));
+                this.appointmentSettingsRepo.add(settings)
+                    .then(result => resolve(result))
+                    .catch((error: Error) => reject(error));
             else {
                 settings.lastModifiedDate = new Date();
-                this.appointmentSettingsRepo.findOneAndUpdate(settings).then(result => resolve(new Settings(result)));
+                this.appointmentSettingsRepo.findOneAndUpdate(settings)
+                    .then(result => resolve(new Settings(result)))
+                    .catch((error: Error) => reject(error));
             }
         });
     }
 
     getAppointmentSettings() {
         return new Promise<Settings>((resolve, reject) => {
-            this.appointmentSettingsRepo.getSettings().then(result => resolve(result));
+            this.appointmentSettingsRepo.getSettings()
+                .then(result => resolve(result))
+                .catch((error: Error) => reject(error));
         });
     }
 
@@ -78,7 +93,7 @@ export class LookupsManager {
                     settings: values[0],
                     types: values[1]
                 });
-            });
+            }).catch((error: Error) => reject(error));
         });
     }
 }

@@ -14,7 +14,9 @@ export class LookupsController {
     @Authorized([Role.Admin, Role.SystemAdmin])
     addAppointmentType( @Body() appointmentType) {
         return new Promise<any>((resolve, reject) => {
-            this.lookupsManager.addEditAppointmentType(appointmentType).then(res => resolve(res));
+            this.lookupsManager.addEditAppointmentType(appointmentType)
+                .then(res => resolve(res))
+                .catch((error: Error) => reject(error));
         });
     }
 
@@ -27,14 +29,16 @@ export class LookupsController {
                 for (let type of results)
                     models.push(type.toLightModel());
                 return resolve(models);
-            });
+            }).catch((error: Error) => reject(error));
         });
     }
 
     @Get('/getAppointmentSettings')
     getAppointmentSettings() {
         return new Promise<any>((resolve, reject) => {
-            this.lookupsManager.getAppointmentSettings().then(result => resolve(result));
+            this.lookupsManager.getAppointmentSettings()
+                .then(result => resolve(result))
+                .catch((error: Error) => reject(error));
         });
     }
 
@@ -42,14 +46,18 @@ export class LookupsController {
     @Authorized([Role.Admin, Role.SystemAdmin])
     addEditAppointmentSettings( @Body() appointmentSettings) {
         return new Promise<any>((resolve, reject) => {
-            this.lookupsManager.addEditAppointmentSettings(appointmentSettings).then(result => resolve(result));
+            this.lookupsManager.addEditAppointmentSettings(appointmentSettings)
+                .then(result => resolve(result))
+                .catch((error: Error) => reject(error));
         });
     }
 
     @Get('/getAppointmentSettingsAndTypes')
     getAppointmentSettingsAndTypes() {
         return new Promise<any>((resolve, reject) => {
-            this.lookupsManager.getAppointmentSettingsAndTypes().then(result => resolve(result));
+            this.lookupsManager.getAppointmentSettingsAndTypes()
+                .then(result => resolve(result))
+                .catch((error: Error) => reject(error));
         });
     }
 

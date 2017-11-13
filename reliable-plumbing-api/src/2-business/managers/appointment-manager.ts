@@ -37,13 +37,14 @@ export class AppointmentManager {
             creationDate: new Date(),
             createdByUserId: appointment.userId
         })];
-        return new Promise<Appointment>((resolve, error) => {
+        return new Promise<Appointment>((resolve, reject) => {
             this.appointmentRepo.add(appointment).then(result => {
                 let notifier = appointment.userId == null ? [] : appointment.userId;
                 this.buildAppointCreatedNotification(notifier, result.id)
                     .then(notification => this.notificationManager.addNotification(notification))
+                    .catch((error: Error) => reject(error));
                 return resolve(result);
-            });
+            }).catch((error: Error) => reject(error));
 
         });
     }
@@ -53,21 +54,19 @@ export class AppointmentManager {
         let fromDate = this.constructAppointmentDate(filters.date.from, filters.time.from);
         let toDate = filters.date.to == null ? null : this.constructAppointmentDate(filters.date.to, filters.time.to);
         return new Promise<Appointment[]>((resolve, reject) => {
-            this.appointmentRepo.getAppointmentsFilteredByDatesAndStatusAndType(fromDate, toDate, filters.status, filters.typeIds).then(results => {
-
-                let filteredAppointments = this.filterAppointmentsByTime(filters.time.from, filters.time.to, results);
-
-
-                return resolve(filteredAppointments);
-            })
-
-
+            this.appointmentRepo.getAppointmentsFilteredByDatesAndStatusAndType(fromDate, toDate, filters.status, filters.typeIds)
+                .then(results => {
+                    let filteredAppointments = this.filterAppointmentsByTime(filters.time.from, filters.time.to, results);
+                    return resolve(filteredAppointments);
+                }).catch((error: Error) => reject(error));
         })
     }
 
     getAssigneesAppointments(assigneeIds: string[], from?: Date, to?: Date) {
         return new Promise<Appointment[]>((resolve, reject) => {
-            this.appointmentRepo.getAppointmentsFilteredByAssigneesAndDates(assigneeIds, from, to).then(results => resolve(results));
+            this.appointmentRepo.getAppointmentsFilteredByAssigneesAndDates(assigneeIds, from, to)
+                .then(results => resolve(results))
+                .catch((error: Error) => reject(error));
         });
     }
 
@@ -102,12 +101,10 @@ export class AppointmentManager {
                             });
                         }
 
-                        return resolve(techniciansWithAppointmentsAndStatus)
-
-                    });
+                        return resolve(techniciansWithAppointmentsAndStatus);
+                    }).catch((error: Error) => reject(error));
             });
         });
-
     }
 
     updateAppointmentStatusAndAssignees(appointment: Appointment) {
@@ -130,8 +127,8 @@ export class AppointmentManager {
                 this.appointmentRepo.updateAppointment(oldAppointment).then(result => {
                     this.sendAppointmentUpdatedNotification(oldStatus, newStatus, oldAssignees, newAssignees, appointment);
                     resolve(result);
-                })
-            });
+                }).catch((error: Error) => reject(error));
+            }).catch((error: Error) => reject(error));
         });
     }
 
@@ -155,9 +152,8 @@ export class AppointmentManager {
                         this.sendCheckInNotification(checkInDetails.appointmentId, checkInDetails.userId);
 
                     return resolve(success);
-                })
-
-            });
+                }).catch((error: Error) => reject(error));
+            }).catch((error: Error) => reject(error));
         });
     }
 
@@ -264,7 +260,7 @@ export class AppointmentManager {
 
                 newNotification.notifeeIds = notifeesIds;
                 return resolve(newNotification);
-            })
+            }).catch((error: Error) => reject(error));
         });
     }
 
@@ -353,7 +349,7 @@ export class AppointmentManager {
 
             newNotification.notifeeIds = notifeesIds;
             this.notificationManager.addNotification(newNotification);
-        });
+        }).catch((error: Error) => console.log(error));;
     }
     // endregion private methods
 }

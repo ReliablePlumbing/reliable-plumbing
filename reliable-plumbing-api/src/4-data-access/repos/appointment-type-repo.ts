@@ -19,7 +19,7 @@ export class AppointmentTypeRepo extends Repo<AppointmentType> {
                     return resolve(0);
                 else
                     return resolve(new AppointmentType(result.toObject({ transform: Object })).priority);
-            });
+            }).catch((error: Error) => reject(error));
         });
     }
 
@@ -28,7 +28,8 @@ export class AppointmentTypeRepo extends Repo<AppointmentType> {
             let model = this.createSet();
 
             model.find({ isDeleted: false }, (err, results) => {
-
+                if (err != null)
+                    return reject(err);
                 let types = [];
                 for (let typeModel of results) {
                     let type = new AppointmentType(typeModel.toObject({ transform: Object }));

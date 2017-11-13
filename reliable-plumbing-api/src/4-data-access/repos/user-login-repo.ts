@@ -19,13 +19,12 @@ export class UserLoginRepo extends Repo<UserLogin> {
     findLogin(id: string): Promise<UserLogin | null> {
         let model = this.createSet();
         return new Promise<UserLogin>((resolve, reject) => {
-            let aa = model.findById(id, (err, result) => {
+            model.findById(id, (err, result) => {
+                if (err != null)
+                    return reject(err);
                 let userLogin = new UserLogin(result.toObject({ transform: Object }));
                 return resolve(userLogin);
             })
-                .catch(err => {
-                    let aa = err;
-                })
         })
     }
 }

@@ -23,7 +23,7 @@ export class NotificationManager {
             this.notificationRepo.add(notification).then(result => {
                 this.notificationBroadcastingService.broadcast(result);
                 return resolve(notification);
-            });
+            }).catch((error: Error) => reject(error));
         });
     }
 
@@ -35,7 +35,7 @@ export class NotificationManager {
                 notf.seen = false;
                 this.notificationRepo.add(notf).then(result => {
                     this.notificationBroadcastingService.broadcast(result);
-                });
+                }).catch((error: Error) => reject(error));
             }
             return resolve(true);
         });

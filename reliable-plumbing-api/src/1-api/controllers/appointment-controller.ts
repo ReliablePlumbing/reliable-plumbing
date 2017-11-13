@@ -15,10 +15,9 @@ export class AppointmentController {
     addAppointment( @Body() appointmentModel) {
         let appointment = new Appointment(appointmentModel);
         return new Promise<any>((resolve, reject) => {
-
-            this.appointmentManager.addAppointment(appointment).then(result => {
-                return resolve(result.toLightModel());
-            })
+            this.appointmentManager.addAppointment(appointment)
+                .then(result => resolve(result.toLightModel()))
+                .catch((error: Error) => reject(error));
         })
     }
 
@@ -33,7 +32,7 @@ export class AppointmentController {
                     models.push(appointment.toLightModel());
 
                 resolve(models);
-            })
+            }).catch((error: Error) => reject(error));
         })
     }
 
@@ -41,14 +40,15 @@ export class AppointmentController {
     @Authorized([Role.Supervisor, Role.Admin, Role.SystemAdmin, Role.Technician])
     getAssigneesAppointments( @Body() filters) {
         return new Promise<Appointment[]>((resolve, reject) => {
-            this.appointmentManager.getAssigneesAppointments(filters.assigneeIds, filters.from, filters.to).then(appointments => {
-                // to light models here
-                let models = [];
-                for (let appointment of appointments)
-                    models.push(appointment.toLightModel());
+            this.appointmentManager.getAssigneesAppointments(filters.assigneeIds, filters.from, filters.to)
+                .then(appointments => {
+                    // to light models here
+                    let models = [];
+                    for (let appointment of appointments)
+                        models.push(appointment.toLightModel());
 
-                resolve(models);
-            })
+                    resolve(models);
+                }).catch((error: Error) => reject(error));
         })
     }
 
@@ -68,28 +68,27 @@ export class AppointmentController {
                 }
 
                 return resolve(models);
-            });
-
-        })
+            }).catch((error: Error) => reject(error));
+        });
     }
 
     @Post('/updateAppointmentStatusAndAssignees')
     @Authorized([Role.Supervisor, Role.Admin, Role.SystemAdmin])
     updateAppointmentStatusAndAssignees( @Body() appointment) {
         return new Promise<any>((resolve, reject) => {
-            this.appointmentManager.updateAppointmentStatusAndAssignees(appointment).then(appointment => {
-                return resolve(appointment.toLightModel());
-            });
+            this.appointmentManager.updateAppointmentStatusAndAssignees(appointment)
+                .then(appointment => resolve(appointment.toLightModel()))
+                .catch((error: Error) => reject(error));
         });
     }
 
     @Post('/technicianCheckIn')
     @Authorized([Role.Technician])
-    technicianCheckIn(@Body() checkInDetails) {
+    technicianCheckIn( @Body() checkInDetails) {
         return new Promise<any>((resolve, reject) => {
-            this.appointmentManager.technicianCheckIn(checkInDetails).then(success => {
-                return resolve(success);
-            });
+            this.appointmentManager.technicianCheckIn(checkInDetails)
+                .then(success => resolve(success))
+                .catch((error: Error) => reject(error));
         });
     }
 

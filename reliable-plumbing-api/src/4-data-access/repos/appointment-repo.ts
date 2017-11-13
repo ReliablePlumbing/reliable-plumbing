@@ -50,6 +50,8 @@ export class AppointmentRepo extends Repo<Appointment> {
         let model = this.createSet();
         return new Promise<Appointment>((resolve, reject) => {
             model.findOneAndUpdate({ _id: appointment.id }, appointment, { new: true }, (err, result) => {
+                if (err)
+                    return reject(err);
                 return resolve(this.mapModelToEntity(result));
             });
         });

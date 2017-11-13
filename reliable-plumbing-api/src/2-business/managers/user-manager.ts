@@ -44,17 +44,17 @@ export class UserManager {
         else
             user.isActivated = false;
 
-        return new Promise<User>((resolve, error) => {
+        return new Promise<User>((resolve, reject) => {
             this.userRepo.findByEmail(user.email).then(firstResult => {
                 if (firstResult != null)
-                    return error(new AppError('user already exists', ErrorType.validation));
+                    return reject(new AppError('user already exists', ErrorType.validation));
 
                 this.userRepo.add(user).then(result => {
                     let emailContent = this.constructVerificationMail(user);
                     this.mailNotifier.sendMail(user.email, emailContent.subject, emailContent.content);
                     return resolve(result);
-                });
-            });
+                }).catch((error: Error) => reject(error));
+            }).catch((error: Error) => reject(error));
         });
     }
 
@@ -66,18 +66,18 @@ export class UserManager {
         if (errors.length > 0) {
             throw new AppError(errors, ErrorType.validation);
         }
-        return new Promise<boolean>((resolve, error) => {
+        return new Promise<boolean>((resolve, reject) => {
             this.userRepo.findByEmail(user.email).then(firstResult => {
                 if (firstResult == null)
-                    return error(new AppError('user doesn\'t exist', ErrorType.validation));
+                    return reject(new AppError('user doesn\'t exist', ErrorType.validation));
                 let updatedProps = Object.getOwnPropertyNames(user);
                 updatedProps.forEach(prop => firstResult[prop] = user[prop]);
                 this.userRepo.update(firstResult).then(result => {
                     // let emailContent = this.constructVerificationMail(user);
                     // this.mailNotifier.sendMail(user.email, emailContent.subject, emailContent.content);
                     return resolve(result);
-                });
-            });
+                }).catch((error: Error) => reject(error));;
+            }).catch((error: Error) => reject(error));
         });
     }
 
@@ -85,7 +85,7 @@ export class UserManager {
         let loginError = new Error('email or password is incorrect');
         return new Promise<any>((resolve, reject) => {
             if (userLogin == null || userLogin.email == null || userLogin.selector == null || userLogin.validator == null)
-                reject(loginError);
+                return reject(loginError);
             else {
                 this.userLoginRepo.findLogin(userLogin.selector).then(login => {
                     if (login == null) // saved logins deleted
@@ -98,9 +98,9 @@ export class UserManager {
                             if (user == null)
                                 return reject(loginError);
                             resolve(user);
-                        });
+                        }).catch((error: Error) => reject(error));
                     }
-                });
+                }).catch((error: Error) => reject(error));
             }
         })
     }
@@ -117,7 +117,7 @@ export class UserManager {
                     result.validator = validator;
                     return resolve(result);
                 }
-            });
+            }).catch((error: Error) => reject(error));
         });
     }
 
@@ -135,10 +135,10 @@ export class UserManager {
                     let passwordHash = AccountSecurity.hashPassword(password, result.salt);
 
                     if (result.hashedPassword != passwordHash)
-                        reject(loginError);
+                        return reject(loginError);
 
-                    resolve(result);
-                });
+                    return resolve(result);
+                }).catch((error: Error) => reject(error));
             }
         });
     }
@@ -146,10 +146,9 @@ export class UserManager {
     checkEmailExistence(email: string) {
         email = email.toLowerCase();
         return new Promise<boolean>((resolve, reject) => {
-            this.userRepo.findByEmail(email).then(result => {
-                resolve(result != null);
-            });
-
+            this.userRepo.findByEmail(email)
+                .then(result => resolve(result != null))
+                .catch((error: Error) => reject(error));
         });
     }
 
@@ -171,9 +170,9 @@ export class UserManager {
                     user.emailActivationDate = new Date();
                     this.userRepo.update(user).then(res => {
                         return resolve({ success: true, message: 'Email is activated', user: user.toLightModel() });
-                    });
-                })
-            });
+                    }).catch((error: Error) => reject(error));
+                }).catch((error: Error) => reject(error));
+            }).catch((error: Error) => reject(error));;
         });
     }
 
@@ -205,9 +204,9 @@ export class UserManager {
                     this.userRepo.findOneAndUpdate(editedUser).then(res => {
 
                         return resolve(res != null);
-                    });
-                })
-            });
+                    }).catch((error: Error) => reject(error));
+                }).catch((error: Error) => reject(error));
+            }).catch((error: Error) => reject(error));
         });
     }
 
@@ -221,15 +220,15 @@ export class UserManager {
                     return resolve([]);
 
                 return resolve(result);
-            });
+            }).catch((error: Error) => reject(error));
         });
     }
 
     deleteUserById(id: string) {
         return new Promise<boolean>((resolve, reject) => {
-            this.userRepo.deleteById(id).then(result => {
-                return resolve(result);
-            })
+            this.userRepo.deleteById(id)
+                .then(result => resolve(result))
+                .catch((error: Error) => reject(error));
         });
     }
 
@@ -245,7 +244,7 @@ export class UserManager {
                             return resolve(true);
 
                 resolve(false);
-            })
+            }).catch((error: Error) => reject(error));
         });
     }
 
@@ -275,8 +274,8 @@ export class UserManager {
                         return resolve(result);
                     else
                         return resolve(null);
-                });
-            });
+                }).catch((error: Error) => reject(error));
+            }).catch((error: Error) => reject(error));
         });
     }
 
@@ -293,7 +292,7 @@ export class UserManager {
                 let mailContent = this.constructVerificationMail(result);
                 this.mailNotifier.sendMail(result.email, mailContent.subject, mailContent.content);
                 return resolve(true);
-            });
+            }).catch((error: Error) => reject(error));
         });
     }
 
@@ -308,9 +307,10 @@ export class UserManager {
                 user.salt = AccountSecurity.generateSalt();
                 user.hashedPassword = AccountSecurity.hashPassword(args.newPassword, user.salt);
 
-                this.userRepo.update(user).then((result: boolean) => resolve(result));
-            });
-
+                this.userRepo.update(user)
+                    .then((result: boolean) => resolve(result))
+                    .catch((error: Error) => reject(error));
+            }).catch((error: Error) => reject(error));
         });
     }
 
@@ -391,9 +391,9 @@ export class UserManager {
             creationDate: new Date()
         });
         return new Promise<UserLogin>((resolve, reject) => {
-            this.userLoginRepo.add(userLogin).then(result => {
-                return resolve(result);
-            });
+            this.userLoginRepo.add(userLogin)
+                .then(result => resolve(result))
+                .catch((error: Error) => reject(error));
         });
     }
 

@@ -13,6 +13,9 @@ export class UserRepo extends Repo<User> {
         return new Promise<User | null>((resolve, reject) => {
             let model = this.createSet();
             return model.findOne({ email: email }, (err, result) => {
+                if (err != null)
+                    return reject(err);
+
                 if (result == null)
                     return resolve(null);
                 let user = new User(result.toObject({ transform: Object }));
@@ -27,7 +30,8 @@ export class UserRepo extends Repo<User> {
 
         return new Promise<User[]>((resolve, reject) => {
             model.find({ roles: { $in: roles } }, (err, results) => {
-
+                if (err != null)
+                    return reject(err);
                 let users = [];
                 for (let userModel of results) {
                     let user = new User(userModel.toObject({ transform: Object }));

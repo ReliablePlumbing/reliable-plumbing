@@ -83,7 +83,9 @@ export class UserController {
     @Get('/checkEmailExistence')
     checkEmailExistence( @QueryParam('email') email: string) {
         return new Promise<boolean>((resolve, reject) => {
-            this.userManager.checkEmailExistence(email).then(result => resolve(result))
+            this.userManager.checkEmailExistence(email)
+                .then(result => resolve(result))
+                .catch((error: Error) => reject(error));
         })
     }
 
@@ -91,14 +93,18 @@ export class UserController {
     @Get('/activateMail')
     activateMail( @QueryParam('token') token: string) {
         return new Promise<boolean>((resolve, reject) => {
-            this.userManager.activateMail(token).then(result => resolve(result))
+            this.userManager.activateMail(token)
+                .then(result => resolve(result))
+                .catch((error: Error) => reject(error));
         })
     }
 
     @Post('/completeUserRegistration')
     completeUserRegistration( @Body() userWithToken: string) {
         return new Promise<boolean>((resolve, reject) => {
-            this.userManager.completeUserRegistration(userWithToken).then(result => resolve(result))
+            this.userManager.completeUserRegistration(userWithToken)
+                .then(result => resolve(result))
+                .catch((error: Error) => reject(error));
         })
     }
 
@@ -112,21 +118,18 @@ export class UserController {
                     lightModels.push(user.toLightModel());
 
                 return resolve(lightModels);
-            })
-        })
+            }).catch((error: Error) => reject(error));
+        });
     }
 
     @Delete('/deleteUserById')
     @Authorized([Role.Supervisor, Role.Admin, Role.SystemAdmin])
     deleteUserById( @QueryParam('id') id: string) {
         return new Promise((resolve, reject) => {
-            this.userManager.deleteUserById(id).then(result => resolve(result));
+            this.userManager.deleteUserById(id)
+                .then(result => resolve(result))
+                .catch((error: Error) => reject(error));
         })
-    }
-    @Get("/validateToken")
-    @Authorized()
-    validateToken() {
-        return 'aaa'
     }
 
     @Post('/socialLogin')
@@ -156,8 +159,8 @@ export class UserController {
                         user: user.toLightModel(),
                         rememberMe: null
                     });
-                }); // save user in db promise
-            }); // provider promise
+                }).catch((error: Error) => reject(error)); // save user in db promise
+            }).catch((error: Error) => reject(error)); // provider promise
         });// return promise
     }
 
@@ -173,24 +176,27 @@ export class UserController {
                     technicians: models,
                     onlineTechniciansWithLocations: SocketContext.trackedUsers
                 })
-            })
-
+            }).catch((error: Error) => reject(error));
         });
     }
 
     @Get('/resendActivationLink')
     @Authorized()
     resendActivationLink( @QueryParam('email') email: string) {
-        this.userManager.resendActivationLink(email);
+        return new Promise<any>((resolve, reject) => {
+            this.userManager.resendActivationLink(email)
+                .then((result: any) => resolve(result))
+                .catch((error: Error) => reject(error));
+        });
     }
 
     @Post('/changePassword')
     @Authorized()
     changePassword( @Body() changePasswordArgs) {
         return new Promise<boolean>((resolve, reject) => {
-            this.userManager.changePassword(changePasswordArgs).then((result: any) => {
-                return resolve(result);
-            });
+            this.userManager.changePassword(changePasswordArgs)
+                .then((result: any) => resolve(result))
+                .catch((error: Error) => reject(error));
         });
     }
 

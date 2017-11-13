@@ -15,8 +15,8 @@ export class SettingsRepo extends Repo<Settings> {
             let model = this.createSet();
 
             model.findOne({}, (err, result) => {
-                if (result == null)
-                    return resolve(null);
+                if (err != null)
+                    return reject(null);
                 return resolve(new Settings(result.toObject({ transform: Object })));
             })
         });

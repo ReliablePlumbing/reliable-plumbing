@@ -32,7 +32,7 @@ export class Repo<T extends BaseEntity>{
             let model = this.createSet();
             model.update({ _id: entity.id }, entity).then(res => {
                 return resolve(res.ok == 1)
-            });
+            }).catch((error: Error) => reject(error));
         })
     }
 
@@ -53,6 +53,8 @@ export class Repo<T extends BaseEntity>{
         let model = this.createSet();
         return new Promise<any>((resolve, reject) => {
             model.findOneAndUpdate({ _id: entity.id }, entity, { new: true }, (err, result) => {
+                if (err != null)
+                    return reject(err);
                 return resolve(result);
             });
         });
@@ -62,8 +64,9 @@ export class Repo<T extends BaseEntity>{
         return new Promise<boolean>((resolve, reject) => {
             let model = this.createSet();
             model.findByIdAndRemove(id, (err, res) => {
-                if (err == null)
-                    return resolve(true);
+                if (err != null)
+                    return reject(err);
+                return resolve(true);
             })
         });
     }
