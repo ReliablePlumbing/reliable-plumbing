@@ -1,4 +1,5 @@
 export interface Config {
+    production: boolean,
     authorization: {
         tokenKey: string,
         tokenExpiration: string
@@ -53,6 +54,38 @@ export interface Config {
             clientSecret: string,
             grantType: string,
             profileFields: string[]
+        }
+    }
+}
+
+
+export interface ProductionConfig { 
+    production: boolean,
+    authorization: {
+        tokenKey: string,
+        tokenExpiration: string
+    };
+
+    db: {
+        mongoConnectionString: string
+    };
+
+    mailSettings: {
+        service: string,
+        auth: {
+            user: string,
+            pass: string
+        }
+    };
+
+    activationMailUrl: string;
+
+    socialMedia: {
+        facebook: {
+            clientSecret: string,
+        },
+        google: {
+            clientSecret: string,
         }
     }
 }

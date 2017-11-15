@@ -1,7 +1,8 @@
 import { Service, Inject, Container } from 'typedi';
 import { NotificationBroadcastingService } from './notification-broadcasting-service';
-import { SocketContext, ConfigService } from '../../5-cross-cutting/cross-cutting.module';
+import { SocketContext } from '../../5-cross-cutting/cross-cutting.module';
 import { Notification, NotificationType } from '../../3-domain/domain-module';
+import config from '../../config';
 
 @Service()
 export class SocketsNotifier {
@@ -14,7 +15,7 @@ export class SocketsNotifier {
 
 
     handleBroadcast(notification: Notification) {
-        let notificationsEvent = ConfigService.config.socketsSettings.notificationsEvent;
+        let notificationsEvent = config.socketsSettings.notificationsEvent;
         let asd = SocketContext.connections;
         for (let notifee of notification.notifees) {
             if (SocketContext.connections[notifee.userId] == null || SocketContext.connections[notifee.userId].length == 0)

@@ -5,8 +5,9 @@ import {
 } from '../../3-domain/domain-module';
 import { AppointmentRepo, UserRepo } from '../../4-data-access/data-access.module';
 import { NotificationManager } from './notification-manager';
-import { AccountSecurity, dependencies, TokenManager, ConfigService } from '../../5-cross-cutting/cross-cutting.module';
+import { AccountSecurity, dependencies, TokenManager } from '../../5-cross-cutting/cross-cutting.module';
 import * as moment from 'moment';
+import config from '../../config';
 
 @Service()
 export class AppointmentManager {
@@ -246,7 +247,7 @@ export class AppointmentManager {
 
     private buildAppointCreatedNotification(notifierIds, objectId) {
         let newNotification = new Notification();
-        newNotification.message = ConfigService.config.notification.messages.appointmentCreated;
+        newNotification.message = config.notification.messages.appointmentCreated;
         newNotification.notifierIds = notifierIds;
         newNotification.objectId = objectId;
         newNotification.objectType = ObjectType.Appointment;
@@ -303,7 +304,7 @@ export class AppointmentManager {
 
         if (addedAssignees.length > 0)
             notifications.push(new Notification({
-                message: ConfigService.config.notification.messages.assgineeAdded,
+                message: config.notification.messages.assgineeAdded,
                 notifees: addedAssignees.map(a => { return { userId: a, seen: false } }),
                 objectId: appointment.id,
                 objectType: ObjectType.Appointment,
@@ -312,7 +313,7 @@ export class AppointmentManager {
 
         if (removedAssignees.length > 0)
             notifications.push(new Notification({
-                message: ConfigService.config.notification.messages.assgineeRemoved,
+                message: config.notification.messages.assgineeRemoved,
                 notifees: removedAssignees.map(a => { return { userId: a, seen: false } }),
                 objectId: appointment.id,
                 objectType: ObjectType.Appointment,
@@ -321,7 +322,7 @@ export class AppointmentManager {
 
         if (oldStatus != newStatus) {
             let changedNotification = new Notification({
-                message: ConfigService.config.notification.messages.appointmentChanged,
+                message: config.notification.messages.appointmentChanged,
                 notifees: sameAssignees.map(a => { return { userId: a, seen: false } }),
                 objectId: appointment.id,
                 objectType: ObjectType.Appointment,
@@ -338,7 +339,7 @@ export class AppointmentManager {
 
     sendCheckInNotification(appointmentId, notifierId) {
         let newNotification = new Notification();
-        newNotification.message = ConfigService.config.notification.messages.appointmentCheckedIn;
+        newNotification.message = config.notification.messages.appointmentCheckedIn;
         newNotification.notifierIds = [notifierId];
         newNotification.objectId = appointmentId;
         newNotification.objectType = ObjectType.Appointment;

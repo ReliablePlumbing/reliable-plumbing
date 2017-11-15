@@ -1,3 +1,4 @@
 dist
 maps
 node_modules
+.env

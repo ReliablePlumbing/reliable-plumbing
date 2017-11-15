@@ -1,9 +1,10 @@
 import { User, Role, AppError, ErrorType, UserLogin, Notification, NotificationType } from '../../3-domain/domain-module';
 import { UserRepo, UserLoginRepo } from '../../4-data-access/data-access.module';
 import { MailNotifier } from '../notifiers/mail-notifier';
-import { AccountSecurity, dependencies, TokenManager, ConfigService } from '../../5-cross-cutting/cross-cutting.module';
+import { AccountSecurity, dependencies, TokenManager } from '../../5-cross-cutting/cross-cutting.module';
 import { Inject, Service } from 'typedi';
 import { NotificationManager } from './notification-manager';
+import config from '../../config';
 
 @Service()
 export class UserManager {
@@ -368,7 +369,7 @@ export class UserManager {
         let token = TokenManager.generateToken({
             email: user.email
         })
-        let url = ConfigService.config.activationMailUrl + token;
+        let url = config.activationMailUrl + token;
         let isSystemUser = user.roles.findIndex(role => role == Role.Customer) == -1;
         let subject = isSystemUser ? 'Account & Email ' : 'Email ' + 'Activation';
 

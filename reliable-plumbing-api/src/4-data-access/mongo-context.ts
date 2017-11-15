@@ -3,14 +3,14 @@ import * as promise from 'bluebird';
 import { GenericModel } from './models/model';
 import { userSchema } from './schemas/user-schema';
 import { Service } from 'typedi';
-import { ConfigService } from '../5-cross-cutting/cross-cutting.module';
+import config from '../config';
 import { genericSchema } from './schemas/generic-schema';
 import * as fs from 'fs';
 import * as path from 'path';
 
 export class MongoContext {
 
-    private connectionString = ConfigService.config.db.mongoConnectionString;
+    private connectionString = config.db.mongoConnectionString;
     private connection: mongoose.Connection;
 
     constructor() {

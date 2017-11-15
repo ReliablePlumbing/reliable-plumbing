@@ -1,8 +1,7 @@
 import { AppError, ErrorType, AppointmentType, Notification, NotificationType, Settings } from '../../3-domain/domain-module';
 import { AppointmentTypeRepo, SettingsRepo } from '../../4-data-access/data-access.module';
-import { AccountSecurity, dependencies, TokenManager, ConfigService } from '../../5-cross-cutting/cross-cutting.module';
+import { AccountSecurity, dependencies, TokenManager } from '../../5-cross-cutting/cross-cutting.module';
 import { Inject, Service } from 'typedi';
-
 
 @Service()
 export class LookupsManager {

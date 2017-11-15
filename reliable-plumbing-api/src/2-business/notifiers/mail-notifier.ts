@@ -1,9 +1,10 @@
 import * as nodemailer from 'nodemailer';
 import { Inject, Container, Service } from 'typedi';
 import { MailLog, MailStatus, Notification, User, ObjectType, NotificationType, Appointment } from '../../3-domain/domain-module';
-import { ConfigService, dependencies } from '../../5-cross-cutting/cross-cutting.module';
+import { dependencies } from '../../5-cross-cutting/cross-cutting.module';
 import { MailLogRepo, UserRepo } from '../../4-data-access/data-access.module';
 import { NotificationBroadcastingService } from './notification-broadcasting-service';
+import config from '../../config';
 
 @Service()
 export class MailNotifier {
@@ -45,7 +46,7 @@ export class MailNotifier {
     }
 
     sendMail(to: string, subject: string, content: string) {
-        let mailSettings = ConfigService.config.mailSettings;
+        let mailSettings = config.mailSettings;
         let transporter = nodemailer.createTransport({
             service: mailSettings.service,
             auth: {

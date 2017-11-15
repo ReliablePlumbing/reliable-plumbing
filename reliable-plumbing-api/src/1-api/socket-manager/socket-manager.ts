@@ -1,18 +1,19 @@
-import { SocketContext, ConfigService } from '../../5-cross-cutting/cross-cutting.module';
+import { SocketContext } from '../../5-cross-cutting/cross-cutting.module';
+import config from '../../config';
 
 export function listenToSocketsEvents(socket) {
     socket.on('disconnect', () => disconnect(socket))
 
-    socket.on(ConfigService.config.socketsSettings.registerConnection,
+    socket.on(config.socketsSettings.registerConnection,
         (connection) => registerConnection(socket, connection));
 
-    socket.on(ConfigService.config.socketsSettings.updateLocation,
+    socket.on(config.socketsSettings.updateLocation,
         (updatedLocation) => updateTrackingMap(updatedLocation));
 
-    socket.on(ConfigService.config.socketsSettings.trackingsubscription,
+    socket.on(config.socketsSettings.trackingsubscription,
         (connection) => registerTrackingSubscriber(socket, connection));
 
-    socket.on(ConfigService.config.socketsSettings.removeTrackingSubscription, 
+    socket.on(config.socketsSettings.removeTrackingSubscription, 
         (connection) => removeTrackingSubscription(socket, connection))
 }
 
@@ -47,8 +48,8 @@ function disconnect(socket) {
     // if user being tracked, emit for all tracking subscribers that he is disconnected
     if (disconnectUser != null && disconnectUser.tracked)
         SocketContext.trackingSubscribers.forEach(subscriber => {
-            let fsg= ConfigService.config.socketsSettings.trackedUserDisconnected
-            subscriber.emit(ConfigService.config.socketsSettings.trackedUserDisconnected, {
+            let fsg= config.socketsSettings.trackedUserDisconnected
+            subscriber.emit(config.socketsSettings.trackedUserDisconnected, {
                 userId: disconnectUser.userId,
                 clientId: disconnectUser.clientId
             });
@@ -95,7 +96,7 @@ function updateTrackingMap(updatedLocation) {
     }
 
     SocketContext.trackingSubscribers.forEach(subscriber => {
-        subscriber.emit(ConfigService.config.socketsSettings.updateTrackingMap, updatedLocation);
+        subscriber.emit(config.socketsSettings.updateTrackingMap, updatedLocation);
     });
 }
 

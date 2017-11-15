@@ -1,12 +1,13 @@
 import { JsonController, Controller, Param, QueryParam, Body, Get, Post, Put, Delete, Authorized, UseInterceptor, Req, Res } from "routing-controllers";
 import { Role, User, UserLogin, SocialMediaProvider } from '../../3-domain/domain-module';
 import { UserManager } from '../../2-business/business.module';
-import { dependencies, ConfigService, SocketContext } from '../../5-cross-cutting/cross-cutting.module';
+import { dependencies, SocketContext } from '../../5-cross-cutting/cross-cutting.module';
 import { Inject } from 'typedi';
 import { AuthorizationProvider } from '../authorization/authorization-provider';
 import { LoginCredentials } from "../../3-domain/entities/login-credentials";
 import { Request, Response } from "express";
 import * as request from 'request';
+import config from '../../config';
 
 @JsonController('/users')
 export class UserController {
@@ -204,7 +205,7 @@ export class UserController {
     private authenticateByFacebook(code, redirectUri) {
         return new Promise<User>((resolve, reject) => {
 
-            let facebookConfig = ConfigService.config.socialMedia.facebook;
+            let facebookConfig = config.socialMedia.facebook;
 
             let fields = facebookConfig.profileFields;
             let accessTokenUrl = facebookConfig.accessTokenUrl;
@@ -241,7 +242,7 @@ export class UserController {
     private authenticateByGoogle(code, redirectUri) {
         return new Promise<User>((resolve, reject) => {
 
-            let googleConfig = ConfigService.config.socialMedia.google;
+            let googleConfig = config.socialMedia.google;
 
             let fields = googleConfig.profileFields;
             let accessTokenUrl = googleConfig.accessTokenUrl;

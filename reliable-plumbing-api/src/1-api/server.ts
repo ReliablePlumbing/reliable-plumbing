@@ -3,10 +3,12 @@ import * as express from 'express';
 import * as socketio from 'socket.io';
 import * as http from 'http';
 import { App } from './app';
-import { SocketContext, ConfigService } from '../5-cross-cutting/cross-cutting.module';
+import { SocketContext } from '../5-cross-cutting/cross-cutting.module';
 import { listenToSocketsEvents } from './socket-manager/socket-manager';
-debug('ts-express:server');
+import * as dotenv from 'dotenv';;
 
+if (process.env.NODE_ENV !== 'production')
+  dotenv.config();
 const port = normalizePort(process.env.PORT || 3000);
 
 var app = express();
