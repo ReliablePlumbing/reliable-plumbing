@@ -29,7 +29,7 @@ export class NotificationsComponent implements OnInit {
 
 
   buildNotification(notification) {
-
+    // todo: build notification with url
     let currentUserId = this.environmentService.currentUser.id;
     let notifee = notification.notifees.find(n => n.userId == currentUserId);
     notification.seen = notifee != null && notifee.seen;

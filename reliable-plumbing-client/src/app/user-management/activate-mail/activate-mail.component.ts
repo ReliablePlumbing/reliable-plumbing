@@ -40,7 +40,7 @@ export class ActivateMailComponent implements OnInit {
           if (this.user.roles != null)
             for (let i = 0; i < this.user.roles.length; i++)
               if (this.user.roles[i] == Role.Supervisor || this.user.roles[i] == Role.Technician)
-                this.registerModelRef = this.modalService.open(this.registerationTemplate);
+                this.registerModelRef = this.modalService.open(this.registerationTemplate, { size: 'lg' });
         }
       });
 

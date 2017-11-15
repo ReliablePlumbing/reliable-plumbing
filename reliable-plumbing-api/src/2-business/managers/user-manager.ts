@@ -26,7 +26,8 @@ export class UserManager {
         if (user == null)
             throw new Error('user cann\'t be null');
         user.email = user.email.toLowerCase();
-        let errors = this.validateUser(user, !this.isSystemUser(user.roles));
+        let isSystemUserValidation = !this.isSystemUser(user.roles)
+        let errors = this.validateUser(user, isSystemUserValidation);
         if (errors.length > 0) {
             throw new AppError(errors, ErrorType.validation);
         }
@@ -315,25 +316,25 @@ export class UserManager {
     }
 
     // region private methods
-    private validateUser(user: User, validatePassword = true): string[] {
+    private validateUser(user: User, isSystemUserValidation = false): string[] {
         let errors: string[] = []
         if (user.email == null || user.email.length == 0)
             errors.push('email cann\'t be empty');
         let emailRegex = new RegExp(/^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/);
         if (!emailRegex.test(user.email))
             errors.push('email is invalid');
-        if (validatePassword) {
+        if (isSystemUserValidation) {
             if (user.password == null || user.password.length == 0)
                 errors.push('password cann\'t be empty');
             errors = errors.concat(this.validatePasswordFormat(user.password));
+            if (user.mobile == null || user.mobile.length == 0)
+                errors.push('mobile cann\'t be empty');
+            let mobileRegex = new RegExp(/^(\([0-9]{3}\) |[0-9]{3}-)[0-9]{3}-[0-9]{4}$/);
+            if (!mobileRegex.test(user.mobile))
+                errors.push('mobile number is invalid');
         }
         if (user.firstName == null || user.firstName.length == 0)
             errors.push('first name cann\'t be empty');
-        if (user.mobile == null || user.mobile.length == 0)
-            errors.push('mobile cann\'t be empty');
-        let mobileRegex = new RegExp(/^(\([0-9]{3}\) |[0-9]{3}-)[0-9]{3}-[0-9]{4}$/);
-        if (!mobileRegex.test(user.mobile))
-            errors.push('mobile number is invalid');
 
         return errors;
     }

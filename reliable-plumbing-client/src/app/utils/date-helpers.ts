@@ -1,3 +1,5 @@
+import * as moment from 'moment';
+
 export function convertFromBootstrapDate(dateObj, time = null) {
     if (time == null)
         time = '00:00:00';
@@ -102,4 +104,13 @@ export function getEnumEntries(yourEnum: any) {
             });
     }
     return enumObjArr;
+}
+
+export function compareBootstrapDate(from, to) {
+    if (to == null)
+        return 0;
+    let fromMomentDate = moment(from.year + '-' + from.month + '-' + from.day, 'YYYY-MM-DD');
+    let toMomentDate = moment(to.year + '-' + to.month + '-' + to.day, 'YYYY-MM-DD');
+
+    return toMomentDate.diff(fromMomentDate);
 }

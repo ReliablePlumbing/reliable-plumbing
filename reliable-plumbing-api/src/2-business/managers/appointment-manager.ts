@@ -304,7 +304,7 @@ export class AppointmentManager {
         if (addedAssignees.length > 0)
             notifications.push(new Notification({
                 message: ConfigService.config.notification.messages.assgineeAdded,
-                notifeeIds: addedAssignees,
+                notifees: addedAssignees.map(a => { return { userId: a, seen: false } }),
                 objectId: appointment.id,
                 objectType: ObjectType.Appointment,
                 type: NotificationType.AssigneeAdded
@@ -313,7 +313,7 @@ export class AppointmentManager {
         if (removedAssignees.length > 0)
             notifications.push(new Notification({
                 message: ConfigService.config.notification.messages.assgineeRemoved,
-                notifeeIds: removedAssignees,
+                notifees: removedAssignees.map(a => { return { userId: a, seen: false } }),
                 objectId: appointment.id,
                 objectType: ObjectType.Appointment,
                 type: NotificationType.AssigneeRemoved
@@ -322,7 +322,7 @@ export class AppointmentManager {
         if (oldStatus != newStatus) {
             let changedNotification = new Notification({
                 message: ConfigService.config.notification.messages.appointmentChanged,
-                notifeeIds: sameAssignees,
+                notifees: sameAssignees.map(a => { return { userId: a, seen: false } }),
                 objectId: appointment.id,
                 objectType: ObjectType.Appointment,
                 type: NotificationType.AssigneeRemoved

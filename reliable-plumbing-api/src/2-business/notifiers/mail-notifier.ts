@@ -1,10 +1,11 @@
 import * as nodemailer from 'nodemailer';
-import { Inject, Container } from 'typedi';
+import { Inject, Container, Service } from 'typedi';
 import { MailLog, MailStatus, Notification, User, ObjectType, NotificationType, Appointment } from '../../3-domain/domain-module';
 import { ConfigService, dependencies } from '../../5-cross-cutting/cross-cutting.module';
 import { MailLogRepo, UserRepo } from '../../4-data-access/data-access.module';
 import { NotificationBroadcastingService } from './notification-broadcasting-service';
 
+@Service()
 export class MailNotifier {
 
     @Inject(dependencies.MailLogRepo)
@@ -119,7 +120,7 @@ export class MailNotifier {
                 mailContent.content += 'has scheduled a new call at ' + appoint.date.toLocaleDateString() + ' \n'
                 mailContent.content += 'you will find the appointment in schedule management in control panel'
                 break;
-
+            // todo: list all other cases
             default:
                 break;
         }
