@@ -2,16 +2,26 @@ import * as debug from 'debug';
 import * as express from 'express';
 import * as socketio from 'socket.io';
 import * as http from 'http';
-import { App } from './app';
-import { SocketContext } from '../5-cross-cutting/cross-cutting.module';
-import { listenToSocketsEvents } from './socket-manager/socket-manager';
-import * as dotenv from 'dotenv';;
+import * as path from 'path';
+import { App } from './1-api/app';
+import { SocketContext } from './5-cross-cutting/cross-cutting.module';
+import { listenToSocketsEvents } from './1-api/socket-manager/socket-manager';
+import * as dotenv from 'dotenv';
+import config from './config';
 
 if (process.env.NODE_ENV !== 'production')
   dotenv.config();
 const port = normalizePort(process.env.PORT || 3000);
 
 var app = express();
+
+if (config.production) {
+  app.use(express.static(__dirname + "/dist-client"));
+  app.use(/^(\/\/.+|(?!\/api).*)$/, function (req, res, next) {
+    res.sendFile(path.join(__dirname + "/dist-client/index.html"))
+  });
+}
+
 var server = http.createServer(app);
 SocketContext.io = socketio().listen(server);
 App.createServer(app);

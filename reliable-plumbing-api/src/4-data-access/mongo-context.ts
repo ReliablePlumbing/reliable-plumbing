@@ -31,9 +31,10 @@ export class MongoContext {
     }
 
     createModel<T>(schema: genericSchema): mongoose.Model<GenericModel<T>> {
-        mongoose.set('debug', function (coll, method, query, doc) {
-            console.log(coll + " " + method + " " + JSON.stringify(query) + " " + JSON.stringify(doc));
-           });
+        if (!config.production)
+            mongoose.set('debug', function (coll, method, query, doc) {
+                console.log(coll + " " + method + " " + JSON.stringify(query) + " " + JSON.stringify(doc));
+            });
         let entity = this.connection.model<GenericModel<T>>(schema.collectionName, schema.schema);
 
         return entity;

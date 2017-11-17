@@ -2,8 +2,8 @@
 
 export const environment = {
   production: true,
-  apiUrl: 'http://rbapi.azurewebsites.net/api/',
-  socketsUrl: 'http://rbapi.azurewebsites.net',
+  apiUrl: '/api/',
+  socketsUrl: '/',
   mapsApiKey: 'AIzaSyAmYRB--nxsm_OprcUO2RzrdlJTy6qLI4c',
   socialMedia: {
     facebook: {
@@ -14,6 +14,6 @@ export const environment = {
       clientId: '683536496260-v9qshpnrqn1t83m2mle5f449rap989e7.apps.googleusercontent.com',
       url: 'https://accounts.google.com/o/oauth2/v2/auth?response_type=code&client_id={clientId}&redirect_uri={redirectUri}&scope=email%20profile'
     },
-    redirectUri: 'http://rbangularclient.azurewebsites.net/social-media-authenticate'
+    redirectUri: 'http://ec2-18-217-44-139.us-east-2.compute.amazonaws.com/social-media-authenticate'
   }
 };

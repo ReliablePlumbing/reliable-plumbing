@@ -177,10 +177,11 @@ export class RegisterationComponent implements OnInit {
     if (this.registerForm.invalid)
       return;
 
-    this.user.address.coords = {
-      lat: this.mapMarker.lat,
-      lng: this.mapMarker.lng
-    };
+    if (this.mode != RegistrationMode.admin)
+      this.user.address.coords = {
+        lat: this.mapMarker.lat,
+        lng: this.mapMarker.lng
+      };
 
     switch (this.mode) {
       case RegistrationMode.signup:

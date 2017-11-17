@@ -5,12 +5,11 @@
   "main": "lib/index.js",
   "types": "lib/index",
   "scripts": {
-    "start": "cross-env NODE_ENV=production node dist/1-api/server.js",
-    "dev": "cross-env NODE_ENV=development nodemon dist/1-api/server.js",
-    "debug": "cross-env NODE_ENV=development node --inspect-brk=3001 dist/1-api/server.js",
+    "start": "cross-env NODE_ENV=production node dist/server.js",
+    "dev": "cross-env NODE_ENV=development nodemon dist/server.js",
+    "debug": "cross-env NODE_ENV=development node --inspect-brk=3001 dist/server.js",
     "test": "mocha --reporter spec --compilers ts:ts-node/register",
-    "gulp": "gulp",
-    "git": "git add -A -- . && git commit -m $message && git push node-starter master"
+    "gulp": "gulp"
   },
   "dependencies": {
     "@reactivex/rxjs": "^5.5.0",

@@ -1,4 +1,5 @@
 dist
+dist-client
 maps
 node_modules
 .env
