@@ -1,34 +1,42 @@
-import { Injectable } from '@angular/core';
-import * as alertify from 'alertify.js';
+import { Injectable, Inject, PLATFORM_ID } from '@angular/core';
+// import * as alertify from 'alertify.js';
+import { isPlatformBrowser, isPlatformServer } from '@angular/common';
 
 @Injectable()
 export class AlertifyService {
-  private notifier: any = alertify;
+  private notifier: any;
 
-  constructor() { }
+  constructor( @Inject(PLATFORM_ID) private platformId: Object) {
+    if (isPlatformBrowser(this.platformId))
+      this.notifier = alertify;    
+   }
 
   confirmDialog(message: string, okCallback: () => any) {
-    this.notifier.confirm(message, function (e) {
-      if (e) {
-        okCallback();
-      } else {
-      }
-    });
+    if (isPlatformBrowser(this.platformId))
+      this.notifier.confirm(message, function (e) {
+        if (e) {
+          okCallback();
+        } else {
+        }
+      });
   }
 
   success(message: string) {
-    this.notifier.success(message);
+    if (isPlatformBrowser(this.platformId))
+      this.notifier.success(message);
   }
 
   error(message: string) {
-    this.notifier.error(message);
+    if (isPlatformBrowser(this.platformId))
+      this.notifier.error(message);
   }
 
   notify(message) {
-    this.notifier
-    .closeLogOnClick(true)
-    .log(message, ev => {
-      this.notifier.log('clicked');
-    });
+    if (isPlatformBrowser(this.platformId))
+      this.notifier
+        .closeLogOnClick(true)
+        .log(message, ev => {
+          this.notifier.log('clicked');
+        });
   }
 }

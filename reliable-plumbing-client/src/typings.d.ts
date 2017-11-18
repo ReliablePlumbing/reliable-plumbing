@@ -5,3 +5,4 @@ interface NodeModule {
 }
 declare var $:any;
 declare var WOW: any;
+declare var alertify: any;

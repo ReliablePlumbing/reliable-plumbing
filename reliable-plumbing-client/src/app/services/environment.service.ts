@@ -1,4 +1,5 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Inject, PLATFORM_ID } from '@angular/core';
+import { isPlatformBrowser, isPlatformServer } from '@angular/common';
 import { UserInfo } from '../models/user-info';
 import { Subject, Observable } from 'rxjs'
 
@@ -11,23 +12,26 @@ export class EnvironmentService {
     private _persistentLogin: any;
     private logoutSource$: Subject<any> = new Subject<any>();
     userLoggedout: Observable<any> = this.logoutSource$.asObservable();
-    
-    constructor() {
+
+    private localStorageVaiable: any = {}
+    constructor( @Inject(PLATFORM_ID) private platformId: Object) {
+        if (isPlatformBrowser(this.platformId))
+            this.localStorageVaiable = localStorage;
     }
 
     public get token(): string {
-        let tokenObj = JSON.parse(localStorage.getItem(this.tokenVariableName))
-            
+        let tokenObj = JSON.parse(this.localStorageVaiable.getItem(this.tokenVariableName))
+
         return tokenObj == null ? null : tokenObj.token;
     }
 
     public get serializedToken() {
-        return JSON.parse(localStorage.getItem(this.tokenVariableName));
+        return JSON.parse(this.localStorageVaiable.getItem(this.tokenVariableName));
     }
 
     public get currentUser(): UserInfo {
         if (this._currentUser == null) {
-            this._currentUser = JSON.parse(localStorage.getItem(this.currentUserVariableName));
+            this._currentUser = JSON.parse(this.localStorageVaiable.getItem(this.currentUserVariableName));
             // this._currentUser.userTypeEnum = this._currentUser.userType.id;
         }
         return this._currentUser;
@@ -35,7 +39,7 @@ export class EnvironmentService {
 
     public get persistentLogin(): any {
         if (this._persistentLogin == null) {
-            this._persistentLogin = JSON.parse(localStorage.getItem(this.persistentLoginVariableName));
+            this._persistentLogin = JSON.parse(this.localStorageVaiable.getItem(this.persistentLoginVariableName));
         }
         return this._persistentLogin;
     }
@@ -51,25 +55,25 @@ export class EnvironmentService {
     public setUserLoginInfo(responseData: any) {
         this._currentUser = null;
         this._persistentLogin = null;
-        
-        localStorage.setItem(this.tokenVariableName, JSON.stringify(responseData.token));
-        localStorage.setItem(this.currentUserVariableName, JSON.stringify(responseData.user));
+
+        this.localStorageVaiable.setItem(this.tokenVariableName, JSON.stringify(responseData.token));
+        this.localStorageVaiable.setItem(this.currentUserVariableName, JSON.stringify(responseData.user));
         if (responseData.rememberMe != null)
-            localStorage.setItem(this.persistentLoginVariableName, JSON.stringify(responseData.rememberMe));
+        this.localStorageVaiable.setItem(this.persistentLoginVariableName, JSON.stringify(responseData.rememberMe));
     }
 
-    updateCurrentUserInfo(user){
-        this._currentUser = null; 
-        localStorage.setItem(this.currentUserVariableName, JSON.stringify(user));       
+    updateCurrentUserInfo(user) {
+        this._currentUser = null;
+        this.localStorageVaiable.setItem(this.currentUserVariableName, JSON.stringify(user));
     }
 
     public destroyLoginInfo() {
         this._currentUser = null;
         this._persistentLogin = null;
-        
-        localStorage.removeItem(this.tokenVariableName);
-        localStorage.removeItem(this.currentUserVariableName);
-        localStorage.removeItem(this.persistentLoginVariableName);
+
+        this.localStorageVaiable.removeItem(this.tokenVariableName);
+        this.localStorageVaiable.removeItem(this.currentUserVariableName);
+        this.localStorageVaiable.removeItem(this.persistentLoginVariableName);
         this.logoutSource$.next();
     }
 

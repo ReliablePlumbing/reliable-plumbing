@@ -5,7 +5,7 @@ import { EnvironmentService } from '../services/environment.service';
 import { Role, RegistrationMode } from '../models/enums';
 
 @Component({
-  selector: 'rb-home',
+  selector: 'home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss']
 })

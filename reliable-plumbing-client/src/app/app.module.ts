@@ -22,7 +22,7 @@ import { TestService } from './test/test.service';
     AppComponent, HomeComponent, TestComponent
   ],
   imports: [
-    BrowserModule/*.withServerTransition({appId: 'ang4-seo-pre'})*/,
+    BrowserModule.withServerTransition({appId: 'ang4-seo-pre'}),
     NgbModule.forRoot(),
     AppRoutingModule, ServicesModule, AdminPanelModule, UserManagementModule, AppointmentManagementModule, SharedModule
   ],
