@@ -1,6 +1,7 @@
 .btn.google-btn {
     display: inline-block;
     background-color: #ea4335 !important;
+    color: #fff !important;
     i {
         margin-right: 5px;
     }
@@ -12,6 +13,7 @@
 .btn.facebook-btn {
     display: inline-block;
     background-color: #3b5998 !important;
+    color: #fff !important;
     i {
         margin-right: 5px;
     }
@@ -29,5 +31,14 @@
     span {
         font-size: 12px;
         cursor: pointer;
+    }
+}
+
+.status-btns-group {
+    label {
+        margin-right: 0 !important;
+    }
+    input {
+        margin-right: 5px;
     }
 }

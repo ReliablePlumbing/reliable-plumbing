@@ -82,7 +82,8 @@ h6 {
 
 .btn.google-btn {
   display: inline-block;
-  background-color: #ea4335 !important; }
+  background-color: #ea4335 !important;
+  color: #fff !important; }
   .btn.google-btn i {
     margin-right: 5px; }
   .btn.google-btn:hover {
@@ -90,7 +91,8 @@ h6 {
 
 .btn.facebook-btn {
   display: inline-block;
-  background-color: #3b5998 !important; }
+  background-color: #3b5998 !important;
+  color: #fff !important; }
   .btn.facebook-btn i {
     margin-right: 5px; }
   .btn.facebook-btn:hover {
@@ -105,6 +107,11 @@ h6 {
   .tag span {
     font-size: 12px;
     cursor: pointer; }
+
+.status-btns-group label {
+  margin-right: 0 !important; }
+.status-btns-group input {
+  margin-right: 5px; }
 
 /*--------------------------------------------------------------
 # Welcome
@@ -177,7 +184,7 @@ h6 {
 # Header
 --------------------------------------------------------------*/
 #header {
-  background-color: rgba(15, 144, 228, 0.8);
+  background-color: rgba(0, 0, 0, 0.9);
   height: initial; }
   #header #logo {
     float: left; }
@@ -208,7 +215,7 @@ h6 {
     #header #header-sticky-wrapper {
       height: inherit !important; } }
   .is-sticky #header {
-    background-color: rgba(15, 144, 228, 0.8); }
+    background-color: rgba(0, 0, 0, 0.9); }
 
 #header-sticky-wrapper {
   height: inherit !important; }
@@ -688,6 +695,8 @@ body.mobile-nav-active {
         color: red; }
       .register .register-container form .form-group .error-message {
         color: red; }
+        .register .register-container form .form-group .error-message a {
+          color: #40a4df; }
     .register .register-container form button {
       background: #40a4df;
       border-radius: 0;
@@ -707,7 +716,7 @@ form .btn {
 # Footer
 --------------------------------------------------------------*/
 #footer {
-  background: #D22E1D;
+  background: rgba(0, 0, 0, 0.9);
   padding: 30px 0;
   color: #fff; }
   #footer .copyright {

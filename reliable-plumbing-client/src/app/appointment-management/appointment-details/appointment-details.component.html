@@ -34,20 +34,20 @@
         <span>"{{mappedAppointment?.status.text}}"</span>
     </div>
 </div>
-<div>
-    <label>
+<div class="btn-group status-btns-group">
+    <label class="btn btn-secondary">
     <input type="radio" name="appointmentStatus" [checked]="mappedAppointment.status.id == appointmentStatusEnum.Pending" 
       (click)="changeAppointmentStatus(appointmentStatusEnum.Pending)"/>Pending
   </label>
-    <label>
+    <label class="btn btn-secondary">
     <input type="radio" name="appointmentStatus" [checked]="mappedAppointment.status.id == appointmentStatusEnum.Confirmed" 
       (click)="changeAppointmentStatus(appointmentStatusEnum.Confirmed)"/>Confirm
   </label>
-    <label>
+    <label class="btn btn-secondary">
     <input type="radio" name="appointmentStatus" [checked]="mappedAppointment.status.id == appointmentStatusEnum.NotAvailable" 
     (click)="changeAppointmentStatus(appointmentStatusEnum.NotAvailable)"/>Not available
   </label>
-    <label>
+    <label class="btn btn-secondary">
     <input type="radio" name="appointmentStatus" [checked]="mappedAppointment.status.id == appointmentStatusEnum.Rejected" 
     (click)="changeAppointmentStatus(appointmentStatusEnum.Rejected)"/>Reject
   </label>

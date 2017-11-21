@@ -1,36 +1,56 @@
 .filters-container {
-  background-color: #f6f6f6;
-  padding: 20px;
-  margin-top: 15px;
+    background-color: #f6f6f6;
+    padding: 20px;
+    margin-top: 15px;
 }
 
 .filters-toggle-btn {
-  background: #40a4df;
-  border-color: #40a4df;
-  border-radius: 0;
-  outline: none;
-  i {
-    margin-right: 5px;
-  }
+    background: #40a4df;
+    border-color: #40a4df;
+    border-radius: 0;
+    outline: none;
+    i {
+        margin-right: 5px;
+    }
 }
 
 .appointemts-sec {}
 
 .appointemts-list {
-  background-color: #f6f6f6;
-  padding: 15px;
-  margin-bottom: 15px;
-  border-radius: 4px;
+    background-color: #f6f6f6;
+    padding: 15px;
+    margin-bottom: 15px;
+    border-radius: 4px;
+    h5 {
+        text-align: center;
+        font-size: 24px;
+        font-weight: 900 !important;
+    }
+}
+
+.appointemt-cards-list {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-gap: 1em;
+    grid-auto-rows: minmax(100px, auto);
 }
 
 .appointemt-card {
-  padding: 10px;
-  margin-bottom: 10px;
-  border-radius: 4px;
-  background-color: #e7e7e7;
-  box-shadow: 1px 2px 8px #c4c4c4;
+    padding: 15px;
+    border-radius: 0;
+    background-color: #fff;
+    box-shadow: 1px 2px 8px #c4c4c4;
+    position: relative;
+    .appointemt-status {
+        position: absolute;
+        left: 0;
+        top: 0;
+        height: 100%;
+        width: 8px;
+        border-radius: 0;
+    }
 }
 
 :host ::ng-deep .dropdown-menu {
-  display: inherit !important;
+    display: inherit !important;
 }

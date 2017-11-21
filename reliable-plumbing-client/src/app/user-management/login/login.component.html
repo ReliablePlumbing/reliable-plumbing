@@ -20,6 +20,9 @@
                             <span class="error-message" *ngIf="!userPasswordControl.valid && (userPasswordControl.dirty || trySubmit)">* required</span>
                         </div>
                     </div>
+                    <div class="col-md-12">
+                        <button type="submit" class="btn btn-success">Login</button>
+                    </div>
                     <div class="col-md-6">
                         <a href="#forgot-password-url" class="login-form__forgot-password forget-password">forgot password</a>
                     </div>
@@ -29,9 +32,6 @@
                         <!-- open sign up popup -->
                     </div>
                     <div class="col-md-6">
-                        <button type="submit" class="btn btn-success">Login</button>
-                    </div>
-                    <div class="col-md-6">
                         <div class="form-group">
                             <input type="checkbox" id="rememberMe" [checked]="rememberMe" (change)="rememberMe = !rememberMe" />
                             <label for="rememberMe">remember me</label>
@@ -39,10 +39,10 @@
                     </div>
                     <div class="col-md-12 text-center">
                         <a class="btn google-btn" (click)="socialLogin(SocialMediaProvider.Google)">
-                          <i class="fa fa-google"></i>Login with google
+                            <i class="fa fa-google"></i>Login with google
                         </a>
                         <a class="btn facebook-btn" (click)="socialLogin(SocialMediaProvider.Facebook)">
-                          <i class="fa fa-facebook"></i>Login with facebook
+                            <i class="fa fa-facebook"></i>Login with facebook
                         </a>
                     </div>
                 </div>

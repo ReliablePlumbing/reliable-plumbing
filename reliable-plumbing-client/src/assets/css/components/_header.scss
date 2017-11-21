@@ -3,7 +3,7 @@
 --------------------------------------------------------------*/
 
 #header {
-    background-color: rgba(15, 144, 228, 0.8);
+    background-color: rgba(0, 0, 0, 0.9);
     height: initial;
     #logo {
         float: left;
@@ -45,7 +45,7 @@
         }
     }
     .is-sticky & {
-        background-color: rgba(15, 144, 228, 0.8);
+        background-color: rgba(0, 0, 0, 0.9);
     }
 }
 

@@ -61,23 +61,24 @@
                             <h3>Appointemts List:</h3>
                             <div class="appointemts-list" *ngFor="let date of datesArrayBetweenFilterDates">
                                 <h5>{{date | date}}</h5>
+                                <div class="section-title-divider"></div>
                                 <no-data *ngIf="appointments[date] == null || appointments[date].length == 0" [message]="'no appointemts for this day'"></no-data>
-                                <div class="row">
-                                    <div class="col-sm-4" *ngFor="let appointment of appointments[date]">
-                                        <div class="appointemt-card pointer" (click)="openAppointmentDetailsModal(appointment, date)">
-                                            <h6>
-                                                <span class="appointemt-status pending" [ngClass]="appointment.status | appointmentStatusColor" placement="top" ngbTooltip="{{appointment.status | appointmentStatusTxt}}"></span>
-                                                <b>{{appointment.user == null ? appointment.fullName : appointment.user.firstName}}</b>
-                                            </h6>
-                                            <div class="appointemt-time">
-                                                <span>{{appointment.time}}</span>
-                                            </div>
-                                            <div class="appointemt-type">
-                                                <span>{{appointment.typeObj?.text}}</span>
-                                            </div>
+
+                                <div class="appointemt-cards-list">
+                                    <div class="appointemt-card pointer" *ngFor="let appointment of appointments[date]" (click)="openAppointmentDetailsModal(appointment, date)">
+                                        <span class="appointemt-status pending" [ngClass]="appointment.status | appointmentStatusColor" placement="top" ngbTooltip="{{appointment.status | appointmentStatusTxt}}"></span>
+                                        <h6>
+                                            <b>{{appointment.user == null ? appointment.fullName : appointment.user.firstName}}</b>
+                                        </h6>
+                                        <div class="appointemt-time">
+                                            <span><b>Time: </b> {{appointment.time}}</span>
+                                        </div>
+                                        <div class="appointemt-type">
+                                            <span><b>Type: </b> {{appointment.typeObj?.text}}</span>
                                         </div>
                                     </div>
                                 </div>
+
                             </div>
                         </ng-container>
                     </section>
