@@ -1,4 +1,5 @@
 import { Config } from './config-contract';
+import * as path from 'path';
 
 export const config: Config = {
     production: false,
@@ -51,5 +52,14 @@ export const config: Config = {
             grantType: "authorization_code",
             profileFields: ["email", "given_name", "family_name", "hd", "email_verified", "name", "locale"]
         }
+    },
+    outlookIntegration: {
+        clientId: '36d37613-08a1-480c-b5e0-28da63cdbcc1',
+        thumbprint: '6FA6EB5BD497555FCF7B6173C1F9532D289F0B37',
+        authorityUrl: 'https://login.microsoftonline.com/ddd9198a-14e9-4f1b-9f26-f9392049e25a',
+        resource: 'https://outlook.office.com',
+        certFilePath: path.join(__dirname, '..\\certificates\\private-key-rsa.pem'),
+        mail: 'ahmed@testRb.onmicrosoft.com',
+        outlookApiEndPoint: 'https://outlook.office.com/api/v2.0'
     }
 }

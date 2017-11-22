@@ -121,7 +121,14 @@ export class MailNotifier {
                 mailContent.content += 'has scheduled a new call at ' + appoint.date.toLocaleDateString() + ' \n'
                 mailContent.content += 'you will find the appointment in schedule management in control panel'
                 break;
-            // todo: list all other cases
+            case NotificationType.AppointmentChanged:
+                mailContent.subject = 'Call changed';
+                mailContent.content = 'appointment changed'
+                break;
+            case NotificationType.AssigneeAdded:
+                mailContent.subject = 'you have been assigned';
+                mailContent.content = 'you have been assigned'
+                break;
             default:
                 break;
         }

@@ -10,6 +10,7 @@ export const dependencies = {
     NotificationBroadcastingService: 'business.notifier.NotificationBroadcastingService',
     SocketsNotifier: 'business.notifier.SocketsNotifier',
     mailNotifier: 'business.MailNotifier',
+    outlookNotifier: 'business.OutlookNotifier',
 
     // data
     MongoContext: 'data.MongoContext',

@@ -40,7 +40,6 @@ export class NotificationBroadcastingService {
         return new Promise<any>((resolve, reject) => {
 
             return promise.then((result: any) => {
-                debugger;
                 resolve(result)
             })
                 .catch((error: Error) => reject(error));

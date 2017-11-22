@@ -56,6 +56,16 @@ export interface Config {
             profileFields: string[]
         }
     }
+
+    outlookIntegration: {
+        clientId: string,
+        thumbprint: string,
+        certFilePath: string,
+        resource: string,
+        authorityUrl: string,
+        mail: string,
+        outlookApiEndPoint: string
+    }
 }
 
 
@@ -87,5 +97,12 @@ export interface ProductionConfig {
         google: {
             clientSecret: string,
         }
+    }
+
+    outlookIntegration: {
+        clientId: string,
+        thumbprint: string,
+        authorityUrl: string,
+        mail: string
     }
 }

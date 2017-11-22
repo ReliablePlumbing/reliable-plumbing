@@ -9,7 +9,7 @@ import { listenToSocketsEvents } from './1-api/socket-manager/socket-manager';
 import * as dotenv from 'dotenv';
 import config from './config';
 
-if (process.env.NODE_ENV !== 'production')
+if (process.env.NODE_ENV == 'production')
   dotenv.config();
 const port = normalizePort(process.env.PORT || 3000);
 

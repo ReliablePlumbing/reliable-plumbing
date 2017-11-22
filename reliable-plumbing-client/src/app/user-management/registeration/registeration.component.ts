@@ -177,7 +177,7 @@ export class RegisterationComponent implements OnInit {
     if (this.registerForm.invalid)
       return;
 
-    if (this.mode != RegistrationMode.admin)
+    if (this.mode != RegistrationMode.admin && this.user.address != null && this.mapMarker != null)
       this.user.address.coords = {
         lat: this.mapMarker.lat,
         lng: this.mapMarker.lng
@@ -304,21 +304,20 @@ export class RegisterationComponent implements OnInit {
         controls = [
           regControls.firstName, regControls.lastName,
           regControls.email, regControls.mobile,
-          regControls.password, regControls.address
+          regControls.password
         ]
         break;
       case RegistrationMode.edit:
         controls = [
           regControls.firstName, regControls.lastName,
-          regControls.email, regControls.mobile,
-          regControls.address
+          regControls.email, regControls.mobile
         ]
         break;
       case RegistrationMode.signup:
         controls = [
           regControls.firstName, regControls.lastName,
           regControls.email, regControls.mobile,
-          regControls.password, regControls.address
+          regControls.password
         ]
         break;
     }

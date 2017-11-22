@@ -8,3 +8,4 @@ export * from './managers/notification-manager';
 export * from './notifiers/notification-broadcasting-service';
 export * from './notifiers/mail-notifier';
 export * from './notifiers/sockets-notifier';
+export * from './notifiers/outlook-calendar-notifier';

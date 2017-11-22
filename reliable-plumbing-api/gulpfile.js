@@ -27,8 +27,13 @@ gulp.task('assets', function () {
     .pipe(gulp.dest('dist'));
 });
 
+gulp.task('certificates', () => {
+  return gulp.src(['certificates/*.*'])
+    .pipe(gulp.dest('dist/certificates'));
+});
+
 gulp.task('watch', ['scripts'], () => {
   gulp.watch('src/**/*.*', ['scripts']);
 });
 
-gulp.task('default', ['watch', 'assets']);
+gulp.task('default', ['watch', 'assets', 'certificates']);

@@ -24,5 +24,11 @@ export const config: ProductionConfig = {
         google: {
             clientSecret: process.env.GOOGLE_CLIENT_SECRET,
         }
+    },
+    outlookIntegration: {
+        clientId: '36d37613-08a1-480c-b5e0-28da63cdbcc1',
+        thumbprint: process.env.THUMBPRINT,
+        authorityUrl: 'https://login.microsoftonline.com/ddd9198a-14e9-4f1b-9f26-f9392049e25a',
+        mail: 'ahmed@testRb.onmicrosoft.com',
     }
 }

@@ -30,9 +30,9 @@
                   <span class="error-message" *ngIf="getControlValidation('email','emailExists')">Email already exists :
                     <a *ngIf="mode != registrationModes.admin" class="btn-link pointer" (click)="openLogin()">Sign in</a>
                   </span>
-                  <span *ngIf="mode != registrationModes.edit" class="">Email not activated
+                  <!-- <span *ngIf="mode != registrationModes.edit && mode != registrationModes.admin" class="">Email not activated
                     <a class="pointer" (click)="resendActivationLink()">Resend activation link</a>
-                  </span>
+                  </span> -->
                 </div>
               </div>
               <div *ngSwitchCase="regControls.mobile" class="col-md-6">

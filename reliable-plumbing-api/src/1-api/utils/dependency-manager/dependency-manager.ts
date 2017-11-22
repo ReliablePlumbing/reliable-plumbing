@@ -9,6 +9,7 @@ const dbContext: data.MongoContext = new data.MongoContext();
 const notificationBroadcastingService: business.NotificationBroadcastingService = new business.NotificationBroadcastingService();
 const socketsNotifier: business.SocketsNotifier = new business.SocketsNotifier(notificationBroadcastingService);
 const mailNotifier: business.MailNotifier = new business.MailNotifier(notificationBroadcastingService);
+const outlookNotifier: business.OutlookNotifier = new business.OutlookNotifier(notificationBroadcastingService);
 
 export function registerDependencies() {
 
@@ -32,4 +33,5 @@ export function registerDependencies() {
     Container.registerService({ id: dependencies.NotificationBroadcastingService, type: business.NotificationBroadcastingService, instance: notificationBroadcastingService });
     Container.registerService({ id: dependencies.SocketsNotifier, type: business.SocketsNotifier, instance: socketsNotifier });
     Container.registerService({ id: dependencies.mailNotifier, type: business.MailNotifier });
+    Container.registerService({ id: dependencies.outlookNotifier, type: business.OutlookNotifier, instance: outlookNotifier });
 }
