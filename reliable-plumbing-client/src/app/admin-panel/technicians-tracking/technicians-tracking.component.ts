@@ -9,7 +9,7 @@ import { SocketsService, UserManagementService } from '../../services/services.e
 export class TechniciansTrackingComponent implements OnInit, OnDestroy {
 
   markers: any[] = [];
-  loading;
+  loading = true;
   technicians;
 
   constructor(private socketService: SocketsService, private userManagementService: UserManagementService) { }
@@ -19,6 +19,7 @@ export class TechniciansTrackingComponent implements OnInit, OnDestroy {
       console.log('from tracking page', results)
       this.technicians = results.technicians;
       this.markOnlineOffLinetechnicians(results.onlineTechniciansWithLocations);
+      this.loading = false;
     })
 
     this.socketService.listenToLocationUpdates(

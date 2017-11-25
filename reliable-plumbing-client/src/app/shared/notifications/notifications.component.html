@@ -1,12 +1,13 @@
-<div style="max-height: 80vh; overflow-y: scroll;scroll-behavior: smooth">
-  <ng-container *ngIf="notifications!=null && notifications.length>0">
-    <ng-container *ngFor="let notification of notifications">
-      <div class="col-md-12">
-        <div>{{notification.message}}</div>
-        <div>{{notification.creationDate | date:'medium'}}</div>
-      </div>
-      <hr/>
+<div class="scrollbar">
+  <div class="notifications-listing">
+    <ng-container *ngIf="notifications!=null && notifications.length>0">
+      <ng-container *ngFor="let notification of notifications">
+        <div class="col-md-12">
+          <div>{{notification.message}}</div>
+          <div>{{notification.creationDate | date:'medium'}}</div>
+        </div>
+        <hr/>
+      </ng-container>
     </ng-container>
-  </ng-container>
-
+  </div>
 </div>

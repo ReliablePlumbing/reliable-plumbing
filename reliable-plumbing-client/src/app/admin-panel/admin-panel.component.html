@@ -13,12 +13,12 @@ Header Section
       </a>
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav ml-auto">
-            <li placement="left" ngbTooltip="Notifications">
-                <a class="nav-link pointer" [ngbPopover]="notificationsContent" popoverTitle="Notifications" placement="bottom" #p="ngbPopover"
-                  (document:click)="p.close()" (click)="$event.stopPropagation()">
-                  <i class="fa fa-bell" style="font-size: 25px;" aria-hidden="true"></i>
-                </a>
-              </li>
+          <li class="notification-container" placement="left" ngbTooltip="Notifications">
+            <a class="nav-link pointer" [ngbPopover]="notificationsContent" popoverTitle="Notifications" placement="bottom" #p="ngbPopover"
+              (document:click)="p.close()" (click)="$event.stopPropagation()">
+              <i class="fa fa-bell" style="font-size: 25px;" aria-hidden="true"></i>
+            </a>
+          </li>
           <li class="nav-item">
             <div ngbDropdown>
               <a class="nav-link pointer" ngbDropdownToggle>{{currentUser.firstName + ' ' + currentUser.lastName}}</a>
@@ -44,21 +44,48 @@ Header Section
 <div class="admin-panel">
   <div class="container-fluid">
     <div class="row">
-      <div class="col-sm-3">
+      <div class="col-sm-3 side-menu">
         <ul class="list-group">
-          <li *ngIf="tabsPremssions.scheduleManagement" class="list-group-item pointer" [routerLink]="['./schedule-management']">Schedule Management</li>
-          <li *ngIf="tabsPremssions.settings" class="list-group-item pointer" [routerLink]="['./appointment-settings']">Appointment Settings & Types</li>
-          <li *ngIf="tabsPremssions.systemUsers" class="list-group-item pointer" [routerLink]="['./system-users-management']">System Users</li>
-          <li *ngIf="tabsPremssions.myAppointments" class="list-group-item pointer" [routerLink]="['./my-appointments']">My Appointments</li>
-          <li *ngIf="tabsPremssions.tracking" class="list-group-item pointer" [routerLink]="['./technicians-tracking']">Technicians Tracking</li>
+          <li *ngIf="tabs.scheduleManagement.hasPermission" class="list-group-item pointer" [routerLink]="['./schedule-management']"
+            [class.selected]="currentSelectedTab == tabs.scheduleManagement.index" (click)="currentSelectedTab = tabs.scheduleManagement.index">Schedule Management</li>
+          <li *ngIf="tabs.settings.hasPermission" class="list-group-item pointer" [routerLink]="['./appointment-settings']"
+            [class.selected]="currentSelectedTab == tabs.settings.index" (click)="currentSelectedTab = tabs.settings.index">Appointment Settings & Types</li>
+          <li *ngIf="tabs.systemUsers.hasPermission" class="list-group-item pointer" [routerLink]="['./system-users-management']"
+            [class.selected]="currentSelectedTab == tabs.systemUsers.index" (click)="currentSelectedTab = tabs.systemUsers.index">System Users</li>
+          <li *ngIf="tabs.myAppointments.hasPermission" class="list-group-item pointer" [routerLink]="['./my-appointments']"
+            [class.selected]="currentSelectedTab == tabs.myAppointments.index" (click)="currentSelectedTab = tabs.myAppointments.index">My Appointments</li>
+          <li *ngIf="tabs.tracking.hasPermission" class="list-group-item pointer" [routerLink]="['./technicians-tracking']"
+            [class.selected]="currentSelectedTab == tabs.tracking.index" (click)="currentSelectedTab = tabs.tracking.index">Technicians Tracking</li>
         </ul>
       </div>
-      <div class="col-sm-9">
+      <div class="col-sm-9 panel-content">
         <router-outlet></router-outlet>
       </div>
     </div>
   </div>
 </div>
+
+<!--==========================
+Footer
+============================-->
+<footer id="footer">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="copyright">
+          &copy; Copyright
+          <strong>Reliable Plumbing</strong>. All Rights Reserved
+        </div>
+        <div class="credits">
+          Designed and Developed by
+          <a href="#">BearToe Design</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+<!-- #footer -->
+
 
 <!--==========================
 registeration/edit profile popup
@@ -94,5 +121,5 @@ change password popup
 
 
 <ng-template #notificationsContent>
-    <notifications></notifications>
+  <notifications></notifications>
 </ng-template>

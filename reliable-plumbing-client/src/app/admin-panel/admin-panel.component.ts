@@ -11,6 +11,8 @@ import { Role, RegistrationMode } from '../models/enums';
 })
 export class AdminPanelComponent implements OnInit {
 
+  currentSelectedTab = 1;
+  
   @ViewChild('registeration') registerationTemplate: ElementRef;
   registerModalRef: NgbModalRef;
   
@@ -19,12 +21,12 @@ export class AdminPanelComponent implements OnInit {
 
   registerMode;
   currentUser;
-  tabsPremssions = {
-    scheduleManagement: false,
-    settings: false,
-    systemUsers: false,
-    myAppointments: false,
-    tracking: false,
+  tabs = {
+    scheduleManagement: {index: 1, hasPermission: false},
+    settings: {index: 2, hasPermission: false},
+    systemUsers: {index: 3, hasPermission: false},
+    myAppointments: {index: 4, hasPermission: false},
+    tracking: {index: 5, hasPermission: false},
   }
   constructor(private environmentService: EnvironmentService, private router: Router, private routeHandlerService: RouteHandlerService,
     private modalService: NgbModal) { }
@@ -48,15 +50,15 @@ export class AdminPanelComponent implements OnInit {
       if (role == Role.Customer)
         this.router.navigate(['/']);
       if (role == Role.Admin || role == Role.SystemAdmin) {
-        this.tabsPremssions.settings = true;
-        this.tabsPremssions.systemUsers = true;
+        this.tabs.settings.hasPermission = true;
+        this.tabs.systemUsers.hasPermission = true;
       }
       if (role == Role.Admin || role == Role.SystemAdmin || role == Role.Supervisor) {
-        this.tabsPremssions.scheduleManagement = true;
-        this.tabsPremssions.tracking = true;
+        this.tabs.scheduleManagement.hasPermission = true;
+        this.tabs.tracking.hasPermission = true;
       }
       if (role == Role.Technician)
-        this.tabsPremssions.myAppointments = true;
+        this.tabs.myAppointments.hasPermission = true;
     }
 
   }

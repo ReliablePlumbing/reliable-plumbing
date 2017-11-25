@@ -38,7 +38,7 @@ export class ScheduleManagementComponent implements OnInit {
 
   ngOnInit() {
     this.timeTo = this.timeFrom = new FormControl('', (control: FormControl) => {
-      if(this.filters.time == null) return null;
+      if (this.filters.time == null) return null;
       let from = this.filters.time.from;
       let to = this.filters.time.to;
 
@@ -137,8 +137,8 @@ export class ScheduleManagementComponent implements OnInit {
       let typeIndex = this.lookups.types.findIndex(t => t.id == appointment.typeId)
       if (typeIndex != -1)
         appointment.typeObj = this.lookups.types[typeIndex]
-        let appointmentDateLocalized = new Date(appointment.date);
-        appointment.time = convertTimeTo12String(appointmentDateLocalized.getHours(), appointmentDateLocalized.getMinutes());
+      let appointmentDateLocalized = new Date(appointment.date);
+      appointment.time = convertTimeTo12String(appointmentDateLocalized.getHours(), appointmentDateLocalized.getMinutes());
       this.appointments[appointmentDate].push(appointment);
       if (this.urlIdParam != null && appointment.id == this.urlIdParam) {
         this.openAppointmentDetailsModal(appointment, appointmentDate);

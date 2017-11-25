@@ -1,36 +1,41 @@
-<div class="tech-tracking-tabs">
-    <ngb-tabset>
-        <ngb-tab title="Map">
-            <ng-template ngbTabContent>
-                <no-data *ngIf="markers == null || markers.length==0" [message]="'No connected technicians'"></no-data>
-                <ng-container *ngIf="markers != null && markers.length>0">
-                    <agm-map [latitude]="markers[0].lat" [longitude]="markers[0].lng" [zoom]="15" [disableDefaultUI]="false" [zoomControl]="true">
-                        <agm-marker *ngFor="let marker of markers" [latitude]="marker.lat" [longitude]="marker.lng" [label]="marker.label" [markerDraggable]="false">
-                            <agm-info-window>
-                                <strong>{{marker.name}}</strong>
-                            </agm-info-window>
-                        </agm-marker>
-                    </agm-map>
+<loader *ngIf="loading">
+</loader>
 
-                </ng-container>
-            </ng-template>
-        </ngb-tab>
-        <ngb-tab title="Technicians">
-            <ng-template ngbTabContent>
-                <h5>Online Technicians</h5>
-                <ul *ngFor="let tech of technicians">
-                    <li *ngIf="tech.online">
-                        <span class="appointemt-status greenBg"></span>{{tech.firstName + ' ' + tech.lastName}}
-                    </li>
-                </ul>
-                <h5>Offline Technicians</h5>
-                <ul *ngFor="let tech of technicians">
-                    <li *ngIf="!tech.online">
-                        <span class="appointemt-status grayBg"></span>{{tech.firstName + ' ' + tech.lastName}}
-                    </li>
-                </ul>
-            </ng-template>
-        </ngb-tab>
+<ng-container *ngIf="!loading">
+  <div class="tech-tracking-tabs">
+    <ngb-tabset>
+      <ngb-tab title="Map">
+        <ng-template ngbTabContent>
+          <no-data *ngIf="markers == null || markers.length==0" [message]="'No connected technicians'"></no-data>
+          <ng-container *ngIf="markers != null && markers.length>0">
+            <agm-map [latitude]="markers[0].lat" [longitude]="markers[0].lng" [zoom]="15" [disableDefaultUI]="false" [zoomControl]="true">
+              <agm-marker *ngFor="let marker of markers" [latitude]="marker.lat" [longitude]="marker.lng" [label]="marker.label" [markerDraggable]="false">
+                <agm-info-window>
+                  <strong>{{marker.name}}</strong>
+                </agm-info-window>
+              </agm-marker>
+            </agm-map>
+
+          </ng-container>
+        </ng-template>
+      </ngb-tab>
+      <ngb-tab title="Technicians">
+        <ng-template ngbTabContent>
+          <h5>Online Technicians</h5>
+          <ul *ngFor="let tech of technicians">
+            <li *ngIf="tech.online">
+              <span class="appointemt-status greenBg"></span>{{tech.firstName + ' ' + tech.lastName}}
+            </li>
+          </ul>
+          <h5>Offline Technicians</h5>
+          <ul *ngFor="let tech of technicians">
+            <li *ngIf="!tech.online">
+              <span class="appointemt-status grayBg"></span>{{tech.firstName + ' ' + tech.lastName}}
+            </li>
+          </ul>
+        </ng-template>
+      </ngb-tab>
 
     </ngb-tabset>
-</div>
+  </div>
+</ng-container>

@@ -12,6 +12,7 @@ import { AppointmentService, AlertifyService, EnvironmentService } from '../../s
 })
 export class AppointmentDetailsComponent implements OnInit {
 
+  loading = true;
   @Input() appointment;
   mappedAppointment: {
     date: any,
@@ -29,9 +30,9 @@ export class AppointmentDetailsComponent implements OnInit {
   ngOnInit() {
     this.mappedAppointment = this.mapAppointment(this.appointment);
     this.appointmentService.getTechniciansWithStatusInTime(this.appointment.id).subscribe(results => {
-      console.log(results);
       this.technicians = results;
       this.mappedTechnicians = this.mapTechnicians(results);
+      this.loading = false;
     });
   }
 
@@ -87,6 +88,7 @@ export class AppointmentDetailsComponent implements OnInit {
   }
 
   save() {
+    this.loading = true;
     // map status
     if (this.mappedAppointment.status.id != this.appointment.status) {
       if (this.appointment.statusHistory == null)
@@ -102,6 +104,7 @@ export class AppointmentDetailsComponent implements OnInit {
 
     // call service
     this.appointmentService.updateAppointmentStatusAndAssignees(this.appointment).subscribe(x => {
+      this.loading = false;
       this.appointmentUpdated.emit(x);
       this.alertifyService.success('Appointment updated successfully');
     })

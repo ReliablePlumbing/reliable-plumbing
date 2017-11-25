@@ -13,6 +13,7 @@ export class SystemUsersManagementComponent implements OnInit {
   users = [];
   registerModelRef: NgbModalRef;
   registrationMode: RegistrationMode = RegistrationMode.admin;
+  loading = true;
 
   constructor(private userManagementService: UserManagementService, private modalService: NgbModal,
     private environmentService: EnvironmentService, private alertifyService: AlertifyService) { }
@@ -42,6 +43,7 @@ export class SystemUsersManagementComponent implements OnInit {
             user.rolesString += ', ';
         }
       }
+      this.loading = false;
     });
   }
 

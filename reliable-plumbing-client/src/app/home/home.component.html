@@ -46,7 +46,7 @@ Header Section
             </li>
           </ng-container>
           <ng-container *ngIf="isUserLoggedIn && currentUser != null">
-            <li placement="left" ngbTooltip="Notifications">
+            <li  class="notification-container" placement="left" ngbTooltip="Notifications">
               <a class="nav-link pointer" [ngbPopover]="notificationsContent" popoverTitle="Notifications" placement="bottom" #p="ngbPopover"
                 (document:click)="p.close()" (click)="$event.stopPropagation()">
                 <i class="fa fa-bell" style="font-size: 25px;" aria-hidden="true"></i>

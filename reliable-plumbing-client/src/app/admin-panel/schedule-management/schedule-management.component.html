@@ -58,11 +58,11 @@
                         <!-- appointments Listing -->
                         <ng-container *ngIf="!loadingFiltered">
                             <br />
-                            <h3>Appointemts List:</h3>
+                            <h3>Appointemts List</h3>
                             <div class="appointemts-list" *ngFor="let date of datesArrayBetweenFilterDates">
                                 <h5>{{date | date}}</h5>
                                 <div class="section-title-divider"></div>
-                                <no-data *ngIf="appointments[date] == null || appointments[date].length == 0" [message]="'no appointemts for this day'"></no-data>
+                                <no-data *ngIf="appointments[date] == null || appointments[date].length == 0" [message]="'No Appointemts'"></no-data>
 
                                 <div class="appointemt-cards-list">
                                     <div class="appointemt-card pointer" *ngFor="let appointment of appointments[date]" (click)="openAppointmentDetailsModal(appointment, date)">
