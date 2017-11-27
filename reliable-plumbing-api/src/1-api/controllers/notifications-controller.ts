@@ -1,5 +1,5 @@
 import { JsonController, Param, QueryParam, Body, Get, Post, Put, Authorized } from "routing-controllers";
-import { Notification } from '../../3-domain/domain-module';
+import { Notification, ObjectType } from '../../3-domain/domain-module';
 import { NotificationManager } from '../../2-business/business.module';
 import { dependencies } from '../../5-cross-cutting/cross-cutting.module';
 import { Inject } from 'typedi';
@@ -23,5 +23,16 @@ export class notificationController {
 
     }
 
+    @Get('/getNotificationObject')
+    @Authorized()
+    getNotificationObject( @QueryParam('objectType') objectType: ObjectType, @QueryParam('objectId') objectId: string) {
+
+        return new Promise<any>((resolve, reject) => {
+            this.notificationManager.getNotificationObject(objectType, objectId)
+                .then(result => resolve(result.toLightModel()))
+                .catch((error: Error) => reject(error));
+
+        });
+    }
 
 }

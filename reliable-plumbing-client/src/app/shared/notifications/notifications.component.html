@@ -2,7 +2,7 @@
   <div class="notifications-listing">
     <ng-container *ngIf="notifications!=null && notifications.length>0">
       <ng-container *ngFor="let notification of notifications">
-        <div class="col-md-12">
+        <div class="col-md-12 pointer" (click)="navigateToNotificationLink(notification)">
           <div>{{notification.message}}</div>
           <div>{{notification.creationDate | date:'medium'}}</div>
         </div>

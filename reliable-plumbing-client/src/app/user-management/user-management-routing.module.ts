@@ -7,10 +7,11 @@ import { SystemUsersManagementComponent } from './system-users-management/system
 import { LoginAuthGuard } from "../services/auth-guard.service";
 import { Role } from '../models/enums';
 import { SocialMediaRedirectComponent } from './social-media-redirect/social-media-redirect.component';
+import { systemRoutes } from '../models/constants';
 
 const routes: Routes = [
-  { path: 'activate-mail', component: ActivateMailComponent },
-  { path: 'social-media-authenticate', component: SocialMediaRedirectComponent },
+  { path: systemRoutes.activateMail, component: ActivateMailComponent },
+  { path: systemRoutes.socialMediaAuthenticate, component: SocialMediaRedirectComponent },
 ];
 
 @NgModule({

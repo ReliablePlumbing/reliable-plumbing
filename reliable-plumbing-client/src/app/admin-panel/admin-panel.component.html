@@ -15,7 +15,7 @@ Header Section
         <ul class="navbar-nav ml-auto">
           <li class="notification-container" placement="left" ngbTooltip="Notifications">
             <a class="nav-link pointer" [ngbPopover]="notificationsContent" popoverTitle="Notifications" placement="bottom" #p="ngbPopover"
-              (document:click)="p.close()" (click)="$event.stopPropagation()">
+              closePopoverOnOutsideClick>
               <i class="fa fa-bell" style="font-size: 25px;" aria-hidden="true"></i>
             </a>
           </li>
@@ -48,14 +48,14 @@ Header Section
         <ul class="list-group">
           <li *ngIf="tabs.scheduleManagement.hasPermission" class="list-group-item pointer" [routerLink]="['./schedule-management']"
             [class.selected]="currentSelectedTab == tabs.scheduleManagement.index" (click)="currentSelectedTab = tabs.scheduleManagement.index">Schedule Management</li>
-          <li *ngIf="tabs.settings.hasPermission" class="list-group-item pointer" [routerLink]="['./appointment-settings']"
-            [class.selected]="currentSelectedTab == tabs.settings.index" (click)="currentSelectedTab = tabs.settings.index">Appointment Settings & Types</li>
-          <li *ngIf="tabs.systemUsers.hasPermission" class="list-group-item pointer" [routerLink]="['./system-users-management']"
-            [class.selected]="currentSelectedTab == tabs.systemUsers.index" (click)="currentSelectedTab = tabs.systemUsers.index">System Users</li>
-          <li *ngIf="tabs.myAppointments.hasPermission" class="list-group-item pointer" [routerLink]="['./my-appointments']"
-            [class.selected]="currentSelectedTab == tabs.myAppointments.index" (click)="currentSelectedTab = tabs.myAppointments.index">My Appointments</li>
-          <li *ngIf="tabs.tracking.hasPermission" class="list-group-item pointer" [routerLink]="['./technicians-tracking']"
-            [class.selected]="currentSelectedTab == tabs.tracking.index" (click)="currentSelectedTab = tabs.tracking.index">Technicians Tracking</li>
+          <li *ngIf="tabs.settings.hasPermission" class="list-group-item pointer" [routerLink]="['./appointment-settings']" [class.selected]="currentSelectedTab == tabs.settings.index"
+            (click)="currentSelectedTab = tabs.settings.index">Appointment Settings & Types</li>
+          <li *ngIf="tabs.systemUsers.hasPermission" class="list-group-item pointer" [routerLink]="['./system-users-management']" [class.selected]="currentSelectedTab == tabs.systemUsers.index"
+            (click)="currentSelectedTab = tabs.systemUsers.index">System Users</li>
+          <li *ngIf="tabs.myAppointments.hasPermission" class="list-group-item pointer" [routerLink]="['./my-appointments']" [class.selected]="currentSelectedTab == tabs.myAppointments.index"
+            (click)="currentSelectedTab = tabs.myAppointments.index">My Appointments</li>
+          <li *ngIf="tabs.tracking.hasPermission" class="list-group-item pointer" [routerLink]="['./technicians-tracking']" [class.selected]="currentSelectedTab == tabs.tracking.index"
+            (click)="currentSelectedTab = tabs.tracking.index">Technicians Tracking</li>
         </ul>
       </div>
       <div class="col-sm-9 panel-content">
@@ -121,5 +121,5 @@ change password popup
 
 
 <ng-template #notificationsContent>
-  <notifications></notifications>
+  <notifications (notificationClicked)="p.close()"></notifications>
 </ng-template>

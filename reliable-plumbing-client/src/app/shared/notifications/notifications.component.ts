@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, EventEmitter, Output } from '@angular/core';
 import { NotificationService, EnvironmentService } from '../../services/services.exports';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'notifications',
@@ -9,8 +10,9 @@ import { NotificationService, EnvironmentService } from '../../services/services
 export class NotificationsComponent implements OnInit {
 
   notifications = [];
+  @Output() notificationClicked: EventEmitter<any> = new EventEmitter<any>()
 
-  constructor(private notificationService: NotificationService, private environmentService: EnvironmentService) { }
+  constructor(private notificationService: NotificationService, private environmentService: EnvironmentService, private router: Router) { }
 
   ngOnInit() {
     let currentUser: any = this.environmentService.currentUser;
@@ -29,7 +31,6 @@ export class NotificationsComponent implements OnInit {
 
 
   buildNotification(notification) {
-    // todo: build notification with url
     let currentUserId = this.environmentService.currentUser.id;
     let notifee = notification.notifees.find(n => n.userId == currentUserId);
     notification.seen = notifee != null && notifee.seen;
@@ -53,6 +54,14 @@ export class NotificationsComponent implements OnInit {
         return -1;
       else if (n1.creationDate < n2.creationDate)
         return 1;
+    })
+  }
+
+  navigateToNotificationLink(notification) {
+    this.notificationService.getFullNotification(notification).subscribe(modifiedNotification => {
+      this.notificationClicked.emit();
+      this.router.navigateByUrl(modifiedNotification.url);
+
     })
   }
 

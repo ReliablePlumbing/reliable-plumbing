@@ -2,7 +2,10 @@ import * as moment from 'moment';
 
 export function convertFromBootstrapDate(dateObj, time = null) {
     if (time == null)
-        time = '00:00:00';
+        time = {
+            hour: 0,
+            minute: 0
+        };
 
     let date = new Date(dateObj.year, dateObj.month - 1, dateObj.day, time.hour, time.minute, 0);
 
@@ -113,4 +116,17 @@ export function compareBootstrapDate(from, to) {
     let toMomentDate = moment(to.year + '-' + to.month + '-' + to.day, 'YYYY-MM-DD');
 
     return toMomentDate.diff(fromMomentDate);
+}
+
+export function convertDateParamToDateObj(dateParam) {
+    if (dateParam == 'null')
+        return null;
+
+    let arr = dateParam.split('-');
+
+    return {
+        year: parseInt(arr[0]),
+        month: parseInt(arr[1]),
+        day: parseInt(arr[2])
+    }
 }

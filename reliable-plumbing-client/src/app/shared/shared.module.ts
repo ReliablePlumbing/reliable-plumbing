@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { AgmCoreModule } from '@agm/core';
 import { FormsModule } from '@angular/forms';
+import { RouterModule } from "@angular/router";
 import { CommonModule } from '@angular/common';
 import { TextMaskModule } from 'angular2-text-mask';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
@@ -14,6 +15,7 @@ import { MultiSelectDatepickerComponent } from './multi-select-datepicker/multi-
 // directives
 import { ModelCharsReplaceDirective } from './directives/model-chars-replace.directive';
 import { InputNumberDirective } from './directives/input-number.directive';
+import { ClosePopoverOnOutsideClickDirective } from './directives/close-popover-outside-click.directive';
 // pipes 
 import { TechnicianStatusColor, TechnicianStatusTxt } from './pipes/technician-status-pipes';
 import { AppointmentStatusColor, AppointmentStatusTxt } from './pipes/appointment-status-pipes';
@@ -24,13 +26,13 @@ let declarations = [
   // pipes
   AppointmentStatusColor, AppointmentStatusTxt, TechnicianStatusColor, TechnicianStatusTxt,
   // directives
-  ModelCharsReplaceDirective, InputNumberDirective
+  ModelCharsReplaceDirective, InputNumberDirective, ClosePopoverOnOutsideClickDirective
 ];
 
 
 @NgModule({
   imports: [
-    CommonModule, FormsModule, NgbModule, TextMaskModule,
+    CommonModule, FormsModule, NgbModule, TextMaskModule, RouterModule,
     AgmCoreModule.forRoot({ apiKey: environment.mapsApiKey })
   ],
   declarations: declarations,

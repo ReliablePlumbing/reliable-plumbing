@@ -1,8 +1,8 @@
 import { Inject, Service } from 'typedi';
 import { dependencies } from '../../5-cross-cutting/cross-cutting.module';
 import { NotificationBroadcastingService } from '../notifiers/notification-broadcasting-service';
-import { NotificationRepo } from '../../4-data-access/data-access.module';
-import { Notification, NotificationType } from '../../3-domain/domain-module';
+import { NotificationRepo, AppointmentRepo } from '../../4-data-access/data-access.module';
+import { Notification, NotificationType, ObjectType } from '../../3-domain/domain-module';
 
 @Service()
 export class NotificationManager {
@@ -12,6 +12,9 @@ export class NotificationManager {
 
     @Inject(dependencies.NotificationBroadcastingService)
     private notificationBroadcastingService: NotificationBroadcastingService;
+
+    @Inject(dependencies.AppointmentRepo)
+    private appointmentRepo: AppointmentRepo;
 
     addNotification(notification: Notification) {
 
@@ -46,6 +49,23 @@ export class NotificationManager {
                 .then((result) => resolve(result))
                 .catch((error: Error) => reject(error));
 
+        });
+    }
+
+    getNotificationObject(objectType: ObjectType, objectId: string) {
+
+        return new Promise<any>((resolve, reject) => {
+
+            switch (objectType) {
+                case ObjectType.Appointment:
+                    this.appointmentRepo.findById(objectId)
+                        .then(result => resolve(result))
+                        .catch((error: Error) => reject(error));;
+                    break;
+
+                default:
+                    break;
+            }
         });
     }
 }

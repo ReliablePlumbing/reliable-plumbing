@@ -33,3 +33,14 @@ export enum SocialMediaProvider {
     Facebook = 1,
     Google
 }
+
+export enum NotificationType {
+    ActivateMail = 1,
+    AppointmentCreated,
+    AppointmentChanged,
+    AppointmentCheckedIn,
+    MailActivated,
+    AssigneeAdded,
+    AssigneeRemoved,
+
+}

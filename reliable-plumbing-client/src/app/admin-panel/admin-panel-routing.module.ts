@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-
+import { systemRoutes } from '../models/constants';
 import { LoginAuthGuard } from "../services/auth-guard.service";
 import { Role } from '../models/enums';
 import { AdminPanelComponent } from './admin-panel.component';
@@ -12,13 +12,13 @@ import { TechniciansTrackingComponent } from './technicians-tracking/technicians
 
 const routes: Routes = [
   {
-    path: 'control-panel', component: AdminPanelComponent, canActivate: [LoginAuthGuard], data: { roles: [Role.Supervisor, Role.Technician, Role.Admin, Role.SystemAdmin] },
+    path: systemRoutes.controlPanel, component: AdminPanelComponent, canActivate: [LoginAuthGuard], data: { roles: [Role.Supervisor, Role.Technician, Role.Admin, Role.SystemAdmin] },
     children: [
-      { path: 'schedule-management', canActivate: [LoginAuthGuard], component: ScheduleManagementComponent, data: { roles: [Role.Admin, Role.SystemAdmin, Role.Technician, Role.Supervisor] } },
-      { path: 'appointment-settings', component: AppointmentSettingsomponent, canActivate: [LoginAuthGuard], data: { roles: [Role.Admin, Role.SystemAdmin] } },
-      { path: 'system-users-management', component: SystemUsersManagementComponent, canActivate: [LoginAuthGuard], data: { roles: [Role.Admin, Role.SystemAdmin] } },
-      { path: 'my-appointments', component: MyAppointmentsComponent, canActivate: [LoginAuthGuard], data: { roles: [Role.Technician] } },
-      { path: 'technicians-tracking', component: TechniciansTrackingComponent, canActivate: [LoginAuthGuard], data: { roles: [Role.Supervisor, Role.Admin, Role.SystemAdmin] } }
+      { path: systemRoutes.scheduleManagement, canActivate: [LoginAuthGuard], component: ScheduleManagementComponent, data: { roles: [Role.Admin, Role.SystemAdmin, Role.Supervisor] } },
+      { path: systemRoutes.settings, component: AppointmentSettingsomponent, canActivate: [LoginAuthGuard], data: { roles: [Role.Admin, Role.SystemAdmin] } },
+      { path: systemRoutes.systemUsers, component: SystemUsersManagementComponent, canActivate: [LoginAuthGuard], data: { roles: [Role.Admin, Role.SystemAdmin] } },
+      { path: systemRoutes.myAppointments, component: MyAppointmentsComponent, canActivate: [LoginAuthGuard], data: { roles: [Role.Technician] } },
+      { path: systemRoutes.tracking, component: TechniciansTrackingComponent, canActivate: [LoginAuthGuard], data: { roles: [Role.Supervisor, Role.Admin, Role.SystemAdmin] } }
     ]
   }
 ];

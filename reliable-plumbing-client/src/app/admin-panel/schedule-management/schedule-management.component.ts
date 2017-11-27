@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { AppointmentStatus } from '../../models/enums';
 import { LookupsService, AppointmentService } from '../../services/services.exports';
-import { getEnumEntries, getDatesArray, getDateString } from '../../utils/date-helpers';
+import { getEnumEntries, getDatesArray, getDateString, convertFromBootstrapDate, convertDateParamToDateObj } from '../../utils/date-helpers';
 import * as moment from 'moment';
 import { NgbModalRef, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { convertTimeTo12String } from '../../utils/date-helpers';
@@ -51,7 +51,8 @@ export class ScheduleManagementComponent implements OnInit {
 
       return null;
     });
-    this.urlIdParam = this.activatedRoute.snapshot.params['id'];
+    let urlParams = this.activatedRoute.snapshot.params;
+    this.urlIdParam = urlParams['id'];
     this.lookupsService.getAppointmentSettingsAndTypes().subscribe(results => {
       this.lookups = {
         types: this.mapTypes(results.types),
@@ -61,15 +62,40 @@ export class ScheduleManagementComponent implements OnInit {
       let afterWeekDate = moment().add(1, 'week');
       this.filters = {
         date: {
-          from: { day: nowDate.date(), month: nowDate.month() + 1, year: nowDate.year() },
-          to: { day: afterWeekDate.date(), month: afterWeekDate.month() + 1, year: afterWeekDate.year() },
+          from: urlParams['dFrom'] == null ? { day: nowDate.date(), month: nowDate.month() + 1, year: nowDate.year() } :
+            convertDateParamToDateObj(urlParams['dFrom']),
+          to: urlParams['dTo'] == null ? { day: afterWeekDate.date(), month: afterWeekDate.month() + 1, year: afterWeekDate.year() } :
+            convertDateParamToDateObj(urlParams['dTo']),
         },
-        status: [],
         time: results.settings.workHours,
+        status: [],
         types: []
       }
-      this.filter()
+
+      this.filter(urlParams['dFrom'] == null && urlParams['dFrom'] == null)
+
+      this.activatedRoute.params.subscribe(params => {
+        let urlIdParam = params['id'];
+        let fromString = !this.filters.date.from ? null : moment(convertFromBootstrapDate(this.filters.date.from)).format('YYYY-M-D');
+        let toString = !this.filters.date.to ? null : moment(convertFromBootstrapDate(this.filters.date.to)).format('YYYY-M-D');
+
+        if ((!params['dFrom'] || params['dFrom'] == fromString) && (!params['dTo'] || (params['dTo'] == 'null' && toString == null)) &&
+          (!urlIdParam || this.urlIdParam == urlIdParam))
+          return;
+
+        this.urlIdParam = urlIdParam;
+        let nowDate = moment();
+        let afterWeekDate = moment().add(1, 'week');
+        this.filters.date = {
+          from: params['dFrom'] == null ? { day: nowDate.date(), month: nowDate.month() + 1, year: nowDate.year() } :
+            convertDateParamToDateObj(params['dFrom']),
+          to: params['dTo'] == null ? { day: afterWeekDate.date(), month: afterWeekDate.month() + 1, year: afterWeekDate.year() } :
+            convertDateParamToDateObj(params['dTo']),
+        }
+        this.filter(false);
+      });
     });
+
   }
 
   mapTypes(types) {
@@ -102,7 +128,7 @@ export class ScheduleManagementComponent implements OnInit {
     this.filters[propName] = this.filters[propName].filter(i => i.id != item.id);
   }
 
-  filter() {
+  filter(changeUrlParams = true) {
     this.loadingFiltered = true;
     let requestFilters = {
       date: {
@@ -118,11 +144,23 @@ export class ScheduleManagementComponent implements OnInit {
     for (let type of this.filters.types)
       requestFilters.typeIds.push(type.id);
 
+    if (changeUrlParams)
+      this.changeUrlParams();
     this.appointmentService.getAppointmentsFiltered(requestFilters).subscribe(results => {
       this.mapAndGroupAppointmentsByDay(results);
       this.loading = false;
       this.loadingFiltered = false;
     });
+  }
+
+  changeUrlParams() {
+
+    let params = {
+      dFrom: moment(convertFromBootstrapDate(this.filters.date.from)).format('YYYY-M-D'),
+      dTo: this.filters.date.to == null ? null : moment(convertFromBootstrapDate(this.filters.date.to)).format('YYYY-M-D'),
+    }
+    let url = this.router.url.split(';')[0];
+    this.router.navigate([url, params], { replaceUrl: true });
   }
 
   mapAndGroupAppointmentsByDay(appointments) {
@@ -162,18 +200,22 @@ export class ScheduleManagementComponent implements OnInit {
   openAppointmentDetailsModal(appointment, date) {
     this.selectedAppointment = appointment;
     this.selectedDate = date;
-    let url = this.router.url;
-    this.router.navigate([url, { id: appointment.id }])
+    let url = this.router.url + ';id=' + appointment.id;
+    this.router.navigateByUrl(url);
     this.appointmentDetailsModalRef = this.modalService.open(this.appointmentDetailsTemplate, { size: 'lg' });
     this.appointmentDetailsModalRef.result.then(_ => {
 
       this.selectedAppointment = null;
       this.selectedDate = null;
+      let params = Object.assign({}, this.activatedRoute.snapshot.params);
+      delete params['id'];
       let url = this.router.url.split(';')[0];
-      this.router.navigate([url]);
+      this.router.navigate([url, params]);
     }, _ => {
+      let params = Object.assign({}, this.activatedRoute.snapshot.params);
+      delete params['id'];
       let url = this.router.url.split(';')[0];
-      this.router.navigate([url]);
+      this.router.navigate([url, params]);
       this.closeAppointmentDetailsModal();
     });
   }

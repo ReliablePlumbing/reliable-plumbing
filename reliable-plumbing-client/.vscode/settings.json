@@ -1,7 +1,7 @@
 {
   "files.exclude": {
     "**/node_modules": true,
-    // "**/dist": true,
+    "**/dist": true,
     "**/maps": true,
     "**/previous deployment": true
   }
