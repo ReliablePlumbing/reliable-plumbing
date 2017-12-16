@@ -72,15 +72,15 @@ export class ScheduleManagementComponent implements OnInit {
         types: []
       }
 
-      this.filter(urlParams['dFrom'] == null && urlParams['dFrom'] == null)
+       this.filter(urlParams['dFrom'] == null && urlParams['dFrom'] == null)
 
       this.activatedRoute.params.subscribe(params => {
         let urlIdParam = params['id'];
         let fromString = !this.filters.date.from ? null : moment(convertFromBootstrapDate(this.filters.date.from)).format('YYYY-M-D');
         let toString = !this.filters.date.to ? null : moment(convertFromBootstrapDate(this.filters.date.to)).format('YYYY-M-D');
 
-        if ((!params['dFrom'] || params['dFrom'] == fromString) && (!params['dTo'] || (params['dTo'] == 'null' && toString == null)) &&
-          (!urlIdParam || this.urlIdParam == urlIdParam))
+        if ((!params['dFrom'] || params['dFrom'] == fromString) && (!params['dTo'] || (params['dTo'] == 'null' && toString == null) || params['dTo'] == toString))// &&
+          // (!urlIdParam || this.urlIdParam == urlIdParam))
           return;
 
         this.urlIdParam = urlIdParam;
