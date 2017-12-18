@@ -1,8 +1,9 @@
 import { Component, OnInit, EventEmitter, Input, Output } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators, AbstractControl } from '@angular/forms';
 import { AlertifyService, EnvironmentService, RouteHandlerService, LookupsService, AppointmentService } from '../../services/services.exports';
-import { convertFromBootstrapDate, getTimeArray, compareBootstrapDate } from '../../utils/date-helpers';
+import { convertFromBootstrapDate, getTimeArray, compareBootstrapDate, getDateString } from '../../utils/date-helpers';
 import { NgbDatepickerConfig, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
+import * as moment from 'moment';
 
 @Component({
   selector: 'rb-schedule-appointment',
@@ -42,12 +43,12 @@ export class ScheduleAppointmentComponent implements OnInit {
 
 
   ngOnInit() {
+    let nowDate = moment().add(1, 'hour').add(30, 'minutes'); // now date after 1:30 hours
     this.config.markDisabled = (date: NgbDateStruct) => {
-      let nowDate = new Date();
-      return compareBootstrapDate(date, { day: nowDate.getDate(), month: nowDate.getMonth() + 1, year: nowDate.getFullYear() }) > 0;
+      return compareBootstrapDate(date, { day: nowDate.date(), month: nowDate.month() + 1, year: nowDate.year() }) > 0;
     };
     let date = new Date();
-    this.appointment.dateObj = { year: date.getFullYear(), month: date.getMonth() + 1, day: date.getDate() };
+    this.appointment.dateObj = { day: nowDate.date(), month: nowDate.month() + 1, year: nowDate.year() };
     this.isLoggedIn = this.environmentService.isUserLoggedIn;
     this.getLookups();
     this.createForm();
@@ -68,6 +69,13 @@ export class ScheduleAppointmentComponent implements OnInit {
       time: ['', this.validateDropdownRequired],
       appointmentType: ['', this.validateDropdownRequired],
       message: ['']
+    });
+
+    this.appointmentForm.controls['date'].valueChanges.subscribe(value => {
+      if (value == null)
+        return;
+
+      this.createTimeArray();
     });
 
     if (!this.isLoggedIn) {
@@ -134,12 +142,44 @@ export class ScheduleAppointmentComponent implements OnInit {
 
   resetUserInfoForm = () => this.appointment.customerInfo = {};
 
+  settings;
   getLookups() {
     this.lookupsService.getAppointmentSettingsAndTypes().subscribe(results => {
 
-      this.timeList = getTimeArray(results.settings.timeSpan, results.settings.workHours.from, results.settings.workHours.to);
+      this.settings = results.settings;
+      this.createTimeArray()
       this.appointmentTypes = results.types;
     })
+  }
+
+  createTimeArray() {
+    let from;
+    let fromSettings = this.settings.workHours.from;
+    // check first if the selected date is the same today date
+    let selectedDate = moment(getDateString(this.appointment.dateObj), 'MM-DD-YYYY');
+    let nowDate = moment();
+    if (!nowDate.isSame(selectedDate, 'day'))
+      from = fromSettings;
+    else { // else if selected date is not today, then get now time and make from 1:30 after now time
+      let nowDateAfter90Min = nowDate.add(1, 'hour').add(30, 'minutes');
+      let now = { hour: nowDateAfter90Min.hours(), minute: nowDateAfter90Min.minutes() };
+      if (now.minute > 0 && now.minute < 30)
+        now.minute = 30;
+      else if (now.minute > 0 && now.minute > 30) {
+        now.hour += 1;
+        now.minute = 30;
+      }
+
+      if (fromSettings.hour < now.hour)
+        from = now;
+      else if (fromSettings.hour == now.hour && now.minute < fromSettings.minute)
+        from = now;
+      else
+        from = fromSettings;
+    }
+
+    this.timeList = getTimeArray(this.settings.timeSpan, from, this.settings.workHours.to);
+
   }
 }
 
