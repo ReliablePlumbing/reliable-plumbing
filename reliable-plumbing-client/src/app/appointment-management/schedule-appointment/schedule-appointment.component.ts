@@ -11,11 +11,14 @@ import { NgbDatepickerConfig, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 })
 export class ScheduleAppointmentComponent implements OnInit {
   appointmentForm: FormGroup;
+  customerInfoForm: FormGroup;
   appointmentTypes = [];
   timeList = [];
   trySubmit: boolean = false;
   isLoggedIn: boolean = false;
   appointment: any = {
+    customerInfo: {},
+    preferedContactType: 'Email',
     typeId: '-1',
     time: '-1'
   };
@@ -26,6 +29,11 @@ export class ScheduleAppointmentComponent implements OnInit {
     showMask: true,
     replceRegex: /\W/g
   };
+  steps = [
+    { label: 'Basic Info' },
+    { label: 'Call Info' }
+  ];
+  activeIndex = 0;
   @Output() appointmentSubmitted: EventEmitter<any> = new EventEmitter<any>();
 
   constructor(private fb: FormBuilder, private alertifyService: AlertifyService, private lookupsService: LookupsService,
@@ -38,6 +46,8 @@ export class ScheduleAppointmentComponent implements OnInit {
       let nowDate = new Date();
       return compareBootstrapDate(date, { day: nowDate.getDate(), month: nowDate.getMonth() + 1, year: nowDate.getFullYear() }) > 0;
     };
+    let date = new Date();
+    this.appointment.dateObj = { year: date.getFullYear(), month: date.getMonth() + 1, day: date.getDate() };
     this.isLoggedIn = this.environmentService.isUserLoggedIn;
     this.getLookups();
     this.createForm();
@@ -48,7 +58,7 @@ export class ScheduleAppointmentComponent implements OnInit {
     this.appointmentForm = this.fb.group({
       date: ['', [Validators.required, (control: FormControl) => {
         let date = this.appointment.dateObj;
-        if(date == null) return null;
+        if (date == null) return null;
         let nowDate = new Date();
         if (compareBootstrapDate(date, { day: nowDate.getDate(), month: nowDate.getMonth() + 1, year: nowDate.getFullYear() }) > 0)
           return { invalidDate: true };
@@ -57,12 +67,21 @@ export class ScheduleAppointmentComponent implements OnInit {
       }]],
       time: ['', this.validateDropdownRequired],
       appointmentType: ['', this.validateDropdownRequired],
+      message: ['']
     });
 
     if (!this.isLoggedIn) {
-      this.appointmentForm.addControl('fullName', new FormControl(null, [Validators.required]))
-      this.appointmentForm.addControl('email', new FormControl(null, [Validators.required, Validators.email]))
-      this.appointmentForm.addControl('mobile', new FormControl(null, [Validators.required]))
+      this.customerInfoForm = this.fb.group({
+        firstName: [null, [Validators.required]],
+        lastName: [null],
+        email: [null, [Validators.required, Validators.email]],
+        mobile: [null, [Validators.required]],
+        street: [null],
+        city: [null],
+        state: [null],
+        zipCode: [null]
+      })
+
     }
   }
 
@@ -75,7 +94,8 @@ export class ScheduleAppointmentComponent implements OnInit {
     if (this.appointmentForm == null)
       return false;
 
-    let control = this.appointmentForm.controls[controlName];
+    let control =
+      this.activeIndex == 0 ? this.customerInfoForm.controls[controlName] : this.appointmentForm.controls[controlName];
 
     return (beforeSubmit || this.trySubmit) && !control.valid && control.errors[errorName];
   }
@@ -97,16 +117,22 @@ export class ScheduleAppointmentComponent implements OnInit {
     })
   }
 
+  nextStep() {
+    if (this.customerInfoForm.invalid)
+      return;
+
+    this.activeIndex = 1;
+  }
+
+  prevStep = () => this.activeIndex = 0;
+
   resetForm() {
     this.appointment.typeId = '-1';
     this.appointment.time = -1;
     this.appointment['date'] = null;
-    if (!this.isLoggedIn) {
-      this.appointment['fullName'] = null;
-      this.appointment['email'] = null;
-      this.appointment['mobile'] = null;
-    }
   }
+
+  resetUserInfoForm = () => this.appointment.customerInfo = {};
 
   getLookups() {
     this.lookupsService.getAppointmentSettingsAndTypes().subscribe(results => {

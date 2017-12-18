@@ -232,10 +232,10 @@ export class AppointmentManager {
         let errors = [];
 
         if (appointment.userId == null) {
-            if (appointment.email == null)
+            if (appointment.customerInfo.email == null)
                 errors.push('email type cann\'t be empty');
-            if (appointment.fullName == null)
-                errors.push('name type cann\'t be empty');
+            if (appointment.customerInfo.firstName == null)
+                errors.push('first name type cann\'t be empty');
         }
         if (appointment.date == null)
             errors.push('appointment date cann\'t be empty');
@@ -329,7 +329,7 @@ export class AppointmentManager {
                 type: NotificationType.AssigneeRemoved
             });
             appointment.userId != null ? changedNotification.notifees.push({ userId: appointment.userId, seen: false }) :
-                changedNotification.unregisterdEmail = appointment.email;
+                changedNotification.unregisterdEmail = appointment.customerInfo.email;
 
             notifications.push(changedNotification);
         }

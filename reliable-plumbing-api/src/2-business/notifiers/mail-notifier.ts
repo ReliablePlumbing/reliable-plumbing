@@ -114,7 +114,7 @@ export class MailNotifier {
             case NotificationType.AppointmentCreated:
                 mailContent.subject = 'New Call';
                 if (appoint.userId == null)
-                    mailContent.content += appoint.fullName + '(anonymus) ';
+                    mailContent.content += appoint.customerInfo.firstName + ' ' + appoint.customerInfo.lastName + '(anonymus) ';
                 else if (notifiers.length > 0)
                     mailContent.content += notifiers[0].firstName + ' ' + notifiers[0].lastName + ' ';
 

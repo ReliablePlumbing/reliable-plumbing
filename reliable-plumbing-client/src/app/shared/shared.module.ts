@@ -7,6 +7,9 @@ import { TextMaskModule } from 'angular2-text-mask';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { environment } from '../../environments/environment';
 
+// prime ng components
+import { StepsModule, TabViewModule, MenuModule } from 'primeng/primeng';
+
 // components
 import { LoaderComponent } from './loader/loader.component';
 import { NoDataComponent } from './no-data/no-data.component';
@@ -33,9 +36,9 @@ let declarations = [
 @NgModule({
   imports: [
     CommonModule, FormsModule, NgbModule, TextMaskModule, RouterModule,
-    AgmCoreModule.forRoot({ apiKey: environment.mapsApiKey })
+    AgmCoreModule.forRoot({ apiKey: environment.mapsApiKey }), StepsModule, TabViewModule, MenuModule
   ],
   declarations: declarations,
-  exports: [declarations, AgmCoreModule, TextMaskModule]
+  exports: [declarations, AgmCoreModule, TextMaskModule, StepsModule, TabViewModule, MenuModule]
 })
 export class SharedModule { }

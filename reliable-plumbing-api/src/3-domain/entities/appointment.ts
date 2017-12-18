@@ -8,12 +8,24 @@ import { AppointmentType } from './appointment-type';
 export class Appointment extends BaseEntity {
 
     creationDate: Date;
-    fullName: string;
-    email?: string;
-    mobile?: string;
+    // unregistered user
+    customerInfo: {
+        firstName: string,
+        lastName: string,
+        mobile: string,
+        email: string,
+        streetAddress: string,
+        city: string,
+        state:string,
+        zipCode: string
+    }
+    // fullName: string;
+    // email?: string;
+    // mobile?: string;
     userId?: string;
     date: Date;
     typeId: string;
+    message: string;
     status: AppointmentStatus;
     statusHistory: StatusHistory[];
     assigneeIds?: string[];
@@ -35,12 +47,11 @@ export class Appointment extends BaseEntity {
         if (appointment != null) {
             this.id = appointment.id;
             this.creationDate = appointment.creationDate;
-            this.fullName = appointment.fullName;
-            this.email = appointment.email;
-            this.mobile = appointment.mobile;
+            this.customerInfo = appointment.customerInfo;
             this.userId = appointment.userId;
             this.date = appointment.date;
             this.typeId = appointment.typeId;
+            this.message = appointment.message;
             this.status = appointment.status;
             this.assigneeIds = appointment.assigneeIds;
             this.user = appointment.user;
@@ -67,12 +78,11 @@ export class Appointment extends BaseEntity {
         return {
             id: this.id,
             creationDate: this.creationDate,
-            fullName: this.fullName,
-            email: this.email,
-            mobile: this.mobile,
+            customerInfo: this.customerInfo,
             userId: this.userId,
             date: this.date,
             typeId: this.typeId,
+            message: this.message,
             status: this.status,
             user: this.user == null ? null : this.user.toLightModel(),
             type: this.type == null ? null : this.type.toLightModel(),
