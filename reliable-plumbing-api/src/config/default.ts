@@ -61,5 +61,9 @@ export const config: Config = {
         certFilePath: path.join(__dirname, '..\\certificates\\private-key-rsa.pem'),
         mail: 'ahmed@testRb.onmicrosoft.com',
         outlookApiEndPoint: 'https://outlook.office.com/api/v2.0'
+    },
+    filesSettings: {
+        basePath: path.join(__dirname, '..\\files'),
+        enableGetFiles: true
     }
 }

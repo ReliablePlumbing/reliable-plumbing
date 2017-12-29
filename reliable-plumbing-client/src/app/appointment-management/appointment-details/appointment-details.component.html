@@ -50,6 +50,10 @@
     </label>
   </div>
 
+  <div class="row">
+    <p-galleria *ngIf="mappedAppointment.images.length>0" [images]="mappedAppointment.images" panelWidth="500" panelHeight="313" [showCaption]="false"></p-galleria>
+  </div>
+
   <h5>Assignees:
     <span class="tag" *ngFor="let assignee of mappedAppointment.assignees">
       {{assignee.technician.firstName}}

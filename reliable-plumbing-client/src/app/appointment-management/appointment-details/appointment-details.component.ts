@@ -3,7 +3,7 @@ import * as moment from 'moment';
 import { convertTimeTo12String } from '../../utils/date-helpers';
 import { AppointmentStatus, TechnicianStatus } from '../../models/enums';
 import { AppointmentService, AlertifyService, EnvironmentService } from '../../services/services.exports';
-
+import { buildImagesObjects } from '../../utils/files-helpers';
 // todo: loader
 @Component({
   selector: 'appointment-details',
@@ -44,6 +44,7 @@ export class AppointmentDetailsComponent implements OnInit {
       date: this.appointment.date,
       time: convertTimeTo12String(apppointmentDate.hour(), apppointmentDate.minutes()),
       status: { id: this.appointment.status, text: AppointmentStatus[this.appointment.status] },
+      images: buildImagesObjects(this.appointment.id, this.appointment.relatedFileNames),
       assignees: []
     }
   }
@@ -52,7 +53,7 @@ export class AppointmentDetailsComponent implements OnInit {
     let mappedTechs = technicians.map(tech => {
       return {
         technician: tech.technician,
-        status:  tech.status,
+        status: tech.status,
         appointments: tech.appointments.map(appoint => this.mapAppointment(appoint)),
       }
     });

@@ -5,6 +5,7 @@ import {
 } from '../../3-domain/domain-module';
 import { AppointmentRepo, UserRepo } from '../../4-data-access/data-access.module';
 import { NotificationManager } from './notification-manager';
+import { FilesManager } from './files-manager';
 import { AccountSecurity, dependencies, TokenManager } from '../../5-cross-cutting/cross-cutting.module';
 import * as moment from 'moment';
 import config from '../../config';
@@ -12,16 +13,12 @@ import config from '../../config';
 @Service()
 export class AppointmentManager {
 
-    @Inject(dependencies.AppointmentRepo)
-    private appointmentRepo: AppointmentRepo;
+    @Inject(dependencies.AppointmentRepo) private appointmentRepo: AppointmentRepo;
+    @Inject(dependencies.UserRepo) private userRepo: UserRepo;
+    @Inject(dependencies.NotificationManager) private notificationManager: NotificationManager;
+    @Inject(dependencies.FilesManager) private filesManager: FilesManager;
 
-    @Inject(dependencies.UserRepo)
-    private userRepo: UserRepo;
-
-    @Inject(dependencies.NotificationManager)
-    private notificationManager: NotificationManager;
-
-    addAppointment(appointment: Appointment) {
+    addAppointment(appointment: Appointment, images) {
         if (appointment == null)
             throw new Error('appointment can\'t be null');
 
@@ -38,12 +35,18 @@ export class AppointmentManager {
             creationDate: new Date(),
             createdByUserId: appointment.userId
         })];
+        appointment.relatedFileNames = this.filesManager.getImagesFilesNames(images);
+
         return new Promise<Appointment>((resolve, reject) => {
             this.appointmentRepo.add(appointment).then(result => {
+                // add notification
                 let notifier = appointment.userId == null ? [] : appointment.userId;
                 this.buildAppointCreatedNotification(notifier, result.id)
                     .then(notification => this.notificationManager.addNotification(notification))
                     .catch((error: Error) => reject(error));
+
+                // convert images to file system
+                this.filesManager.moveFilesToObjectFolder(result.id, images);
                 return resolve(result);
             }).catch((error: Error) => reject(error));
 

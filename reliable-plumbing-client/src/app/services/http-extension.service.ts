@@ -10,36 +10,45 @@ export class HttpExtensionService {
 
     constructor(private http: Http, private environmentService: EnvironmentService, private handleExceptionService: ExceptionHandlingService) { }
 
-    createAuthorizationHeader(headers: Headers) {
+    private createAuthorizationHeader(headers: Headers) {
         headers.append('Authorization', this.environmentService.token);
     }
 
-    get(url, withAuthorization = true): Observable<any> {
+    private handleOptions(options?, createAuthHeader = true) {
         let headers = new Headers();
-        if (withAuthorization)
+
+        if (createAuthHeader)
             this.createAuthorizationHeader(headers);
-        return this.http.get(url, { headers: headers })
+
+        if (options == null)
+            options = {};
+
+        if (options.headers != null)
+            for (let headerKey in options.headers)
+                headers.append(headerKey, options.headers[headerKey]);
+
+        options.headers = headers;
+
+        return options;
+    }
+
+    get(url, withAuthorization = true): Observable<any> {
+        let options = this.handleOptions(null, withAuthorization);
+
+        return this.http.get(url, options)
             .catch((error: any) => this.handleExceptionService.handleError(error));
     }
 
     post(url, data?, withAuthorization = true, options?): Observable<any> {
-        let headers = new Headers();
-        if (withAuthorization)
-            this.createAuthorizationHeader(headers);
-        if (options == null)
-            options = {};
-        options.headers = headers;
+        options = this.handleOptions(options, withAuthorization);
+
         return this.http.post(url, data, options)
             .catch((err: any) => this.handleExceptionService.handleError(err));
     }
 
     delete(url, data?, withAuthorization = true, options?): Observable<any> {
-        let headers = new Headers();
-        if (withAuthorization)
-            this.createAuthorizationHeader(headers);
-        if (options == null)
-            options = {};
-        options.headers = headers;
+        options = this.handleOptions(options, withAuthorization);
+
         return this.http.delete(url, options)
             .catch((err: any) => this.handleExceptionService.handleError(err));
     }

@@ -19,9 +19,6 @@ export class Appointment extends BaseEntity {
         state:string,
         zipCode: string
     }
-    // fullName: string;
-    // email?: string;
-    // mobile?: string;
     userId?: string;
     date: Date;
     typeId: string;
@@ -36,10 +33,12 @@ export class Appointment extends BaseEntity {
         userId: string,
         user?: User
     };
+    relatedFileNames: string[];
     // navigational properties
     user?: User;
     assignees?: User[];
     type?: AppointmentType;
+    relatedFiles: any[];
 
     constructor(appointment: any) {
         super();
@@ -57,6 +56,8 @@ export class Appointment extends BaseEntity {
             this.user = appointment.user;
             this.type = appointment.type;
             this.checkInDetails = appointment.checkInDetails;
+            this.relatedFileNames = appointment.relatedFileNames;
+            this.relatedFiles = appointment.relatedFiles;
             this.statusHistory = appointment.statusHistory == null ? [] : appointment.statusHistory.map(s => {
                 return new StatusHistory({
                     id: s.id,
@@ -89,7 +90,9 @@ export class Appointment extends BaseEntity {
             statusHistory: this.statusHistory.map(s => s.toLightModel()),
             assigneeIds: this.assigneeIds,
             assignees: this.assignees == null ? null : this.assignees.map(a => a.toLightModel()),
-            checkInDetails: this.mapCheckInDetails(this.checkInDetails)
+            checkInDetails: this.mapCheckInDetails(this.checkInDetails),
+            // images: this.images
+            relatedFileNames: this.relatedFileNames
         }
     }
 

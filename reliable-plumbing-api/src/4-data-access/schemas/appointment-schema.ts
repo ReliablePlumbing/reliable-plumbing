@@ -14,7 +14,7 @@ export var appointmentSchema: genericSchema = {
                 city: { type: String, required: false },
                 state: { type: String, required: false },
                 zipCode: { type: String, required: false }
-            }, 
+            },
             required: false
         },
         // fullName: { type: String, required: false },
@@ -39,7 +39,8 @@ export var appointmentSchema: genericSchema = {
                 userId: { type: String, required: true, ref: 'users' },
             },
             required: false
-        }
+        },
+        relatedFileNames: [{ type: String, required: false }]
     }),
     collectionName: 'appointments'
 };

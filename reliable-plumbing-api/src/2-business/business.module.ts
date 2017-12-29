@@ -3,6 +3,7 @@ export * from './managers/user-manager';
 export * from './managers/appointment-manager';
 export * from './managers/lookups-manager';
 export * from './managers/notification-manager';
+export * from './managers/files-manager';
 
 // notifiers
 export * from './notifiers/notification-broadcasting-service';

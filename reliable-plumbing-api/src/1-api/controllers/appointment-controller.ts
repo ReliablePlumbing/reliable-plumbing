@@ -1,9 +1,9 @@
-import { JsonController, Param, QueryParam, Body, Get, Post, Put, Delete, Authorized } from "routing-controllers";
+import { JsonController, Param, QueryParam, Body, Get, Post, Put, Delete, Authorized, BodyParam, UploadedFiles } from "routing-controllers";
 import { Role, Appointment } from '../../3-domain/domain-module';
 import { AppointmentManager } from '../../2-business/business.module';
 import { dependencies } from '../../5-cross-cutting/cross-cutting.module';
 import { Inject } from 'typedi';
-
+import { fileUploadOptions } from '../utils/files-options';
 
 @JsonController('/appointments')
 export class AppointmentController {
@@ -12,10 +12,10 @@ export class AppointmentController {
     private appointmentManager: AppointmentManager;
 
     @Post('/addAppointment')
-    addAppointment( @Body() appointmentModel) {
+    addAppointment( @BodyParam('appointment') appointmentModel, @UploadedFiles('images', { options: fileUploadOptions }) images) {
         let appointment = new Appointment(appointmentModel);
         return new Promise<any>((resolve, reject) => {
-            this.appointmentManager.addAppointment(appointment)
+            this.appointmentManager.addAppointment(appointment, images)
                 .then(result => resolve(result.toLightModel()))
                 .catch((error: Error) => reject(error));
         })
@@ -28,8 +28,10 @@ export class AppointmentController {
             this.appointmentManager.getAppointmentFiltered(filters).then(appointments => {
                 // to light models here
                 let models = [];
-                for (let appointment of appointments)
-                    models.push(appointment.toLightModel());
+                for (let appointment of appointments) {
+                    let model = appointment.toLightModel();
+                    models.push(model);
+                }
 
                 resolve(models);
             }).catch((error: Error) => reject(error));

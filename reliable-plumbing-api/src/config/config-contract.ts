@@ -66,6 +66,11 @@ export interface Config {
         mail: string,
         outlookApiEndPoint: string
     }
+
+    filesSettings: {
+        basePath: string,
+        enableGetFiles: string
+    }
 }
 
 

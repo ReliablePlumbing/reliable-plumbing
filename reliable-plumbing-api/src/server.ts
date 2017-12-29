@@ -8,6 +8,7 @@ import { SocketContext } from './5-cross-cutting/cross-cutting.module';
 import { listenToSocketsEvents } from './1-api/socket-manager/socket-manager';
 import * as dotenv from 'dotenv';
 import config from './config';
+import * as bodyParser from 'body-parser';
 
 if (process.env.NODE_ENV == 'production')
   dotenv.config();
@@ -21,6 +22,13 @@ if (config.production) {
     res.sendFile(path.join(__dirname + "/dist-client/index.html"))
   });
 }
+
+if (config.filesSettings.enableGetFiles){
+  app.use('/files', express.static(__dirname + "/files"));
+}
+
+app.use(bodyParser.json({limit: "50mb"}));
+app.use(bodyParser.urlencoded({limit: "50mb", extended: true, parameterLimit:50000}));
 
 var server = http.createServer(app);
 SocketContext.io = socketio().listen(server);

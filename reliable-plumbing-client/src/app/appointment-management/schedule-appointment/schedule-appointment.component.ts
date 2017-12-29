@@ -2,6 +2,7 @@ import { Component, OnInit, EventEmitter, Input, Output } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators, AbstractControl } from '@angular/forms';
 import { AlertifyService, EnvironmentService, RouteHandlerService, LookupsService, AppointmentService } from '../../services/services.exports';
 import { convertFromBootstrapDate, getTimeArray, compareBootstrapDate, getDateString } from '../../utils/date-helpers';
+import { b64toByteArr } from '../../utils/files-helpers';
 import { NgbDatepickerConfig, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import * as moment from 'moment';
 
@@ -17,6 +18,7 @@ export class ScheduleAppointmentComponent implements OnInit {
   timeList = [];
   trySubmit: boolean = false;
   isLoggedIn: boolean = false;
+  images = [];
   appointment: any = {
     customerInfo: {},
     preferedContactType: 'Email',
@@ -116,13 +118,13 @@ export class ScheduleAppointmentComponent implements OnInit {
     this.appointment.date = convertFromBootstrapDate(this.appointment.dateObj, this.appointment.time);
     if (this.isLoggedIn)
       this.appointment.userId = this.environmentService.currentUser.id;
-    // call service to send the appointement data
-    this.appointmentService.addAppointment(this.appointment).subscribe(result => {
+
+    this.appointmentService.addAppointment(this.appointment, this.images.map(img => img.file)).subscribe(result => {
       if (result.id != null) {
         this.appointmentSubmitted.emit();
         this.alertifyService.success('Your appointment has been submitted');
       }
-    })
+    });
   }
 
   nextStep() {
@@ -181,5 +183,17 @@ export class ScheduleAppointmentComponent implements OnInit {
     this.timeList = getTimeArray(this.settings.timeSpan, from, this.settings.workHours.to);
 
   }
+
+  onUploadFile(files) {
+    for (let file of files.files) 
+      this.images.push({ file: file, source: file.objectURL, alt: 'image' + (this.images.length + 1), title: 'image' + (this.images.length + 1) });
+  }
+
+  removeAllImages() {
+    this.images = [];
+
+  }
+
+
 }
 

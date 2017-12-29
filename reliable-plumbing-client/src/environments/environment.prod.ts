@@ -4,6 +4,7 @@ export const environment = {
   production: true,
   apiUrl: '/api/',
   socketsUrl: '/',
+  filesUrl: '/files/',
   mapsApiKey: 'AIzaSyAmYRB--nxsm_OprcUO2RzrdlJTy6qLI4c',
   socialMedia: {
     facebook: {
