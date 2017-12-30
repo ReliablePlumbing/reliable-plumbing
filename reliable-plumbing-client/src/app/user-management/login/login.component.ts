@@ -18,6 +18,8 @@ export class LoginComponent {
   rememberMe: boolean = false;
   @Output() userLoggedIn: EventEmitter<any> = new EventEmitter<any>();
   SocialMediaProvider = SocialMediaProvider;
+  showErrorMsg = false;
+  errorMsg = 'Invalid email and/or password';
 
   constructor(
     private userManagementService: UserManagementService, private alertifyService: AlertifyService,
@@ -30,18 +32,20 @@ export class LoginComponent {
     if (loginForm.valid) {
       this.userManagementService.login(this.userEmail, this.userPassword, this.rememberMe)
         .subscribe(result => {
-          // this.environmentService.currentUser = null;
           if (result) {
             this.notificationService.connectSockets();
             this.userLoggedIn.emit();
             this.alertifyService.success('login completed successfully');
             this.routeHandler.routeToDefault();
+            this.showErrorMsg = false;
           }
-          else
-            this.alertifyService.error('Email or password is incorrect');
+          else {
+            this.alertifyService.error(this.errorMsg);
+          }
         },
         error => {
-          this.alertifyService.error('Email or password is incorrect');
+          this.showErrorMsg = true;
+          this.alertifyService.error(this.errorMsg);
         });
     }
   }

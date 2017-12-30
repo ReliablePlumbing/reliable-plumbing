@@ -8,34 +8,35 @@
                     </div> -->
                     <div class="col-md-12">
                         <div class="form-group">
-                            <label>Username / Email:</label>
-                            <input class="form-control" type="text" name="userEmail" #userEmailControl="ngModel" [(ngModel)]="userEmail" placeholder="Enter Your Email" required/>
+                            <label>Email:</label>
+                            <input class="form-control" type="text" name="userEmail" #userEmailControl="ngModel" [(ngModel)]="userEmail" placeholder="Enter Your Email"
+                                required/>
                             <span class="error-message" *ngIf="!userEmailControl.valid && (userEmailControl.dirty || trySubmit)">* required</span>
                         </div>
                     </div>
                     <div class="col-md-12">
                         <div class="form-group">
-                            <label>password:</label>
-                            <input class="form-control" type="password" name="userPassword" #userPasswordControl="ngModel" [(ngModel)]="userPassword" placeholder="Enter Your Password" required/>
+                            <label>Password:</label>
+                            <a href="#forgot-password-url" class="login-form__forgot-password forget-password">Forgot Password</a>
+                            <input class="form-control" type="password" name="userPassword" #userPasswordControl="ngModel" [(ngModel)]="userPassword"
+                                placeholder="Enter Your Password" required/>
                             <span class="error-message" *ngIf="!userPasswordControl.valid && (userPasswordControl.dirty || trySubmit)">* required</span>
                         </div>
                     </div>
+                    <div class="col-sm-12">
+                        <span class="error-message" *ngIf="showErrorMsg">
+                            {{errorMsg}}
+                        </span>
+                    </div>
+                    <div class="col-md-6">
+                        <!-- <div class="form-group"> -->
+                        <label for="rememberMe">
+                            <input type="checkbox" id="rememberMe" [checked]="rememberMe" (change)="rememberMe = !rememberMe" /> Remember Me
+                        </label>
+                        <!-- </div> -->
+                    </div>
                     <div class="col-md-12">
-                        <button type="submit" class="btn btn-success">Login</button>
-                    </div>
-                    <div class="col-md-6">
-                        <a href="#forgot-password-url" class="login-form__forgot-password forget-password">forgot password</a>
-                    </div>
-                    <div class="col-md-6">
-                        <div>New User ?
-                            <a href="#">Sign up</a> Or</div>
-                        <!-- open sign up popup -->
-                    </div>
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <input type="checkbox" id="rememberMe" [checked]="rememberMe" (change)="rememberMe = !rememberMe" />
-                            <label for="rememberMe">remember me</label>
-                        </div>
+                        <button type="submit" class="btn btn-success">Sign In</button>
                     </div>
                     <div class="col-md-12 text-center">
                         <a class="btn google-btn" (click)="socialLogin(SocialMediaProvider.Google)">
@@ -44,6 +45,12 @@
                         <a class="btn facebook-btn" (click)="socialLogin(SocialMediaProvider.Facebook)">
                             <i class="fa fa-facebook"></i>Login with facebook
                         </a>
+                    </div>
+                    <div class="col-md-6">
+                        <div>New User ?
+                            <a href="#">Sign Up</a>
+                        </div>
+                        <!-- open sign up popup -->
                     </div>
                 </div>
             </form>
