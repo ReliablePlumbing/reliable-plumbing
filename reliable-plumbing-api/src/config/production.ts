@@ -17,6 +17,7 @@ export const config: ProductionConfig = {
         }
     },
     activationMailUrl: "http://ec2-18-217-44-139.us-east-2.compute.amazonaws.com/activate-mail?token=",
+    forgotPasswordUrl: "http://ec2-18-217-44-139.us-east-2.compute.amazonaws.com/forgot-password?token=",
     socialMedia: {
         facebook: {
             clientSecret: process.env.FACEBOOK_CLIENT_SECRET,

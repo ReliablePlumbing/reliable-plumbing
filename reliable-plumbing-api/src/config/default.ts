@@ -18,6 +18,7 @@ export const config: Config = {
         }
     },
     activationMailUrl: "http://localhost:4200/activate-mail?token=",
+    forgotPasswordUrl: "http://localhost:4200/forgot-password?token=",
     socketsSettings: {
         registerConnection: "registerConnectionWithUserId",
         notificationsEvent: "notifications",

@@ -20,6 +20,10 @@ export class LoginComponent {
   SocialMediaProvider = SocialMediaProvider;
   showErrorMsg = false;
   errorMsg = 'Invalid email and/or password';
+  forgotPassword = false;
+  showInfoMsg = false;
+  infoMsg;
+  email;
 
   constructor(
     private userManagementService: UserManagementService, private alertifyService: AlertifyService,
@@ -53,5 +57,20 @@ export class LoginComponent {
   socialLogin(provider: SocialMediaProvider) {
     this.authService.redirectToSocialLogin(provider);
 
+  }
+
+  resetPassword() {
+    this.trySubmit = true;
+    if (this.email)
+      this.userManagementService.forgotPassword(this.email).subscribe(result => {
+        if (result) {
+          this.infoMsg = 'A link has been sent to your email, please follow the link to reset your password';
+          this.showInfoMsg = true;
+          this.trySubmit = false;
+        }
+        else
+          this.alertifyService.error('Email doesn\'t exist');
+
+      })
   }
 }

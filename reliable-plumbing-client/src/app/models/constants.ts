@@ -20,5 +20,6 @@ export const systemRoutes = {
     myAppointments: 'my-appointments',
     tracking: 'technicians-tracking',
     activateMail: 'activate-mail',
-    socialMediaAuthenticate: 'social-media-authenticate'
+    socialMediaAuthenticate: 'social-media-authenticate',
+    forgotPassword: 'forgot-password'
 }

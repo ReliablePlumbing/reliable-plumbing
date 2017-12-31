@@ -3,6 +3,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { LoginComponent } from './login/login.component';
 import { RegisterationComponent } from './registeration/registeration.component';
 import { ActivateMailComponent } from './activate-mail/activate-mail.component';
+import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
 import { SystemUsersManagementComponent } from './system-users-management/system-users-management.component';
 import { LoginAuthGuard } from "../services/auth-guard.service";
 import { Role } from '../models/enums';
@@ -12,6 +13,7 @@ import { systemRoutes } from '../models/constants';
 const routes: Routes = [
   { path: systemRoutes.activateMail, component: ActivateMailComponent },
   { path: systemRoutes.socialMediaAuthenticate, component: SocialMediaRedirectComponent },
+  { path: systemRoutes.forgotPassword, component: ForgotPasswordComponent },
 ];
 
 @NgModule({

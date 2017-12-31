@@ -17,16 +17,17 @@ export class RouteHandlerService {
   routeToDefault() {
     let currentUser = this.environmentService.currentUser;
     let route = '/';
-    for (let role of currentUser.roles) {
-      if (role == Role.Technician) { 
-        route = 'control-panel/my-appointments';
-        break;
+    if (currentUser)
+      for (let role of currentUser.roles) {
+        if (role == Role.Technician) {
+          route = 'control-panel/my-appointments';
+          break;
+        }
+        else if (role == Role.Admin || role == Role.SystemAdmin || role == Role.Supervisor) {
+          route = 'control-panel/schedule-management';
+          break;
+        }
       }
-      else if(role == Role.Admin || role == Role.SystemAdmin || role == Role.Supervisor){
-        route = 'control-panel/schedule-management';
-        break;
-      }
-    }
     this.router.navigate([route])
   }
 }

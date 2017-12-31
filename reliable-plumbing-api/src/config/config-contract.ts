@@ -18,6 +18,7 @@ export interface Config {
     };
 
     activationMailUrl: string;
+    forgotPasswordUrl: string;
 
     socketsSettings: {
         registerConnection: string,
@@ -69,7 +70,7 @@ export interface Config {
 
     filesSettings: {
         basePath: string,
-        enableGetFiles: string
+        enableGetFiles: boolean
     }
 }
 
@@ -94,6 +95,7 @@ export interface ProductionConfig {
     };
 
     activationMailUrl: string;
+    forgotPasswordUrl: string;
 
     socialMedia: {
         facebook: {

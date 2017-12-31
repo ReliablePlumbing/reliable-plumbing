@@ -9,19 +9,10 @@ import config from '../../config';
 @Service()
 export class UserManager {
 
-    // region dependencies
-    @Inject(dependencies.UserRepo)
-    private userRepo: UserRepo;
-
-    @Inject(dependencies.UserLoginRepo)
-    private userLoginRepo: UserLoginRepo;
-
-    @Inject(dependencies.mailNotifier)
-    private mailNotifier: MailNotifier;
-
-    @Inject(dependencies.NotificationManager)
-    private notificationManager: NotificationManager;
-    // endregion dependencies
+    @Inject(dependencies.UserRepo) private userRepo: UserRepo;
+    @Inject(dependencies.UserLoginRepo) private userLoginRepo: UserLoginRepo;
+    @Inject(dependencies.mailNotifier) private mailNotifier: MailNotifier;
+    @Inject(dependencies.NotificationManager) private notificationManager: NotificationManager;
 
     registerUser(user: User): Promise<any> {
         if (user == null)
@@ -308,11 +299,62 @@ export class UserManager {
 
                 user.salt = AccountSecurity.generateSalt();
                 user.hashedPassword = AccountSecurity.hashPassword(args.newPassword, user.salt);
-
+                if (errors.length > 0) {
+                    throw new AppError(errors, ErrorType.validation);
+                }
                 this.userRepo.update(user)
                     .then((result: boolean) => resolve(result))
                     .catch((error: Error) => reject(error));
             }).catch((error: Error) => reject(error));
+        });
+    }
+
+    forgotPassword(email) {
+        return new Promise<boolean>((resolve, reject) => {
+            if (!email)
+                return resolve(false);
+
+            this.userRepo.findByEmail(email).then(user => {
+                if (user && user.email.toLowerCase() == email.toLowerCase()) {
+                    let emailContent = this.constructForgotPasswordMail(user);
+                    this.mailNotifier.sendMail(user.email, emailContent.subject, emailContent.content);
+                    return resolve(true);
+                }
+                else
+                    return resolve(false);
+            }).catch((error: Error) => reject(error));
+        });
+    }
+
+    resetPassword(data) {
+        if (data == null)
+            throw new AppError('Data isn\'t complete', ErrorType.validation);
+
+        return new Promise<any>((resolve, reject) => {
+            TokenManager.decodeToken(data.token).then(decodedToken => {
+
+                if (decodedToken == null)
+                    return resolve({ success: false, message: 'Reset Password Link is Expired', user: null });
+                let email = decodedToken.email.toLowerCase();
+
+                this.userRepo.findByEmail(email).then(user => {
+                    if (user == null)
+                        return resolve({ success: false, message: 'User doesn\'t Exist', user: null });
+                    let errors = [];
+                    if (data.newPassword == null || data.newPassword.length == 0)
+                        errors.push('password cann\'t be empty');
+                    errors = errors.concat(this.validatePasswordFormat(data.newPassword));
+
+                    if (errors.length > 0) {
+                        throw new AppError(errors, ErrorType.validation);
+                    }
+                    user.salt = AccountSecurity.generateSalt();
+                    user.hashedPassword = AccountSecurity.hashPassword(data.newPassword, user.salt);
+                    this.userRepo.update(user).then(res => {
+                        return resolve({ success: true, message: 'Your Password has been updated successfully', user: user.toLightModel() });
+                    }).catch((error: Error) => reject(error));
+                }).catch((error: Error) => reject(error));
+            }).catch((error: Error) => reject(error));;
         });
     }
 
@@ -368,7 +410,7 @@ export class UserManager {
     private constructVerificationMail(user: User) {
         let token = TokenManager.generateToken({
             email: user.email
-        })
+        });
         let url = config.activationMailUrl + token;
         let isSystemUser = user.roles.findIndex(role => role == Role.Customer) == -1;
         let subject = isSystemUser ? 'Account & Email ' : 'Email ' + 'Activation';
@@ -383,6 +425,25 @@ export class UserManager {
             content: content
         }
     }
+
+    private constructForgotPasswordMail(user: User) {
+        let token = TokenManager.generateToken({
+            email: user.email
+        });
+        let url = config.forgotPasswordUrl + token;
+        let subject = 'Reliable Plumbing account password reset';
+
+        // todo: get template
+        let content = `<h3>please follow the link bellow to activate your account password<h3>\n
+                        <a href="${url}">ResetPassword<a>`;
+
+        return {
+            subject: subject,
+            content: content
+        }
+    }
+
+
 
     createPersistentUserLogin(user: User) {
         let validator = TokenManager.generateRandomSeries();

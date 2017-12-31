@@ -138,5 +138,14 @@ export class UserManagementService {
       .map((response: Response) => response.json());
   }
 
+  resetPassword(data) {
+    return this.httpExtensionService.post(this.basePath + 'resetPassword', data, false)
+      .map((response: Response) => response.json());
+  }
+
+  forgotPassword(email) {
+    return this.httpExtensionService.get(this.basePath + 'forgotPassword?email=' + email, false)
+      .map((response: Response) => response.json());
+  }
 
 }

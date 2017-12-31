@@ -16,13 +16,15 @@ import { ActivateMailComponent } from './activate-mail/activate-mail.component';
 import { SystemUsersManagementComponent } from './system-users-management/system-users-management.component';
 import { SocialMediaRedirectComponent } from './social-media-redirect/social-media-redirect.component';
 import { ChangePasswordComponent } from './change-password/change-password.component';
+import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
 
 @NgModule({
   imports: [
-    CommonModule, FormsModule, HttpModule, ReactiveFormsModule, ServicesModule, 
+    CommonModule, FormsModule, HttpModule, ReactiveFormsModule, ServicesModule,
     UserManagementRoutingModule, NgbModule.forRoot(), SharedModule
   ],
-  declarations: [LoginComponent, RegisterationComponent, ActivateMailComponent, SystemUsersManagementComponent, SocialMediaRedirectComponent, ChangePasswordComponent],
+  declarations: [LoginComponent, RegisterationComponent, ActivateMailComponent, SystemUsersManagementComponent, SocialMediaRedirectComponent, 
+    ChangePasswordComponent, ForgotPasswordComponent],
   exports: [LoginComponent, RegisterationComponent, ChangePasswordComponent]
 })
 

@@ -201,6 +201,24 @@ export class UserController {
         });
     }
 
+    @Get('/forgotPassword')
+    forgotPassword( @QueryParam('email') email: string) {
+        return new Promise<boolean>((resolve, reject) => {
+            this.userManager.forgotPassword(email)
+                .then(result => resolve(result))
+                .catch((error: Error) => reject(error));
+        });
+    }
+
+    @Post('/resetPassword')
+    resetPassword( @Body() data: any) {
+        return new Promise<any>((resolve, reject) => {
+            this.userManager.resetPassword(data)
+                .then(result => resolve(result))
+                .catch((error: Error) => reject(error));
+        });
+    }
+
 
     private authenticateByFacebook(code, redirectUri) {
         return new Promise<User>((resolve, reject) => {
