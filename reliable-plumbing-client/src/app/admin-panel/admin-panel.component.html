@@ -2,87 +2,80 @@
 Header Section
 ============================-->
 <header id="header">
-  <div class="container-fluid">
-    <nav class="navbar navbar-toggleable-md navbar-expand-lg">
-      <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
-        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <div class="container-fluid">
+        <nav class="navbar navbar-toggleable-md navbar-expand-lg">
+            <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
-      <a id="logo" class="navbar-brand" [routerLink]="['/']">
-        <img src="assets/img/rb-logo.png" />
-      </a>
-      <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav ml-auto">
-          <li class="notification-container" placement="left" ngbTooltip="Notifications">
-            <a class="nav-link pointer" [ngbPopover]="notificationsContent" popoverTitle="Notifications" placement="bottom" #p="ngbPopover"
-              closePopoverOnOutsideClick>
-              <i class="fa fa-bell" style="font-size: 25px;" aria-hidden="true"></i>
+            <a id="logo" class="navbar-brand" [routerLink]="['/']">
+                <img src="assets/img/rb-logo.png" />
             </a>
-          </li>
-          <li class="nav-item">
-            <div ngbDropdown>
-              <a class="nav-link pointer" ngbDropdownToggle>{{currentUser.firstName + ' ' + currentUser.lastName}}</a>
-              <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
-                <button class="dropdown-item" (click)="openChangePassword()">Change Password</button>
-                <button class="dropdown-item" (click)="openEditProfile()">Edit Profile</button>
-              </div>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav ml-auto">
+                    <li class="notification-container" placement="top" ngbTooltip="Notifications">
+                        <a class="nav-link pointer" [ngbPopover]="notificationsContent" popoverTitle="Notifications" placement="bottom" #p="ngbPopover" closePopoverOnOutsideClick>
+                            <i class="fa fa-bell" style="font-size: 22px;" aria-hidden="true"></i>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <div ngbDropdown>
+                            <a class="nav-link pointer" ngbDropdownToggle>{{currentUser.firstName + ' ' + currentUser.lastName}}</a>
+                            <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+                                <button class="dropdown-item" (click)="openChangePassword()">Change Password</button>
+                                <button class="dropdown-item" (click)="openEditProfile()">Edit Profile</button>
+                            </div>
+                        </div>
+                        <!-- <a (click)="openEditProfile()" class="nav-link pointer">{{currentUser?.firstName + ' ' + currentUser?.lastName}}</a> -->
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link pointer" (click)="logout()">Log out</a>
+                    </li>
+                    <li class="nav-item panel-link">
+                        <a [routerLink]="['/']" class="nav-link pointer">Go to Website</a>
+                    </li>
+                </ul>
             </div>
-            <!-- <a (click)="openEditProfile()" class="nav-link pointer">{{currentUser?.firstName + ' ' + currentUser?.lastName}}</a> -->
-          </li>
-          <li class="nav-item">
-            <a class="nav-link pointer" (click)="logout()">Log out</a>
-          </li>
-          <li class="nav-item panel-link">
-            <a [routerLink]="['/']" class="nav-link pointer">Go to Website</a>
-          </li>
-        </ul>
-      </div>
-    </nav>
-  </div>
+        </nav>
+    </div>
 </header>
 <!-- #header -->
 <div class="admin-panel">
-  <div class="container-fluid">
-    <div class="row">
-      <div class="col-sm-3 side-menu">
-        <ul class="list-group">
-          <li *ngIf="tabs.scheduleManagement.hasPermission" class="list-group-item pointer" [routerLink]="['./schedule-management']"
-            [class.selected]="currentSelectedTab == tabs.scheduleManagement.index" (click)="currentSelectedTab = tabs.scheduleManagement.index">Schedule Management</li>
-          <li *ngIf="tabs.settings.hasPermission" class="list-group-item pointer" [routerLink]="['./appointment-settings']" [class.selected]="currentSelectedTab == tabs.settings.index"
-            (click)="currentSelectedTab = tabs.settings.index">Appointment Settings & Types</li>
-          <li *ngIf="tabs.systemUsers.hasPermission" class="list-group-item pointer" [routerLink]="['./system-users-management']" [class.selected]="currentSelectedTab == tabs.systemUsers.index"
-            (click)="currentSelectedTab = tabs.systemUsers.index">System Users</li>
-          <li *ngIf="tabs.myAppointments.hasPermission" class="list-group-item pointer" [routerLink]="['./my-appointments']" [class.selected]="currentSelectedTab == tabs.myAppointments.index"
-            (click)="currentSelectedTab = tabs.myAppointments.index">My Appointments</li>
-          <li *ngIf="tabs.tracking.hasPermission" class="list-group-item pointer" [routerLink]="['./technicians-tracking']" [class.selected]="currentSelectedTab == tabs.tracking.index"
-            (click)="currentSelectedTab = tabs.tracking.index">Technicians Tracking</li>
-        </ul>
-      </div>
-      <div class="col-sm-9 panel-content">
-        <router-outlet></router-outlet>
-      </div>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-3 side-menu">
+                <ul class="list-group">
+                    <li *ngIf="tabs.scheduleManagement.hasPermission" class="list-group-item pointer" [routerLink]="['./schedule-management']" [class.selected]="currentSelectedTab == tabs.scheduleManagement.index" (click)="currentSelectedTab = tabs.scheduleManagement.index">Schedule Management</li>
+                    <li *ngIf="tabs.settings.hasPermission" class="list-group-item pointer" [routerLink]="['./appointment-settings']" [class.selected]="currentSelectedTab == tabs.settings.index" (click)="currentSelectedTab = tabs.settings.index">Appointment Settings & Types</li>
+                    <li *ngIf="tabs.systemUsers.hasPermission" class="list-group-item pointer" [routerLink]="['./system-users-management']" [class.selected]="currentSelectedTab == tabs.systemUsers.index" (click)="currentSelectedTab = tabs.systemUsers.index">System Users</li>
+                    <li *ngIf="tabs.myAppointments.hasPermission" class="list-group-item pointer" [routerLink]="['./my-appointments']" [class.selected]="currentSelectedTab == tabs.myAppointments.index" (click)="currentSelectedTab = tabs.myAppointments.index">My Appointments</li>
+                    <li *ngIf="tabs.tracking.hasPermission" class="list-group-item pointer" [routerLink]="['./technicians-tracking']" [class.selected]="currentSelectedTab == tabs.tracking.index" (click)="currentSelectedTab = tabs.tracking.index">Technicians Tracking</li>
+                </ul>
+            </div>
+            <div class="col-sm-9 panel-content">
+                <router-outlet></router-outlet>
+            </div>
+        </div>
     </div>
-  </div>
 </div>
 
 <!--==========================
 Footer
 ============================-->
 <footer id="footer">
-  <div class="container">
-    <div class="row">
-      <div class="col-md-12">
-        <div class="copyright">
-          &copy; Copyright
-          <strong>Reliable Plumbing</strong>. All Rights Reserved
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="copyright">
+                    &copy; Copyright
+                    <strong>Reliable Plumbing</strong>. All Rights Reserved
+                </div>
+                <div class="credits">
+                    Designed and Developed by
+                    <a href="#">BearToe Design</a>
+                </div>
+            </div>
         </div>
-        <div class="credits">
-          Designed and Developed by
-          <a href="#">BearToe Design</a>
-        </div>
-      </div>
     </div>
-  </div>
 </footer>
 <!-- #footer -->
 
@@ -91,15 +84,15 @@ Footer
 registeration/edit profile popup
 ============================-->
 <ng-template #registeration let-c="close" let-d="dismiss">
-  <div class="modal-header">
-    <h4 class="modal-title">Edit Profile</h4>
-    <button type="button" class="close" aria-label="Close" (click)="d()">
+    <div class="modal-header">
+        <h4 class="modal-title">Edit Profile</h4>
+        <button type="button" class="close" aria-label="Close" (click)="d()">
       <span aria-hidden="true">&times;</span>
     </button>
-  </div>
-  <div class="modal-body">
-    <rb-registeration (userAdded)="userRegistered($event)" [mode]="registerMode"></rb-registeration>
-  </div>
+    </div>
+    <div class="modal-body">
+        <rb-registeration (userAdded)="userRegistered($event)" [mode]="registerMode"></rb-registeration>
+    </div>
 
 </ng-template>
 
@@ -107,19 +100,19 @@ registeration/edit profile popup
 change password popup
 ============================-->
 <ng-template #changePassword let-c="close" let-d="dismiss">
-  <div class="modal-header">
-    <h4 class="modal-title">Change Password</h4>
-    <button type="button" class="close" aria-label="Close" (click)="d()">
+    <div class="modal-header">
+        <h4 class="modal-title">Change Password</h4>
+        <button type="button" class="close" aria-label="Close" (click)="d()">
       <span aria-hidden="true">&times;</span>
     </button>
-  </div>
-  <div class="modal-body">
-    <rb-change-password (passwordChanged)="passwordChanged()"></rb-change-password>
-  </div>
+    </div>
+    <div class="modal-body">
+        <rb-change-password (passwordChanged)="passwordChanged()"></rb-change-password>
+    </div>
 </ng-template>
 
 
 
 <ng-template #notificationsContent>
-  <notifications (notificationClicked)="p.close()"></notifications>
+    <notifications (notificationClicked)="p.close()"></notifications>
 </ng-template>

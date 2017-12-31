@@ -7,7 +7,8 @@
             background: #fff;
             border-radius: 4px;
             p {
-                margin-bottom: 5px;
+                font-size: 13px;
+                margin: 10px 0;
             }
             .form-group {
                 min-height: 85px;
@@ -22,7 +23,7 @@
                 label {}
                 .error-message {
                     color: red;
-                    a{
+                    a {
                         color: #40a4df
                     }
                 }
@@ -31,9 +32,29 @@
                 background: #40a4df;
                 border-radius: 0;
                 border: 0;
-                padding: 10px 24px;
+                padding: 8px 24px;
                 color: #fff;
                 transition: 0.4s;
+            }
+        }
+        .ui-galleria.ui-widget.ui-widget-content {
+            height: 250px !important;
+            margin: auto;
+            .ui-galleria-panel-wrapper {
+                height: 100% !important;
+                width: 100% !important;
+                >li {
+                    height: 100% !important;
+                    img {
+                        height: 100% !important;
+                        object-fit: cover;
+                    }
+                }
+            }
+            .ui-galleria-filmstrip-wrapper {
+                position: absolute;
+                bottom: 0;
+                left: 25px;
             }
         }
     }
@@ -48,4 +69,8 @@ form {
 .forget-password {
     display: inline-block;
     margin-bottom: 10px;
+}
+
+.ui-steps .ui-steps-item {
+    width: 50% !important;
 }

@@ -3,6 +3,7 @@
     background-color: #ea4335 !important;
     color: #fff !important;
     border-radius: 0;
+    font-size: 13px;
     i {
         margin-right: 5px;
     }
@@ -16,6 +17,7 @@
     background-color: #3b5998 !important;
     color: #fff !important;
     border-radius: 0;
+    font-size: 13px;
     i {
         margin-right: 5px;
     }
@@ -43,4 +45,16 @@
     input {
         margin-right: 5px;
     }
+}
+
+.ui-button.ui-fileupload-choose {
+    display: inline-block;
+    vertical-align: middle;
+    border-radius: 0;
+}
+
+.btn.btn-danger {
+    background: #c82333 !important;
+    background-color: #c82333 !important;
+    border-color: #bd2130 !important;
 }

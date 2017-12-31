@@ -1,3 +1,4 @@
+@import url("https://fonts.googleapis.com/css?family=Raleway");
 .blueColor {
   color: #40a4df !important; }
 
@@ -13,7 +14,7 @@
 body {
   background: #fff;
   color: #666666;
-  font-family: "Open Sans", sans-serif; }
+  font-family: "Raleway", sans-serif; }
 
 a {
   color: #40a4df;
@@ -91,7 +92,8 @@ input[type=radio] {
   display: inline-block;
   background-color: #ea4335 !important;
   color: #fff !important;
-  border-radius: 0; }
+  border-radius: 0;
+  font-size: 13px; }
   .btn.google-btn i {
     margin-right: 5px; }
   .btn.google-btn:hover {
@@ -101,7 +103,8 @@ input[type=radio] {
   display: inline-block;
   background-color: #3b5998 !important;
   color: #fff !important;
-  border-radius: 0; }
+  border-radius: 0;
+  font-size: 13px; }
   .btn.facebook-btn i {
     margin-right: 5px; }
   .btn.facebook-btn:hover {
@@ -121,6 +124,16 @@ input[type=radio] {
   margin-right: 0 !important; }
 .status-btns-group input {
   margin-right: 5px; }
+
+.ui-button.ui-fileupload-choose {
+  display: inline-block;
+  vertical-align: middle;
+  border-radius: 0; }
+
+.btn.btn-danger {
+  background: #c82333 !important;
+  background-color: #c82333 !important;
+  border-color: #bd2130 !important; }
 
 /*--------------------------------------------------------------
 # Welcome
@@ -235,9 +248,21 @@ input[type=radio] {
 /* navbar */
 .navbar {
   padding: 0; }
-  .navbar .navbar-collapse .navbar-nav li a {
-    color: #fff;
-    font-weight: 400; }
+  .navbar .navbar-collapse .navbar-nav li {
+    margin: 0 5px; }
+    .navbar .navbar-collapse .navbar-nav li a {
+      color: #fff;
+      font-weight: 400;
+      position: relative;
+      padding: 1.5rem 1rem; }
+    .navbar .navbar-collapse .navbar-nav li:hover a:before {
+      content: '';
+      height: 3px;
+      width: 100%;
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      background-color: #40a4df; }
 
 /* Nav Menu Arrows */
 .sf-arrows .sf-with-ul {
@@ -693,7 +718,8 @@ body.mobile-nav-active {
     background: #fff;
     border-radius: 4px; }
     .register .register-container form p {
-      margin-bottom: 5px; }
+      font-size: 13px;
+      margin: 10px 0; }
     .register .register-container form .form-group {
       min-height: 85px;
       margin-bottom: 5px; }
@@ -710,9 +736,24 @@ body.mobile-nav-active {
       background: #40a4df;
       border-radius: 0;
       border: 0;
-      padding: 10px 24px;
+      padding: 8px 24px;
       color: #fff;
       transition: 0.4s; }
+  .register .register-container .ui-galleria.ui-widget.ui-widget-content {
+    height: 250px !important;
+    margin: auto; }
+    .register .register-container .ui-galleria.ui-widget.ui-widget-content .ui-galleria-panel-wrapper {
+      height: 100% !important;
+      width: 100% !important; }
+      .register .register-container .ui-galleria.ui-widget.ui-widget-content .ui-galleria-panel-wrapper > li {
+        height: 100% !important; }
+        .register .register-container .ui-galleria.ui-widget.ui-widget-content .ui-galleria-panel-wrapper > li img {
+          height: 100% !important;
+          object-fit: cover; }
+    .register .register-container .ui-galleria.ui-widget.ui-widget-content .ui-galleria-filmstrip-wrapper {
+      position: absolute;
+      bottom: 0;
+      left: 25px; }
 
 form .btn {
   margin-bottom: 10px; }
@@ -720,6 +761,9 @@ form .btn {
 .forget-password {
   display: inline-block;
   margin-bottom: 10px; }
+
+.ui-steps .ui-steps-item {
+  width: 50% !important; }
 
 /*--------------------------------------------------------------
 # Footer
@@ -735,5 +779,14 @@ form .btn {
     text-align: center;
     font-size: 13px;
     color: #ccc; }
+
+@media (max-width: 1024px) {
+  .navbar .navbar-collapse .navbar-nav li {
+    font-size: 14px;
+    margin: 0; } }
+@media (max-width: 768px) {
+  #testimonials .profile .pic {
+    width: inherit;
+    height: inherit; } }
 
 /*# sourceMappingURL=style.css.map */

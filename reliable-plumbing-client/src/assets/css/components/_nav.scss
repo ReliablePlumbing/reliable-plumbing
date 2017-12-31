@@ -10,9 +10,25 @@
     .navbar-collapse {
         .navbar-nav {
             li {
+                margin: 0 5px;
                 a {
                     color: #fff;
                     font-weight: 400;
+                    position: relative;
+                    padding: 1.5rem 1rem;
+                }
+                &:hover {
+                    a {
+                        &:before {
+                            content: '';
+                            height: 3px;
+                            width: 100%;
+                            position: absolute;
+                            left: 0;
+                            bottom: 0;
+                            background-color: $accent-color;
+                        }
+                    }
                 }
             }
         }
