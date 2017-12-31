@@ -4,6 +4,9 @@
 .redColor {
   color: red !important; }
 
+.fullWidth {
+  width: 100%; }
+
 /*--------------------------------------------------------------
 # General
 --------------------------------------------------------------*/
@@ -80,10 +83,15 @@ h6 {
   border: 2px solid #fff;
   color: #fff !important; }
 
+input[type=checkbox],
+input[type=radio] {
+  vertical-align: middle; }
+
 .btn.google-btn {
   display: inline-block;
   background-color: #ea4335 !important;
-  color: #fff !important; }
+  color: #fff !important;
+  border-radius: 0; }
   .btn.google-btn i {
     margin-right: 5px; }
   .btn.google-btn:hover {
@@ -92,7 +100,8 @@ h6 {
 .btn.facebook-btn {
   display: inline-block;
   background-color: #3b5998 !important;
-  color: #fff !important; }
+  color: #fff !important;
+  border-radius: 0; }
   .btn.facebook-btn i {
     margin-right: 5px; }
   .btn.facebook-btn:hover {

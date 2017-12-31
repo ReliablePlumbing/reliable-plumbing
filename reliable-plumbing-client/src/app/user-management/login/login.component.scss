@@ -1,7 +1,17 @@
-.forget-password{
+.forget-password {
     float: right;
+    text-decoration: underline !important;
+    color: #007bff !important;
+    margin-top: 15px;
 }
 
-.btn-reset{
-    color: #007bff !important;
-} 
+.btn-reset {
+    color: #41a4df !important;
+}
+
+.new-user {
+    text-align: center;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
