@@ -35,7 +35,10 @@ export class RegisterationComponent implements OnInit {
         lat: null,
         lng: null
       },
-      text: null
+      streetAddress: null,
+      city: null,
+      state: null,
+      zipCode: null
     }
   }
   mapMarker: Marker;
@@ -97,7 +100,10 @@ export class RegisterationComponent implements OnInit {
           this.registerForm.addControl('confirmPassword', new FormControl(null, [Validators.required, this.matchOtherValidator('password')]));
           break;
         case regControls.address:
-          this.registerForm.addControl('address', new FormControl(null, [Validators.required]));
+          this.registerForm.addControl('streetAddress', new FormControl(null));
+          this.registerForm.addControl('city', new FormControl(null));
+          this.registerForm.addControl('state', new FormControl(null));
+          this.registerForm.addControl('zipCode', new FormControl(null));
           break;
         case regControls.roles:
           let roles = this.environmentService.currentUser.roles;
@@ -117,6 +123,11 @@ export class RegisterationComponent implements OnInit {
           });
 
           this.registerForm.addControl('roles', rolesFG);
+          break;
+        case regControls.accountType:
+        if(!this.user.accountType)
+          this.user.accountType = 'Residential';
+          this.registerForm.addControl('accountType', new FormControl(null, [Validators.required]));
           break;
       }
     }
@@ -226,7 +237,7 @@ export class RegisterationComponent implements OnInit {
 
     let control = this.registerForm.controls[controlName];
 
-    return (beforeSubmit || this.trySubmit) && !control.valid && control.errors && control.errors[errorName];
+    return (beforeSubmit || this.trySubmit) && control.hasError(errorName);
   }
 
   resetForm() {
@@ -309,15 +320,18 @@ export class RegisterationComponent implements OnInit {
         break;
       case RegistrationMode.edit:
         controls = [
+          regControls.accountType,
           regControls.firstName, regControls.lastName,
-          regControls.email, regControls.mobile
+          regControls.email, regControls.mobile,
+          regControls.address
         ]
         break;
       case RegistrationMode.signup:
         controls = [
+          regControls.accountType,
           regControls.firstName, regControls.lastName,
           regControls.email, regControls.mobile,
-          regControls.password
+          regControls.password, regControls.address
         ]
         break;
     }
@@ -346,5 +360,6 @@ export enum regControls {
   lastName,
   password,
   roles,
-  address
+  address,
+  accountType
 }

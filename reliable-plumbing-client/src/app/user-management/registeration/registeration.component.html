@@ -21,7 +21,7 @@
               </div>
               <div *ngSwitchCase="regControls.email" class="col-md-6">
                 <div class="form-group">
-                  <label for="email" class="">Email
+                  <label for="email" class="">Email Address
                     <i *ngIf="getControlValidation('email','required')">*</i>
                   </label>
                   <input type="email" name="email" class="form-control" placeholder="ex: exmple@domain.com" formControlName="email" [(ngModel)]="user.email"
@@ -37,7 +37,7 @@
               </div>
               <div *ngSwitchCase="regControls.mobile" class="col-md-6">
                 <div class="form-group">
-                  <label for="mobile" class="">Mobile
+                  <label for="mobile" class="">Mobile/Telephone
                     <i *ngIf="getControlValidation('mobile','required')">*</i>
                   </label>
                   <input type="tel" name="mobile" class="form-control" formControlName="mobile" [(ngModel)]="user.mobile" placeholder="ex: (123) 123-1234"
@@ -116,22 +116,61 @@
                 </div>
               </div>
               <ng-container *ngSwitchCase="regControls.address">
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="streetAddress" class="">Street Address
+                      <i *ngIf="getControlValidation('streetAddress','required')">*</i>
+                    </label>
+                    <input type="text" name="streetAddress" class="form-control" formControlName="streetAddress" [(ngModel)]="user.address.streetAddress"
+                    />
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="city" class="">City
+                      <i *ngIf="getControlValidation('city','required')">*</i>
+                    </label>
+                    <input type="text" name="city" class="form-control" formControlName="city" [(ngModel)]="user.address.city" />
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="state" class="">State
+                      <i *ngIf="getControlValidation('state','required')">*</i>
+                    </label>
+                    <input type="text" name="state" class="form-control" formControlName="state" [(ngModel)]="user.address.state" />
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="zipCode" class="">Zip Code
+                      <i *ngIf="getControlValidation('zipCode','required')">*</i>
+                    </label>
+                    <input type="text" name="zipCode" class="form-control" formControlName="zipCode" [(ngModel)]="user.address.zipCode" />
+                  </div>
+                </div>
+                <div class="col-md-12 map-container" *ngIf="mapMarker != null">
+                  <agm-map [latitude]="mapMarker.lat" [longitude]="mapMarker.lng" [zoom]="15" [disableDefaultUI]="false" [zoomControl]="true">
+                    <agm-marker [latitude]="mapMarker.lat" [longitude]="mapMarker.lng" [label]="mapMarker.label" [markerDraggable]="mapMarker.draggable"
+                      (dragEnd)="markerDragEnd(m, $event)">
+                      <agm-info-window>
+                        <strong>Your Location</strong>
+                      </agm-info-window>
+                    </agm-marker>
+                  </agm-map>
+                </div>
+              </ng-container>
+              <ng-container *ngSwitchCase="regControls.accountType">
                 <div class="col-md-12">
                   <div class="form-group">
-                    <label for="address" class="">Address
-                      <i *ngIf="getControlValidation('address','required')">*</i>
+                    <label for="appointmentType" class="">Account Type
+                      <i *ngIf="getControlValidation('accountType','required')">*</i>
                     </label>
-                    <input type="text" name="address" class="form-control" formControlName="address" [(ngModel)]="user.address.text" />
-                  </div>
-                  <div class="map-container" *ngIf="mapMarker != null">
-                    <agm-map [latitude]="mapMarker.lat" [longitude]="mapMarker.lng" [zoom]="15" [disableDefaultUI]="false" [zoomControl]="true">
-                      <agm-marker [latitude]="mapMarker.lat" [longitude]="mapMarker.lng" [label]="mapMarker.label" [markerDraggable]="mapMarker.draggable"
-                        (dragEnd)="markerDragEnd(m, $event)">
-                        <agm-info-window>
-                          <strong>Your Location</strong>
-                        </agm-info-window>
-                      </agm-marker>
-                    </agm-map>
+                    <select name="accountType" formControlName="accountType" [(ngModel)]="user.accountType">
+                      <!-- <option disabled selected value="-1">Select Service</option> -->
+                      <option value="Commercial">Commercial</option>
+                      <option value="Residential">Residential</option>
+                    </select>
                   </div>
                 </div>
               </ng-container>

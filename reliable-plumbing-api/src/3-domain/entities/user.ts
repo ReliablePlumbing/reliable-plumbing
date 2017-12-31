@@ -25,7 +25,10 @@ export class User extends BaseEntity {
       lat: number,
       lng: number
     },
-    text: string
+    streetAddress: string,
+    city: string,
+    state: string,
+    zipCode: string
   }
 
   constructor(user?: any) {

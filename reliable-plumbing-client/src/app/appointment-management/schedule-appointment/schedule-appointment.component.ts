@@ -48,10 +48,12 @@ export class ScheduleAppointmentComponent implements OnInit {
     let nowDate = moment().add(1, 'hour').add(30, 'minutes'); // now date after 1:30 hours
     this.config.markDisabled = (date: NgbDateStruct) => {
       return compareBootstrapDate(date, { day: nowDate.date(), month: nowDate.month() + 1, year: nowDate.year() }) > 0;
-    };
+    };    
     let date = new Date();
     this.appointment.dateObj = { day: nowDate.date(), month: nowDate.month() + 1, year: nowDate.year() };
     this.isLoggedIn = this.environmentService.isUserLoggedIn;
+    if(this.isLoggedIn)
+      this.activeIndex = 1;
     this.getLookups();
     this.createForm();
   }
