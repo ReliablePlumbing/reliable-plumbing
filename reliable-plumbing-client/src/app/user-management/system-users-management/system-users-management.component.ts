@@ -12,8 +12,11 @@ export class SystemUsersManagementComponent implements OnInit {
 
   users = [];
   registerModelRef: NgbModalRef;
-  registrationMode: RegistrationMode = RegistrationMode.admin;
+  registrationMode: RegistrationMode;
   loading = true;
+  clonedEditedUser = null;
+  selectedIndex = -1;
+  modalHeaderTxt;
 
   constructor(private userManagementService: UserManagementService, private modalService: NgbModal,
     private environmentService: EnvironmentService, private alertifyService: AlertifyService) { }
@@ -49,12 +52,29 @@ export class SystemUsersManagementComponent implements OnInit {
 
 
   addUser(register) {
+    this.modalHeaderTxt = 'Add New User';
+    this.registrationMode = RegistrationMode.admin;
     this.registerModelRef = this.modalService.open(register, { size: 'lg' })
   }
 
   userAdded(user) {
-    this.users.push(user);
+    if (this.registrationMode == RegistrationMode.admin)
+      this.users.push(user);
+    else if (this.registrationMode == RegistrationMode.systemUserEdit) {
+      user.rolesString = '';
+      for (let i = 0; i < user.rolesObj.length; i++) {
+        let role = user.rolesObj[i];
+        user.rolesString += role.name;
+        if (i < user.roles.length - 1)
+          user.rolesString += ', ';
+      }
+      this.users[this.selectedIndex] = user;
+    }
+
     this.registerModelRef.close();
+    this.clonedEditedUser = null;
+    this.registrationMode = null;
+    this.selectedIndex = -1;
   }
 
   deleteUser(user) {
@@ -68,5 +88,15 @@ export class SystemUsersManagementComponent implements OnInit {
       });
 
     })
+  }
+
+
+  editUser(user, template, index) {
+    this.modalHeaderTxt = 'Edit User';
+    this.clonedEditedUser = Object.assign({}, user);
+    this.registrationMode = RegistrationMode.systemUserEdit;
+    this.selectedIndex = index;
+    this.registerModelRef = this.modalService.open(template, { size: 'lg' })
+
   }
 }

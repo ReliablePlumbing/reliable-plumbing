@@ -2,7 +2,7 @@ export enum Role {
     Supervisor = 1,
     Technician,
     Customer,
-    Admin, 
+    Admin,
     SystemAdmin
 }
 
@@ -10,7 +10,8 @@ export enum RegistrationMode {
     signup,
     admin,
     completeProfile,
-    edit
+    edit,
+    systemUserEdit
 }
 
 export enum AppointmentStatus {

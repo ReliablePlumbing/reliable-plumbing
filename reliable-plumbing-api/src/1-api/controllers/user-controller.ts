@@ -29,8 +29,9 @@ export class UserController {
     updateProfile( @Body() user: User) {
         return new Promise((resolve, reject) => {
 
-            this.userManager.updateProfile(user).then((result: boolean) => {
-                return resolve(result);
+            this.userManager.updateProfile(user).then((result: User) => {
+                let model = result != null ? result.toLightModel() : null;
+                return resolve(model);
             }).catch((error: Error) => reject(error));
         });
     }
@@ -113,7 +114,7 @@ export class UserController {
     @Authorized([Role.Supervisor, Role.Admin, Role.SystemAdmin])
     getAllSystemUsers( @Body() roles?: Role[]) {
         return new Promise((resolve, reject) => {
-            this.userManager.getAllSystemUsers().then(result => {
+            this.userManager.getAllSystemUsers(roles).then(result => {
                 let lightModels = [];
                 for (let user of result)
                     lightModels.push(user.toLightModel());

@@ -59,16 +59,16 @@ export class UserManager {
         if (errors.length > 0) {
             throw new AppError(errors, ErrorType.validation);
         }
-        return new Promise<boolean>((resolve, reject) => {
+        return new Promise<User>((resolve, reject) => {
             this.userRepo.findByEmail(user.email).then(firstResult => {
                 if (firstResult == null)
                     return reject(new AppError('user doesn\'t exist', ErrorType.validation));
                 let updatedProps = Object.getOwnPropertyNames(user);
                 updatedProps.forEach(prop => firstResult[prop] = user[prop]);
                 this.userRepo.update(firstResult).then(result => {
-                    let emailContent = this.constructVerificationMail(user);
-                    this.mailNotifier.sendMail(user.email, emailContent.subject, emailContent.content);
-                    return resolve(result);
+                    if (result)
+                        return resolve(firstResult);
+                    else return resolve(null);
                 }).catch((error: Error) => reject(error));;
             }).catch((error: Error) => reject(error));
         });
