@@ -6,8 +6,11 @@
 
 @media (max-width: 1024px) {
     .navbar .navbar-collapse .navbar-nav li {
-        font-size: 14px;
+        font-size: 12px;
         margin: 0;
+    }
+    .navbar .navbar-collapse .navbar-nav li a {
+        padding: 1.5rem 0.5rem;
     }
 }
 
@@ -16,6 +19,9 @@
     #testimonials .profile .pic {
         width: inherit;
         height: inherit;
+    }
+    #hero {
+        height: 76vh;
     }
 }
 

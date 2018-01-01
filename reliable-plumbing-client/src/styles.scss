@@ -1,150 +1,148 @@
 /* You can add global styles to this file, and also import other style files */
+
 @import url('../node_modules/primeng/resources/primeng.min.css');
 @import url('..//node_modules/primeng/resources/themes/omega/theme.css');
-
-
 .modal-content {
-  margin-top: 110px;
+    margin-top: 110px;
 }
 
 .pointer {
-  cursor: pointer;
+    cursor: pointer;
 }
 
 button {
-  cursor: pointer;
-  border-radius: 0 !important;
+    cursor: pointer;
+    border-radius: 0 !important;
 }
 
 a {
-  cursor: pointer;
+    cursor: pointer;
 }
 
 .navbar-toggler-icon {
-  color: #fff;
-  font-size: 30px;
-  padding: 10px 0px;
+    color: #fff;
+    font-size: 30px;
+    padding: 10px 0px;
 }
 
 select {
-  width: 100%;
-  padding: .5rem .75rem;
-  font-size: 1rem;
-  line-height: 1.25;
-  color: #464a4c;
-  background-color: #fff;
-  border: 1px solid rgba(0, 0, 0, .15);
+    width: 100%;
+    padding: .5rem .75rem;
+    font-size: 1rem;
+    line-height: 1.25;
+    color: #464a4c;
+    background-color: #fff;
+    border: 1px solid rgba(0, 0, 0, .15);
 }
 
-.fa-calendar {
-  color: #fff !important;
-}
-
+// .fa-calendar {
+//   color: #fff !important;
+// }
 .date-picker-cont {
-  .form-control {
-    display: inline-block;
-    width: calc(100% - 69px);
-  }
-  button {
-    display: inline-block;
-  }
+    .form-control {
+        display: inline-block;
+        width: calc(100% - 69px);
+    }
+    button {
+        display: inline-block;
+    }
 }
 
 .ngb-dp-header {
-  .btn-link {
-    cursor: pointer;
-    outline: 0;
-    padding: 3px 11px !important;
-  }
+    .btn-link {
+        cursor: pointer;
+        outline: 0;
+        padding: 3px 11px !important;
+    }
 }
 
 .appointemt-status {
-  width: 12px;
-  height: 12px;
-  background-color: #fff;
-  border-radius: 50%;
-  display: inline-block;
-  margin-right: 5px;
-  vertical-align: inherit;
+    width: 12px;
+    height: 12px;
+    background-color: #fff;
+    border-radius: 50%;
+    display: inline-block;
+    margin-right: 5px;
+    vertical-align: inherit;
 }
 
 .appointemt-status.pending {
-  background-color: #d1c8e3;
+    background-color: #d1c8e3;
 }
 
 .appointemt-status.confirmed {
-  background-color: #719ad2;
+    background-color: #719ad2;
 }
 
 .appointemt-status.not-available {
-  background-color: #93745f;
+    background-color: #93745f;
 }
 
 .appointemt-status.rejected {
-  background-color: #FF3B30;
+    background-color: #FF3B30;
 }
 
 .greenBg {
-  background-color: green;
+    background-color: green;
 }
 
 .blueBg {
-  background-color: #719ad2;
+    background-color: #719ad2;
 }
 
 .redBg {
-  background-color: #FF3B30;
+    background-color: #FF3B30;
 }
 
 .grayBg {
-  background-color: #d1c8e3;
+    background-color: #d1c8e3;
 }
 
 
 /* general styles for map */
 
 .map-container {
-  margin-bottom: 20px;
+    margin-bottom: 20px;
 }
 
 .agm-map-container-inner {
-  width: 100% !important;
-  height: 300px !important;
+    width: 100% !important;
+    height: 300px !important;
 }
 
 rb-technicians-tracking .agm-map-container-inner {
-  width: 100% !important;
-  height: 83vh !important;
+    width: 100% !important;
+    height: 83vh !important;
 }
 
 .btn-link {
-  border-color: transparent;
+    border-color: transparent;
 }
 
 .error-message {
-  color: red;
+    color: red;
 }
 
 .notification-container {
-  ngb-popover-window {
-    width: 400px;
-    max-width: 400px !important;
-  }
-  .arrow::after{
-    border-bottom-color: #e0e0e0 !important;
-  }
-  .popover-header{
-      background-color: #e0e0e0;
-      font-weight: bold;
-      padding-bottom: 10px;
-      padding-top: 10px;
-  }
-  .popover-body{
-      padding: 0 !important;
-  }
+    ngb-popover-window {
+        width: 400px;
+        max-width: 400px !important;
+    }
+    .arrow::after {
+        border-bottom-color: #e0e0e0 !important;
+    }
+    .popover-header {
+        background-color: #e0e0e0;
+        font-weight: bold;
+        padding-bottom: 10px;
+        padding-top: 10px;
+    }
+    .popover-body {
+        padding: 0 !important;
+    }
 }
 
 .ui-panel-images {
-  width: 100%;
-  // height: 100%;
+    width: 100%;
+    // height: 100%;
 }

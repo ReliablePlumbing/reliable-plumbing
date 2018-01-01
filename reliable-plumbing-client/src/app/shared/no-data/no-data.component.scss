@@ -1,19 +1,17 @@
-
 .no-data {
-  position: relative;
-  margin: 0 auto;
-  background-color: #dddddd;
-  padding: 15px;
-  border-radius: 10px;
-  .icon {
-    font-size: 55px;
-    vertical-align: middle;
-    padding-right: 5px;
-  }
-  .text {
-      font-family: fantasy;
-      text-transform: capitalize;
-      font-size: 25px;
-      vertical-align: middle;
-  }
+    position: relative;
+    margin: 0 auto;
+    background-color: #dddddd;
+    padding: 15px;
+    border-radius: 10px;
+    .icon {
+        font-size: 55px;
+        vertical-align: middle;
+        padding-right: 5px;
+    }
+    .text {
+        text-transform: capitalize;
+        font-size: 25px;
+        vertical-align: middle;
+    }
 }

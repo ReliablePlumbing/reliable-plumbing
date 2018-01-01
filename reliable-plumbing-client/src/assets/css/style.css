@@ -782,11 +782,17 @@ form .btn {
 
 @media (max-width: 1024px) {
   .navbar .navbar-collapse .navbar-nav li {
-    font-size: 14px;
-    margin: 0; } }
+    font-size: 12px;
+    margin: 0; }
+
+  .navbar .navbar-collapse .navbar-nav li a {
+    padding: 1.5rem 0.5rem; } }
 @media (max-width: 768px) {
   #testimonials .profile .pic {
     width: inherit;
-    height: inherit; } }
+    height: inherit; }
+
+  #hero {
+    height: 76vh; } }
 
 /*# sourceMappingURL=style.css.map */
