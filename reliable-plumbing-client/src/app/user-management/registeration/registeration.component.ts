@@ -22,25 +22,7 @@ export class RegisterationComponent implements OnInit {
   role = Role;
   registrationModes = RegistrationMode;
   isSystemAdmin = false;
-  @Input() user: any = {
-    password: null,
-    confirmPassword: null,
-    firstName: null,
-    lastName: null,
-    email: null,
-    mobile: null,
-    roles: [],
-    address: {
-      coords: {
-        lat: null,
-        lng: null
-      },
-      streetAddress: null,
-      city: null,
-      state: null,
-      zipCode: null
-    }
-  }
+  @Input() user: any;
   mapMarker: Marker;
   mobileMaskOpts = {
     mask: ['(', /[1-9]/, /\d/, /\d/, ')', ' ', /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/],
@@ -49,12 +31,29 @@ export class RegisterationComponent implements OnInit {
     showMask: true,
     replceRegex: /\W/g
   };
+  userRoles = {
+    Supervisor: false,
+    Technician: false,
+    Admin: false,
+    SystemAdmin: false
+  };
+
   constructor(private fb: FormBuilder, private userManagementService: UserManagementService, private alertifyService: AlertifyService,
     private environmentService: EnvironmentService, private routeHandler: RouteHandlerService) { }
 
   ngOnInit() {
+    if (!this.user)
+      this.user = {
+        address: {
+          coords: { lat: null, lng: null },
+          streetAddress: null, city: null,
+          state: null, zipCode: null
+        }
+      };
     if (this.mode == RegistrationMode.edit)
       this.mapLoggedInUser();
+    else if (this.mode == RegistrationMode.systemUserEdit)
+      this.mapUserRoles();
     else
       navigator.geolocation.getCurrentPosition(position => {
         this.mapMarker = {
@@ -64,7 +63,7 @@ export class RegisterationComponent implements OnInit {
           label: null
         }
       });
-    if (this.mode == RegistrationMode.completeProfile || this.mode == RegistrationMode.edit) {
+    if (this.mode == RegistrationMode.completeProfile || this.mode == RegistrationMode.edit || this.mode == RegistrationMode.systemUserEdit) {
       this.registerBtnText = 'Update';
       this.showResetBtn = false;
       this.disableEmailInput = true;
@@ -117,21 +116,21 @@ export class RegisterationComponent implements OnInit {
 
           let rolesFG = this.fb.group(rolesControls, {
             validator: (group: FormGroup) => {
-              let controlNames = Object.getOwnPropertyNames(group.controls);
-              return ~controlNames.findIndex(c => group.controls[c].value == true) ? null : { noRole: true };
+              return this.user.roles && this.user.roles.length > 0 ? null : { noRole: true };
             }
           });
 
           this.registerForm.addControl('roles', rolesFG);
           break;
         case regControls.accountType:
-        if(!this.user.accountType)
-          this.user.accountType = 'Residential';
+          if (!this.user.accountType)
+            this.user.accountType = 'Residential';
           this.registerForm.addControl('accountType', new FormControl(null, [Validators.required]));
           break;
       }
     }
-    if (this.registerForm.controls['email'] != null && this.mode != RegistrationMode.completeProfile && this.mode != RegistrationMode.edit)
+    if (this.registerForm.controls['email'] != null && this.mode != RegistrationMode.completeProfile &&
+      this.mode != RegistrationMode.edit && this.mode != RegistrationMode.systemUserEdit)
       this.registerForm.controls['email'].valueChanges.subscribe(x => {
         let control = this.registerForm.controls['email']
         let emailErrors = control.hasError('email') || control.hasError('required');
@@ -203,17 +202,21 @@ export class RegisterationComponent implements OnInit {
         });
         break;
       case RegistrationMode.edit:
+      case RegistrationMode.systemUserEdit:
         this.userManagementService.updateProfile(this.user).subscribe(success => {
           if (success) {
             this.alertifyService.success('Profile updated successfully');
-            let user: any = this.environmentService.currentUser;
-            user.firstName = this.user.firstName;
-            user.lastName = this.user.lastName;
-            user.mobile = this.user.mobile;
-            user.address = this.user.address;
-            this.environmentService.updateCurrentUserInfo(user);
+            if (this.mode == RegistrationMode.edit) {
+
+              let user: any = this.environmentService.currentUser;
+              user.firstName = this.user.firstName;
+              user.lastName = this.user.lastName;
+              user.mobile = this.user.mobile;
+              user.address = this.user.address;
+              this.environmentService.updateCurrentUserInfo(user);
+            }
             this.user.password = this.user.confirmPassword = null;
-            this.userAdded.emit(this.user)
+            this.userAdded.emit(success);
           }
           else
             this.alertifyService.error('profile not updated, please try again');
@@ -326,6 +329,13 @@ export class RegisterationComponent implements OnInit {
           regControls.address
         ]
         break;
+      case RegistrationMode.systemUserEdit:
+        controls = [
+          regControls.firstName, regControls.lastName,
+          regControls.email, regControls.mobile,
+          regControls.roles
+        ]
+        break;
       case RegistrationMode.signup:
         controls = [
           regControls.accountType,
@@ -349,6 +359,11 @@ export class RegisterationComponent implements OnInit {
       else
         this.alertifyService.success('try again');
     })
+  }
+
+  mapUserRoles() {
+    for (let role of this.user.roles)
+      this.userRoles[Role[role]] = true;
   }
 }
 

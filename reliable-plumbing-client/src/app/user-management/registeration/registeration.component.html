@@ -91,23 +91,23 @@
                     <label>Roles: </label>
                     <div class="form-check form-check-inline">
                       <label class="form-check-label">
-                        <input class="form-check-input" type="checkbox" (click)="handleRolesChange($event)" formControlName="technician" [value]="role.Technician"> Technician
+                        <input class="form-check-input" type="checkbox" (click)="handleRolesChange($event)" [checked]="userRoles.Technician" formControlName="technician" [value]="role.Technician"> Technician
                       </label>
                     </div>
                     <div class="form-check form-check-inline">
                       <label class="form-check-label">
-                        <input class="form-check-input" type="checkbox" (click)="handleRolesChange($event)" formControlName="supervisor" [value]="role.Supervisor"> Supervisor
+                        <input class="form-check-input" type="checkbox" (click)="handleRolesChange($event)" [checked]="userRoles.Supervisor" formControlName="supervisor" [value]="role.Supervisor"> Supervisor
                       </label>
                     </div>
                     <ng-container *ngIf="isSystemAdmin">
                       <div class="form-check form-check-inline">
                         <label class="form-check-label">
-                          <input class="form-check-input" type="checkbox" (click)="handleRolesChange($event)" formControlName="admin" [value]="role.Admin"> Administrator
+                          <input class="form-check-input" type="checkbox" (click)="handleRolesChange($event)" [checked]="userRoles.Admin" formControlName="admin" [value]="role.Admin"> Administrator
                         </label>
                       </div>
                       <div class="form-check form-check-inline">
                         <label class="form-check-label">
-                          <input class="form-check-input" type="checkbox" (click)="handleRolesChange($event)" formControlName="systemAdmin" [value]="role.SystemAdmin"> SystemAdmin
+                          <input class="form-check-input" type="checkbox" (click)="handleRolesChange($event)" [checked]="userRoles.SystemAdmin" formControlName="systemAdmin" [value]="role.SystemAdmin"> SystemAdmin
                         </label>
                       </div>
                     </ng-container>
