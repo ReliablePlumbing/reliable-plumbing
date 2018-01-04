@@ -181,7 +181,7 @@
 
             <div class="col-md-12">
               <button type="submit" (click)="scheduleAppointment()" class="btn btn-success">Send</button> &nbsp;
-              <button *ngIf="isLoggedIn" type="submit" (click)="prevStep()" class="btn btn-success">Back</button> &nbsp;
+              <button *ngIf="!isLoggedIn" type="submit" (click)="prevStep()" class="btn btn-success">Back</button> &nbsp;
               <button type="reset" (click)="resetForm()" class="btn btn-danger">Clear</button>
             </div>
           </div>
