@@ -9,7 +9,7 @@
             </button>
             <div class="filters-container collapse" id="filter-toggle">
                 <div class="row">
-                    <div class="col-sm-6">
+                    <div class="col-xl-6 col-md-12 col-sm-12 col-xs-12">
                         <div class="form-group">
                             <h5>select Range Dates</h5>
                             <div>
@@ -17,7 +17,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-sm-3">
+                    <div class="col-xl-3 col-md-6 col-sm-6 col-xs-6">
                         <div class="form-group">
                             <h5>select from time</h5>
                             <div>
@@ -31,7 +31,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-sm-3">
+                    <div class="col-xl-3 col-md-6 col-sm-6 col-xs-6">
                         <div class="form-group">
                             <h5>select from to</h5>
                             <div>
@@ -68,7 +68,7 @@
                                     <div class="appointemt-card pointer" *ngFor="let appointment of appointments[date]" (click)="openAppointmentDetailsModal(appointment, date)">
                                         <span class="appointemt-status pending" [ngClass]="appointment.status | appointmentStatusColor" placement="top" ngbTooltip="{{appointment.status | appointmentStatusTxt}}"></span>
                                         <h6>
-                                            <b>{{appointment.user == null ? appointment.customerInfo.firstName : appointment.user.firstName}}</b>
+                                            <b>{{appointment.user == null ? appointment.customerInfo?.firstName : appointment.user?.firstName}}</b>
                                         </h6>
                                         <div class="appointemt-time">
                                             <span><b>Time: </b> {{appointment.time}}</span>

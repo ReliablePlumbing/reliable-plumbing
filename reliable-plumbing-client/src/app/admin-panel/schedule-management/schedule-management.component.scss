@@ -54,3 +54,17 @@
 :host ::ng-deep .dropdown-menu {
     display: inherit !important;
 }
+
+@media (max-width: 1024px) {
+    .appointemt-cards-list {
+        -ms-grid-columns: 1fr 1fr;
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+@media (max-width: 768px) {
+    .appointemt-cards-list {
+        -ms-grid-columns: 1fr;
+        grid-template-columns: 1fr;
+    }
+}

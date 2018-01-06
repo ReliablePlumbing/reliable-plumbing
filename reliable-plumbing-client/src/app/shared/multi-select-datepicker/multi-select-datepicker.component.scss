@@ -4,14 +4,18 @@
     display: inline-block;
     height: 2rem;
     width: 2rem;
-  }
-  .custom-day.focused {
+}
+
+.custom-day.focused {
     background-color: #e6e6e6;
-  }
-  .custom-day.range, .custom-day:hover {
+}
+
+.custom-day.range,
+.custom-day:hover {
     background-color: #0275d8;
     color: white;
-  }
-  .faded {
+}
+
+.faded {
     opacity: 0.5;
-  }
+}

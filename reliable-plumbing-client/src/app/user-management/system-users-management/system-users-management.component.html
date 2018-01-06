@@ -5,44 +5,44 @@
 
     <div class="row header">
         <h3 class="col-sm-6">System Users</h3>
-    
+
         <div class="col-sm-6">
 
             <button class="btn btn-primary add-user-btn" (click)="addUser(register)">Add New User</button>
         </div>
 
     </div>
+    <div class="table-responsive">
+        <table class="table">
+            <thead>
+                <th>Name</th>
+                <th>User Type</th>
+                <th>Email</th>
+                <th>Mobile</th>
+                <th>Creation Date</th>
+                <th>Status</th>
+                <th>Activation Date</th>
+                <th></th>
+            </thead>
+            <tbody>
+                <tr *ngFor="let user of users; let i = index">
+                    <td>{{user.firstName + ' ' + user.lastName}}</td>
+                    <td>{{user.rolesString}}</td>
+                    <td>{{user.email}}</td>
+                    <td>{{user.mobile}}</td>
+                    <td>{{user.creationDate | date}}</td>
+                    <td>{{user.isActivated ? 'Activated' : 'Deactivated'}}</td>
+                    <td>{{user.activationDate == null ? 'not activated yet' : user.activationDate | date }}</td>
+                    <td>
+                        <a class="btn btn-link btn-link-delete filters-toggle-btn" (click)="deleteUser(user)">Delete</a>
+                        <a class="btn btn-link btn-link-edit filters-toggle-btn" (click)="editUser(user, register, i)">Edit</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
 
-    <table class="table">
-        <thead>
-            <th>Name</th>
-            <th>User Type</th>
-            <th>Email</th>
-            <th>Mobile</th>
-            <th>Creation Date</th>
-            <th>Status</th>
-            <th>Activation Date</th>
-            <th></th>
-        </thead>
-        <tbody>
-            <tr *ngFor="let user of users; let i = index">
-                <td>{{user.firstName + ' ' + user.lastName}}</td>
-                <td>{{user.rolesString}}</td>
-                <td>{{user.email}}</td>
-                <td>{{user.mobile}}</td>
-                <td>{{user.creationDate | date}}</td>
-                <td>{{user.isActivated ? 'Activated' : 'Deactivated'}}</td>
-                <td>{{user.activationDate == null ? 'not activated yet' : user.activationDate | date }}</td>
-                <td>
-                    <a class="btn btn-link btn-link-delete filters-toggle-btn" (click)="deleteUser(user)">Delete</a>
-                    <a class="btn btn-link btn-link-edit filters-toggle-btn" (click)="editUser(user, register, i)">Edit</a>
-                </td>
-            </tr>
-        </tbody>
-    </table>
 
-
-
+    </div>
     <ng-template #register let-c="close" let-d="dismiss">
         <div class="modal-header">
             <h4 class="modal-title">{{modalHeaderTxt}}</h4>

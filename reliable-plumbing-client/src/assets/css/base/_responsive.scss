@@ -23,9 +23,39 @@
     #hero {
         height: 76vh;
     }
+    .navbar .navbar-collapse .navbar-nav li a {
+        padding: 0.5rem 0.5rem;
+    }
 }
 
-@media (max-width: 576px) {}
+@media (max-width: 576px) {
+    ngb-datepicker-month-view {
+        .d-flex {
+            font-size: 12px;
+        }
+    }
+    ngb-datepicker {
+        font-size: 12px;
+    }
+    .ngb-dp-day {
+        width: 24px !important;
+        height: 24px !important;
+        .custom-day {
+            width: 24px !important;
+            height: 24px !important;
+        }
+    }
+    .ngb-dp-day,
+    .ngb-dp-weekday,
+    .ngb-dp-week-number {
+        width: 24px !important;
+        height: 24px !important;
+    }
+    .ngb-dp-header {
+        height: 2.25rem !important;
+        margin-bottom: -2rem !important;
+    }
+}
 
 // Large devices (desktops, 992px and up)
 @media (min-width: 992px) {}
