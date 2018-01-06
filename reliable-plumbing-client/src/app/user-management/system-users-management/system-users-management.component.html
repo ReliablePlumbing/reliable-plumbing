@@ -13,7 +13,7 @@
 
     </div>
     <div class="table-responsive">
-        <table class="table">
+        <table class="table table-bordered">
             <thead>
                 <th>Name</th>
                 <th>User Type</th>
@@ -22,6 +22,7 @@
                 <th>Creation Date</th>
                 <th>Status</th>
                 <th>Activation Date</th>
+                <th></th>
                 <th></th>
             </thead>
             <tbody>
@@ -34,8 +35,11 @@
                     <td>{{user.isActivated ? 'Activated' : 'Deactivated'}}</td>
                     <td>{{user.activationDate == null ? 'not activated yet' : user.activationDate | date }}</td>
                     <td>
-                        <a class="btn btn-link btn-link-delete filters-toggle-btn" (click)="deleteUser(user)">Delete</a>
-                        <a class="btn btn-link btn-link-edit filters-toggle-btn" (click)="editUser(user, register, i)">Edit</a>
+                        <button class="btn btn-danger filters-toggle-btn" (click)="deleteUser(user)">Delete</button>
+                    </td>
+                    <td>
+                        <button class="btn btn-primary filters-toggle-btn" (click)="editUser(user, register, i)">Edit</button>
+
                     </td>
                 </tr>
             </tbody>

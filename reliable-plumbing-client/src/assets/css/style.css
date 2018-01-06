@@ -726,8 +726,6 @@ body.mobile-nav-active {
       .register .register-container form .form-group .form-control {
         border-radius: 0;
         height: 40px; }
-      .register .register-container form .form-group i {
-        color: red; }
       .register .register-container form .form-group .error-message {
         color: red; }
         .register .register-container form .form-group .error-message a {
