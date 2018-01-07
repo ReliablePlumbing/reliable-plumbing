@@ -43,17 +43,17 @@
             <table class="table table-bordered">
                 <thead>
                     <th>name</th>
-                    <th>edit</th>
-                    <th>Delete</th>
+                    <th></th>
+                    <th></th>
                 </thead>
                 <tbody>
                     <tr *ngFor="let type of types">
                         <td>{{type.name}}</td>
                         <td>
-                            <button class="btn btn-primary filters-toggle-btn" (click)="openAddEditTypePopup(addEditPopup, type)">edit</button>
+                            <button class="btn btn-primary filters-toggle-btn" (click)="openAddEditTypePopup(addEditPopup, type)"><i class="fa fa-pencil-square-o"></i> edit</button>
                         </td>
                         <td>
-                            <button class="btn btn-danger filters-toggle-btn" (click)="deleteType(type)">delete</button>
+                            <button class="btn btn-danger filters-toggle-btn" (click)="deleteType(type)"><i class="fa fa-trash-o"></i> delete</button>
                         </td>
                     </tr>
                 </tbody>

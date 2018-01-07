@@ -8,7 +8,7 @@
 
         <div class="col-sm-6">
 
-            <button class="btn btn-primary add-user-btn" (click)="addUser(register)">Add New User</button>
+            <button class="btn btn-primary add-user-btn" (click)="addUser(register)"><i class="fa fa-plus"></i> Add New User</button>
         </div>
 
     </div>
@@ -35,11 +35,10 @@
                     <td>{{user.isActivated ? 'Activated' : 'Deactivated'}}</td>
                     <td>{{user.activationDate == null ? 'not activated yet' : user.activationDate | date }}</td>
                     <td>
-                        <button class="btn btn-danger filters-toggle-btn" (click)="deleteUser(user)">Delete</button>
+                        <button class="btn btn-primary filters-toggle-btn" (click)="editUser(user, register, i)"><i class="fa fa-pencil-square-o"></i> Edit</button>
                     </td>
                     <td>
-                        <button class="btn btn-primary filters-toggle-btn" (click)="editUser(user, register, i)">Edit</button>
-
+                        <button class="btn btn-danger filters-toggle-btn" (click)="deleteUser(user)"><i class="fa fa-trash-o"></i> Delete</button>
                     </td>
                 </tr>
             </tbody>
