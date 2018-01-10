@@ -22,7 +22,7 @@ Header Section
                             <a class="nav-link pointer" ngbDropdownToggle>{{currentUser.firstName + ' ' + currentUser.lastName}}</a>
                             <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
                                 <button class="dropdown-item" (click)="openChangePassword()">Change Password</button>
-                                <button class="dropdown-item" [routerLink]="systemRoutes.editProfile">Edit Profile</button>
+                                <button class="dropdown-item" [routerLink]="'/' + systemRoutes.editProfile">Edit Profile</button>
                             </div>
                         </div>
                         <!-- <a (click)="openEditProfile()" class="nav-link pointer">{{currentUser?.firstName + ' ' + currentUser?.lastName}}</a> -->

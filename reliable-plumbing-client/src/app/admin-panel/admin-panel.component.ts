@@ -14,9 +14,6 @@ export class AdminPanelComponent implements OnInit {
 
   currentSelectedTab = -1;
 
-  @ViewChild('registeration') registerationTemplate: ElementRef;
-  registerModalRef: NgbModalRef;
-
   @ViewChild('changePassword') changePasswordTemplate: ElementRef;
   changePasswordModalRef: NgbModalRef;
 
@@ -29,6 +26,8 @@ export class AdminPanelComponent implements OnInit {
     myAppointments: { index: 4, hasPermission: false },
     tracking: { index: 5, hasPermission: false },
   }
+  systemRoutes = systemRoutes;
+
   constructor(private environmentService: EnvironmentService, private router: Router, private routeHandlerService: RouteHandlerService,
     private modalService: NgbModal) { }
 
