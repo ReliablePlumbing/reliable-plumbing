@@ -1,8 +1,11 @@
 import { Component, OnInit, EventEmitter, Input, Output } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
-import { Role, RegistrationMode } from '../../models/enums';
+import { ActivatedRoute } from '@angular/router';
+import { Role, RegistrationMode, regControls } from '../../models/enums';
 import { Marker } from '../../models/marker';
 import { AlertifyService, EnvironmentService, RouteHandlerService, UserManagementService } from '../../services/services.exports';
+import { ProfileEventsService } from './profile-events.service';
+import { isSystemUser } from '../../utils/user-helpers';
 
 @Component({
   selector: 'rb-registeration',
@@ -11,337 +14,147 @@ import { AlertifyService, EnvironmentService, RouteHandlerService, UserManagemen
 })
 export class RegisterationComponent implements OnInit {
 
-  @Input() mode: RegistrationMode = RegistrationMode.signup;
-  controls: regControls[] = [];
-  registerForm: FormGroup;
-  registerBtnText = 'Register';
-  disableEmailInput = false;
-  showResetBtn = false;
-  trySubmit: boolean = false;
+  @Input() mode: RegistrationMode;
+  @Input() user = null;
   @Output() userAdded: EventEmitter<any> = new EventEmitter<any>();
-  role = Role;
-  registrationModes = RegistrationMode;
-  isSystemAdmin = false;
-  @Input() user: any;
-  mapMarker: Marker;
-  mobileMaskOpts = {
-    mask: ['(', /[1-9]/, /\d/, /\d/, ')', ' ', /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/],
-    guide: false,
-    keepCharPositions: false,
-    showMask: true,
-    replceRegex: /\W/g
-  };
-  userRoles = {
-    Supervisor: false,
-    Technician: false,
-    Admin: false,
-    SystemAdmin: false
-  };
+  userId: any;
+  basicInfoControls;
+  steps = [
+    { label: 'Basic Info' },
+    { label: 'Sites (Addresses)' }
+  ];
+  activeIndex = 0;
+  subscription;
+  isValid = true;
+  actionType: actionType;
+  showSteps = false;
 
   constructor(private fb: FormBuilder, private userManagementService: UserManagementService, private alertifyService: AlertifyService,
-    private environmentService: EnvironmentService, private routeHandler: RouteHandlerService) { }
+    private environmentService: EnvironmentService, private routeHandler: RouteHandlerService, private activatedRoute: ActivatedRoute,
+    private profileEventsService: ProfileEventsService) { }
 
   ngOnInit() {
-    if (!this.user)
-      this.user = {
-        address: {
-          coords: { lat: null, lng: null },
-          streetAddress: null, city: null,
-          state: null, zipCode: null
-        }
-      };
-    if (this.mode == RegistrationMode.edit)
-      this.mapLoggedInUser();
-    else if (this.mode == RegistrationMode.systemUserEdit)
-      this.mapUserRoles();
-    else
-      navigator.geolocation.getCurrentPosition(position => {
-        this.mapMarker = {
-          lat: position.coords.latitude,
-          lng: position.coords.longitude,
-          draggable: true,
-          label: null
-        }
-      });
-    if (this.mode == RegistrationMode.completeProfile || this.mode == RegistrationMode.edit || this.mode == RegistrationMode.systemUserEdit) {
-      this.registerBtnText = 'Update';
-      this.showResetBtn = false;
-      this.disableEmailInput = true;
-    }
-    else if (this.mode == RegistrationMode.admin) {
-      this.registerBtnText = 'Add';
-      this.showResetBtn = true;
-      this.disableEmailInput = false;
-    }
-    this.createForm();
+    this.subsciptionToForms();
+    this.userId = this.activatedRoute.snapshot.params['userId'];
+    if (this.mode == null)
+      this.mode = this.activatedRoute.snapshot.data.mode;
+
+    this.initUser();
   }
 
-  createForm() {
-    this.registerForm = this.fb.group({});
-    this.controls = this.getModeControls();
-
-    for (let control of this.controls) {
-      switch (control) {
-        case regControls.email:
-          this.registerForm.addControl('email', new FormControl(null, [Validators.required, Validators.email]));
-          break;
-        case regControls.firstName:
-          this.registerForm.addControl('firstName', new FormControl(null, [Validators.required]));
-          break;
-        case regControls.lastName:
-          this.registerForm.addControl('lastName', new FormControl(null));
-          break;
-        case regControls.mobile:
-          this.registerForm.addControl('mobile', new FormControl(null, [Validators.required, Validators.pattern(/^(\([0-9]{3}\) |[0-9]{3}-)[0-9]{3}-[0-9]{4}$/)]));
-          break;
-        case regControls.password:
-          this.registerForm.addControl('password', new FormControl(null, [Validators.required, Validators.pattern(/^(?=.*?[A-Z])(?=.*?[a-z])((?=.*?[0-9])|(?=.*?[#?!@$%^&*-])).{6,32}$/)]))
-          this.registerForm.addControl('confirmPassword', new FormControl(null, [Validators.required, this.matchOtherValidator('password')]));
-          break;
-        case regControls.address:
-          this.registerForm.addControl('streetAddress', new FormControl(null));
-          this.registerForm.addControl('city', new FormControl(null));
-          this.registerForm.addControl('state', new FormControl(null));
-          this.registerForm.addControl('zipCode', new FormControl(null));
-          break;
-        case regControls.roles:
-          let roles = this.environmentService.currentUser.roles;
-
-          let rolesControls: any = { technician: [''], supervisor: [''] };
-          this.isSystemAdmin = ~roles.indexOf(Role.SystemAdmin) != 0
-          if (this.isSystemAdmin) {
-            rolesControls.admin = [''];
-            rolesControls.systemAdmin = [''];
-          }
-
-          let rolesFG = this.fb.group(rolesControls, {
-            validator: (group: FormGroup) => {
-              return this.user.roles && this.user.roles.length > 0 ? null : { noRole: true };
-            }
-          });
-
-          this.registerForm.addControl('roles', rolesFG);
-          break;
-        case regControls.accountType:
-          if (!this.user.accountType)
-            this.user.accountType = 'Residential';
-          this.registerForm.addControl('accountType', new FormControl(null, [Validators.required]));
-          break;
-      }
-    }
-    if (this.registerForm.controls['email'] != null && this.mode != RegistrationMode.completeProfile &&
-      this.mode != RegistrationMode.edit && this.mode != RegistrationMode.systemUserEdit)
-      this.registerForm.controls['email'].valueChanges.subscribe(x => {
-        let control = this.registerForm.controls['email']
-        let emailErrors = control.hasError('email') || control.hasError('required');
-        if (emailErrors) return null;
-
-        this.userManagementService.checkEmailExistence(this.user.email)
-          .subscribe(exists => {
-            if (!exists) return null;
-            else
-              control.setErrors({ emailExists: exists })
-          });
-      });
-    else if (this.registerForm.controls['email'] != null)
-      setTimeout(() => this.registerForm.controls['email'].disable(), 0);
-  }
-
-  matchOtherValidator(otherControlName: string) {
-
-    let thisControl: FormControl;
-    let otherControl: FormControl;
-
-    return (control: FormControl) => {
-
-      if (!control.parent) return null;
-
-      if (!thisControl) {
-        thisControl = control;
-        otherControl = control.parent.get(otherControlName) as FormControl;
-        if (!otherControl) throw new Error('matchOtherValidator(): other control is not found in parent group');
-        otherControl.valueChanges.subscribe(() => { thisControl.updateValueAndValidity(); });
-      }
-
-      if (!otherControl) return null;
-
-      if (otherControl.value !== thisControl.value)
-        return { matchOther: true };
-
-      return null;
-    }
-  }
-
-  handleRolesChange(event) {
-    let checked = event.target.checked;
-    let value = parseInt(event.target.value);
-
-    if (checked)
-      this.user.roles.push(value);
-    else
-      this.user.roles = this.user.roles.filter(role => role != value);
-  }
-
-  userRegister() {
-    this.trySubmit = true;
-    if (this.registerForm.invalid)
-      return;
-
-    if (this.mode != RegistrationMode.admin && this.user.address != null && this.mapMarker != null)
-      this.user.address.coords = {
-        lat: this.mapMarker.lat,
-        lng: this.mapMarker.lng
-      };
-
+  initUser() {
     switch (this.mode) {
-      case RegistrationMode.signup:
-      case RegistrationMode.admin:
-        this.userManagementService.register(this.user).subscribe(x => {
-          this.user.password = this.user.confirmPassword = null;
-          this.userAdded.emit(this.user)
-        });
-        break;
-      case RegistrationMode.edit:
-      case RegistrationMode.systemUserEdit:
-        this.userManagementService.updateProfile(this.user).subscribe(success => {
-          if (success) {
-            this.alertifyService.success('Profile updated successfully');
-            if (this.mode == RegistrationMode.edit) {
-
-              let user: any = this.environmentService.currentUser;
-              user.firstName = this.user.firstName;
-              user.lastName = this.user.lastName;
-              user.mobile = this.user.mobile;
-              user.address = this.user.address;
-              this.environmentService.updateCurrentUserInfo(user);
-            }
-            this.user.password = this.user.confirmPassword = null;
-            this.userAdded.emit(success);
-          }
-          else
-            this.alertifyService.error('profile not updated, please try again');
-        });
+      case RegistrationMode.addSystemUser:
+      case RegistrationMode.editSystemUser:
+        // user comes from input
+        this.mapUser(this.user);
+        this.basicInfoControls = this.getModeControls();
         break;
       case RegistrationMode.completeProfile:
-        this.userAdded.emit(this.user)
+        // the user is an input
+        this.mapUser(this.user);
+        this.basicInfoControls = this.getModeControls();
         break;
-      default:
+      case RegistrationMode.edit:
+        if (this.userId)
+          this.getUserById(this.userId);
+        else
+          this.mapUser(this.environmentService.currentUser)
+        break;
+      case RegistrationMode.signup:
+        this.showSteps = true;
+        this.user = { sites: [], site: {} };
+        this.basicInfoControls = this.getModeControls();
+
         break;
     }
+
   }
 
-  openLogin() {
-    this.userAdded.emit({});
+  getUserById(userId) {
+    this.userManagementService.getUserById(userId).subscribe(result => {
+      if (result)
+        this.user = result;
+
+      this.showSteps = !isSystemUser(this.user);
+      this.basicInfoControls = this.getModeControls();
+    });
   }
 
-  getControlValidation(controlName, errorName, beforeSubmit = true) {
-    if (this.registerForm == null)
-      return false;
 
-    let control = this.registerForm.controls[controlName];
-
-    return (beforeSubmit || this.trySubmit) && control.hasError(errorName);
-  }
-
-  resetForm() {
-    this.user = {
-      password: null,
-      confirmPassword: null,
-      firstName: null,
-      lastName: null,
-      email: null,
-      mobile: null,
-      roles: [Role.Technician],
-      address: {
-        coords: {
-          lat: null,
-          lng: null
-        },
-        text: null
-      }
-    };
-    this.trySubmit = false;
-  }
-
-  markerDragEnd(m, $event) {
-    this.mapMarker.lat = $event.coords.lat;
-    this.mapMarker.lng = $event.coords.lng;
-  }
-
-  mapLoggedInUser() {
-    let currentUser: any = this.environmentService.currentUser;
-
-    this.user = {
-      email: currentUser.email,
-      firstName: currentUser.firstName,
-      lastName: currentUser.lastName,
-      mobile: currentUser.mobile,
-      address: currentUser.address,
-    };
-
-    if (this.user.address != null)
-      this.mapMarker = {
-        lat: this.user.address.coords.lat,
-        lng: this.user.address.coords.lng,
-        draggable: true,
-        label: null
-      }
-    else {
-      this.user.address = {
-        coords: {
-          lat: null,
-          lng: null
-        },
-        text: null
-      }
-      navigator.geolocation.getCurrentPosition(position => {
-        this.mapMarker = {
-          lat: position.coords.latitude,
-          lng: position.coords.longitude,
-          draggable: true,
-          label: null
+  mapUser(user) {
+    if (user) {
+      this.user = {
+        id: user.id,
+        email: user.email,
+        accountType: user.accountType,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        mobile: user.mobile,
+        roles: user.roles,
+        site: user.sites,
+      };
+      this.showSteps = !isSystemUser(this.user);
+      if (this.showSteps) {
+        if (this.user.site && this.user.sites.length > 0) {
+          this.user.site = this.user.sites[0];
+          this.user.site.index = 0;
         }
-      });
+        else {
+          this.user.site;
+          this.user.sites = [];
+        }
+      }
     }
+    else
+      this.user = { sites: [], roles: [], site: {} }
+
+    this.basicInfoControls = this.getModeControls();
   }
 
   getModeControls() {
-    let controls: regControls[] = [];
+    let controls: any = [];
     switch (this.mode) {
-      case RegistrationMode.admin:
+      case RegistrationMode.addSystemUser:
+        let editableEmail = true;
+      case RegistrationMode.editSystemUser:
+        this.showSteps = false;
         controls = [
-          regControls.firstName, regControls.lastName,
-          regControls.email, regControls.roles
+          { type: regControls.firstName },
+          { type: regControls.lastName },
+          { type: regControls.email, editable: editableEmail },
+          { type: regControls.mobile },
+          { type: regControls.roles, roles: this.getAllowedRoles() },
         ]
         break;
       case RegistrationMode.completeProfile:
         controls = [
-          regControls.firstName, regControls.lastName,
-          regControls.email, regControls.mobile,
-          regControls.password
+          { type: regControls.firstName },
+          { type: regControls.lastName },
+          { type: regControls.email, editable: false },
+          { type: regControls.mobile },
+          { type: regControls.password },
         ]
         break;
       case RegistrationMode.edit:
-        controls = [
-          regControls.accountType,
-          regControls.firstName, regControls.lastName,
-          regControls.email, regControls.mobile,
-          regControls.address
-        ]
-        break;
-      case RegistrationMode.systemUserEdit:
-        controls = [
-          regControls.firstName, regControls.lastName,
-          regControls.email, regControls.mobile,
-          regControls.roles
-        ]
+        controls = [];
+        if (!isSystemUser(this.user))
+          controls.push({ type: regControls.accountType });
+        controls.push({ type: regControls.firstName });
+        controls.push({ type: regControls.lastName });
+        controls.push({ type: regControls.email, editable: false });
+        controls.push({ type: regControls.mobile });
+
         break;
       case RegistrationMode.signup:
+        this.showSteps = true;
         controls = [
-          regControls.accountType,
-          regControls.firstName, regControls.lastName,
-          regControls.email, regControls.mobile,
-          regControls.password, regControls.address
+          { type: regControls.accountType },
+          { type: regControls.firstName },
+          { type: regControls.lastName },
+          { type: regControls.email, editable: true },
+          { type: regControls.mobile }, // address will be added in other section
+          { type: regControls.password }
         ]
         break;
     }
@@ -349,32 +162,123 @@ export class RegisterationComponent implements OnInit {
     return controls;
   }
 
-  regControls = regControls;
+  getAllowedRoles() {
 
-  resendActivationLink() {
-    let user: any = this.environmentService.currentUser;
-    this.userManagementService.resendActivationLink(user.email).subscribe(success => {
-      if (success)
-        this.alertifyService.success('activation link sent to your mail');
-      else
-        this.alertifyService.success('try again');
-    })
+    let currentUserRoles = this.environmentService.currentUser.roles;
+
+    let allowedRoles: any = [
+      { role: Role.Technician, text: 'Technician' },
+      { role: Role.Supervisor, text: 'Supervisor' }
+    ];
+    let isSystemAdmin = ~currentUserRoles.indexOf(Role.SystemAdmin) != 0
+    if (isSystemAdmin) {
+      allowedRoles.push({ role: Role.Admin, text: 'Admin' });
+      allowedRoles.push({ role: Role.SystemAdmin, text: 'System Admin' });
+    }
+
+    return allowedRoles;
   }
 
-  mapUserRoles() {
-    for (let role of this.user.roles)
-      this.userRoles[Role[role]] = true;
+  addUserSite() {
+    this.actionType = actionType.addSite;
+    this.profileEventsService.isFormValid();
+  }
+
+  initNewSite = () => this.user.site = {};
+
+  editSite(index) {
+    this.user.site = this.user.sites[index];
+    this.user.site.index = index;
+  }
+
+  deleteSite(index) {
+    this.alertifyService.confirmDialog('Are you sure you want to remove this site', () => {
+      let sites = [];
+      for (let i = 0; i < this.user.sites.length; i++) {
+        if (i != index)
+          sites.push(this.user.sites[i]);
+      }
+
+      this.user.sites = sites;
+      this.user.site = {};
+    });
+  }
+
+  nextStep() {
+    this.actionType = actionType.nextStep;
+    this.profileEventsService.isFormValid();
+  }
+
+  save() {
+    this.actionType = actionType.save;
+    this.profileEventsService.isFormValid();
+  }
+
+  subsciptionToForms() {
+    this.subscription = this.profileEventsService.validateFormResponse.subscribe(isValid => {
+      this.isValid = isValid;
+      if (isValid) {
+        switch (this.actionType) {
+          case actionType.addSite:
+            let site = this.user.site;
+            if (site.index)
+              this.user.sites[site.index] = site;
+            else
+              this.user.sites.push(site);
+            this.user.site = {};
+            break;
+          case actionType.nextStep:
+            this.isValid = true;
+            this.activeIndex = 1;
+            break;
+          case actionType.save:
+            this.addEditUser();
+            break;
+        }
+      }
+
+
+    });
+  }
+
+  addEditUser() {
+    switch (this.mode) {
+      case RegistrationMode.addSystemUser:
+      case RegistrationMode.signup:
+        this.userManagementService.register(this.user).subscribe(x => {
+          if (x) {
+            this.alertifyService.success('Save Completed Successfully');
+            this.userAdded.emit(this.user);
+          }
+        });
+        break;
+      case RegistrationMode.editSystemUser:
+      case RegistrationMode.edit:
+        this.userManagementService.updateProfile(this.user).subscribe(user => {
+          if (user) {
+            this.alertifyService.success('Profile updated successfully');
+            this.userAdded.emit(user);
+          }
+          else
+            this.alertifyService.error('profile not updated, please try again');
+        });
+        break;
+      case RegistrationMode.completeProfile:
+        this.userAdded.emit(this.user);
+
+        break;
+    }
+  }
+
+  ngOnDestroy() {
+    if (this.subscription)
+      this.subscription.unsubscribe();
   }
 }
 
-
-export enum regControls {
-  email = 1,
-  mobile,
-  firstName,
-  lastName,
-  password,
-  roles,
-  address,
-  accountType
+export enum actionType {
+  addSite,
+  nextStep,
+  save
 }
+

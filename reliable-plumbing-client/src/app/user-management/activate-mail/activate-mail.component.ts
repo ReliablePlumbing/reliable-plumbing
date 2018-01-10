@@ -4,6 +4,7 @@ import { RouteHandlerService } from '../../services/route-handler.service';
 import { UserManagementService } from '../../services/services.exports';
 import { RegistrationMode, Role } from '../../models/enums';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { isSystemUser } from '../../utils/user-helpers';
 
 @Component({
   selector: 'rb-activate-mail',
@@ -18,8 +19,7 @@ export class ActivateMailComponent implements OnInit {
   displayMessage = '';
   registrationMode = RegistrationMode.completeProfile;
   user = null;
-  @ViewChild('register') registerationTemplate: ElementRef;
-  registerModelRef: NgbModalRef;
+  completeProfile = false;
 
   constructor(private activatedRoute: ActivatedRoute, private routeHandlerService: RouteHandlerService,
     private userManagementService: UserManagementService, private modalService: NgbModal) { }
@@ -35,13 +35,7 @@ export class ActivateMailComponent implements OnInit {
         this.user = result.user;
         this.displayMessage = result.message;
 
-        if (result.success && this.user != null) {
-          let isSystemUser = false;
-          if (this.user.roles != null)
-            for (let i = 0; i < this.user.roles.length; i++)
-              if (this.user.roles[i] == Role.Supervisor || this.user.roles[i] == Role.Technician)
-                this.registerModelRef = this.modalService.open(this.registerationTemplate, { size: 'lg' });
-        }
+        this.completeProfile = result.success && this.user && this.user.roles && isSystemUser(this.user);
       });
 
   }
@@ -52,7 +46,6 @@ export class ActivateMailComponent implements OnInit {
       user: user
     }
     this.userManagementService.completeUserRegistration(body).subscribe((result) => {
-      this.registerModelRef.close();
       this.routeToDefault();
     });
   }

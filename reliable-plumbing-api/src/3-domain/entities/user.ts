@@ -20,7 +20,7 @@ export class User extends BaseEntity {
   activationDate?: Date;
   socialMediaId?: string;
   SocialMediaProvider?: SocialMediaProvider;
-  address: {
+  sites: [{
     coords: {
       lat: number,
       lng: number
@@ -29,7 +29,7 @@ export class User extends BaseEntity {
     city: string,
     state: string,
     zipCode: string
-  }
+  }]
 
   constructor(user?: any) {
     super();
@@ -49,7 +49,7 @@ export class User extends BaseEntity {
       this.createdByUserId = user.createdByUserId;
       this.isActivated = user.isActivated;
       this.activationDate = user.activationDate;
-      this.address = user.address;
+      this.sites = user.sites;
       this.socialMediaId = user.socialMediaId;
       this.SocialMediaProvider = user.SocialMediaProvider == null ? SocialMediaProvider.None : user.SocialMediaProvider;
     }
@@ -69,7 +69,7 @@ export class User extends BaseEntity {
       creationDate: this.creationDate,
       isActivated: this.isActivated,
       activationDate: this.activationDate,
-      address: this.address,
+      sites: this.sites,
       socialMediaId: this.socialMediaId,
       SocialMediaProvider: this.SocialMediaProvider
     }

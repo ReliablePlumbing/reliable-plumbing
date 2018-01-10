@@ -38,7 +38,7 @@ Header Section
                             <a class="nav-link pointer" (click)="openLoginPopup()">Login</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link pointer" (click)="openRegisterPopup()">Register</a>
+                            <a class="nav-link pointer" [routerLink]="systemRoutes.register">Register</a>
                         </li>
                     </ng-container>
                     <ng-container *ngIf="isUserLoggedIn && currentUser != null">
@@ -52,7 +52,7 @@ Header Section
                                 <a class="nav-link pointer" ngbDropdownToggle>{{currentUser.firstName + ' ' + currentUser.lastName}}</a>
                                 <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
                                     <button class="dropdown-item" (click)="openChangePassword()">Change Password</button>
-                                    <button class="dropdown-item" (click)="openEditProfile()">Edit Profile</button>
+                                    <button class="dropdown-item" [routerLink]="systemRoutes.editProfile">Edit Profile</button>
                                 </div>
                             </div>
                             <!-- <a (click)="openEditProfile()" class="nav-link pointer">{{currentUser.firstName + ' ' + currentUser.lastName}}</a> -->
@@ -611,22 +611,6 @@ Footer
 <a href="#" class="back-to-top">
     <i class="fa fa-chevron-up"></i>
 </a>
-
-<!--==========================
-registeration/edit profile popup
-============================-->
-<ng-template #registeration let-c="close" let-d="dismiss">
-    <div class="modal-header">
-        <h4 class="modal-title">{{isUserLoggedIn? 'Edit Profile' : 'Register'}}</h4>
-        <button type="button" class="close" aria-label="Close" (click)="d()">
-      <span aria-hidden="true">&times;</span>
-    </button>
-    </div>
-    <div class="modal-body">
-        <rb-registeration (userAdded)="userRegistered($event)" [mode]="registerMode"></rb-registeration>
-    </div>
-
-</ng-template>
 
 <!--==========================
 login popup

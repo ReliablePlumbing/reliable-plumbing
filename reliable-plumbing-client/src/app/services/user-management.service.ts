@@ -84,6 +84,11 @@ export class UserManagementService {
     return serviceCall.map((response: Response) => response.json());
   }
 
+  getUserById(userId) {
+    return this.httpExtensionService.get(this.basePath + 'getUserById?userId' + userId)
+      .map((response: Response) => response.json());
+  }
+
   deleteUserById(id) {
     return this.httpExtensionService.delete(this.basePath + 'deleteUserById?id=' + id)
       .map((response: Response) => response.json());

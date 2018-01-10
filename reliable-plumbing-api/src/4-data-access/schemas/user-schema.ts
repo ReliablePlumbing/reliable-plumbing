@@ -16,21 +16,18 @@ export var userSchema: genericSchema = {
         createdByUserId: { type: String, required: false },
         isActivated: { type: Boolean, required: true },
         activationDate: { type: Date, required: false },
-        address: {
-            type: {
-                coords: {
-                    type: {
-                        lat: { type: Number, required: true },
-                        lng: { type: Number, required: true }
-                    }, required: false
-                },
-                streetAddress: { type: String, required: true },
-                city: { type: String, required: true },
-                state: { type: String, required: true },
-                zipCode: { type: String, required: true }
-
-            }, required: false
-        },
+        sites: [new Schema({
+            coords: {
+                type: {
+                    lat: { type: Number, required: true },
+                    lng: { type: Number, required: true }
+                }, required: false
+            },
+            streetAddress: { type: String, required: true },
+            city: { type: String, required: true },
+            state: { type: String, required: true },
+            zipCode: { type: String, required: false }
+        })],
         socialMediaId: { type: String, required: false },
         SocialMediaProvider: { type: Number, required: false }
     }),

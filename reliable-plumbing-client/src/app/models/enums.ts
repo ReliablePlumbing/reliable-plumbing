@@ -7,12 +7,23 @@ export enum Role {
 }
 
 export enum RegistrationMode {
+    addSystemUser,
+    editSystemUser,
     signup,
-    admin,
     completeProfile,
     edit,
-    systemUserEdit
 }
+
+export enum regControls {
+    email = 1,
+    mobile,
+    firstName,
+    lastName,
+    password,
+    roles,
+    address,
+    accountType
+  }
 
 export enum AppointmentStatus {
     Pending = 1,

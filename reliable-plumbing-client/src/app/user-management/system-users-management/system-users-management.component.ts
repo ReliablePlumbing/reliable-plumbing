@@ -53,14 +53,15 @@ export class SystemUsersManagementComponent implements OnInit {
 
   addUser(register) {
     this.modalHeaderTxt = 'Add New User';
-    this.registrationMode = RegistrationMode.admin;
+    this.clonedEditedUser = null;
+    this.registrationMode = RegistrationMode.addSystemUser;
     this.registerModelRef = this.modalService.open(register, { size: 'lg' })
   }
 
   userAdded(user) {
-    if (this.registrationMode == RegistrationMode.admin)
+    if (this.registrationMode == RegistrationMode.addSystemUser)
       this.users.push(user);
-    else if (this.registrationMode == RegistrationMode.systemUserEdit) {
+    else if (this.registrationMode == RegistrationMode.editSystemUser) {
       user.rolesString = '';
       for (let i = 0; i < user.rolesObj.length; i++) {
         let role = user.rolesObj[i];
@@ -94,7 +95,8 @@ export class SystemUsersManagementComponent implements OnInit {
   editUser(user, template, index) {
     this.modalHeaderTxt = 'Edit User';
     this.clonedEditedUser = Object.assign({}, user);
-    this.registrationMode = RegistrationMode.systemUserEdit;
+    this.clonedEditedUser.roles = [].concat(this.clonedEditedUser.roles);
+    this.registrationMode = RegistrationMode.editSystemUser;
     this.selectedIndex = index;
     this.registerModelRef = this.modalService.open(template, { size: 'lg' })
 

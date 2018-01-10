@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { EnvironmentService } from '../services/environment.service';
 import { Role, RegistrationMode } from '../models/enums';
+import { systemRoutes } from '../models/constants';
 
 @Component({
   selector: 'home',
@@ -28,6 +29,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   currentUser = null;
   isSystemUser = false;
   registerMode;
+  systemRoutes = systemRoutes;
 
   constructor(private activatedRoute: ActivatedRoute, private modalService: NgbModal, private environmentService: EnvironmentService) { }
 

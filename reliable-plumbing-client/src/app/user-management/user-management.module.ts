@@ -5,6 +5,9 @@ import { HttpModule } from '@angular/http';
 import { UserManagementRoutingModule } from './user-management-routing.module';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
+// providers
+import { ProfileEventsService } from './registeration/profile-events.service';
+
 // our modules
 import { SharedModule } from '../shared/shared.module';
 import { ServicesModule } from '../services/services.module';
@@ -17,6 +20,7 @@ import { SystemUsersManagementComponent } from './system-users-management/system
 import { SocialMediaRedirectComponent } from './social-media-redirect/social-media-redirect.component';
 import { ChangePasswordComponent } from './change-password/change-password.component';
 import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
+import { DynamicFormComponent } from './registeration/dynamic-form/dynamic-form.component';
 
 @NgModule({
   imports: [
@@ -24,7 +28,10 @@ import { ForgotPasswordComponent } from './forgot-password/forgot-password.compo
     UserManagementRoutingModule, NgbModule.forRoot(), SharedModule
   ],
   declarations: [LoginComponent, RegisterationComponent, ActivateMailComponent, SystemUsersManagementComponent, SocialMediaRedirectComponent, 
-    ChangePasswordComponent, ForgotPasswordComponent],
+    ChangePasswordComponent, ForgotPasswordComponent, DynamicFormComponent],
+
+  providers: [ProfileEventsService],
+  
   exports: [LoginComponent, RegisterationComponent, ChangePasswordComponent]
 })
 

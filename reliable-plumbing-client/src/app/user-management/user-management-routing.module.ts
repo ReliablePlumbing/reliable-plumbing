@@ -6,7 +6,7 @@ import { ActivateMailComponent } from './activate-mail/activate-mail.component';
 import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
 import { SystemUsersManagementComponent } from './system-users-management/system-users-management.component';
 import { LoginAuthGuard } from "../services/auth-guard.service";
-import { Role } from '../models/enums';
+import { Role, RegistrationMode } from '../models/enums';
 import { SocialMediaRedirectComponent } from './social-media-redirect/social-media-redirect.component';
 import { systemRoutes } from '../models/constants';
 
@@ -14,6 +14,8 @@ const routes: Routes = [
   { path: systemRoutes.activateMail, component: ActivateMailComponent },
   { path: systemRoutes.socialMediaAuthenticate, component: SocialMediaRedirectComponent },
   { path: systemRoutes.forgotPassword, component: ForgotPasswordComponent },
+  { path: systemRoutes.register, component: RegisterationComponent, data: { mode: RegistrationMode.signup} },
+  { path: systemRoutes.editProfile, component: RegisterationComponent, data: { mode: RegistrationMode.edit} },
 ];
 
 @NgModule({

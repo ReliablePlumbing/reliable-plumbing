@@ -124,6 +124,20 @@ export class UserController {
         });
     }
 
+    @Get('/getUserById')
+    @Authorized()
+    getUserById( @QueryParam('userId') userId: string) {
+        return new Promise<any>((resolve, reject) => {
+            this.userManager.getUserById(userId).then((result: User) => {
+                if (!result)
+                    return resolve(null);
+                let model = result.toLightModel();
+                return resolve(model)
+            }).catch((error: Error) => reject(error));
+
+        });
+    }
+
     @Delete('/deleteUserById')
     @Authorized([Role.Supervisor, Role.Admin, Role.SystemAdmin])
     deleteUserById( @QueryParam('id') id: string) {

@@ -21,5 +21,7 @@ export const systemRoutes = {
     tracking: 'technicians-tracking',
     activateMail: 'activate-mail',
     socialMediaAuthenticate: 'social-media-authenticate',
-    forgotPassword: 'forgot-password'
+    forgotPassword: 'forgot-password',
+    register: 'register',
+    editProfile: 'edit-profile'
 }

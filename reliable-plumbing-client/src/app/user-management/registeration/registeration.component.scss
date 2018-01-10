@@ -1,19 +1,46 @@
 .display-block {
-  display: block;
+    display: block;
 }
 
 .passwordInfoPopover {
-  p,
-  li {
-      color: white;
-  }
+    p,
+    li {
+        color: white;
+    }
 }
 
 :host ::ng-deep .password-input-group {
-  .popover-body {
-    background-color: black;
-  }
-  .arrow:after{
-      border-top-color: black !important;
-  }
+    .popover-body {
+        background-color: black;
+    }
+    .arrow:after {
+        border-top-color: black !important;
+    }
+    .ui-steps .ui-steps-item {
+        width: 35%;
+    }
+    .ui-steps.steps-custom {
+        margin-bottom: 75px;
+        margin-top: 10px;
+    }
+    .ui-steps.steps-custom .ui-steps-item .ui-menuitem-link {
+        height: 10px;
+        padding: 0 1em;
+    }
+    .ui-steps.steps-custom .ui-state-default {
+        background-color: #b3b1b1 !important;
+        border: 0 !important;
+    }
+    .ui-steps.steps-custom .ui-steps-item .ui-steps-number {
+        background-color: #0081c2;
+        color: #FFFFFF;
+        display: inline-block;
+        width: 50px;
+        border-radius: 50%;
+        margin-top: -17px;
+        margin-bottom: 2px;
+    }
+    .ui-steps.steps-custom .ui-steps-item .ui-steps-title {
+        color: #555555;
+    }
 }

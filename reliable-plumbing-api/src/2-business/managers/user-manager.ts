@@ -217,6 +217,19 @@ export class UserManager {
         });
     }
 
+    getUserById(userId: string) {
+        return new Promise<User>((resolve, reject) => {
+
+            this.userRepo.findUsersByIds([userId])
+                .then(result => {
+                    if (result && result.length > 0)
+                        return resolve(result[0]);
+
+                    return resolve(null);
+                }).catch((error: Error) => reject(error));
+        });
+    }
+
     deleteUserById(id: string) {
         return new Promise<boolean>((resolve, reject) => {
             this.userRepo.deleteById(id)
