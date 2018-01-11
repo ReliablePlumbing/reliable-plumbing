@@ -10,6 +10,7 @@ export enum RegistrationMode {
     addSystemUser,
     editSystemUser,
     signup,
+    addCustomer,
     completeProfile,
     edit,
 }

@@ -35,7 +35,7 @@ export class ActivateMailComponent implements OnInit {
         this.user = result.user;
         this.displayMessage = result.message;
 
-        this.completeProfile = result.success && this.user && this.user.roles && isSystemUser(this.user);
+        this.completeProfile = result.success && this.user && result.completeProfile;
       });
 
   }

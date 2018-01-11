@@ -49,7 +49,18 @@ export class User extends BaseEntity {
       this.createdByUserId = user.createdByUserId;
       this.isActivated = user.isActivated;
       this.activationDate = user.activationDate;
-      this.sites = user.sites;
+      this.sites = !user.sites ? [] : user.sites.map(s => {
+        return {
+          coords: !s.coords ? {} : {
+            lat: s.coords.lat,
+            lng: s.coords.lng
+          },
+          streetAddress: s.streetAddress,
+          city: s.city,
+          state: s.state,
+          zipCode: s.zipCode
+        }
+      });
       this.socialMediaId = user.socialMediaId;
       this.SocialMediaProvider = user.SocialMediaProvider == null ? SocialMediaProvider.None : user.SocialMediaProvider;
     }

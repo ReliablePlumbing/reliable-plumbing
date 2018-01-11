@@ -46,23 +46,20 @@ export class RegisterationComponent implements OnInit {
     switch (this.mode) {
       case RegistrationMode.addSystemUser:
       case RegistrationMode.editSystemUser:
-        // user comes from input
-        this.mapUser(this.user);
-        this.basicInfoControls = this.getModeControls();
-        break;
       case RegistrationMode.completeProfile:
-        // the user is an input
         this.mapUser(this.user);
         this.basicInfoControls = this.getModeControls();
         break;
       case RegistrationMode.edit:
         if (this.userId)
           this.getUserById(this.userId);
+        else if (this.user)
+          this.mapUser(this.user);
         else
-          this.mapUser(this.environmentService.currentUser)
+          this.mapUser(this.environmentService.currentUser);
         break;
       case RegistrationMode.signup:
-        this.showSteps = true;
+      case RegistrationMode.addCustomer:
         this.user = { sites: [], site: {} };
         this.basicInfoControls = this.getModeControls();
 
@@ -92,11 +89,11 @@ export class RegisterationComponent implements OnInit {
         lastName: user.lastName,
         mobile: user.mobile,
         roles: user.roles,
-        site: user.sites,
+        sites: user.sites,
       };
       this.showSteps = !isSystemUser(this.user);
       if (this.showSteps) {
-        if (this.user.site && this.user.sites.length > 0) {
+        if (this.user.sites && this.user.sites.length > 0) {
           this.user.site = this.user.sites[0];
           this.user.site.index = 0;
         }
@@ -138,13 +135,13 @@ export class RegisterationComponent implements OnInit {
         break;
       case RegistrationMode.edit:
         controls = [];
-        if (!isSystemUser(this.user))
+        this.showSteps = !isSystemUser(this.user);
+        if (this.showSteps)
           controls.push({ type: regControls.accountType });
         controls.push({ type: regControls.firstName });
         controls.push({ type: regControls.lastName });
         controls.push({ type: regControls.email, editable: false });
         controls.push({ type: regControls.mobile });
-
         break;
       case RegistrationMode.signup:
         this.showSteps = true;
@@ -153,8 +150,18 @@ export class RegisterationComponent implements OnInit {
           { type: regControls.firstName },
           { type: regControls.lastName },
           { type: regControls.email, editable: true },
-          { type: regControls.mobile }, // address will be added in other section
+          { type: regControls.mobile },
           { type: regControls.password }
+        ]
+        break;
+      case RegistrationMode.addCustomer:
+        this.showSteps = true;
+        controls = [
+          { type: regControls.accountType },
+          { type: regControls.firstName },
+          { type: regControls.lastName },
+          { type: regControls.email, editable: true },
+          { type: regControls.mobile }
         ]
         break;
     }
@@ -221,7 +228,7 @@ export class RegisterationComponent implements OnInit {
         switch (this.actionType) {
           case actionType.addSite:
             let site = this.user.site;
-            if (site.index)
+            if (site.index != null)
               this.user.sites[site.index] = site;
             else
               this.user.sites.push(site);
@@ -245,6 +252,7 @@ export class RegisterationComponent implements OnInit {
     switch (this.mode) {
       case RegistrationMode.addSystemUser:
       case RegistrationMode.signup:
+      case RegistrationMode.addCustomer:
         this.userManagementService.register(this.user).subscribe(x => {
           if (x) {
             this.alertifyService.success('Save Completed Successfully');
@@ -278,6 +286,7 @@ export class RegisterationComponent implements OnInit {
 
 export enum actionType {
   addSite,
+  editSite,
   nextStep,
   save
 }

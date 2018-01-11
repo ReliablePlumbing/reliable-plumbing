@@ -23,8 +23,9 @@ export class AdminPanelComponent implements OnInit {
     scheduleManagement: { index: 1, hasPermission: false },
     settings: { index: 2, hasPermission: false },
     systemUsers: { index: 3, hasPermission: false },
-    myAppointments: { index: 4, hasPermission: false },
-    tracking: { index: 5, hasPermission: false },
+    users: { index: 4, hasPermission: false },
+    myAppointments: { index: 5, hasPermission: false },
+    tracking: { index: 6, hasPermission: false },
   }
   systemRoutes = systemRoutes;
 
@@ -52,6 +53,7 @@ export class AdminPanelComponent implements OnInit {
       if (role == Role.Admin || role == Role.SystemAdmin) {
         this.tabs.settings.hasPermission = true;
         this.tabs.systemUsers.hasPermission = true;
+        this.tabs.users.hasPermission = true;
       }
       if (role == Role.Admin || role == Role.SystemAdmin || role == Role.Supervisor) {
         this.tabs.scheduleManagement.hasPermission = true;
@@ -62,16 +64,6 @@ export class AdminPanelComponent implements OnInit {
     }
 
   }
-
-  userRegistered(user) {
-    this.registerModalRef.close();
-  }
-
-  openEditProfile() {
-    this.registerMode = RegistrationMode.edit;
-    this.registerModalRef = this.modalService.open(this.registerationTemplate, { size: 'lg' })
-  }
-
 
   openChangePassword() {
     this.changePasswordModalRef = this.modalService.open(this.changePasswordTemplate);
@@ -95,6 +87,8 @@ export class AdminPanelComponent implements OnInit {
       this.currentSelectedTab = this.tabs.settings.index;
     else if (~url.indexOf(systemRoutes.systemUsers))
       this.currentSelectedTab = this.tabs.systemUsers.index;
+    else if (~url.indexOf(systemRoutes.users))
+      this.currentSelectedTab = this.tabs.users.index;
     else if (~url.indexOf(systemRoutes.myAppointments))
       this.currentSelectedTab = this.tabs.myAppointments.index;
     else if (~url.indexOf(systemRoutes.tracking))

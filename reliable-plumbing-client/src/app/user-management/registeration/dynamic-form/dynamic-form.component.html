@@ -170,6 +170,10 @@
               </agm-marker>
             </agm-map>
           </div>
+          <div class="col-sm-12">
+            <span class="error-message" *ngIf="user.sites.length ==0">You have to add at least one address</span>
+          </div>
+
         </ng-container>
         <ng-container *ngSwitchCase="regControls.accountType">
           <div class="col-md-12">

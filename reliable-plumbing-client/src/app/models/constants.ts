@@ -17,6 +17,7 @@ export const systemRoutes = {
     scheduleManagement: 'schedule-management',
     settings: 'appointment-settings',
     systemUsers: 'system-users-management',
+    users: 'users-management',
     myAppointments: 'my-appointments',
     tracking: 'technicians-tracking',
     activateMail: 'activate-mail',

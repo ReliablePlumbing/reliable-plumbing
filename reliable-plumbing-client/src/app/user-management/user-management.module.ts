@@ -21,6 +21,7 @@ import { SocialMediaRedirectComponent } from './social-media-redirect/social-med
 import { ChangePasswordComponent } from './change-password/change-password.component';
 import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
 import { DynamicFormComponent } from './registeration/dynamic-form/dynamic-form.component';
+import { UsersManagementComponent } from './users-management/users-management.component';
 
 @NgModule({
   imports: [
@@ -28,7 +29,7 @@ import { DynamicFormComponent } from './registeration/dynamic-form/dynamic-form.
     UserManagementRoutingModule, NgbModule.forRoot(), SharedModule
   ],
   declarations: [LoginComponent, RegisterationComponent, ActivateMailComponent, SystemUsersManagementComponent, SocialMediaRedirectComponent, 
-    ChangePasswordComponent, ForgotPasswordComponent, DynamicFormComponent],
+    ChangePasswordComponent, ForgotPasswordComponent, DynamicFormComponent, UsersManagementComponent],
 
   providers: [ProfileEventsService],
   

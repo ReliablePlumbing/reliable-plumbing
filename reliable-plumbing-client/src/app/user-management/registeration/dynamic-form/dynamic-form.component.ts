@@ -1,6 +1,6 @@
 import { Component, OnInit, EventEmitter, Input, Output } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
-import { Role, RegistrationMode } from '../../../models/enums';
+import { Role, RegistrationMode, regControls } from '../../../models/enums';
 import { Marker } from '../../../models/marker';
 import { AlertifyService, EnvironmentService, RouteHandlerService, UserManagementService } from '../../../services/services.exports';
 import { ProfileEventsService } from '../profile-events.service';
@@ -107,9 +107,9 @@ export class DynamicFormComponent implements OnInit {
           this.registerForm.addControl('confirmPassword', new FormControl(null, [Validators.required, this.matchOtherValidator('password')]));
           break;
         case regControls.address:
-          this.registerForm.addControl('streetAddress', new FormControl(null, [Validators.required]));
-          this.registerForm.addControl('city', new FormControl(null, [Validators.required]));
-          this.registerForm.addControl('state', new FormControl(null, [Validators.required]));
+          this.registerForm.addControl('streetAddress', new FormControl(null));
+          this.registerForm.addControl('city', new FormControl(null));
+          this.registerForm.addControl('state', new FormControl(null));
           this.registerForm.addControl('zipCode', new FormControl(null));
           break;
         case regControls.roles:
@@ -207,16 +207,4 @@ export class DynamicFormComponent implements OnInit {
     if (this.subscription)
       this.subscription.unsubscribe();
   }
-}
-
-
-export enum regControls {
-  email = 1,
-  mobile,
-  firstName,
-  lastName,
-  password,
-  roles,
-  address,
-  accountType
 }

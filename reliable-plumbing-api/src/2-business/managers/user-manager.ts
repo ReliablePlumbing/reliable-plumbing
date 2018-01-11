@@ -18,8 +18,7 @@ export class UserManager {
         if (user == null)
             throw new Error('user cann\'t be null');
         user.email = user.email.toLowerCase();
-        let isSystemUserValidation = !this.isSystemUser(user.roles)
-        let errors = this.validateUser(user, isSystemUserValidation);
+        let errors = this.validateUser(user, user.password != null);
         if (errors.length > 0) {
             throw new AppError(errors, ErrorType.validation);
         }
@@ -27,15 +26,15 @@ export class UserManager {
         if (user.password != null) {
             user.salt = AccountSecurity.generateSalt();
             user.hashedPassword = AccountSecurity.hashPassword(user.password, user.salt);
-        }
-        user.creationDate = new Date();
-        if (user.roles == null || user.roles.length == 0) {
-            user.roles = [Role.Customer];
             user.isActivated = true;
             user.activationDate = new Date();
         }
         else
             user.isActivated = false;
+        user.creationDate = new Date();
+        if (user.roles == null || user.roles.length == 0)
+            user.roles = [Role.Customer];
+
 
         return new Promise<User>((resolve, reject) => {
             this.userRepo.findByEmail(user.email).then(firstResult => {
@@ -162,7 +161,7 @@ export class UserManager {
                     user.isEmailVerfied = true;
                     user.emailActivationDate = new Date();
                     this.userRepo.update(user).then(res => {
-                        return resolve({ success: true, message: 'Email is activated', user: user.toLightModel() });
+                        return resolve({ success: true, completeProfile: user.password == null, message: 'Email is activated', user: user.toLightModel() });
                     }).catch((error: Error) => reject(error));
                 }).catch((error: Error) => reject(error));
             }).catch((error: Error) => reject(error));;
@@ -372,14 +371,14 @@ export class UserManager {
     }
 
     // region private methods
-    private validateUser(user: User, isSystemUserValidation = false): string[] {
+    private validateUser(user: User, validatePasswords = false): string[] {
         let errors: string[] = []
         if (user.email == null || user.email.length == 0)
             errors.push('email cann\'t be empty');
         let emailRegex = new RegExp(/^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/);
         if (!emailRegex.test(user.email))
             errors.push('email is invalid');
-        if (isSystemUserValidation) {
+        if (validatePasswords) {
             if (user.password == null || user.password.length == 0)
                 errors.push('password cann\'t be empty');
             errors = errors.concat(this.validatePasswordFormat(user.password));

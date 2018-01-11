@@ -74,7 +74,7 @@ export class UserManagementService {
     // .catch((error: Error) => console.log(error))
   }
 
-  getAllSystemUsers(roles?: Role[]) {
+  getAllSystemUsers(roles?: Role[]): Observable<any> {
     let serviceCall = null;
     if (roles != null && roles.length > 0)
       serviceCall = this.httpExtensionService.post(this.basePath + 'getAllSystemUsers', roles);

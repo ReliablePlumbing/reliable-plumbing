@@ -1,0 +1,62 @@
+<loader *ngIf="loading">
+</loader>
+
+<ng-container *ngIf="!loading">
+
+  <div class="row header">
+    <h3 class="col-sm-6">Users</h3>
+
+    <div class="col-sm-6">
+
+      <button class="btn btn-primary add-user-btn" (click)="addUser(register)">
+        <i class="fa fa-plus"></i> Add New User</button>
+    </div>
+
+  </div>
+  <div class="table-responsive">
+    <table class="table table-bordered">
+      <thead>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Mobile</th>
+        <th>Joining Date</th>
+        <th>Status</th>
+        <th>Activation Date</th>
+        <th></th>
+        <th></th>
+      </thead>
+      <tbody>
+        <tr *ngFor="let user of displayedUsers; let i = index">
+          <td>{{user.firstName + ' ' + user.lastName}}</td>
+          <td>{{user.email}}</td>
+          <td>{{user.mobile}}</td>
+          <td>{{user.creationDate | date}}</td>
+          <td>{{user.isActivated ? 'Activated' : 'Deactivated'}}</td>
+          <td>{{user.activationDate == null ? 'not activated yet' : user.activationDate | date }}</td>
+          <td>
+            <button class="btn btn-primary filters-toggle-btn" (click)="editUser(user, register, i)">
+              <i class="fa fa-pencil-square-o"></i> Edit</button>
+          </td>
+          <td>
+            <button class="btn btn-danger filters-toggle-btn" (click)="deleteUser(user)">
+              <i class="fa fa-trash-o"></i> Delete</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <ngb-pagination [collectionSize]="users.length" [(page)]="page"></ngb-pagination>
+  </div>
+  <ng-template #register let-c="close" let-d="dismiss">
+    <div class="modal-header">
+      <h4 class="modal-title">{{modalHeaderTxt}}</h4>
+      <button type="button" class="close" aria-label="Close" (click)="d()">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <rb-registeration [mode]="registrationMode" [user]="clonedEditedUser" (userAdded)="userAdded($event)"></rb-registeration>
+    </div>
+
+  </ng-template>
+</ng-container>
