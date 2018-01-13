@@ -1,39 +1,43 @@
-<section class="register">
-  <div class="register-container">
-    <div class="container">
-      <ng-container *ngIf="showSteps">
-        <p-steps [model]="steps" styleClass="steps-custom" [activeIndex]="activeIndex"></p-steps>
-      </ng-container>
+<section class="schedule-sec">
+    <div class="container schedule-form">
+        <section class="register">
+            <div class="register-container">
+                <div class="container">
+                    <ng-container *ngIf="showSteps">
+                        <p-steps [model]="steps" styleClass="steps-custom" [activeIndex]="activeIndex"></p-steps>
+                    </ng-container>
 
-      <ng-container *ngIf="activeIndex==0">
-        <dynamic-form [controlsCofig]="basicInfoControls" [user]="user"></dynamic-form>
-      </ng-container>
-
-
-      <ng-container *ngIf="activeIndex==1">
-        <button (click)="initNewSite()">New Site (Address)</button>
-
-        <div *ngFor="let site of user.sites; let i = index">
-          <div class="row">
-            <span>{{site.streetAddress + ' - ' + site.city + ' - ' + site.state}}</span>
-            <a (click)="editSite(i)" class="btn btn-link">Edit</a>
-            <a (click)="deleteSite(i)" class="btn btn-link">Delete</a>
-          </div>
-        </div>
+                    <ng-container *ngIf="activeIndex==0">
+                        <dynamic-form [controlsCofig]="basicInfoControls" [user]="user"></dynamic-form>
+                    </ng-container>
 
 
-        <dynamic-form [controlsCofig]="[{type: 7}]" [user]="user"></dynamic-form>
-        <button (click)="addUserSite()">Add Site</button>
-      </ng-container>
+                    <ng-container *ngIf="activeIndex==1">
+                        <button (click)="initNewSite()">New Site (Address)</button>
 
-      <h4 *ngIf="!isValid">Some fields are required or invalid, please complete all form data</h4>
-      <div class="col-md-12">
-        <button *ngIf="activeIndex==1 || !showSteps" type="submit" [disabled]="false" (click)="save()" class="btn btn-success">Save</button> &nbsp;
-        <button *ngIf="activeIndex==0 && showSteps" type="submit" [disabled]="false" (click)="nextStep()" class="btn btn-success">Next</button> &nbsp;
-        <button *ngIf="activeIndex==1 && showSteps" type="submit" [disabled]="false" (click)="activeIndex = 0" class="btn btn-success">Back</button> &nbsp;
-      </div>
+                        <div *ngFor="let site of user.sites; let i = index">
+                            <div class="row">
+                                <span>{{site.streetAddress + ' - ' + site.city + ' - ' + site.state}}</span>
+                                <a (click)="editSite(i)" class="btn btn-link">Edit</a>
+                                <a (click)="deleteSite(i)" class="btn btn-link">Delete</a>
+                            </div>
+                        </div>
+
+
+                        <dynamic-form [controlsCofig]="[{type: 7}]" [user]="user"></dynamic-form>
+                        <button (click)="addUserSite()">Add Site</button>
+                    </ng-container>
+
+                    <h4 *ngIf="!isValid">Some fields are required or invalid, please complete all form data</h4>
+                    <div class="col-md-12">
+                        <button *ngIf="activeIndex==1 || !showSteps" type="submit" [disabled]="false" (click)="save()" class="btn btn-success">Save</button> &nbsp;
+                        <button *ngIf="activeIndex==0 && showSteps" type="submit" [disabled]="false" (click)="nextStep()" class="btn btn-success">Next</button> &nbsp;
+                        <button *ngIf="activeIndex==1 && showSteps" type="submit" [disabled]="false" (click)="activeIndex = 0" class="btn btn-success">Back</button> &nbsp;
+                    </div>
+                </div>
+            </div>
+            <!-- /.registeration-container -->
+        </section>
+        <!-- /.registeration -->
     </div>
-  </div>
-  <!-- /.registeration-container -->
 </section>
-<!-- /.registeration -->

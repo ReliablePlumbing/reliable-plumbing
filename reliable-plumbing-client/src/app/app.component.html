@@ -1,8 +1,7 @@
 <header id="header">
     <div class="container-fluid">
         <nav class="navbar navbar-toggleable-md navbar-expand-lg">
-            <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
-                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon fa fa-bars"></span>
             </button>
             <a id="logo" class="navbar-brand" [routerLink]="['/']">
@@ -42,8 +41,7 @@
                     </ng-container>
                     <ng-container *ngIf="isUserLoggedIn && currentUser != null">
                         <li class="notification-container" placement="top" ngbTooltip="Notifications">
-                            <a class="nav-link pointer" [ngbPopover]="notificationsContent" popoverTitle="Notifications" placement="bottom" #p="ngbPopover"
-                                closePopoverOnOutsideClick>
+                            <a class="nav-link pointer" [ngbPopover]="notificationsContent" popoverTitle="Notifications" placement="bottom" #p="ngbPopover" closePopoverOnOutsideClick>
                                 <i class="fa fa-bell" style="font-size: 22px;" aria-hidden="true"></i>
                             </a>
                         </li>
@@ -75,7 +73,7 @@
     </div>
 </header>
 
-<div class="full-hight-screen">
+<div class="">
     <router-outlet></router-outlet>
 </div>
 
