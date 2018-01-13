@@ -1,6 +1,7 @@
 // managers
 export * from './managers/user-manager';
 export * from './managers/appointment-manager';
+export * from './managers/quote-manager';
 export * from './managers/lookups-manager';
 export * from './managers/notification-manager';
 export * from './managers/files-manager';

@@ -1,20 +1,16 @@
 import { Inject, Service } from 'typedi';
 import { dependencies } from '../../5-cross-cutting/cross-cutting.module';
 import { NotificationBroadcastingService } from '../notifiers/notification-broadcasting-service';
-import { NotificationRepo, AppointmentRepo } from '../../4-data-access/data-access.module';
+import { NotificationRepo, AppointmentRepo, QuoteRepo } from '../../4-data-access/data-access.module';
 import { Notification, NotificationType, ObjectType } from '../../3-domain/domain-module';
 
 @Service()
 export class NotificationManager {
 
-    @Inject(dependencies.NotificationRepo)
-    private notificationRepo: NotificationRepo;
-
-    @Inject(dependencies.NotificationBroadcastingService)
-    private notificationBroadcastingService: NotificationBroadcastingService;
-
-    @Inject(dependencies.AppointmentRepo)
-    private appointmentRepo: AppointmentRepo;
+    @Inject(dependencies.NotificationRepo) private notificationRepo: NotificationRepo;
+    @Inject(dependencies.NotificationBroadcastingService) private notificationBroadcastingService: NotificationBroadcastingService;
+    @Inject(dependencies.AppointmentRepo) private appointmentRepo: AppointmentRepo;
+    @Inject(dependencies.QuoteRepo) private quoteRepo: QuoteRepo;
 
     addNotification(notification: Notification) {
 
@@ -60,8 +56,14 @@ export class NotificationManager {
                 case ObjectType.Appointment:
                     this.appointmentRepo.findById(objectId)
                         .then(result => resolve(result))
-                        .catch((error: Error) => reject(error));;
+                        .catch((error: Error) => reject(error));
                     break;
+                case ObjectType.Quote:
+                    this.quoteRepo.findById(objectId)
+                        .then(result => resolve(result))
+                        .catch((error: Error) => reject(error));
+
+                    break
 
                 default:
                     break;

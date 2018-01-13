@@ -24,5 +24,7 @@ export const systemRoutes = {
     socialMediaAuthenticate: 'social-media-authenticate',
     forgotPassword: 'forgot-password',
     register: 'register',
-    editProfile: 'edit-profile'
+    editProfile: 'edit-profile',
+    scheduleCall: 'schedule-call',
+    requestQuote: 'request-quote'
 }

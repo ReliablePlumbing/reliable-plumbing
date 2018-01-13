@@ -2,7 +2,7 @@ import { Observable, Subject } from '@reactivex/rxjs';
 import { Service, Inject, Container } from 'typedi';
 import { Notification, ObjectType } from '../../3-domain/domain-module';
 import { dependencies } from '../../5-cross-cutting/cross-cutting.module';
-import { AppointmentRepo } from '../../4-data-access/data-access.module';
+import { AppointmentRepo, QuoteRepo } from '../../4-data-access/data-access.module';
 
 @Service()
 export class NotificationBroadcastingService {
@@ -33,8 +33,12 @@ export class NotificationBroadcastingService {
         let promise = null;
         switch (objectType) {
             case ObjectType.Appointment:
-                let repo: AppointmentRepo = Container.get(dependencies.AppointmentRepo);
-                promise = repo.findById(objectId);
+                let callRepo: AppointmentRepo = Container.get(dependencies.AppointmentRepo);
+                promise = callRepo.findById(objectId);
+                break;
+            case ObjectType.Quote:
+                let quoteRepo: QuoteRepo = Container.get(dependencies.QuoteRepo);
+                promise = quoteRepo.findById(objectId);
                 break;
         }
         return new Promise<any>((resolve, reject) => {

@@ -6,6 +6,7 @@ export * from './lookups.service';
 export * from './alertify.service';
 export * from './route-handler.service';
 export * from './appointment.service';
+export * from './quote.service';
 export * from './sockets.service';
 export * from './notification.service';
 export * from './auth.service';

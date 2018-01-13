@@ -12,6 +12,7 @@ import { NotificationService } from './notification.service';
 import { SocketsService } from './sockets.service';
 import { AuthService } from './auth.service';
 import { UserManagementService } from './user-management.service';
+import { QuoteService } from './quote.service';
 
 @NgModule({
   imports: [
@@ -19,7 +20,7 @@ import { UserManagementService } from './user-management.service';
   ],
   declarations: [],
   providers: [HttpExtensionService, UserManagementService, EnvironmentService, ExceptionHandlingService, AlertifyService, RouteHandlerService,
-    AuthGuard, LoginAuthGuard, LookupsService, AppointmentService, NotificationService, SocketsService, AuthService
+    AuthGuard, LoginAuthGuard, LookupsService, AppointmentService, NotificationService, SocketsService, AuthService, QuoteService
   ]
 })
 export class ServicesModule { }

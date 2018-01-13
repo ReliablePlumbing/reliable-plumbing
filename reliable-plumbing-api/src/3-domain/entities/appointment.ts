@@ -4,6 +4,7 @@ import { Role } from '../enums/role';
 import { SocialMediaProvider } from '../enums/social-media-provider';
 import { User } from './user';
 import { AppointmentType } from './appointment-type';
+import { StatusHistory } from './helpers/status-history';
 
 export class Appointment extends BaseEntity {
 
@@ -106,37 +107,6 @@ export class Appointment extends BaseEntity {
             lng: checkin.lng,
             userId: checkin.userId,
             user: checkin.user == null ? null : checkin.user.toLightModel()
-        }
-    }
-}
-
-
-export class StatusHistory extends BaseEntity {
-    status: AppointmentStatus;
-    creationDate: Date;
-    createdByUserId?: string;
-    createdBy?: User // nav prop
-
-
-    constructor(statusHistory: any) {
-        super();
-
-        if (statusHistory != null) {
-            this.id = statusHistory.id;
-            this.status = statusHistory.status;
-            this.creationDate = statusHistory.creationDate;
-            this.createdByUserId = statusHistory.createdByUserId;
-            this.createdBy = statusHistory.createdBy;
-        }
-    }
-
-    toLightModel() {
-        return {
-            id: this.id,
-            status: this.status,
-            creationDate: this.creationDate,
-            createdByUserId: this.createdByUserId,
-            createdBy: this.createdBy == null ? null : this.createdBy.toLightModel()
         }
     }
 }

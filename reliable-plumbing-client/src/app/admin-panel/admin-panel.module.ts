@@ -7,8 +7,8 @@ import { SelectModule } from 'ng2-select';
 // our modules
 import { ServicesModule } from '../services/services.module';
 import { UserManagementModule } from '../user-management/user-management.module';
-import { SharedModule }from '../shared/shared.module';
-import { AppointmentManagementModule } from '../appointment-management/appointment-management.module';
+import { SharedModule } from '../shared/shared.module';
+import { CallsQuotesManagementModule } from '../calls-quotes-management/calls-quotes-management.module';
 
 // components
 import { AdminPanelRoutingModule } from './admin-panel-routing.module';
@@ -20,9 +20,11 @@ import { TechniciansTrackingComponent } from './technicians-tracking/technicians
 
 @NgModule({
   imports: [
-    CommonModule, AdminPanelRoutingModule, ServicesModule, NgbModule, FormsModule, UserManagementModule, 
-    SharedModule, SelectModule, AppointmentManagementModule, ReactiveFormsModule
+    CommonModule, AdminPanelRoutingModule, ServicesModule, NgbModule, FormsModule, UserManagementModule,
+    SharedModule, SelectModule, CallsQuotesManagementModule, ReactiveFormsModule
   ],
-  declarations: [AppointmentSettingsomponent, AdminPanelComponent, ScheduleManagementComponent, MyAppointmentsComponent, TechniciansTrackingComponent]
+  declarations: [
+    AppointmentSettingsomponent, AdminPanelComponent, ScheduleManagementComponent, MyAppointmentsComponent, TechniciansTrackingComponent
+  ]
 })
 export class AdminPanelModule { }

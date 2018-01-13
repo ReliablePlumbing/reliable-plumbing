@@ -1,6 +1,6 @@
 import { Inject, Service } from 'typedi';
 import {
-    AppError, ErrorType, Appointment, AppointmentStatus, AppointmentType, NotificationType,
+    AppError, ErrorType, Appointment, AppointmentStatus, NotificationType,
     Notification, ObjectType, Role, TechnicianStatus, User, StatusHistory
 } from '../../3-domain/domain-module';
 import { AppointmentRepo, UserRepo } from '../../4-data-access/data-access.module';
@@ -41,7 +41,7 @@ export class AppointmentManager {
             this.appointmentRepo.add(appointment).then(result => {
                 // add notification
                 let notifier = appointment.userId == null ? [] : appointment.userId;
-                this.buildAppointCreatedNotification(notifier, result.id)
+                this.buildAppointCreatedNotification([notifier], result.id)
                     .then(notification => this.notificationManager.addNotification(notification))
                     .catch((error: Error) => reject(error));
 

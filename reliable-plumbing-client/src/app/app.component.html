@@ -1,2 +1,126 @@
+<header id="header">
+    <div class="container-fluid">
+        <nav class="navbar navbar-toggleable-md navbar-expand-lg">
+            <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon fa fa-bars"></span>
+            </button>
+            <a id="logo" class="navbar-brand" [routerLink]="['/']">
+                <img src="assets/img/rb-logo.png" />
+            </a>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ng-container *ngIf="!isControlPanel">
+                    <ul class="navbar-nav m-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" href="#home">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#about">About Us</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#services">Services</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#testimonials">Testimonials</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#team">Team</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#contact">Contact Us</a>
+                        </li>
+                    </ul>
+                </ng-container>
+                <ul class="navbar-nav ml-auto">
+                    <ng-container *ngIf="!isUserLoggedIn">
+                        <li class="nav-item">
+                            <a class="nav-link pointer" (click)="openLoginPopup()">Login</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link pointer" [routerLink]="[systemRoutes.register]">Register</a>
+                        </li>
+                    </ng-container>
+                    <ng-container *ngIf="isUserLoggedIn && currentUser != null">
+                        <li class="notification-container" placement="top" ngbTooltip="Notifications">
+                            <a class="nav-link pointer" [ngbPopover]="notificationsContent" popoverTitle="Notifications" placement="bottom" #p="ngbPopover"
+                                closePopoverOnOutsideClick>
+                                <i class="fa fa-bell" style="font-size: 22px;" aria-hidden="true"></i>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <div ngbDropdown>
+                                <a class="nav-link pointer" ngbDropdownToggle>{{currentUser.firstName + ' ' + currentUser.lastName}}</a>
+                                <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+                                    <button class="dropdown-item" (click)="openChangePassword()">Change Password</button>
+                                    <button class="dropdown-item" [routerLink]="[systemRoutes.editProfile]">Edit Profile</button>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link pointer" (click)="logout()">Log out</a>
+                        </li>
+                        <li *ngIf="isSystemUser" class="nav-item panel-link">
+                            <a *ngIf="isControlPanel" [routerLink]="['/']" class="nav-link pointer">Go to App</a>
+                            <a *ngIf="!isControlPanel" [routerLink]="getDefaultPanelRoute()" class="nav-link pointer">Go to Panel</a>
+                        </li>
+                    </ng-container>
+                </ul>
+            </div>
+        </nav>
+    </div>
+</header>
 
-<router-outlet></router-outlet>
+<div class="full-hight-screen">
+    <router-outlet></router-outlet>
+</div>
+
+<footer id="footer">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="copyright">
+                    &copy; Copyright
+                    <strong>Reliable Plumbing</strong>. All Rights Reserved
+                </div>
+                <div class="credits">
+                    Designed and Developed by
+                    <a href="#">BearToe Design</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
+
+
+<ng-template #login let-c="close" let-d="dismiss">
+    <div class="modal-header">
+        <h4 class="modal-title">Login</h4>
+        <button type="button" class="close" aria-label="Close" (click)="d()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <rb-login [userEmail]="registeredUserEmail" (userLoggedIn)="userLoggedIn()"></rb-login>
+    </div>
+
+</ng-template>
+
+<!--==========================
+    change password popup
+    ============================-->
+<ng-template #changePassword let-c="close" let-d="dismiss">
+    <div class="modal-header">
+        <h4 class="modal-title">Change Password</h4>
+        <button type="button" class="close" aria-label="Close" (click)="d()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <rb-change-password (passwordChanged)="passwordChanged()"></rb-change-password>
+    </div>
+</ng-template>
+
+
+<ng-template #notificationsContent>
+    <notifications (notificationClicked)="p.close()"></notifications>
+</ng-template>

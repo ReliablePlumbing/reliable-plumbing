@@ -3,6 +3,7 @@ export const dependencies = {
     // business
     UserManager: 'business.UserManager',
     AppointmentManager: 'business.AppointmentManager',
+    QuoteManager: 'business.QuoteManager',
     LookupsManager: 'business.LookupsManager',
     NotificationManager: 'business.NotificationManager',
     FilesManager: 'business.FilesManager',
@@ -19,6 +20,7 @@ export const dependencies = {
     UserLoginRepo: 'data.UserLoginRepo',
     MailLogRepo: 'data.MailLogRepo',
     AppointmentRepo: 'data.AppointmentRepo',
+    QuoteRepo: 'data.QuoteRepo',
     AppointmentTypeRepo: 'data.AppointmentTypeRepo',
     NotificationRepo: 'data.NotificationRepo',
     SettingsRepo: 'data.SettingsRepo',

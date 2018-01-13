@@ -39,17 +39,15 @@ export class AdminPanelComponent implements OnInit {
     this.setCurrentTabFromUrl(this.router.url);
   }
 
-  logout() {
-    this.environmentService.destroyLoginInfo();
-    this.router.navigate(['/']);
-  }
-
   constructTabsPermissions() {
     let roles = this.currentUser.roles;
 
     for (let role of roles) {
-      if (role == Role.Customer)
+      if (role == Role.Customer) {
         this.router.navigate(['/']);
+        return;
+      }
+
       if (role == Role.Admin || role == Role.SystemAdmin) {
         this.tabs.settings.hasPermission = true;
         this.tabs.systemUsers.hasPermission = true;
@@ -63,14 +61,6 @@ export class AdminPanelComponent implements OnInit {
         this.tabs.myAppointments.hasPermission = true;
     }
 
-  }
-
-  openChangePassword() {
-    this.changePasswordModalRef = this.modalService.open(this.changePasswordTemplate);
-  }
-
-  passwordChanged() {
-    this.changePasswordModalRef.close();
   }
 
   subscribeToRouterEvents() {

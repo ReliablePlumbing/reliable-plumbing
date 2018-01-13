@@ -15,6 +15,11 @@ export class RouteHandlerService {
   }
 
   routeToDefault() {
+    let route = this.getDefaultRoute();
+    this.router.navigate([route])
+  }
+
+  getDefaultRoute() {
     let currentUser = this.environmentService.currentUser;
     let route = '/';
     if (currentUser)
@@ -28,6 +33,6 @@ export class RouteHandlerService {
           break;
         }
       }
-    this.router.navigate([route])
+    return route;
   }
 }

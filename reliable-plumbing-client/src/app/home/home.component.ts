@@ -12,31 +12,12 @@ import { systemRoutes } from '../models/constants';
 })
 export class HomeComponent implements OnInit, AfterViewInit {
 
-  @ViewChild('registeration') registerationTemplate: ElementRef;
-  registerModalRef: NgbModalRef;
-
-  @ViewChild('login') loginTemplate: ElementRef;
-  loginModalRef: NgbModalRef;
-  registeredUserEmail = null;
-
-  @ViewChild('scheduleCall') scheduleCallTemplate: ElementRef;
-  scheduleCallModalRef: NgbModalRef;
-
-  @ViewChild('changePassword') changePasswordTemplate: ElementRef;
-  changePasswordModalRef: NgbModalRef;
-
-  isUserLoggedIn: boolean = false;
-  currentUser = null;
-  isSystemUser = false;
-  registerMode;
   systemRoutes = systemRoutes;
 
   constructor(private activatedRoute: ActivatedRoute, private modalService: NgbModal, private environmentService: EnvironmentService) { }
 
   ngOnInit() {
-    this.isUserLoggedIn = this.environmentService.isUserLoggedIn;
-    this.currentUser = this.environmentService.currentUser;
-    this.isSystemUser = this.isUserLoggedIn && this.environmentService.currentUser.roles.findIndex(x => x == Role.Customer) == -1;
+   
   }
 
   ngAfterViewInit() {
@@ -49,7 +30,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
     }, 10);
 
     // Hero rotating texts
-    $("#hero .rotating").Morphext({
+    $("#home .rotating").Morphext({
       animation: "flipInX",
       separator: ",",
       speed: 3000
@@ -152,50 +133,5 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   }
 
-  userRegistered(user) {
-    this.registerModalRef.close();
-    this.registeredUserEmail = user.email;
-    if (!this.isUserLoggedIn)
-      this.openLoginPopup();
-  }
-
-  userLoggedIn() {
-    this.loginModalRef.close();
-    this.isUserLoggedIn = this.environmentService.isUserLoggedIn;
-    this.currentUser = this.environmentService.currentUser;
-    this.isSystemUser = this.isUserLoggedIn && this.environmentService.currentUser.roles.findIndex(x => x == Role.Customer) == -1;
-  }
-
-  openRegisterPopup() {
-    this.registerMode = RegistrationMode.signup;
-    this.registerModalRef = this.modalService.open(this.registerationTemplate, { size: 'lg' })
-  }
-
-  openEditProfile() {
-    this.registerMode = RegistrationMode.edit;
-    this.registerModalRef = this.modalService.open(this.registerationTemplate, { size: 'lg' })
-  }
-
-  openLoginPopup() {
-    this.loginModalRef = this.modalService.open(this.loginTemplate)
-  }
-
-  openScheduleCallPopup() {
-    this.scheduleCallModalRef = this.modalService.open(this.scheduleCallTemplate, { size: 'lg' });
-  }
-
-  logout() {
-    this.environmentService.destroyLoginInfo();
-    this.isUserLoggedIn = this.environmentService.isUserLoggedIn;
-    this.currentUser = this.environmentService.currentUser;
-    this.isSystemUser = this.isUserLoggedIn && this.environmentService.currentUser.roles.findIndex(x => x == Role.Customer) == -1;
-  }
-
-  openChangePassword() {
-    this.changePasswordModalRef = this.modalService.open(this.changePasswordTemplate);
-  }
-
-  passwordChanged() {
-    this.changePasswordModalRef.close();
-  }
+  
 }

@@ -1,6 +1,6 @@
 import * as nodemailer from 'nodemailer';
 import { Inject, Container, Service } from 'typedi';
-import { MailLog, MailStatus, Notification, User, ObjectType, NotificationType, Appointment } from '../../3-domain/domain-module';
+import { MailLog, MailStatus, Notification, User, ObjectType, NotificationType, Appointment, Quote } from '../../3-domain/domain-module';
 import { dependencies } from '../../5-cross-cutting/cross-cutting.module';
 import { MailLogRepo, UserRepo } from '../../4-data-access/data-access.module';
 import { NotificationBroadcastingService } from './notification-broadcasting-service';
@@ -96,6 +96,9 @@ export class MailNotifier {
             case ObjectType.Appointment:
                 mailContent = this.buildAppointmentMailContent(notification, notifiers);
                 break;
+            case ObjectType.Quote:
+                mailContent = this.buildQuoteMailContent(notification, notifiers);
+                break;
 
             default:
                 break;
@@ -105,7 +108,7 @@ export class MailNotifier {
     }
 
     private buildAppointmentMailContent(notification: Notification, notifiers: User[]) {
-        let appoint = <Appointment>notification.object;
+        let quote = <Appointment>notification.object;
         let mailContent = {
             subject: '',
             content: ''
@@ -113,12 +116,12 @@ export class MailNotifier {
         switch (notification.type) {
             case NotificationType.AppointmentCreated:
                 mailContent.subject = 'New Call';
-                if (appoint.userId == null)
-                    mailContent.content += appoint.customerInfo.firstName + ' ' + appoint.customerInfo.lastName + '(anonymus) ';
+                if (quote.userId == null)
+                    mailContent.content += quote.customerInfo.firstName + ' ' + quote.customerInfo.lastName + '(anonymus) ';
                 else if (notifiers.length > 0)
                     mailContent.content += notifiers[0].firstName + ' ' + notifiers[0].lastName + ' ';
 
-                mailContent.content += 'has scheduled a new call at ' + appoint.date.toLocaleDateString() + ' \n'
+                mailContent.content += 'has scheduled a new call at ' + quote.date.toLocaleDateString() + ' \n'
                 mailContent.content += 'you will find the appointment in schedule management in control panel'
                 break;
             case NotificationType.AppointmentChanged:
@@ -131,6 +134,38 @@ export class MailNotifier {
                 break;
             default:
                 break;
+        }
+
+        return mailContent;
+    }
+
+    private buildQuoteMailContent(notification: Notification, notifiers: User[]){
+        let quote = <Quote>notification.object;
+        let mailContent = {
+            subject: '',
+            content: ''
+        }
+        switch (notification.type) {
+            case NotificationType.QuoteCreated:
+                mailContent.subject = 'New Quote';
+                if (quote.userId == null)
+                    mailContent.content += quote.customerInfo.firstName + ' ' + quote.customerInfo.lastName + '(anonymus) ';
+                else if (notifiers.length > 0)
+                    mailContent.content += notifiers[0].firstName + ' ' + notifiers[0].lastName + ' ';
+
+                mailContent.content += 'has requested a new quote \n'
+                mailContent.content += 'you will find the quote in quotes management in control panel'
+                break;
+            // case NotificationType.AppointmentChanged:
+            //     mailContent.subject = 'Call changed';
+            //     mailContent.content = 'appointment changed'
+            //     break;
+            // case NotificationType.AssigneeAdded:
+            //     mailContent.subject = 'you have been assigned';
+            //     mailContent.content = 'you have been assigned'
+            //     break;
+            // default:
+            //     break;
         }
 
         return mailContent;

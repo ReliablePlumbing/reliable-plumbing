@@ -16,6 +16,7 @@ export function registerDependencies() {
     /*** Business ***/
     Container.registerService({ id: dependencies.UserManager, type: business.UserManager });
     Container.registerService({ id: dependencies.AppointmentManager, type: business.AppointmentManager });
+    Container.registerService({ id: dependencies.QuoteManager, type: business.QuoteManager });
     Container.registerService({ id: dependencies.LookupsManager, type: business.LookupsManager });
     Container.registerService({ id: dependencies.NotificationManager, type: business.NotificationManager });
     Container.registerService({ id: dependencies.FilesManager, type: business.FilesManager });
@@ -26,6 +27,7 @@ export function registerDependencies() {
     Container.registerService({ id: dependencies.UserLoginRepo, type: data.UserLoginRepo });
     Container.registerService({ id: dependencies.MailLogRepo, type: data.MailLogRepo });
     Container.registerService({ id: dependencies.AppointmentRepo, type: data.AppointmentRepo });
+    Container.registerService({ id: dependencies.QuoteRepo, type: data.QuoteRepo });
     Container.registerService({ id: dependencies.AppointmentTypeRepo, type: data.AppointmentTypeRepo });
     Container.registerService({ id: dependencies.NotificationRepo, type: data.NotificationRepo });
     Container.registerService({ id: dependencies.SettingsRepo, type: data.SettingsRepo });

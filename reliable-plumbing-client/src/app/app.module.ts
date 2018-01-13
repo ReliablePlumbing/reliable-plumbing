@@ -6,7 +6,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 // our modules
 import { UserManagementModule } from './user-management/user-management.module';
 import { ServicesModule } from './services/services.module';
-import { AppointmentManagementModule } from './appointment-management/appointment-management.module';
+import { CallsQuotesManagementModule } from './calls-quotes-management/calls-quotes-management.module';
 import { AdminPanelModule } from './admin-panel/admin-panel.module';
 import { SharedModule } from './shared/shared.module';
 
@@ -24,7 +24,8 @@ import { TestService } from './test/test.service';
   imports: [
     BrowserModule.withServerTransition({appId: 'ang4-seo-pre'}),
     NgbModule.forRoot(),
-    AppRoutingModule, ServicesModule, AdminPanelModule, UserManagementModule, AppointmentManagementModule, SharedModule
+    AppRoutingModule, ServicesModule, AdminPanelModule, UserManagementModule, CallsQuotesManagementModule, 
+    SharedModule
   ],
   providers: [TestService],
   bootstrap: [AppComponent]

@@ -99,34 +99,52 @@
 
         <form [formGroup]="appointmentForm" novalidate>
           <div class="row">
-            <!-- <div class="row"> -->
 
-            <div class="col-md-6">
-              <div class="form-group date-picker-cont">
-                <label for="date" class="">Pick a date
-                  <i *ngIf="getControlValidation('date','required')">*</i>
-                </label>
-                <input class="form-control" placeholder="yyyy-mm-dd" name="date" formControlName="date" [(ngModel)]="appointment.dateObj"
-                  ngbDatepicker #d="ngbDatepicker">
-                <button class="input-group-addon" (click)="d.toggle()" type="button">
-                  <i class="fa fa-calendar" aria-hidden="true"></i>
-                </button>
-                <span class="error-message" *ngIf="getControlValidation('date','invalidDate')">only valid date are today or after that</span>
+            <!-- Sites -->
+            <ng-container *ngIf="isLoggedIn">
+              <div class="col-sm-12">
+                <div class="form-group">
+                  <label for="site" class="">Choose Site
+                    <i *ngIf="getControlValidation('site','req')">*</i>
+                  </label>
+                  <select name="site" formControlName="site" [(ngModel)]="appointment.site">
+                    <option disabled value="-1" selected>Select Site</option>
+                    <option *ngFor="let site of sites" [ngValue]="site">{{constructSite(site)}}</option>
+                  </select>
+                </div>
               </div>
-            </div>
+            </ng-container>
 
-            <div class="col-md-6">
-              <div class="form-group">
-                <label for="time" class="">Pick a time
-                  <i *ngIf="getControlValidation('time','req')">*</i>
-                </label>
-                <select name="time" formControlName="time" [(ngModel)]="appointment.time">
-                  <option disabled value="-1" selected>select time</option>
-                  <option *ngFor="let time of timeList" [ngValue]="time">{{time.timeStr}}</option>
-                </select>
+            <!-- Call Date & time -->
+            <ng-container *ngIf="mode==modes.call">
+              <div class="col-md-6">
+                <div class="form-group date-picker-cont">
+                  <label for="date" class="">Pick a date
+                    <i *ngIf="getControlValidation('date','required')">*</i>
+                  </label>
+                  <input class="form-control" placeholder="yyyy-mm-dd" name="date" formControlName="date" [(ngModel)]="appointment.dateObj"
+                    ngbDatepicker #d="ngbDatepicker">
+                  <button class="input-group-addon" (click)="d.toggle()" type="button">
+                    <i class="fa fa-calendar" aria-hidden="true"></i>
+                  </button>
+                  <span class="error-message" *ngIf="getControlValidation('date','invalidDate')">only valid date are today or after that</span>
+                </div>
               </div>
-            </div>
 
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label for="time" class="">Pick a time
+                    <i *ngIf="getControlValidation('time','req')">*</i>
+                  </label>
+                  <select name="time" formControlName="time" [(ngModel)]="appointment.time">
+                    <option disabled value="-1" selected>select time</option>
+                    <option *ngFor="let time of timeList" [ngValue]="time">{{time.timeStr}}</option>
+                  </select>
+                </div>
+              </div>
+            </ng-container>
+
+            <!-- Services -->
             <div class="col-md-6">
               <div class="form-group">
                 <label for="appointmentType" class="">Service
@@ -139,35 +157,39 @@
               </div>
             </div>
 
+            <!-- Contact Method -->
             <div class="col-md-6">
               <div class="form-group">
-                <label for="preferedContactType" class="">Preferred Method of contact</label>
-                <div class="btn-group status-btns-group">
-                  <label class="btn btn-secondary">
-                    <input type="radio" class="pointer" name="preferedContactType" [checked]="appointment.preferedContactType == 'Email'" (click)="appointment.preferedContactType = 'Email'"
-                    />Email
-                  </label>
-                  <label class="btn btn-secondary">
-                    <input type="radio" class="pointer" name="preferedContactType" [checked]="appointment.preferedContactType == 'Telephone'"
-                      (click)="appointment.preferedContactType = 'Telephone'" />Telephone
-                  </label>
+                <label for="preferedContactType" class="">Preferred Method of contact
+                  <div class="btn-group status-btns-group">
+                    <label class="btn btn-secondary">
+                      <input type="radio" class="pointer" name="preferedContactType" [checked]="appointment.preferedContactType == 'Email'" (click)="appointment.preferedContactType = 'Email'"
+                      />Email
+                    </label>
+                    <label class="btn btn-secondary">
+                      <input type="radio" class="pointer" name="preferedContactType" [checked]="appointment.preferedContactType == 'Telephone'"
+                        (click)="appointment.preferedContactType = 'Telephone'" />Telephone
+                    </label>
+                  </div>
+                </label>
                 </div>
-              </div>
             </div>
 
+            <!-- Images -->
             <div class="col-md-12">
               <div class="form-group">
                 <label for="preferedContactType" class="">Post a photo</label>
                 <p-fileUpload mode="basic" name="demo[]" accept="image/*" maxFileSize="1000000" (onSelect)="onUploadFile($event)" multiple="multiple"
                   auto="true"></p-fileUpload>
-                  <button class="btn btn-danger" (click)="removeAllImages()">Clear</button>
+                <button class="btn btn-danger" (click)="removeAllImages()">Clear</button>
               </div>
               <p-galleria *ngIf="images.length>0" [images]="images" panelWidth="500" panelHeight="313" [showCaption]="false"></p-galleria>
             </div>
 
+            <!-- Description -->
             <div class="col-md-12">
               <div class="form-group">
-                <label for="message" class="">Message</label>
+                <label for="message" class="">Description</label>
                 <textarea type="text" name="message" class="form-control" formControlName="message" [(ngModel)]="appointment.message"></textarea>
               </div>
             </div>

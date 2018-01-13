@@ -5,13 +5,17 @@ import { convertFromBootstrapDate, getTimeArray, compareBootstrapDate, getDateSt
 import { b64toByteArr } from '../../utils/files-helpers';
 import { NgbDatepickerConfig, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import * as moment from 'moment';
+import { CallsQuotesMode } from '../../models/enums';
 
 @Component({
-  selector: 'rb-schedule-appointment',
-  templateUrl: './schedule-appointment.component.html',
-  styleUrls: ['./schedule-appointment.component.scss']
+  selector: 'rb-calls-quotes-form',
+  templateUrl: './calls-quotes-form.component.html',
+  styleUrls: ['./calls-quotes-form.component.scss']
 })
-export class ScheduleAppointmentComponent implements OnInit {
+export class CallsQuotesFormComponent implements OnInit {
+
+  @Input() mode: CallsQuotesMode;
+  modes = CallsQuotesMode;
   appointmentForm: FormGroup;
   customerInfoForm: FormGroup;
   appointmentTypes = [];
@@ -23,7 +27,8 @@ export class ScheduleAppointmentComponent implements OnInit {
     customerInfo: {},
     preferedContactType: 'Email',
     typeId: '-1',
-    time: '-1'
+    time: '-1',
+    site: '-1'
   };
   mobileMaskOpts = {
     mask: ['(', /[1-9]/, /\d/, /\d/, ')', ' ', /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/],
@@ -37,7 +42,8 @@ export class ScheduleAppointmentComponent implements OnInit {
     { label: 'Call Info' }
   ];
   activeIndex = 0;
-  @Output() appointmentSubmitted: EventEmitter<any> = new EventEmitter<any>();
+  @Output() submitted: EventEmitter<any> = new EventEmitter<any>();
+  sites = [];
 
   constructor(private fb: FormBuilder, private alertifyService: AlertifyService, private lookupsService: LookupsService,
     private environmentService: EnvironmentService, private routeHandler: RouteHandlerService,
@@ -52,16 +58,22 @@ export class ScheduleAppointmentComponent implements OnInit {
     let date = new Date();
     this.appointment.dateObj = { day: nowDate.date(), month: nowDate.month() + 1, year: nowDate.year() };
     this.isLoggedIn = this.environmentService.isUserLoggedIn;
-    if (this.isLoggedIn)
+    if (this.isLoggedIn) {
       this.activeIndex = 1;
+      this.sites = this.environmentService.currentUser.sites;
+    }
     this.getLookups();
     this.createForm();
   }
 
   createForm() {
-
     this.appointmentForm = this.fb.group({
-      date: ['', [Validators.required, (control: FormControl) => {
+      appointmentType: ['', this.validateDropdownRequired],
+      message: ['']
+    });
+
+    if (this.mode == CallsQuotesMode.call) {
+      this.appointmentForm.addControl('date', new FormControl(null, [Validators.required, (control: FormControl) => {
         let date = this.appointment.dateObj;
         if (date == null) return null;
         let nowDate = new Date();
@@ -69,18 +81,16 @@ export class ScheduleAppointmentComponent implements OnInit {
           return { invalidDate: true };
 
         return null;
-      }]],
-      time: ['', this.validateDropdownRequired],
-      appointmentType: ['', this.validateDropdownRequired],
-      message: ['']
-    });
+      }]));
 
-    this.appointmentForm.controls['date'].valueChanges.subscribe(value => {
-      if (value == null)
-        return;
+      this.appointmentForm.controls['date'].valueChanges.subscribe(value => {
+        if (value == null)
+          return;
 
-      this.createTimeArray();
-    });
+        this.createTimeArray();
+      });
+      this.appointmentForm.addControl('time', new FormControl(null, this.validateDropdownRequired));
+    }
 
     if (!this.isLoggedIn) {
       this.customerInfoForm = this.fb.group({
@@ -92,9 +102,10 @@ export class ScheduleAppointmentComponent implements OnInit {
         city: [null],
         state: [null],
         zipCode: [null]
-      })
-
+      });
     }
+    else
+      this.appointmentForm.addControl('site', new FormControl(null, [Validators.required]));
   }
 
   validateDropdownRequired(control: AbstractControl) {
@@ -121,12 +132,16 @@ export class ScheduleAppointmentComponent implements OnInit {
     if (this.isLoggedIn)
       this.appointment.userId = this.environmentService.currentUser.id;
 
-    this.appointmentService.addAppointment(this.appointment, this.images.map(img => img.file)).subscribe(result => {
-      if (result.id != null) {
-        this.appointmentSubmitted.emit();
-        this.alertifyService.success('Your appointment has been submitted');
-      }
+    this.submitted.emit({
+      obj: this.appointment,
+      images: this.images.map(img => img.file)
     });
+    // this.appointmentService.addAppointment(this.appointment, this.images.map(img => img.file)).subscribe(result => {
+    //   if (result.id != null) {
+    //     this.appointmentSubmitted.emit();
+    //     this.alertifyService.success('Your appointment has been submitted');
+    //   }
+    // });
   }
 
   nextStep() {
@@ -188,6 +203,10 @@ export class ScheduleAppointmentComponent implements OnInit {
 
   }
 
+  constructSite(site) {
+    return site.streetAddress + ' - ' + site.city + ' - ' + site.state;
+  }
+
   onUploadFile(files) {
     for (let file of files.files)
       this.images.push({ file: file, source: file.objectURL, alt: 'image' + (this.images.length + 1), title: 'image' + (this.images.length + 1) });
@@ -197,7 +216,4 @@ export class ScheduleAppointmentComponent implements OnInit {
     this.images = [];
 
   }
-
-
 }
-

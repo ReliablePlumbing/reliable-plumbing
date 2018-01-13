@@ -7,12 +7,17 @@ export enum Role {
 }
 
 export enum RegistrationMode {
-    addSystemUser,
+    addSystemUser = 1,
     editSystemUser,
     signup,
     addCustomer,
     completeProfile,
     edit,
+}
+
+export enum CallsQuotesMode {
+    call = 1,
+    quote
 }
 
 export enum regControls {

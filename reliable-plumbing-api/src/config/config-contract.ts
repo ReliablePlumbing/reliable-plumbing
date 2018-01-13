@@ -36,7 +36,8 @@ export interface Config {
             assgineeAdded: string,
             assgineeRemoved: string,
             appointmentChanged: string,
-            appointmentCheckedIn: string
+            appointmentCheckedIn: string,
+            quoteCreated: string
         }
     }
 
