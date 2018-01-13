@@ -10,6 +10,8 @@
                     <li *ngIf="tabs.users.hasPermission" class="list-group-item pointer" [routerLink]="['./users-management']" [class.selected]="currentSelectedTab == tabs.users.index" (click)="currentSelectedTab = tabs.users.index"><i class="fa fa-user" aria-hidden="true"></i> Users</li>
                     <li *ngIf="tabs.myAppointments.hasPermission" class="list-group-item pointer" [routerLink]="['./my-appointments']" [class.selected]="currentSelectedTab == tabs.myAppointments.index" (click)="currentSelectedTab = tabs.myAppointments.index"><i class="fa fa-list-ol" aria-hidden="true"></i> My Appointments</li>
                     <li *ngIf="tabs.tracking.hasPermission" class="list-group-item pointer" [routerLink]="['./technicians-tracking']" [class.selected]="currentSelectedTab == tabs.tracking.index" (click)="currentSelectedTab = tabs.tracking.index"><i class="fa fa-briefcase" aria-hidden="true"></i> Technicians Tracking</li>
+                    <li *ngIf="tabs.profile.hasPermission" class="list-group-item pointer" [routerLink]="['./edit-profile']" [class.selected]="currentSelectedTab == tabs.profile.index" (click)="currentSelectedTab = tabs.profile.index"><i class="fa fa-briefcase" aria-hidden="true"></i> My Profile</li>
+                    <li *ngIf="tabs.changePassword.hasPermission" class="list-group-item pointer" [routerLink]="['./change-password']" [class.selected]="currentSelectedTab == tabs.changePassword.index" (click)="currentSelectedTab = tabs.changePassword.index"><i class="fa fa-briefcase" aria-hidden="true"></i> Change Password</li>
                 </ul>
             </div>
             <div class="col-md-9 col-sm-12 col-xs-129 panel-content">

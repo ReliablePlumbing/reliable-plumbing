@@ -10,6 +10,8 @@ import { SystemUsersManagementComponent } from '../user-management/system-users-
 import { UsersManagementComponent } from '../user-management/users-management/users-management.component';
 import { MyAppointmentsComponent } from './my-appointments/my-appointments.component';
 import { TechniciansTrackingComponent } from './technicians-tracking/technicians-tracking.component';
+import { EditProfileComponent } from './edit-profile/edit-profile.component';
+import { ResetPasswordComponent } from './reset-password/reset-password.component';
 
 const routes: Routes = [
   {
@@ -20,7 +22,9 @@ const routes: Routes = [
       { path: systemRoutes.systemUsers, component: SystemUsersManagementComponent, canActivate: [LoginAuthGuard], data: { roles: [Role.Admin, Role.SystemAdmin] } },
       { path: systemRoutes.users, component: UsersManagementComponent, canActivate: [LoginAuthGuard], data: { roles: [Role.Admin, Role.SystemAdmin] } },
       { path: systemRoutes.myAppointments, component: MyAppointmentsComponent, canActivate: [LoginAuthGuard], data: { roles: [Role.Technician] } },
-      { path: systemRoutes.tracking, component: TechniciansTrackingComponent, canActivate: [LoginAuthGuard], data: { roles: [Role.Supervisor, Role.Admin, Role.SystemAdmin] } }
+      { path: systemRoutes.tracking, component: TechniciansTrackingComponent, canActivate: [LoginAuthGuard], data: { roles: [Role.Supervisor, Role.Admin, Role.SystemAdmin] } },
+      { path: systemRoutes.editProfile, component: EditProfileComponent, canActivate: [LoginAuthGuard] },
+      { path: systemRoutes.changePassword, component: ResetPasswordComponent, canActivate: [LoginAuthGuard] }
     ]
   }
 ];

@@ -13,6 +13,7 @@ export var sessionStrg = {
 
 export const systemRoutes = {
     home: '/',
+    // control panel
     controlPanel: 'control-panel',
     scheduleManagement: 'schedule-management',
     settings: 'appointment-settings',
@@ -20,11 +21,21 @@ export const systemRoutes = {
     users: 'users-management',
     myAppointments: 'my-appointments',
     tracking: 'technicians-tracking',
+
     activateMail: 'activate-mail',
     socialMediaAuthenticate: 'social-media-authenticate',
     forgotPassword: 'forgot-password',
     register: 'register',
     editProfile: 'edit-profile',
     scheduleCall: 'schedule-call',
-    requestQuote: 'request-quote'
+    requestQuote: 'request-quote',
+
+    // customer portal
+    customerPortal: 'customer-portal',
+    callsHistory: 'calls-history',
+    quotesHistory: 'quotes-history',
+
+    // shared in customer & control panels
+    myProfile: 'my-profile',
+    changePassword: 'change-password'
 }

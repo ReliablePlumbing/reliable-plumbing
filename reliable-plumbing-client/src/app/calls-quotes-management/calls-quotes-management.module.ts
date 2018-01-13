@@ -18,7 +18,7 @@ import { CallsQuotesFormComponent } from './calls-quotes-form/calls-quotes-form.
     ScheduleCallComponent, AppointmentDetailsComponent, RequestQuoteComponent, CallsQuotesFormComponent
   ],
   exports: [
-    ScheduleCallComponent, AppointmentDetailsComponent
+    ScheduleCallComponent, AppointmentDetailsComponent, CallsQuotesFormComponent, RequestQuoteComponent
   ]
 })
 export class CallsQuotesManagementModule { }

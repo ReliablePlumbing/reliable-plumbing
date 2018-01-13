@@ -13,9 +13,7 @@ import { systemRoutes } from '../models/constants';
 const routes: Routes = [
   { path: systemRoutes.activateMail, component: ActivateMailComponent },
   { path: systemRoutes.socialMediaAuthenticate, component: SocialMediaRedirectComponent },
-  { path: systemRoutes.forgotPassword, component: ForgotPasswordComponent },
   { path: systemRoutes.register, component: RegisterationComponent, data: { mode: RegistrationMode.signup} },
-  { path: systemRoutes.editProfile, component: RegisterationComponent, data: { mode: RegistrationMode.edit} },
 ];
 
 @NgModule({

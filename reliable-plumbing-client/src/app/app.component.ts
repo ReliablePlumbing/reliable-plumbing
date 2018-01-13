@@ -12,16 +12,10 @@ import { systemRoutes } from './models/constants';
 })
 export class AppComponent {
 
-  @ViewChild('registeration') registerationTemplate: ElementRef;
-  registerModalRef: NgbModalRef;
-
   @ViewChild('login') loginTemplate: ElementRef;
   loginModalRef: NgbModalRef;
+
   registeredUserEmail = null;
-
-  @ViewChild('changePassword') changePasswordTemplate: ElementRef;
-  changePasswordModalRef: NgbModalRef;
-
   isUserLoggedIn: boolean = false;
   currentUser = null;
   isSystemUser = false;
@@ -43,12 +37,6 @@ export class AppComponent {
     });
   }
 
-  userRegistered(user) {
-    this.registerModalRef.close();
-    this.registeredUserEmail = user.email;
-    if (!this.isUserLoggedIn)
-      this.openLoginPopup();
-  }
 
   userLoggedIn() {
     this.loginModalRef.close();
@@ -57,15 +45,6 @@ export class AppComponent {
     this.isSystemUser = this.isUserLoggedIn && this.environmentService.currentUser.roles.findIndex(x => x == Role.Customer) == -1;
   }
 
-  openRegisterPopup() {
-    this.registerMode = RegistrationMode.signup;
-    this.registerModalRef = this.modalService.open(this.registerationTemplate, { size: 'lg' })
-  }
-
-  openEditProfile() {
-    this.registerMode = RegistrationMode.edit;
-    this.registerModalRef = this.modalService.open(this.registerationTemplate, { size: 'lg' })
-  }
 
   openLoginPopup() {
     this.loginModalRef = this.modalService.open(this.loginTemplate)
@@ -77,14 +56,6 @@ export class AppComponent {
     this.currentUser = this.environmentService.currentUser;
     this.isSystemUser = this.isUserLoggedIn && this.environmentService.currentUser.roles.findIndex(x => x == Role.Customer) == -1;
     this.router.navigate(['/']);
-  }
-
-  openChangePassword() {
-    this.changePasswordModalRef = this.modalService.open(this.changePasswordTemplate);
-  }
-
-  passwordChanged() {
-    this.changePasswordModalRef.close();
   }
 
   getDefaultPanelRoute() {

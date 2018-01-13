@@ -15,17 +15,20 @@ import { LoaderComponent } from './loader/loader.component';
 import { NoDataComponent } from './no-data/no-data.component';
 import { NotificationsComponent } from './notifications/notifications.component';
 import { MultiSelectDatepickerComponent } from './multi-select-datepicker/multi-select-datepicker.component';
+import { MessageComponent } from './message/message.component';
+
 // directives
 import { ModelCharsReplaceDirective } from './directives/model-chars-replace.directive';
 import { InputNumberDirective } from './directives/input-number.directive';
 import { ClosePopoverOnOutsideClickDirective } from './directives/close-popover-outside-click.directive';
+
 // pipes 
 import { TechnicianStatusColor, TechnicianStatusTxt } from './pipes/technician-status-pipes';
 import { AppointmentStatusColor, AppointmentStatusTxt } from './pipes/appointment-status-pipes';
 
 let declarations = [
   // components
-  LoaderComponent, MultiSelectDatepickerComponent, NoDataComponent, NotificationsComponent,
+  LoaderComponent, MultiSelectDatepickerComponent, NoDataComponent, NotificationsComponent, MessageComponent,
   // pipes
   AppointmentStatusColor, AppointmentStatusTxt, TechnicianStatusColor, TechnicianStatusTxt,
   // directives

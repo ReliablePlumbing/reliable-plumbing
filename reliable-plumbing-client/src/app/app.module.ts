@@ -9,6 +9,7 @@ import { ServicesModule } from './services/services.module';
 import { CallsQuotesManagementModule } from './calls-quotes-management/calls-quotes-management.module';
 import { AdminPanelModule } from './admin-panel/admin-panel.module';
 import { SharedModule } from './shared/shared.module';
+import { CustomerPortalModule } from './customer-portal/customer-portal.module';
 
 // components
 import { AppComponent } from './app.component';
@@ -25,7 +26,7 @@ import { TestService } from './test/test.service';
     BrowserModule.withServerTransition({appId: 'ang4-seo-pre'}),
     NgbModule.forRoot(),
     AppRoutingModule, ServicesModule, AdminPanelModule, UserManagementModule, CallsQuotesManagementModule, 
-    SharedModule
+    SharedModule, CustomerPortalModule
   ],
   providers: [TestService],
   bootstrap: [AppComponent]

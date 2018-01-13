@@ -1,8 +1,7 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { EnvironmentService, RouteHandlerService } from '../services/services.exports';
-import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { Router, NavigationEnd } from '@angular/router';
-import { Role, RegistrationMode } from '../models/enums';
+import { Role } from '../models/enums';
 import { systemRoutes } from '../models/constants';
 
 @Component({
@@ -14,9 +13,6 @@ export class AdminPanelComponent implements OnInit {
 
   currentSelectedTab = -1;
 
-  @ViewChild('changePassword') changePasswordTemplate: ElementRef;
-  changePasswordModalRef: NgbModalRef;
-
   registerMode;
   currentUser;
   tabs = {
@@ -26,11 +22,12 @@ export class AdminPanelComponent implements OnInit {
     users: { index: 4, hasPermission: false },
     myAppointments: { index: 5, hasPermission: false },
     tracking: { index: 6, hasPermission: false },
+    profile: { index: 7, hasPermission: true },
+    changePassword: { index: 8, hasPermission: true },
   }
   systemRoutes = systemRoutes;
 
-  constructor(private environmentService: EnvironmentService, private router: Router, private routeHandlerService: RouteHandlerService,
-    private modalService: NgbModal) { }
+  constructor(private environmentService: EnvironmentService, private router: Router, private routeHandlerService: RouteHandlerService) { }
 
   ngOnInit() {
     this.currentUser = this.environmentService.currentUser;
@@ -83,5 +80,9 @@ export class AdminPanelComponent implements OnInit {
       this.currentSelectedTab = this.tabs.myAppointments.index;
     else if (~url.indexOf(systemRoutes.tracking))
       this.currentSelectedTab = this.tabs.tracking.index;
+    else if (~url.indexOf(systemRoutes.editProfile))
+      this.currentSelectedTab = this.tabs.profile.index;
+    else if (~url.indexOf(systemRoutes.changePassword))
+      this.currentSelectedTab = this.tabs.changePassword.index;
   }
 }

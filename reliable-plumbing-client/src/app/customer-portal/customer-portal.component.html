@@ -1,0 +1,17 @@
+<div class="admin-panel">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-3 col-sm-12 col-xs-123 side-menu">
+                <ul class="list-group">
+                    <li class="list-group-item pointer" [routerLink]="['./' + systemRoutes.callsHistory]" [class.selected]="currentSelectedTab == tabs.calls" (click)="currentSelectedTab = tabs.calls"><i class="fa fa-calendar" aria-hidden="true"></i> Calls History</li>
+                    <li class="list-group-item pointer" [routerLink]="['./' + systemRoutes.quotesHistory]" [class.selected]="currentSelectedTab == tabs.quotes" (click)="currentSelectedTab = tabs.quotes"><i class="fa fa-calendar-check-o" aria-hidden="true"></i> Quotes History</li>
+                    <li class="list-group-item pointer" [routerLink]="['./' + systemRoutes.myProfile]" [class.selected]="currentSelectedTab == tabs.profile" (click)="currentSelectedTab = tabs.profile"><i class="fa fa-user" aria-hidden="true"></i> My Profile</li>
+                    <li class="list-group-item pointer" [routerLink]="['./' + systemRoutes.changePassword]" [class.selected]="currentSelectedTab == tabs.changePassword" (click)="currentSelectedTab = tabs.changePassword"><i class="fa fa-user" aria-hidden="true"></i> Change Password</li>
+                </ul>
+            </div>
+            <div class="col-md-9 col-sm-12 col-xs-129 panel-content">
+                <router-outlet></router-outlet>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,14 @@
+<button *ngIf="mode != modes.addCall" class="btn btn-success" (click)="setMode(modes.addCall)">New Call</button>
+<button *ngIf="mode != modes.history" (click)="setMode(modes.history)">Back</button>
+
+<ng-container *ngIf="mode == modes.addCall">
+  <rb-calls-quotes-form [mode]="callsQuotesMode" (submitted)="callSubmitted($event)"></rb-calls-quotes-form>
+</ng-container>
+
+<ng-container *ngIf="mode == modes.msg">
+  <message [text]="'Saved Successfully'"></message>
+</ng-container>
+
+<ng-container *ngIf="mode == modes.history">
+
+</ng-container>
