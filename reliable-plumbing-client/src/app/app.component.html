@@ -48,10 +48,6 @@
                         <li class="nav-item">
                             <div ngbDropdown>
                                 <a class="nav-link pointer">{{currentUser.firstName + ' ' + currentUser.lastName}}</a>
-                                <!-- <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
-                                    <button class="dropdown-item" (click)="openChangePassword()">Change Password</button>
-                                    <button class="dropdown-item" [routerLink]="[systemRoutes.editProfile]">Edit Profile</button>
-                                </div> -->
                             </div>
                         </li>
                         <li class="nav-item">
@@ -125,5 +121,5 @@
 
 
 <ng-template #notificationsContent>
-    <notifications (notificationClicked)="p.close()"></notifications>
+    <notifications (notificationClicked)="closeNotifications($event)"></notifications>
 </ng-template>

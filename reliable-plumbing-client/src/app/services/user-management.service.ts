@@ -153,4 +153,9 @@ export class UserManagementService {
       .map((response: Response) => response.json());
   }
 
+  searchUsers(searchText) {
+    return this.httpExtensionService.get(this.basePath + 'searchUsers?searchText=' + searchText, true)
+      .map((response: Response) => response.json());
+  }
+
 }

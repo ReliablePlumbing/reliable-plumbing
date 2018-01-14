@@ -8,7 +8,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { environment } from '../../environments/environment';
 
 // prime ng components
-import { StepsModule, TabViewModule, MenuModule, FileUploadModule, GalleriaModule } from 'primeng/primeng';
+import { StepsModule, TabViewModule, MenuModule, FileUploadModule, GalleriaModule, InputSwitchModule } from 'primeng/primeng';
 
 // components
 import { LoaderComponent } from './loader/loader.component';
@@ -38,10 +38,10 @@ let declarations = [
 
 @NgModule({
   imports: [
-    CommonModule, FormsModule, NgbModule, TextMaskModule, RouterModule, 
+    CommonModule, FormsModule, NgbModule, TextMaskModule, RouterModule, InputSwitchModule,
     AgmCoreModule.forRoot({ apiKey: environment.mapsApiKey }), StepsModule, TabViewModule, MenuModule, FileUploadModule, GalleriaModule
   ],
   declarations: declarations,
-  exports: [declarations, AgmCoreModule, TextMaskModule, StepsModule, TabViewModule, MenuModule, FileUploadModule, GalleriaModule]
+  exports: [declarations, AgmCoreModule, TextMaskModule, StepsModule, TabViewModule, MenuModule, FileUploadModule, GalleriaModule, InputSwitchModule]
 })
 export class SharedModule { }

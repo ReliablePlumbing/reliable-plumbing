@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { AppointmentStatus } from '../../models/enums';
-import { LookupsService, AppointmentService } from '../../services/services.exports';
+import { AppointmentStatus, CallsQuotesMode } from '../../models/enums';
+import { LookupsService, AppointmentService, AlertifyService } from '../../services/services.exports';
 import { getEnumEntries, getDatesArray, getDateString, convertFromBootstrapDate, convertDateParamToDateObj } from '../../utils/date-helpers';
 import * as moment from 'moment';
 import { NgbModalRef, NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -15,6 +15,9 @@ import { FormControl } from '@angular/forms';
 })
 export class ScheduleManagementComponent implements OnInit {
 
+  modes = { listing: 1, addCall: 2, msg: 3 };
+  mode = this.modes.listing;
+  callsQuotesMode: CallsQuotesMode = CallsQuotesMode.call;
   @ViewChild('appointmentDetails') appointmentDetailsTemplate: ElementRef;
   appointmentDetailsModalRef: NgbModalRef;
   selectedAppointment = null;
@@ -33,7 +36,7 @@ export class ScheduleManagementComponent implements OnInit {
   timeTo: FormControl;
   timeFrom: FormControl;
 
-  constructor(private lookupsService: LookupsService, private appointmentService: AppointmentService,
+  constructor(private lookupsService: LookupsService, private appointmentService: AppointmentService, private alertifyService: AlertifyService,
     private modalService: NgbModal, private router: Router, private activatedRoute: ActivatedRoute) { }
 
   ngOnInit() {
@@ -72,7 +75,7 @@ export class ScheduleManagementComponent implements OnInit {
         types: []
       }
 
-       this.filter(urlParams['dFrom'] == null && urlParams['dFrom'] == null)
+      this.filter(urlParams['dFrom'] == null && urlParams['dFrom'] == null)
 
       this.activatedRoute.params.subscribe(params => {
         let urlIdParam = params['id'];
@@ -237,5 +240,20 @@ export class ScheduleManagementComponent implements OnInit {
     this.appointmentDetailsModalRef.close();
   }
 
+
+  callSubmitted(call) {
+
+    this.appointmentService.addAppointment(call.obj, call.images).subscribe(result => {
+      if (result.id != null) {
+        this.mode = this.modes.msg;
+        setTimeout(() => this.mode = this.modes.listing, 5000);
+        this.alertifyService.success('Your call has been submitted');
+      }
+    });
+  }
+
+  setMode(currentMode) {
+    this.mode = currentMode;
+  }
 }
 

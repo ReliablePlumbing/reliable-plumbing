@@ -1,11 +1,13 @@
 import { Component, OnInit, EventEmitter, Input, Output } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators, AbstractControl } from '@angular/forms';
-import { AlertifyService, EnvironmentService, RouteHandlerService, LookupsService, AppointmentService } from '../../services/services.exports';
+import { AlertifyService, EnvironmentService, RouteHandlerService, LookupsService, AppointmentService, UserManagementService } from '../../services/services.exports';
 import { convertFromBootstrapDate, getTimeArray, compareBootstrapDate, getDateString } from '../../utils/date-helpers';
 import { b64toByteArr } from '../../utils/files-helpers';
 import { NgbDatepickerConfig, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import * as moment from 'moment';
 import { CallsQuotesMode } from '../../models/enums';
+import { Observable } from 'rxjs/observable';
+import { of } from 'rxjs/observable/of';
 
 @Component({
   selector: 'rb-calls-quotes-form',
@@ -15,6 +17,8 @@ import { CallsQuotesMode } from '../../models/enums';
 export class CallsQuotesFormComponent implements OnInit {
 
   @Input() mode: CallsQuotesMode;
+  @Input() adminMode = false;
+  existingCustomer = false;
   modes = CallsQuotesMode;
   appointmentForm: FormGroup;
   customerInfoForm: FormGroup;
@@ -46,11 +50,12 @@ export class CallsQuotesFormComponent implements OnInit {
   sites = [];
 
   constructor(private fb: FormBuilder, private alertifyService: AlertifyService, private lookupsService: LookupsService,
-    private environmentService: EnvironmentService, private routeHandler: RouteHandlerService,
+    private environmentService: EnvironmentService, private routeHandler: RouteHandlerService, private usermanagementService: UserManagementService,
     private appointmentService: AppointmentService, private config: NgbDatepickerConfig) { }
 
 
   ngOnInit() {
+    this.existingCustomer = this.adminMode;
     let nowDate = moment().add(1, 'hour').add(30, 'minutes'); // now date after 1:30 hours
     this.config.markDisabled = (date: NgbDateStruct) => {
       return compareBootstrapDate(date, { day: nowDate.date(), month: nowDate.month() + 1, year: nowDate.year() }) > 0;
@@ -58,7 +63,7 @@ export class CallsQuotesFormComponent implements OnInit {
     let date = new Date();
     this.appointment.dateObj = { day: nowDate.date(), month: nowDate.month() + 1, year: nowDate.year() };
     this.isLoggedIn = this.environmentService.isUserLoggedIn;
-    if (this.isLoggedIn) {
+    if (this.isLoggedIn && !this.adminMode) {
       this.activeIndex = 1;
       this.sites = this.environmentService.currentUser.sites;
     }
@@ -92,7 +97,7 @@ export class CallsQuotesFormComponent implements OnInit {
       this.appointmentForm.addControl('time', new FormControl(null, this.validateDropdownRequired));
     }
 
-    if (!this.isLoggedIn) {
+    if (!this.isLoggedIn || this.adminMode) {
       this.customerInfoForm = this.fb.group({
         firstName: [null, [Validators.required]],
         lastName: [null],
@@ -105,7 +110,7 @@ export class CallsQuotesFormComponent implements OnInit {
       });
     }
     else
-      this.appointmentForm.addControl('site', new FormControl(null, [Validators.required]));
+      this.appointmentForm.addControl('site', new FormControl(null, this.validateDropdownRequired));
   }
 
   validateDropdownRequired(control: AbstractControl) {
@@ -129,25 +134,27 @@ export class CallsQuotesFormComponent implements OnInit {
       return;
 
     this.appointment.date = convertFromBootstrapDate(this.appointment.dateObj, this.appointment.time);
-    if (this.isLoggedIn)
+    if (this.isLoggedIn && !this.adminMode)
       this.appointment.userId = this.environmentService.currentUser.id;
+    else if(this.existingCustomer)
+      this.appointment.userId = this.selectedUser.id;
 
     this.submitted.emit({
       obj: this.appointment,
       images: this.images.map(img => img.file)
     });
-    // this.appointmentService.addAppointment(this.appointment, this.images.map(img => img.file)).subscribe(result => {
-    //   if (result.id != null) {
-    //     this.appointmentSubmitted.emit();
-    //     this.alertifyService.success('Your appointment has been submitted');
-    //   }
-    // });
   }
 
   nextStep() {
-    if (this.customerInfoForm.invalid)
+    if (!this.adminMode && this.customerInfoForm.invalid)
+      return;
+    else if (this.existingCustomer && typeof this.selectedUser != 'object')
       return;
 
+    if (this.existingCustomer && typeof this.selectedUser == 'object') {
+      this.appointmentForm.addControl('site', new FormControl(null, this.validateDropdownRequired));
+      this.sites = this.selectedUser.sites;
+    }
     this.activeIndex = 1;
   }
 
@@ -212,8 +219,27 @@ export class CallsQuotesFormComponent implements OnInit {
       this.images.push({ file: file, source: file.objectURL, alt: 'image' + (this.images.length + 1), title: 'image' + (this.images.length + 1) });
   }
 
-  removeAllImages() {
-    this.images = [];
+  removeAllImages = () => this.images = [];
 
-  }
+  selectedUser;
+  searching = false;
+  searchFailed = false;
+  hideSearchingWhenUnsubscribed = new Observable(() => () => this.searching = false);
+
+  search = (text$: Observable<string>) =>
+    text$
+      .debounceTime(300)
+      .distinctUntilChanged()
+      .do(() => this.searching = true)
+      .switchMap(term =>
+        this.usermanagementService.searchUsers(term)
+          .do(() => this.searchFailed = false)
+          .catch(() => {
+            this.searchFailed = true;
+            return of([]);
+          }))
+      .do(() => this.searching = false)
+      .merge(this.hideSearchingWhenUnsubscribed);
+
+  inputFormatter = (val) => val == null ? '' : val.firstName + ' ' + val.lastName + '  (' + val.email + ')';
 }

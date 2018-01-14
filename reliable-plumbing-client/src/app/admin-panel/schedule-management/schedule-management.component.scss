@@ -71,3 +71,24 @@
         grid-template-columns: 1fr;
     }
 }
+
+.add-call {
+    float: right;
+}
+
+.header {
+    padding-top: 10px;
+    background-color: lightgray;
+
+    & label {
+        font-size: 25px;
+    }
+}
+
+.msg{
+    margin-top: 10px;
+}
+
+.schedule-content {
+    margin-top: 10px;
+}
