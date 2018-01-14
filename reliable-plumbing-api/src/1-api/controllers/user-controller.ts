@@ -234,6 +234,18 @@ export class UserController {
         });
     }
 
+    @Get('/searchUsers')
+    searchUsers( @QueryParam('searchText') searchText: string) {
+        return new Promise<any>((resolve, reject) => {
+            this.userManager.searchUsers(searchText)
+                .then(results => {
+                    let usersModel = results.map(user => user.toLightModel());
+                    resolve(usersModel);
+                })
+                .catch((error: Error) => reject(error));
+        });
+    }
+
 
     private authenticateByFacebook(code, redirectUri) {
         return new Promise<User>((resolve, reject) => {
