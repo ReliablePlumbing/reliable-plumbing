@@ -1,7 +1,7 @@
 import { Component, ViewChild, ElementRef } from '@angular/core';
 import { NotificationService, SocketsService, EnvironmentService, RouteHandlerService } from './services/services.exports';
 import { ActivatedRoute, Router, NavigationEnd } from '@angular/router';
-import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, NgbModalRef, NgbPopover } from '@ng-bootstrap/ng-bootstrap';
 import { Role, RegistrationMode } from './models/enums';
 import { systemRoutes } from './models/constants';
 
@@ -14,6 +14,7 @@ export class AppComponent {
 
   @ViewChild('login') loginTemplate: ElementRef;
   loginModalRef: NgbModalRef;
+  @ViewChild('p') notificationsPopover: NgbPopover;
 
   registeredUserEmail = null;
   isUserLoggedIn: boolean = false;
@@ -61,4 +62,6 @@ export class AppComponent {
   getDefaultPanelRoute() {
     return this.routeHandlerService.getDefaultRoute();
   }
+
+  closeNotifications = () => this.notificationsPopover.close();
 }

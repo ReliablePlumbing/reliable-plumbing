@@ -12,6 +12,9 @@ export class MessageComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
+    $('.bb').fadeToggle(200);
+    $('.message').toggleClass('comein');
+    $('.check').toggleClass('scaledown');
   }
 
 }

@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule } from '@angular/forms';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 
 import { CallsQuotesManagementRoutingModule } from './calls-quotes-management-routing.module';
 import { ScheduleCallComponent } from './schedule-call/schedule-call.component';
@@ -12,7 +12,7 @@ import { CallsQuotesFormComponent } from './calls-quotes-form/calls-quotes-form.
 
 @NgModule({
   imports: [
-    CommonModule, CallsQuotesManagementRoutingModule, NgbModule, ReactiveFormsModule, SharedModule
+    CommonModule, CallsQuotesManagementRoutingModule, NgbModule, ReactiveFormsModule, SharedModule, FormsModule
   ],
   declarations: [
     ScheduleCallComponent, AppointmentDetailsComponent, RequestQuoteComponent, CallsQuotesFormComponent

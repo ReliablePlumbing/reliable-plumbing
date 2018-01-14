@@ -370,6 +370,28 @@ export class UserManager {
         });
     }
 
+    searchUsers(searchText: string){
+        return new Promise<User[]>((resolve, reject) => {
+            if(searchText == null || searchText.length == 0)
+                return resolve([]);
+
+            this.userRepo.getUsersByRoles([Role.Customer]).then(results => {
+                searchText = searchText.toLowerCase();
+                let filteredUsers = results.filter(user => {
+                    
+                    return user.firstName.toLowerCase().indexOf(searchText) != -1 ||
+                        user.lastName.toLowerCase().indexOf(searchText) != -1 ||
+                        (user.firstName + ' ' + user.lastName).toLowerCase().indexOf(searchText) != -1 ||
+                        user.email.toLowerCase().indexOf(searchText) != -1 ||
+                        user.mobile.toLowerCase().indexOf(searchText) != -1
+                });
+
+                return resolve(filteredUsers);
+            });
+            
+        });
+    }
+
     // region private methods
     private validateUser(user: User, validatePasswords = false): string[] {
         let errors: string[] = []
