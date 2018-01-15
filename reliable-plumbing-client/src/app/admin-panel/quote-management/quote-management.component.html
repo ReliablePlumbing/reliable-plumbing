@@ -1,0 +1,51 @@
+<loader *ngIf="loading"></loader>
+
+<ng-container *ngIf="!loading">
+
+  <section class="listing-content">
+
+    <ngb-tabset type="pills">
+      <ngb-tab *ngFor="let tab of tabs" [title]="tab.text + ' (' + mappedQuotes[tab.id].length + ')'" [id]="tab.id">
+        <ng-template ngbTabContent>
+
+          <div class="quotes-list">
+
+            <div class="quotes-cards-list">
+              <div class="quote-card pointer" *ngFor="let quote of mappedQuotes[tab.id]" (click)="openQuoteDetailsModal(quote)">
+                <h6>
+                  <b>{{quote.fullName}}</b>
+                </h6>
+                <h6>
+                  <b>{{quote.type.name}}</b>
+                </h6>
+                <h6 *ngIf="quote.totalEstimate != null">
+                  <label>Total Estimation (</label>
+                  <b>{{quote.totalEstimate}})</b>
+                </h6>
+              </div>
+            </div>
+
+          </div>
+
+        </ng-template>
+      </ngb-tab>
+
+    </ngb-tabset>
+  </section>
+</ng-container>
+
+
+
+
+<ng-template #quoteDetails let-c="close" let-d="dismiss">
+  <div class="modal-header">
+    <h5 class="modal-title">Quote Details</h5>
+    <button type="button" class="close" aria-label="Close" (click)="closeQuoteDetailsModal()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <rb-quote-details [quote]="selectedQuote" (quoteUpdated)="quoteUpdated($event)" (close)="closeQuoteDetailsModal()"></rb-quote-details>
+  </div>
+
+</ng-template>

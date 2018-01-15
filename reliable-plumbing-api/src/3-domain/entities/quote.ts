@@ -30,6 +30,11 @@ export class Quote extends BaseEntity {
     user?: User;
     type?: AppointmentType;
     relatedFiles: any[];
+    estimateFields: [{
+        id?: string,
+        desc: string,
+        cost: number
+    }];
 
     constructor(quote: any) {
         super();
@@ -46,6 +51,13 @@ export class Quote extends BaseEntity {
             this.type = quote.type;
             this.relatedFileNames = quote.relatedFileNames;
             this.relatedFiles = quote.relatedFiles;
+            this.estimateFields = quote.estimateFields == null ? [] : quote.estimateFields.map(f => {
+                return {
+                    id: f.id,
+                    desc: f.desc,
+                    cost: f.cost
+                }
+            });
             this.statusHistory = quote.statusHistory == null ? [] : quote.statusHistory.map(s => {
                 return new StatusHistory({
                     id: s.id,
@@ -72,7 +84,8 @@ export class Quote extends BaseEntity {
             type: this.type == null ? null : this.type.toLightModel(),
             statusHistory: this.statusHistory.map(s => s.toLightModel()),
             // images: this.images
-            relatedFileNames: this.relatedFileNames
+            relatedFileNames: this.relatedFileNames,
+            estimateFields: this.estimateFields      
         }
     }
 }

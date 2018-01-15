@@ -6,7 +6,7 @@ import { b64toByteArr } from '../../utils/files-helpers';
 import { NgbDatepickerConfig, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import * as moment from 'moment';
 import { CallsQuotesMode } from '../../models/enums';
-import { Observable } from 'rxjs/observable';
+import { Observable } from 'rxjs/Observable';
 import { of } from 'rxjs/observable/of';
 
 @Component({

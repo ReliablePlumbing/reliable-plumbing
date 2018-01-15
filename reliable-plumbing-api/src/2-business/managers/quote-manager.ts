@@ -27,10 +27,10 @@ export class QuoteManager {
             throw new AppError(errors, ErrorType.validation);
 
         // initialize quote data creation date, initial status etc..
-       quote.creationDate = new Date();
-       quote.status = QuoteStatus.Pending;
-       quote.statusHistory = [new StatusHistory({
-            status: QuoteStatus.Pending,
+        quote.creationDate = new Date();
+        quote.status = QuoteStatus.Open;
+        quote.statusHistory = [new StatusHistory({
+            status: QuoteStatus.Open,
             creationDate: new Date(),
             createdByUserId: quote.userId
         })];
@@ -52,6 +52,26 @@ export class QuoteManager {
         });
     }
 
+
+    getQuotesFilteredByStatus(statuses: QuoteStatus[]) {
+        return new Promise<Quote[]>((resolve, reject) => {
+            this.quoteRepo.getQuotesFilteredByStatus(statuses)
+                .then((result: any) => resolve(result))
+                .catch((error: Error) => reject(error));
+
+        });
+    }
+
+    updateQuote(quote: Quote) {
+        return new Promise<Quote>((resolve, reject) => {
+            this.quoteRepo.updateQuote(quote)
+                .then((result: any) => {
+                    this.buildQuoteUpdatedNotification(quote);
+                    resolve(result);
+                }).catch((error: Error) => reject(error));
+        });
+    }
+
     // getAppointmentFiltered(filters) {
 
     //     let fromDate = this.constructAppointmentDate(filters.date.from, filters.time.from);
@@ -65,7 +85,7 @@ export class QuoteManager {
     //     })
     // }
 
-    
+
 
     // updateAppointmentStatusAndAssignees(appointment: Appointment) {
     //     return new Promise<Appointment>((resolve, reject) => {
@@ -92,7 +112,7 @@ export class QuoteManager {
     //     });
     // }
 
-    
+
     // region Private Methods
 
     private getQuoteCurrentStatus(statusHistory: any[]) {
@@ -122,7 +142,7 @@ export class QuoteManager {
 
     private buildQuoteCreatedNotification(notifierIds, objectId) {
         let newNotification = new Notification();
-        newNotification.message = config.notification.messages.appointmentCreated;
+        newNotification.message = config.notification.messages.quoteCreated;
         newNotification.notifierIds = notifierIds;
         newNotification.objectId = objectId;
         newNotification.objectType = ObjectType.Quote;
@@ -142,66 +162,45 @@ export class QuoteManager {
         });
     }
 
-    // private sendAppointmentUpdatedNotification(oldStatus: AppointmentStatus, newStatus: AppointmentStatus,
-    //     oldAssignees: string[], newAssignees: string[], appointment: Appointment) {
-    //     let addedAssignees = [];
-    //     let removedAssignees = [];
-    //     let sameAssignees = [];
+    private buildQuoteUpdatedNotification(quote: Quote) {
 
-    //     for (let oldAssignee of oldAssignees) {
-    //         let exists = false;
-    //         for (let newAssignee of newAssignees)
-    //             if (oldAssignee == newAssignee) {
-    //                 exists = true; break;
-    //             }
-    //         exists ? sameAssignees.push(oldAssignee) : removedAssignees.push(oldAssignee);
-    //     }
-    //     for (let newAssignee of newAssignees) {
-    //         let exists = false;
-    //         for (let oldAssignee of oldAssignees)
-    //             if (oldAssignee == newAssignee) {
-    //                 exists = true; break;
-    //             }
-    //         if (!exists)
-    //             addedAssignees.push(newAssignee);
-    //     }
+        let changedNotification = new Notification({
+            message: config.notification.messages.quoteChanged,
+            notifees: [],
+            objectId: quote.id,
+            objectType: ObjectType.Quote,
+            type: NotificationType.QuoteChanged
+        });
 
-    //     let notifications = [];
+        let promise: Promise<any> = null;
+        switch (quote.status) {
+            case QuoteStatus.Pending:
+                promise = new Promise<any>((resolve, reject) => {
+                    quote.userId != null ? changedNotification.notifees.push({ userId: quote.userId, seen: false }) :
+                        changedNotification.unregisterdEmail = quote.customerInfo.email;
+                    resolve(true);
+                });
+                break;
+            case QuoteStatus.Approved:
+            case QuoteStatus.Rejected:
+                promise = new Promise<any>((resolve, reject) => {
+                    this.userRepo.getUsersByRoles([Role.Admin, Role.Supervisor]).then(results => {
+                        changedNotification.notifees = results.map(user => {
+                            return { userId: user.id, seen: false };
+                        });
+                        resolve(true);
+                    });
+                });
+                break;
+        }
 
-    //     if (addedAssignees.length > 0)
-    //         notifications.push(new Notification({
-    //             message: config.notification.messages.assgineeAdded,
-    //             notifees: addedAssignees.map(a => { return { userId: a, seen: false } }),
-    //             objectId: appointment.id,
-    //             objectType: ObjectType.Appointment,
-    //             type: NotificationType.AssigneeAdded
-    //         }));
+        if (!promise)
+            return;
 
-    //     if (removedAssignees.length > 0)
-    //         notifications.push(new Notification({
-    //             message: config.notification.messages.assgineeRemoved,
-    //             notifees: removedAssignees.map(a => { return { userId: a, seen: false } }),
-    //             objectId: appointment.id,
-    //             objectType: ObjectType.Appointment,
-    //             type: NotificationType.AssigneeRemoved
-    //         }));
+        promise.then((result: any) => this.notificationManager.addNotification(changedNotification))
+            .catch((error: Error) => console.log(error));
 
-    //     if (oldStatus != newStatus) {
-    //         let changedNotification = new Notification({
-    //             message: config.notification.messages.appointmentChanged,
-    //             notifees: sameAssignees.map(a => { return { userId: a, seen: false } }),
-    //             objectId: appointment.id,
-    //             objectType: ObjectType.Appointment,
-    //             type: NotificationType.AssigneeRemoved
-    //         });
-    //         appointment.userId != null ? changedNotification.notifees.push({ userId: appointment.userId, seen: false }) :
-    //             changedNotification.unregisterdEmail = appointment.customerInfo.email;
-
-    //         notifications.push(changedNotification);
-    //     }
-
-    //     this.notificationManager.addNotifications(notifications);
-    // }
+    }
 
     // endregion private methods
 }

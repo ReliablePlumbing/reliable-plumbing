@@ -26,7 +26,11 @@ export var quoteSchema: genericSchema = {
             creationDate: { type: Date, required: true },
             createdByUserId: { type: String, required: false, ref: 'users' },
         })],
-        relatedFileNames: [{ type: String, required: false }]
+        relatedFileNames: [{ type: String, required: false }],
+        estimateFields: [new Schema({
+            desc: { type: String, required: true },
+            cost: { type: Number, required: true }
+        })]
     }),
     collectionName: 'quotes'
 };

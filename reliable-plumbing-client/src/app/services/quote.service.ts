@@ -40,5 +40,15 @@ export class QuoteService {
         return this.sanitizer.bypassSecurityTrustUrl(urlCreator.createObjectURL(blob));
       })
   }
+
+  getQuotesFilteredByStatus(statuses) {
+    return this.httpService.post(this.basePath + 'getQuotesFilteredByStatus', statuses)
+      .map((response: Response) => response.json())
+  }
+
+  updateQuote(quote) {
+    return this.httpService.post(this.basePath + 'updateQuote', quote)
+      .map((response: Response) => response.json())
+  }
 }
 

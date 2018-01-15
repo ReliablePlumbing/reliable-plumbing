@@ -19,6 +19,7 @@ import { MyAppointmentsComponent } from './my-appointments/my-appointments.compo
 import { TechniciansTrackingComponent } from './technicians-tracking/technicians-tracking.component';
 import { EditProfileComponent } from './edit-profile/edit-profile.component';
 import { ResetPasswordComponent } from './reset-password/reset-password.component';
+import { QuoteManagementComponent } from './quote-management/quote-management.component';
 
 @NgModule({
   imports: [
@@ -26,7 +27,7 @@ import { ResetPasswordComponent } from './reset-password/reset-password.componen
     SharedModule, SelectModule, CallsQuotesManagementModule, ReactiveFormsModule
   ],
   declarations: [
-    AppointmentSettingsomponent, AdminPanelComponent, ScheduleManagementComponent, MyAppointmentsComponent, TechniciansTrackingComponent, EditProfileComponent, ResetPasswordComponent
+    AppointmentSettingsomponent, AdminPanelComponent, ScheduleManagementComponent, MyAppointmentsComponent, TechniciansTrackingComponent, EditProfileComponent, ResetPasswordComponent, QuoteManagementComponent
   ]
 })
 export class AdminPanelModule { }

@@ -16,6 +16,7 @@ export const systemRoutes = {
     // control panel
     controlPanel: 'control-panel',
     scheduleManagement: 'schedule-management',
+    quoteManagement: 'quote-management',
     settings: 'appointment-settings',
     systemUsers: 'system-users-management',
     users: 'users-management',

@@ -1,6 +1,6 @@
 import { Repo } from './repo';
 import { quoteSchema } from '../schemas/quote-schema';
-import { Quote, AppointmentStatus, User, AppointmentType } from '../../3-domain/domain-module';
+import { Quote, AppointmentStatus, User, AppointmentType, QuoteStatus } from '../../3-domain/domain-module';
 import { GenericModel } from '../models/model';
 import { StatusHistory } from '../../3-domain/domain-module';
 
@@ -9,6 +9,32 @@ export class QuoteRepo extends Repo<Quote> {
 
     constructor() {
         super(quoteSchema);
+    }
+
+    getQuotesFilteredByStatus(statuses: QuoteStatus[]) {
+        let model = this.createSet();
+
+        return new Promise<Quote[]>((resolve, reject) => {
+
+            model.find({ status: { $in: statuses } }).populate('userId').populate('typeId').exec((err, results) => {
+                if (err != null)
+                    return reject(err);
+
+                return resolve(this.mapModelToEntities(results));
+            });
+
+        });
+    }
+
+    updateQuote(quote) {
+        let model = this.createSet();
+        return new Promise<Quote>((resolve, reject) => {
+            model.findOneAndUpdate({ _id: quote.id }, quote, { new: true }, (err, result) => {
+                if (err)
+                    return reject(err);
+                return resolve(this.mapModelToEntity(result));
+            });
+        });
     }
 
     // getAppointmentsFilteredByDatesAndStatusAndType(from: Date, to: Date, status: AppointmentStatus[], typeids: string[]) {
@@ -105,7 +131,7 @@ export class QuoteRepo extends Repo<Quote> {
         else
             quote.typeId = obj.typeId;
 
-        quote.statusHistory = this.mapStatusHistory(obj.statusHistory)
+        quote.statusHistory = this.mapStatusHistory(obj.statusHistory);
 
         return quote;
     }

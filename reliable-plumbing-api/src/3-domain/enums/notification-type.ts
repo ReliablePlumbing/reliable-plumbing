@@ -6,5 +6,6 @@ export enum NotificationType {
     MailActivated,
     AssigneeAdded,
     AssigneeRemoved,
-    QuoteCreated
+    QuoteCreated,
+    QuoteChanged
 }
