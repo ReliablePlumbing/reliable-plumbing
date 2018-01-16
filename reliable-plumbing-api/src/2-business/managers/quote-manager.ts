@@ -53,9 +53,9 @@ export class QuoteManager {
     }
 
 
-    getQuotesFilteredByStatus(statuses: QuoteStatus[]) {
+    getQuotesFilteredByStatus(filters: { statuses: QuoteStatus[], userId: string }) {
         return new Promise<Quote[]>((resolve, reject) => {
-            this.quoteRepo.getQuotesFilteredByStatus(statuses)
+            this.quoteRepo.getQuotesFilteredByStatus(filters)
                 .then((result: any) => resolve(result))
                 .catch((error: Error) => reject(error));
 
@@ -184,7 +184,7 @@ export class QuoteManager {
             case QuoteStatus.Approved:
             case QuoteStatus.Rejected:
                 promise = new Promise<any>((resolve, reject) => {
-                    this.userRepo.getUsersByRoles([Role.Admin, Role.Supervisor]).then(results => {
+                    this.userRepo.getUsersByRoles([Role.Admin, Role.Supervisor, Role.SystemAdmin]).then(results => {
                         changedNotification.notifees = results.map(user => {
                             return { userId: user.id, seen: false };
                         });
@@ -197,7 +197,10 @@ export class QuoteManager {
         if (!promise)
             return;
 
-        promise.then((result: any) => this.notificationManager.addNotification(changedNotification))
+        promise.then((result: any) => {
+            if (changedNotification.notifees && changedNotification.notifees.length > 0)
+                return this.notificationManager.addNotification(changedNotification);
+        })
             .catch((error: Error) => console.log(error));
 
     }

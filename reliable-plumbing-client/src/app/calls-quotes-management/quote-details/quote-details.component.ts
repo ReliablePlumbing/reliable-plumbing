@@ -1,7 +1,8 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { buildImagesObjects } from '../../utils/files-helpers';
-import { QuoteService, AlertifyService } from '../../services/services.exports';
+import { QuoteService, AlertifyService, EnvironmentService } from '../../services/services.exports';
 import { QuoteStatus } from '../../models/enums';
+import { isSystemUser } from '../../utils/user-helpers';
 
 @Component({
   selector: 'rb-quote-details',
@@ -11,6 +12,7 @@ import { QuoteStatus } from '../../models/enums';
 export class QuoteDetailsComponent implements OnInit {
 
   @Input() quote;
+  isCustomer = false;
   mappedQuote;
   showImages = false;
   estimates = {
@@ -22,10 +24,10 @@ export class QuoteDetailsComponent implements OnInit {
   @Output() quoteUpdated: EventEmitter<any> = new EventEmitter<any>();
   @Output() close: EventEmitter<any> = new EventEmitter<any>();
 
-  constructor(private QuoteService: QuoteService, private alertifyService: AlertifyService) { }
+  constructor(private QuoteService: QuoteService, private alertifyService: AlertifyService, private environemntService: EnvironmentService) { }
 
   ngOnInit() {
-
+    this.isCustomer = !isSystemUser(this.environemntService.currentUser);
     this.mappedQuote = this.mapQuote(this.quote);
 
   }
@@ -64,19 +66,21 @@ export class QuoteDetailsComponent implements OnInit {
 
   }
 
-  save() {
-    this.quote.estimateFields = this.estimates.fields
-      .filter(f => f.desc != null || parseFloat(f.cost) > 0)
-      .map(f => {
-        return {
-          desc: f.desc,
-          cost: (f.cost == null || parseFloat(f.cost) < 0) ? 0 : parseFloat(f.cost)
-        }
-      });
-    this.quote.status = QuoteStatus.Pending;
+  save(nextStatus) {
+    if (nextStatus == QuoteStatus.Pending) {
+      this.quote.estimateFields = this.estimates.fields
+        .filter(f => f.desc != null || parseFloat(f.cost) > 0)
+        .map(f => {
+          return {
+            desc: f.desc,
+            cost: (f.cost == null || parseFloat(f.cost) < 0) ? 0 : parseFloat(f.cost)
+          }
+        });
+    }
+    this.quote.status = nextStatus;
     this.QuoteService.updateQuote(this.quote).subscribe(result => {
       if (result) {
-        this.alertifyService.success('Quote sent to the customer');
+        this.alertifyService.success('Quote has been updated successfully');
         this.quoteUpdated.emit(this.quote);
       }
     })

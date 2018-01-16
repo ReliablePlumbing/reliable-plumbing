@@ -1,5 +1,10 @@
 <button *ngIf="mode != modes.addCall" class="btn btn-success" (click)="setMode(modes.addCall)">New Call</button>
-<button *ngIf="mode != modes.history" (click)="setMode(modes.history)">Back</button>
+<div class="row">
+  <div class="col-sm-12">
+
+    <button *ngIf="mode != modes.history" class="btn btn-primary pull-right" (click)="setMode(modes.history)">Back</button>
+  </div>
+</div>
 
 <ng-container *ngIf="mode == modes.addCall">
   <rb-calls-quotes-form [mode]="callsQuotesMode" (submitted)="callSubmitted($event)"></rb-calls-quotes-form>

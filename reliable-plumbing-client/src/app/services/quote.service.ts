@@ -41,8 +41,9 @@ export class QuoteService {
       })
   }
 
-  getQuotesFilteredByStatus(statuses) {
-    return this.httpService.post(this.basePath + 'getQuotesFilteredByStatus', statuses)
+  getQuotesFilteredByStatus(statuses, userId = null) {
+    let body =  { statuses: statuses, userId: userId }
+    return this.httpService.post(this.basePath + 'getQuotesFilteredByStatus', body)
       .map((response: Response) => response.json())
   }
 

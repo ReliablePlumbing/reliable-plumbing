@@ -11,12 +11,19 @@ export class QuoteRepo extends Repo<Quote> {
         super(quoteSchema);
     }
 
-    getQuotesFilteredByStatus(statuses: QuoteStatus[]) {
+    getQuotesFilteredByStatus(filters: { statuses: QuoteStatus[], userId: string }) {
+
         let model = this.createSet();
+
+        let filtersObj: any = {};
+        if (filters.statuses && filters.statuses.length > 0)
+            filtersObj.status = { $in: filters.statuses };
+        if(filters.userId)
+            filtersObj.userId = { $in: [filters.userId] };
 
         return new Promise<Quote[]>((resolve, reject) => {
 
-            model.find({ status: { $in: statuses } }).populate('userId').populate('typeId').exec((err, results) => {
+            model.find(filtersObj).populate('userId').populate('typeId').exec((err, results) => {
                 if (err != null)
                     return reject(err);
 

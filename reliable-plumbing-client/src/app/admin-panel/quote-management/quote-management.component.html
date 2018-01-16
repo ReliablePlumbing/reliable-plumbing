@@ -15,13 +15,13 @@
                 <h6>
                   <b>{{quote.fullName}}</b>
                 </h6>
-                <h6>
+                <div>
                   <b>{{quote.type.name}}</b>
-                </h6>
-                <h6 *ngIf="quote.totalEstimate != null">
+                </div>
+                <div *ngIf="quote.totalEstimate != null">
                   <label>Total Estimation (</label>
                   <b>{{quote.totalEstimate}})</b>
-                </h6>
+                </div>
               </div>
             </div>
 

@@ -23,14 +23,14 @@ export class QuoteController {
 
     @Post('/getQuotesFilteredByStatus')
     @Authorized()
-    getQuotesFilteredByStatus( @Body() statuses: QuoteStatus[]) {
+    getQuotesFilteredByStatus( @Body() filters: { statuses: QuoteStatus[], userId: string }) {
         return new Promise<any>((resolve, reject) => {
-            this.quoteManager.getQuotesFilteredByStatus(statuses)
-            .then((results: Quote[]) => resolve(results.map(quote => quote.toLightModel())))
-            .catch((error: Error) => reject(error));
+            this.quoteManager.getQuotesFilteredByStatus(filters)
+                .then((results: Quote[]) => resolve(results.map(quote => quote.toLightModel())))
+                .catch((error: Error) => reject(error));
         });
     }
-    
+
     @Post('/updateQuote')
     @Authorized()
     updateQuote( @Body() quote: Quote) {

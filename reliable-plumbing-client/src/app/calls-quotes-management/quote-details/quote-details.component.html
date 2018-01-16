@@ -77,6 +77,10 @@
 
   </div>
 
-  <button *ngIf="quote.status == statusEnum.Open" class="btn btn-primary filters-toggle-btn" [disabled]="estimates.fields.length<=1" (click)="save()">Send</button>
+  <button *ngIf="quote.status == statusEnum.Open" class="btn btn-primary filters-toggle-btn" [disabled]="estimates.fields.length<=1" (click)="save(statusEnum.Pending)">Send</button>
+  <ng-container *ngIf="quote.status == statusEnum.Pending && isCustomer">
+    <button class="btn btn-success filters-toggle-btn" (click)="save(statusEnum.Approved)">Approve</button>
+    <button class="btn btn-danger filters-toggle-btn" (click)="save(statusEnum.Rejected)">Reject</button>
+  </ng-container>
   <button class="btn btn-danger filters-toggle-btn" (click)="closeModal()">Close</button>
 </ng-container>
