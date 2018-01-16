@@ -12,12 +12,14 @@ import { MyAppointmentsComponent } from './my-appointments/my-appointments.compo
 import { TechniciansTrackingComponent } from './technicians-tracking/technicians-tracking.component';
 import { EditProfileComponent } from './edit-profile/edit-profile.component';
 import { ResetPasswordComponent } from './reset-password/reset-password.component';
+import { QuoteManagementComponent } from './quote-management/quote-management.component';
 
 const routes: Routes = [
   {
     path: systemRoutes.controlPanel, component: AdminPanelComponent, canActivate: [LoginAuthGuard], data: { roles: [Role.Supervisor, Role.Technician, Role.Admin, Role.SystemAdmin] },
     children: [
       { path: systemRoutes.scheduleManagement, canActivate: [LoginAuthGuard], component: ScheduleManagementComponent, data: { roles: [Role.Admin, Role.SystemAdmin, Role.Supervisor] } },
+      { path: systemRoutes.quoteManagement, canActivate: [LoginAuthGuard], component: QuoteManagementComponent, data: { roles: [Role.Admin, Role.SystemAdmin, Role.Supervisor] } },
       { path: systemRoutes.settings, component: AppointmentSettingsomponent, canActivate: [LoginAuthGuard], data: { roles: [Role.Admin, Role.SystemAdmin] } },
       { path: systemRoutes.systemUsers, component: SystemUsersManagementComponent, canActivate: [LoginAuthGuard], data: { roles: [Role.Admin, Role.SystemAdmin] } },
       { path: systemRoutes.users, component: UsersManagementComponent, canActivate: [LoginAuthGuard], data: { roles: [Role.Admin, Role.SystemAdmin] } },

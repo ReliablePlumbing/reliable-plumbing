@@ -156,10 +156,10 @@ export class MailNotifier {
                 mailContent.content += 'has requested a new quote \n'
                 mailContent.content += 'you will find the quote in quotes management in control panel'
                 break;
-            // case NotificationType.AppointmentChanged:
-            //     mailContent.subject = 'Call changed';
-            //     mailContent.content = 'appointment changed'
-            //     break;
+            case NotificationType.QuoteChanged:
+                mailContent.subject = config.notification.messages.quoteChanged;
+                mailContent.content = config.notification.messages.quoteChanged;
+                break;
             // case NotificationType.AssigneeAdded:
             //     mailContent.subject = 'you have been assigned';
             //     mailContent.content = 'you have been assigned'

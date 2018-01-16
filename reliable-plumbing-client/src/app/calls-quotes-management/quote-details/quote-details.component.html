@@ -1,0 +1,86 @@
+<loader *ngIf="loading"></loader>
+
+<ng-container *ngIf="!loading">
+  <div class="row">
+    <div class="col-md-3">
+      <label>
+        <b>Name</b>
+      </label>
+    </div>
+    <div class="col-md-8">
+      <span>{{mappedQuote?.fullName}}</span>
+    </div>
+  </div>
+
+  <div class="row">
+    <label class="col-md-3">
+      <b>Description</b>
+    </label>
+    <div class="col-md-8">
+      <p>{{mappedQuote.message}}</p>
+    </div>
+  </div>
+
+
+  <div class="row" *ngIf="mappedQuote.images.length>0">
+    <a *ngIf="!showImages" class="btn btn-link" (click)="showImages=!showImages">Show Images</a>
+    <a *ngIf="showImages" class="btn btn-link" (click)="showImages=!showImages">Hide Images</a>
+    <p-galleria *ngIf="showImages" [images]="mappedQuote.images" panelWidth="500" panelHeight="313" [showCaption]="false"></p-galleria>
+  </div>
+  <!-- 
+  <h5>Assignees:
+    <span class="tag" *ngFor="let assignee of mappedAppointment.assignees">
+      {{assignee.technician.firstName}}
+      <span (click)="removeAssignee(assignee)">x</span>
+    </span>
+  </h5> -->
+
+  <div class="row estimates-wrapper container">
+
+    <table class="table table-bordered table-scrollable">
+      <thead>
+        <th>#</th>
+        <th>Description</th>
+        <th>Estimate</th>
+        <th *ngIf="quote.status == statusEnum.Open"></th>
+      </thead>
+      <tbody>
+        <tr *ngFor="let field of estimates.fields; let i = index">
+          <td>{{i+1}}</td>
+          <ng-container *ngIf="quote.status == statusEnum.Open">
+            <td>
+              <textarea class="form-control" [(ngModel)]="field.desc"></textarea>
+            </td>
+            <td>
+              <input type="text" number class="form-control" [(ngModel)]="field.cost" (change)="sumFields()" />
+            </td>
+            <td *ngIf="quote.status == statusEnum.Open" class="fields-btns">
+              <span *ngIf="i<estimates.fields.length-1" (click)="removeField(i)" class="fa fa-times fa-2" aria-hidden="true" title="Remove Field"></span>
+              <span *ngIf="i==estimates.fields.length-1" (click)="addAnotherField()" class="fa fa-plus fa-2" aria-hidden="true" title="Add Another field"></span>
+            </td>
+          </ng-container>
+          <ng-container *ngIf="quote.status != statusEnum.Open">
+            <td class="text-center">{{field.desc}}</td>
+            <td class="text-center">{{field.cost}}</td>
+          </ng-container>
+        </tr>
+        <tr>
+          <td colspan="2" class="text-center">
+            <b>Total</b>
+          </td>
+          <td colspan="2" class="text-center">
+            <b>{{estimates.total}}</b>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+  </div>
+
+  <button *ngIf="quote.status == statusEnum.Open" class="btn btn-primary filters-toggle-btn" [disabled]="estimates.fields.length<=1" (click)="save(statusEnum.Pending)">Send</button>
+  <ng-container *ngIf="quote.status == statusEnum.Pending && isCustomer">
+    <button class="btn btn-success filters-toggle-btn" (click)="save(statusEnum.Approved)">Approve</button>
+    <button class="btn btn-danger filters-toggle-btn" (click)="save(statusEnum.Rejected)">Reject</button>
+  </ng-container>
+  <button class="btn btn-danger filters-toggle-btn" (click)="closeModal()">Close</button>
+</ng-container>

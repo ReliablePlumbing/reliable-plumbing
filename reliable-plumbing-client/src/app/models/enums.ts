@@ -40,6 +40,14 @@ export enum AppointmentStatus {
     Rejected
 }
 
+export enum QuoteStatus {
+    Open = 1,
+    Pending,
+    Approved,
+    Rejected,
+    Closed
+}
+
 export enum TechnicianStatus {
     Available = 1,
     Busy,

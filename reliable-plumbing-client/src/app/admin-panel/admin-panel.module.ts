@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SelectModule } from 'ng2-select';
 
@@ -19,14 +18,15 @@ import { MyAppointmentsComponent } from './my-appointments/my-appointments.compo
 import { TechniciansTrackingComponent } from './technicians-tracking/technicians-tracking.component';
 import { EditProfileComponent } from './edit-profile/edit-profile.component';
 import { ResetPasswordComponent } from './reset-password/reset-password.component';
+import { QuoteManagementComponent } from './quote-management/quote-management.component';
 
 @NgModule({
   imports: [
-    CommonModule, AdminPanelRoutingModule, ServicesModule, NgbModule, FormsModule, UserManagementModule,
+    CommonModule, AdminPanelRoutingModule, ServicesModule, FormsModule, UserManagementModule,
     SharedModule, SelectModule, CallsQuotesManagementModule, ReactiveFormsModule
   ],
   declarations: [
-    AppointmentSettingsomponent, AdminPanelComponent, ScheduleManagementComponent, MyAppointmentsComponent, TechniciansTrackingComponent, EditProfileComponent, ResetPasswordComponent
+    AppointmentSettingsomponent, AdminPanelComponent, ScheduleManagementComponent, MyAppointmentsComponent, TechniciansTrackingComponent, EditProfileComponent, ResetPasswordComponent, QuoteManagementComponent
   ]
 })
 export class AdminPanelModule { }

@@ -35,7 +35,8 @@ export const config: Config = {
             assgineeRemoved: "You have been unassigned",
             appointmentChanged: "Appointment changed",
             appointmentCheckedIn: "Appointment Checked in",
-            quoteCreated: "New Quote has been requested"
+            quoteCreated: "New Quote has been requested",
+            quoteChanged: "Quote Changed"
         }
     },
     socialMedia: {

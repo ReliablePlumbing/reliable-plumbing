@@ -43,7 +43,7 @@ export class ExceptionHandlingService {
             }
             else if (errorBody.code == 500) { // unhandled exception
                 if (environment.production)
-                    this.alertifyService.error('حدث خطأ غير متوقع, برجاء المحاولة في وقت لاحق');
+                    this.alertifyService.error('');
                 else
                     this.alertifyService.error(errorBody.message);
             }

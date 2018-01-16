@@ -1,3 +1,7 @@
 export enum QuoteStatus {
-    Pending = 1
+    Open = 1,
+    Pending,
+    Approved,
+    Rejected,
+    Closed
 }

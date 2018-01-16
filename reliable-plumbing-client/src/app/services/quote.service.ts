@@ -40,5 +40,16 @@ export class QuoteService {
         return this.sanitizer.bypassSecurityTrustUrl(urlCreator.createObjectURL(blob));
       })
   }
+
+  getQuotesFilteredByStatus(statuses, userId = null) {
+    let body =  { statuses: statuses, userId: userId }
+    return this.httpService.post(this.basePath + 'getQuotesFilteredByStatus', body)
+      .map((response: Response) => response.json())
+  }
+
+  updateQuote(quote) {
+    return this.httpService.post(this.basePath + 'updateQuote', quote)
+      .map((response: Response) => response.json())
+  }
 }
 

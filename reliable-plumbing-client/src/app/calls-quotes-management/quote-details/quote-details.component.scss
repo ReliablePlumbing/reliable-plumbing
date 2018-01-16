@@ -1,0 +1,15 @@
+.fields-btns {
+    align-content: center;
+    & .fa {
+        cursor: pointer;
+    }
+    & .fa-2 {
+        font-size: 2em
+    }
+    & .fa-plus {
+        color: green;
+    }
+    & .fa-times {
+        color: red;
+    }
+}

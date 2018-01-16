@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Http, Headers, Response } from '@angular/http';
 import 'rxjs/add/operator/catch';
-import { Observable, ObservableInput } from 'rxjs/observable';
+import { Observable, ObservableInput } from 'rxjs/Observable';
 import { ExceptionHandlingService } from './exception-handling.service';
 import { EnvironmentService } from './environment.service';
 

@@ -1,23 +1,16 @@
-import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
-import { NgbModalRef, NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { QuoteStatus, CallsQuotesMode } from '../../models/enums';
-import { QuoteService, AlertifyService, EnvironmentService } from '../../services/services.exports';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { QuoteStatus } from '../../models/enums';
 import { getEnumEntries } from '../../utils/date-helpers';
+import { QuoteService, AlertifyService } from '../../services/services.exports';
+import { NgbModalRef, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
-  selector: 'rb-quotes-history',
-  templateUrl: './quotes-history.component.html',
-  styleUrls: ['./quotes-history.component.scss']
+  selector: 'rb-quote-management',
+  templateUrl: './quote-management.component.html',
+  styleUrls: ['./quote-management.component.scss']
 })
-export class QuotesHistoryComponent implements OnInit {
+export class QuoteManagementComponent implements OnInit {
 
-  modes = {
-    history: 1,
-    addQuote: 2,
-    msg: 3,
-  };
-  mode = this.modes.history;
-  callsQuotesMode: CallsQuotesMode = CallsQuotesMode.quote;
   tabs = [];
   quotes;
   mappedQuotes;
@@ -27,13 +20,12 @@ export class QuotesHistoryComponent implements OnInit {
   selectedQuote = null;
   statusEnum = QuoteStatus;
 
-  constructor(private quoteService: QuoteService, private alertifyService: AlertifyService, private modalService: NgbModal,
-    private environemntService: EnvironmentService) { }
+  constructor(private quoteService: QuoteService, private alertifyService: AlertifyService, private modalService: NgbModal) { }
 
   ngOnInit() {
-    this.tabs = getEnumEntries(QuoteStatus).filter(t => t.id != QuoteStatus.Open);
+    this.tabs = getEnumEntries(QuoteStatus);
 
-    this.quoteService.getQuotesFilteredByStatus([QuoteStatus.Pending, QuoteStatus.Approved, QuoteStatus.Rejected], this.environemntService.currentUser.id)
+    this.quoteService.getQuotesFilteredByStatus([QuoteStatus.Approved, QuoteStatus.Open, QuoteStatus.Pending, QuoteStatus.Rejected])
       .subscribe(results => {
         this.quotes = results;
         this.mappedQuotes = this.mapAndGroupQuotes(results);
@@ -55,7 +47,7 @@ export class QuotesHistoryComponent implements OnInit {
     return mappedQuotes;
   }
 
-  sumEstimateFields(quote) {
+  sumEstimateFields(quote){
     let total = 0;
     quote.estimateFields.forEach(f => total += f.cost);
 
@@ -87,17 +79,4 @@ export class QuotesHistoryComponent implements OnInit {
     this.closeQuoteDetailsModal();
   }
 
-  setMode = (currentMode) => this.mode = currentMode;
-
-  quoteSubmitted(quote) {
-
-    this.quoteService.addQuote(quote.obj, quote.images).subscribe(result => {
-      if (result.id != null) {
-        this.mode = this.modes.msg;
-        this.alertifyService.success('Your quote has been submitted');
-        setTimeout(() => this.mode = this.modes.history, 5000);
-      }
-    });
-
-  }
 }

@@ -1,24 +1,8 @@
 <loader *ngIf="loading"></loader>
 
-<div class="row">
-  <div class="col-sm-12">
-
-    <button *ngIf="mode != modes.history" class="btn btn-primary pull-right" (click)="setMode(modes.history)">Back</button>
-  </div>
-</div>
-
-<ng-container *ngIf="mode==modes.addQuote">
-  <rb-calls-quotes-form [mode]="callsQuotesMode" (submitted)="quoteSubmitted($event)"></rb-calls-quotes-form>
-</ng-container>
-<ng-container *ngIf="mode==modes.msg">
-  <message [text]="'Saved Successfully'"></message>
-</ng-container>
-
-<ng-container *ngIf="!loading&&mode==modes.history">
+<ng-container *ngIf="!loading">
 
   <section class="listing-content">
-
-    <button *ngIf="mode != modes.addQuote" class="btn btn-success pull-right" (click)="setMode(modes.addQuote)">Request New Quote</button>
 
     <ngb-tabset type="pills">
       <ngb-tab *ngFor="let tab of tabs" [title]="tab.text + ' (' + mappedQuotes[tab.id].length + ')'" [id]="tab.id">

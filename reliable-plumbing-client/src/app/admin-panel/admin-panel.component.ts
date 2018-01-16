@@ -17,13 +17,14 @@ export class AdminPanelComponent implements OnInit {
   currentUser;
   tabs = {
     scheduleManagement: { index: 1, hasPermission: false },
-    settings: { index: 2, hasPermission: false },
-    systemUsers: { index: 3, hasPermission: false },
-    users: { index: 4, hasPermission: false },
-    myAppointments: { index: 5, hasPermission: false },
-    tracking: { index: 6, hasPermission: false },
-    profile: { index: 7, hasPermission: true },
-    changePassword: { index: 8, hasPermission: true },
+    quoteManagement: { index: 2, hasPermission: false },
+    settings: { index: 3, hasPermission: false },
+    systemUsers: { index: 4, hasPermission: false },
+    users: { index: 5, hasPermission: false },
+    myAppointments: { index: 6, hasPermission: false },
+    tracking: { index: 7, hasPermission: false },
+    profile: { index: 8, hasPermission: true },
+    changePassword: { index: 9, hasPermission: true },
   }
   systemRoutes = systemRoutes;
 
@@ -52,6 +53,7 @@ export class AdminPanelComponent implements OnInit {
       }
       if (role == Role.Admin || role == Role.SystemAdmin || role == Role.Supervisor) {
         this.tabs.scheduleManagement.hasPermission = true;
+        this.tabs.quoteManagement.hasPermission = true;
         this.tabs.tracking.hasPermission = true;
       }
       if (role == Role.Technician)
@@ -70,6 +72,8 @@ export class AdminPanelComponent implements OnInit {
   setCurrentTabFromUrl(url) {
     if (~url.indexOf(systemRoutes.scheduleManagement))
       this.currentSelectedTab = this.tabs.scheduleManagement.index;
+    if (~url.indexOf(systemRoutes.quoteManagement))
+      this.currentSelectedTab = this.tabs.quoteManagement.index;
     else if (~url.indexOf(systemRoutes.settings))
       this.currentSelectedTab = this.tabs.settings.index;
     else if (~url.indexOf(systemRoutes.systemUsers))

@@ -1,5 +1,5 @@
 import { JsonController, Param, QueryParam, Body, Get, Post, Put, Delete, Authorized, BodyParam, UploadedFiles } from "routing-controllers";
-import { Role, Quote } from '../../3-domain/domain-module';
+import { Role, Quote, QuoteStatus } from '../../3-domain/domain-module';
 import { QuoteManager } from '../../2-business/business.module';
 import { dependencies } from '../../5-cross-cutting/cross-cutting.module';
 import { Inject } from 'typedi';
@@ -21,6 +21,26 @@ export class QuoteController {
         })
     }
 
+    @Post('/getQuotesFilteredByStatus')
+    @Authorized()
+    getQuotesFilteredByStatus( @Body() filters: { statuses: QuoteStatus[], userId: string }) {
+        return new Promise<any>((resolve, reject) => {
+            this.quoteManager.getQuotesFilteredByStatus(filters)
+                .then((results: Quote[]) => resolve(results.map(quote => quote.toLightModel())))
+                .catch((error: Error) => reject(error));
+        });
+    }
+
+    @Post('/updateQuote')
+    @Authorized()
+    updateQuote( @Body() quote: Quote) {
+        return new Promise<any>((resolve, reject) => {
+            this.quoteManager.updateQuote(quote)
+                .then(result => resolve(result))
+                .catch((error: Error) => reject(error));
+        });
+    }
+
     // @Post('/getAppointmentsFiltered')
     // @Authorized([Role.Supervisor, Role.Admin, Role.SystemAdmin])
     // getAppointmentsFiltered( @Body() filters) {
@@ -38,7 +58,7 @@ export class QuoteController {
     //     })
     // }
 
-    
+
 
     // @Post('/updateAppointmentStatusAndAssignees')
     // @Authorized([Role.Supervisor, Role.Admin, Role.SystemAdmin])

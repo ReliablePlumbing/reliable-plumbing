@@ -9,16 +9,17 @@ import { AppointmentDetailsComponent } from './appointment-details/appointment-d
 import { SharedModule } from '../shared/shared.module';
 import { RequestQuoteComponent } from './request-quote/request-quote.component';
 import { CallsQuotesFormComponent } from './calls-quotes-form/calls-quotes-form.component';
+import { QuoteDetailsComponent } from './quote-details/quote-details.component';
 
 @NgModule({
   imports: [
     CommonModule, CallsQuotesManagementRoutingModule, NgbModule, ReactiveFormsModule, SharedModule, FormsModule
   ],
   declarations: [
-    ScheduleCallComponent, AppointmentDetailsComponent, RequestQuoteComponent, CallsQuotesFormComponent
+    ScheduleCallComponent, AppointmentDetailsComponent, RequestQuoteComponent, CallsQuotesFormComponent, QuoteDetailsComponent
   ],
   exports: [
-    ScheduleCallComponent, AppointmentDetailsComponent, CallsQuotesFormComponent, RequestQuoteComponent
+    ScheduleCallComponent, AppointmentDetailsComponent, CallsQuotesFormComponent, RequestQuoteComponent, QuoteDetailsComponent
   ]
 })
 export class CallsQuotesManagementModule { }

@@ -42,6 +42,6 @@ let declarations = [
     AgmCoreModule.forRoot({ apiKey: environment.mapsApiKey }), StepsModule, TabViewModule, MenuModule, FileUploadModule, GalleriaModule
   ],
   declarations: declarations,
-  exports: [declarations, AgmCoreModule, TextMaskModule, StepsModule, TabViewModule, MenuModule, FileUploadModule, GalleriaModule, InputSwitchModule]
+  exports: [declarations, AgmCoreModule, TextMaskModule, StepsModule, TabViewModule, MenuModule, FileUploadModule, GalleriaModule, InputSwitchModule, NgbModule]
 })
 export class SharedModule { }
