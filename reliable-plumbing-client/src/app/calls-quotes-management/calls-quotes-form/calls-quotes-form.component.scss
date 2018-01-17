@@ -32,8 +32,25 @@
     .ui-steps.steps-custom .ui-steps-item .ui-steps-title {
         color: #555555;
     }
+
+    .ui-button .ui-button-text {
+        line-height: 1.8 !important;
+    }
+}
+
+.photos-sec .btn.btn-danger{
+    margin-top: 9px;
 }
 
 textarea {
     height: 130px !important;
+}
+
+.btns-block{
+    display: flex !important;
+    margin-top: 6px;
+}
+
+.validation-text{
+    color: red;
 }

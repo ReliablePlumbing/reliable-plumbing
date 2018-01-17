@@ -7,7 +7,7 @@ import { Component, OnInit, Input } from '@angular/core';
 })
 export class MessageComponent implements OnInit {
 
-  @Input() text;
+  @Input() text = 'Saved Successfully';
 
   constructor() { }
 

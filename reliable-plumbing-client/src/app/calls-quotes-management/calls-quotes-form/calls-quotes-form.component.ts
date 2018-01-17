@@ -29,7 +29,9 @@ export class CallsQuotesFormComponent implements OnInit {
   isLoggedIn: boolean = false;
   images = [];
   appointment: any = {
-    customerInfo: {},
+    customerInfo: {
+      state: 'California'
+    },
     preferedContactType: 'Email',
     typeId: '-1',
     time: '-1',
@@ -106,11 +108,13 @@ export class CallsQuotesFormComponent implements OnInit {
         lastName: [null],
         email: [null, [Validators.required, Validators.email]],
         mobile: [null, [Validators.required]],
-        street: [null],
-        city: [null],
-        state: [null],
+        street: [null, [Validators.required]],
+        city: [null, [Validators.required]],
+        state: [null, [Validators.required]],
         zipCode: [null]
       });
+      //California
+      this.customerInfoForm.controls['state'].disable();
     }
     else if (!this.forQuote)
       this.appointmentForm.addControl('site', new FormControl(null, this.validateDropdownRequired));
@@ -121,6 +125,7 @@ export class CallsQuotesFormComponent implements OnInit {
 
     return value != null && value != '-1' ? null : { req: true };
   }
+
   getControlValidation(controlName, errorName, beforeSubmit = true) {
     if (this.appointmentForm == null)
       return false;
@@ -128,7 +133,7 @@ export class CallsQuotesFormComponent implements OnInit {
     let control =
       this.activeIndex == 0 ? this.customerInfoForm.controls[controlName] : this.appointmentForm.controls[controlName];
 
-    return (beforeSubmit || this.trySubmit) && !control.valid && control.errors[errorName];
+    return (beforeSubmit || this.trySubmit) && !control.valid && control.hasError(errorName);
   }
 
   scheduleAppointment() {
@@ -149,11 +154,14 @@ export class CallsQuotesFormComponent implements OnInit {
   }
 
   nextStep() {
-    if (!this.adminMode && this.customerInfoForm.invalid)
+    if (!this.adminMode && this.customerInfoForm.invalid) {
+      this.trySubmit = true;
       return;
+    }
     else if (this.existingCustomer && typeof this.selectedUser != 'object')
       return;
 
+    this.trySubmit = false;
     if (this.existingCustomer && typeof this.selectedUser == 'object') {
       this.appointmentForm.addControl('site', new FormControl(null, this.validateDropdownRequired));
       this.sites = this.selectedUser.sites;

@@ -40,6 +40,7 @@
                   </label>
                   <input type="text" name="firstName" class="form-control" formControlName="firstName" [(ngModel)]="appointment.customerInfo.firstName"
                   />
+                  <label *ngIf="getControlValidation('firstName','required', false)" class="validation-text">* Required</label>
                 </div>
               </div>
 
@@ -60,6 +61,7 @@
                   </label>
                   <input type="tel" name="mobile" class="form-control" formControlName="mobile" [(ngModel)]="appointment.customerInfo.mobile"
                     placeholder="ex: (123) 123-1234" [textMask]="mobileMaskOpts" />
+                <label *ngIf="getControlValidation('mobile','required', false)" class="validation-text">* Required</label>                  
                 </div>
               </div>
 
@@ -71,6 +73,7 @@
                   <input type="email" name="email" class="form-control" placeholder="ex: exmple@domain.com" formControlName="email" [(ngModel)]="appointment.customerInfo.email"
                   />
                   <span class="error-message" *ngIf="getControlValidation('email','email', false)">Please enter a valid email</span>
+                <label *ngIf="getControlValidation('email','required', false)" class="validation-text">* Required</label>                  
                 </div>
               </div>
 
@@ -81,6 +84,7 @@
                   </label>
                   <input type="text" name="street" class="form-control" formControlName="street" [(ngModel)]="appointment.customerInfo.street"
                   />
+                <label *ngIf="getControlValidation('street','required', false)" class="validation-text">* Required</label>                  
                 </div>
               </div>
 
@@ -90,6 +94,7 @@
                     <i *ngIf="getControlValidation('city','required')">*</i>
                   </label>
                   <input type="text" name="city" class="form-control" formControlName="city" [(ngModel)]="appointment.customerInfo.city" />
+                <label *ngIf="getControlValidation('city','required', false)" class="validation-text">* Required</label>                  
                 </div>
               </div>
 
@@ -100,6 +105,7 @@
                   </label>
                   <input type="text" name="state" class="form-control" formControlName="state" [(ngModel)]="appointment.customerInfo.state"
                   />
+                <label *ngIf="getControlValidation('state','required', false)" class="validation-text">* Required</label>                  
                 </div>
               </div>
 
@@ -110,6 +116,7 @@
                   </label>
                   <input type="text" name="zipCode" class="form-control" formControlName="zipCode" [(ngModel)]="appointment.customerInfo.zipCode"
                   />
+                <label *ngIf="getControlValidation('zipCode','required', false)" class="validation-text">* Required</label>                  
                 </div>
               </div>
             </ng-container>
@@ -137,6 +144,7 @@
                     <option disabled value="-1" selected>Select Site</option>
                     <option *ngFor="let site of sites" [ngValue]="site.id">{{constructSite(site)}}</option>
                   </select>
+                  <label *ngIf="getControlValidation('site','req', false)" class="validation-text">* Required</label>                  
                 </div>
               </div>
             </ng-container>
@@ -153,6 +161,7 @@
                   <button class="input-group-addon" (click)="d.toggle()" type="button">
                     <i class="fa fa-calendar" aria-hidden="true"></i>
                   </button>
+                  <label *ngIf="getControlValidation('date','required', false)" class="validation-text">* Required</label>                  
                   <span class="error-message" *ngIf="getControlValidation('date','invalidDate')">only valid date are today or after that</span>
                 </div>
               </div>
@@ -166,6 +175,7 @@
                     <option disabled value="-1" selected>select time</option>
                     <option *ngFor="let time of timeList" [ngValue]="time">{{time.timeStr}}</option>
                   </select>
+                  <label *ngIf="getControlValidation('time','req', false)" class="validation-text">* Required</label>                  
                 </div>
               </div>
             </ng-container>
@@ -180,6 +190,7 @@
                   <option disabled selected value="-1">Select Service</option>
                   <option *ngFor="let appoinType of appointmentTypes" [value]="appoinType.id">{{appoinType.name}}</option>
                 </select>
+                <label *ngIf="getControlValidation('appointmentType','req', false)" class="validation-text">* Required</label>                  
               </div>
             </div>
 
@@ -187,12 +198,12 @@
             <div class="col-md-6" *ngIf="!forQuote">
               <div class="form-group">
                 <label for="preferedContactType" class="">Preferred Method of contact
-                  <div class="btn-group status-btns-group">
-                    <label class="btn btn-secondary">
+                  <div class="btn-group status-btns-group btns-block">
+                    <label class="btn btn-info">
                       <input type="radio" class="pointer" name="preferedContactType" [checked]="appointment.preferedContactType == 'Email'" (click)="appointment.preferedContactType = 'Email'"
                       />Email
                     </label>
-                    <label class="btn btn-secondary">
+                    <label class="btn btn-info">
                       <input type="radio" class="pointer" name="preferedContactType" [checked]="appointment.preferedContactType == 'Telephone'"
                         (click)="appointment.preferedContactType = 'Telephone'" />Telephone
                     </label>
@@ -203,7 +214,7 @@
 
             <!-- Images -->
             <div class="col-md-12" *ngIf="!forQuote">
-              <div class="form-group">
+              <div class="form-group photos-sec">
                 <label for="preferedContactType" class="">Post photos</label>
                 <p-fileUpload mode="basic" name="demo[]" accept="image/*" maxFileSize="1000000" (onSelect)="onUploadFile($event)" multiple="multiple"
                   auto="true"></p-fileUpload>
