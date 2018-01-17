@@ -18,6 +18,7 @@ export var quoteSchema: genericSchema = {
             required: false
         },
         userId: { type: String, required: false, ref: 'users' },
+        siteId: { type: String, required: false },
         typeId: { type: String, required: true, ref: 'appointmentTypes' },
         message: { type: String, required: false },
         status: { type: Number, required: true },

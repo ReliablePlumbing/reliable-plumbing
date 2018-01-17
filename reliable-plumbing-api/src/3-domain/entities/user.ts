@@ -21,6 +21,7 @@ export class User extends BaseEntity {
   socialMediaId?: string;
   SocialMediaProvider?: SocialMediaProvider;
   sites: [{
+    id?: string,
     coords: {
       lat: number,
       lng: number
@@ -51,6 +52,7 @@ export class User extends BaseEntity {
       this.activationDate = user.activationDate;
       this.sites = !user.sites ? [] : user.sites.map(s => {
         return {
+          id: s.id,
           coords: !s.coords ? {} : {
             lat: s.coords.lat,
             lng: s.coords.lng

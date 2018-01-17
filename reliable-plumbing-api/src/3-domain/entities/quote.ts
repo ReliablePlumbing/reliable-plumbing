@@ -21,6 +21,7 @@ export class Quote extends BaseEntity {
         zipCode: string
     }
     userId?: string;
+    siteId?: string;
     typeId: string;
     message: string;
     status: QuoteStatus;
@@ -44,6 +45,7 @@ export class Quote extends BaseEntity {
             this.creationDate = quote.creationDate;
             this.customerInfo = quote.customerInfo;
             this.userId = quote.userId;
+            this.siteId = quote.siteId;
             this.typeId = quote.typeId;
             this.message = quote.message;
             this.status = quote.status;
@@ -77,6 +79,7 @@ export class Quote extends BaseEntity {
             creationDate: this.creationDate,
             customerInfo: this.customerInfo,
             userId: this.userId,
+            siteId: this.siteId,
             typeId: this.typeId,
             message: this.message,
             status: this.status,

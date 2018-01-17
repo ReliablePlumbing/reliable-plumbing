@@ -10,6 +10,24 @@
 <ng-container *ngIf="mode==modes.addQuote">
   <rb-calls-quotes-form [mode]="callsQuotesMode" (submitted)="quoteSubmitted($event)"></rb-calls-quotes-form>
 </ng-container>
+
+<ng-container *ngIf="mode==modes.addCall">
+  <div class="row container">
+    <div class="col quote-falt-card">
+      <div>
+        <b>{{selectedQuote.type.name}}</b>
+      </div>
+      <div>
+        <label>Total Estimation </label>
+        <b>({{selectedQuote.totalEstimate}})</b>
+      </div>
+    </div>
+
+  </div>
+
+  <rb-calls-quotes-form [mode]="callsQuotesMode" (submitted)="callSubmitted($event)"></rb-calls-quotes-form>
+</ng-container>
+
 <ng-container *ngIf="mode==modes.msg">
   <message [text]="'Saved Successfully'"></message>
 </ng-container>
@@ -35,8 +53,9 @@
                   <b>{{quote.type.name}}</b>
                 </div>
                 <div *ngIf="quote.totalEstimate != null">
-                  <label>Total Estimation (</label>
-                  <b>{{quote.totalEstimate}})</b>
+                  <label>Total Estimation </label>
+                  <b>({{quote.totalEstimate}})</b>
+                  <button *ngIf="quote.status == statusEnum.Approved" (click)="$event.stopPropagation(); setMode(modes.addCall, quote)" class="btn btn-success btn-sm pull-right">Schedule Call</button>
                 </div>
               </div>
             </div>

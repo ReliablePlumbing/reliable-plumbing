@@ -17,10 +17,8 @@ export var appointmentSchema: genericSchema = {
             },
             required: false
         },
-        // fullName: { type: String, required: false },
-        // email: { type: String, required: false },
-        // mobile: { type: String, required: false },
         userId: { type: String, required: false, ref: 'users' },
+        siteId: { type: String, required: false },
         date: { type: Date, required: true },
         typeId: { type: String, required: true, ref: 'appointmentTypes' },
         message: { type: String, required: false },

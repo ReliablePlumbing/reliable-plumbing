@@ -21,6 +21,7 @@ export class Appointment extends BaseEntity {
         zipCode: string
     }
     userId?: string;
+    siteId?: string;
     date: Date;
     typeId: string;
     message: string;
@@ -49,6 +50,7 @@ export class Appointment extends BaseEntity {
             this.creationDate = appointment.creationDate;
             this.customerInfo = appointment.customerInfo;
             this.userId = appointment.userId;
+            this.siteId = appointment.siteId;
             this.date = appointment.date;
             this.typeId = appointment.typeId;
             this.message = appointment.message;
@@ -82,6 +84,7 @@ export class Appointment extends BaseEntity {
             creationDate: this.creationDate,
             customerInfo: this.customerInfo,
             userId: this.userId,
+            siteId: this.siteId,
             date: this.date,
             typeId: this.typeId,
             message: this.message,

@@ -133,9 +133,9 @@
                   <label for="site" class="">Choose Site
                     <i *ngIf="getControlValidation('site','req')">*</i>
                   </label>
-                  <select name="site" formControlName="site" [(ngModel)]="appointment.site">
+                  <select name="site" formControlName="site" [(ngModel)]="appointment.siteId">
                     <option disabled value="-1" selected>Select Site</option>
-                    <option *ngFor="let site of sites" [ngValue]="site">{{constructSite(site)}}</option>
+                    <option *ngFor="let site of sites" [ngValue]="site.id">{{constructSite(site)}}</option>
                   </select>
                 </div>
               </div>

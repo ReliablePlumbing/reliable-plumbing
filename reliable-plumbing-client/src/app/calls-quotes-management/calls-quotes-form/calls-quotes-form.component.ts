@@ -32,7 +32,7 @@ export class CallsQuotesFormComponent implements OnInit {
     preferedContactType: 'Email',
     typeId: '-1',
     time: '-1',
-    site: '-1'
+    siteId: '-1'
   };
   mobileMaskOpts = {
     mask: ['(', /[1-9]/, /\d/, /\d/, ')', ' ', /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/],

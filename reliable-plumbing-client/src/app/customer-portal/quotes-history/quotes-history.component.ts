@@ -15,6 +15,7 @@ export class QuotesHistoryComponent implements OnInit {
     history: 1,
     addQuote: 2,
     msg: 3,
+    addCall: 4
   };
   mode = this.modes.history;
   callsQuotesMode: CallsQuotesMode = CallsQuotesMode.quote;
@@ -26,6 +27,7 @@ export class QuotesHistoryComponent implements OnInit {
   quoteDetailsModalRef: NgbModalRef;
   selectedQuote = null;
   statusEnum = QuoteStatus;
+  callSelectedQuote;
 
   constructor(private quoteService: QuoteService, private alertifyService: AlertifyService, private modalService: NgbModal,
     private environemntService: EnvironmentService) { }
@@ -87,10 +89,21 @@ export class QuotesHistoryComponent implements OnInit {
     this.closeQuoteDetailsModal();
   }
 
-  setMode = (currentMode) => this.mode = currentMode;
+  setMode = (currentMode, selectedQuote = null) => {
+    switch (currentMode) {
+      case this.modes.addQuote:
+        this.callsQuotesMode = CallsQuotesMode.quote;
+        break;
+      case this.modes.addCall:
+        this.callsQuotesMode = CallsQuotesMode.call;
+        this.selectedQuote = selectedQuote;
+        break;
+    }
+    this.mode = currentMode
+  };
 
   quoteSubmitted(quote) {
-
+debugger;
     this.quoteService.addQuote(quote.obj, quote.images).subscribe(result => {
       if (result.id != null) {
         this.mode = this.modes.msg;
