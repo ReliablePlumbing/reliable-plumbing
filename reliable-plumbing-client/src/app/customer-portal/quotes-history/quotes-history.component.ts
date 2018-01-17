@@ -1,7 +1,7 @@
 import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
 import { NgbModalRef, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { QuoteStatus, CallsQuotesMode } from '../../models/enums';
-import { QuoteService, AlertifyService, EnvironmentService } from '../../services/services.exports';
+import { QuoteService, AlertifyService, EnvironmentService, AppointmentService } from '../../services/services.exports';
 import { getEnumEntries } from '../../utils/date-helpers';
 
 @Component({
@@ -30,7 +30,7 @@ export class QuotesHistoryComponent implements OnInit {
   callSelectedQuote;
 
   constructor(private quoteService: QuoteService, private alertifyService: AlertifyService, private modalService: NgbModal,
-    private environemntService: EnvironmentService) { }
+    private environemntService: EnvironmentService, private appointmentService: AppointmentService) { }
 
   ngOnInit() {
     this.tabs = getEnumEntries(QuoteStatus).filter(t => t.id != QuoteStatus.Open);
@@ -103,7 +103,6 @@ export class QuotesHistoryComponent implements OnInit {
   };
 
   quoteSubmitted(quote) {
-debugger;
     this.quoteService.addQuote(quote.obj, quote.images).subscribe(result => {
       if (result.id != null) {
         this.mode = this.modes.msg;
@@ -111,6 +110,21 @@ debugger;
         setTimeout(() => this.mode = this.modes.history, 5000);
       }
     });
-
   }
+
+  callSubmitted(call) {
+    call.obj.quoteId = this.selectedQuote.id;
+
+    this.appointmentService.addAppointment(call.obj, call.images).subscribe(result => {
+      if (result.id != null) {
+        this.selectedQuote.appointmentId = result.id;
+        this.selectedQuote = null;
+        this.mode = this.modes.msg;
+        this.alertifyService.success('Your call has been submitted');
+        setTimeout(() => this.mode = this.modes.history, 5000);
+      }
+    });
+  }
+
+
 }

@@ -1,6 +1,6 @@
 import { Repo } from './repo';
 import { appointmentSchema } from '../schemas/appointment-schema';
-import { Appointment, AppointmentStatus, User, StatusHistory, AppointmentType } from '../../3-domain/domain-module';
+import { Appointment, AppointmentStatus, User, StatusHistory, AppointmentType, Quote } from '../../3-domain/domain-module';
 import { GenericModel } from '../models/model';
 
 
@@ -25,7 +25,7 @@ export class AppointmentRepo extends Repo<Appointment> {
 
         return new Promise<Appointment[]>((resolve, reject) => {
 
-            model.find(filterObj).populate('userId').exec((err, results) => {
+            model.find(filterObj).populate('userId').populate('quoteId').exec((err, results) => {
                 if (err != null)
                     return reject(err);
 
@@ -103,6 +103,13 @@ export class AppointmentRepo extends Repo<Appointment> {
         }
         else
             appointment.typeId = obj.typeId;
+
+        if (obj.quoteId != null && typeof obj.quoteId == 'object') {
+            appointment.quote = new Quote(obj.quoteId);
+            appointment.quoteId = appointment.quote.id;
+        }
+        else
+            appointment.quoteId = obj.quoteId;
 
         appointment.statusHistory = this.mapStatusHistory(obj.statusHistory)
 

@@ -25,7 +25,7 @@
 
   </div>
 
-  <rb-calls-quotes-form [mode]="callsQuotesMode" (submitted)="callSubmitted($event)"></rb-calls-quotes-form>
+  <rb-calls-quotes-form [mode]="callsQuotesMode" [forQuote]="true" (submitted)="callSubmitted($event)"></rb-calls-quotes-form>
 </ng-container>
 
 <ng-container *ngIf="mode==modes.msg">
@@ -55,7 +55,7 @@
                 <div *ngIf="quote.totalEstimate != null">
                   <label>Total Estimation </label>
                   <b>({{quote.totalEstimate}})</b>
-                  <button *ngIf="quote.status == statusEnum.Approved" (click)="$event.stopPropagation(); setMode(modes.addCall, quote)" class="btn btn-success btn-sm pull-right">Schedule Call</button>
+                  <button *ngIf="quote.status == statusEnum.Approved && !quote.appointmentId" (click)="$event.stopPropagation(); setMode(modes.addCall, quote)" class="btn btn-success btn-sm pull-right">Schedule Call</button>
                 </div>
               </div>
             </div>

@@ -5,6 +5,7 @@ import { User } from './user';
 import { AppointmentType } from './appointment-type';
 import { QuoteStatus } from '../enums/quote-status';
 import { StatusHistory } from './helpers/status-history';
+import { Appointment } from '../domain-module';
 
 export class Quote extends BaseEntity {
 
@@ -22,6 +23,7 @@ export class Quote extends BaseEntity {
     }
     userId?: string;
     siteId?: string;
+    appointmentId?: string;
     typeId: string;
     message: string;
     status: QuoteStatus;
@@ -30,6 +32,7 @@ export class Quote extends BaseEntity {
     // navigational properties
     user?: User;
     type?: AppointmentType;
+    appointment?: Appointment; 
     relatedFiles: any[];
     estimateFields: [{
         id?: string,
@@ -46,6 +49,7 @@ export class Quote extends BaseEntity {
             this.customerInfo = quote.customerInfo;
             this.userId = quote.userId;
             this.siteId = quote.siteId;
+            this.appointmentId = quote.appointmentId;
             this.typeId = quote.typeId;
             this.message = quote.message;
             this.status = quote.status;
@@ -80,11 +84,13 @@ export class Quote extends BaseEntity {
             customerInfo: this.customerInfo,
             userId: this.userId,
             siteId: this.siteId,
+            appointmentId: this.appointmentId,
             typeId: this.typeId,
             message: this.message,
             status: this.status,
             user: this.user == null ? null : this.user.toLightModel(),
             type: this.type == null ? null : this.type.toLightModel(),
+            appointment: this.appointment == null ? null : this.appointment.toLightModel(),
             statusHistory: this.statusHistory.map(s => s.toLightModel()),
             // images: this.images
             relatedFileNames: this.relatedFileNames,

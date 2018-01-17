@@ -127,7 +127,7 @@
           <div class="row">
 
             <!-- Sites -->
-            <ng-container *ngIf="(isLoggedIn && !adminMode) || existingCustomer">
+            <ng-container *ngIf="((isLoggedIn && !adminMode) || existingCustomer) && !forQuote">
               <div class="col-sm-12">
                 <div class="form-group">
                   <label for="site" class="">Choose Site
@@ -171,7 +171,7 @@
             </ng-container>
 
             <!-- Services -->
-            <div class="col-md-6">
+            <div class="col-md-6" *ngIf="!forQuote">
               <div class="form-group">
                 <label for="appointmentType" class="">Service
                   <i *ngIf="getControlValidation('appointmentType','req')">*</i>
@@ -184,7 +184,7 @@
             </div>
 
             <!-- Contact Method -->
-            <div class="col-md-6">
+            <div class="col-md-6" *ngIf="!forQuote">
               <div class="form-group">
                 <label for="preferedContactType" class="">Preferred Method of contact
                   <div class="btn-group status-btns-group">
@@ -202,7 +202,7 @@
             </div>
 
             <!-- Images -->
-            <div class="col-md-12">
+            <div class="col-md-12" *ngIf="!forQuote">
               <div class="form-group">
                 <label for="preferedContactType" class="">Post photos</label>
                 <p-fileUpload mode="basic" name="demo[]" accept="image/*" maxFileSize="1000000" (onSelect)="onUploadFile($event)" multiple="multiple"
@@ -213,7 +213,7 @@
             </div>
 
             <!-- Description -->
-            <div class="col-md-12">
+            <div class="col-md-12" *ngIf="!forQuote">
               <div class="form-group">
                 <label for="message" class="">Description</label>
                 <textarea type="text" name="message" class="form-control" formControlName="message" [(ngModel)]="appointment.message"></textarea>

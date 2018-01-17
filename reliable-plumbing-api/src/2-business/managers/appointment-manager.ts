@@ -3,7 +3,7 @@ import {
     AppError, ErrorType, Appointment, AppointmentStatus, NotificationType,
     Notification, ObjectType, Role, TechnicianStatus, User, StatusHistory
 } from '../../3-domain/domain-module';
-import { AppointmentRepo, UserRepo } from '../../4-data-access/data-access.module';
+import { AppointmentRepo, UserRepo, QuoteRepo } from '../../4-data-access/data-access.module';
 import { NotificationManager } from './notification-manager';
 import { FilesManager } from './files-manager';
 import { AccountSecurity, dependencies, TokenManager } from '../../5-cross-cutting/cross-cutting.module';
@@ -14,6 +14,7 @@ import config from '../../config';
 export class AppointmentManager {
 
     @Inject(dependencies.AppointmentRepo) private appointmentRepo: AppointmentRepo;
+    @Inject(dependencies.QuoteRepo) private quoteRepo: QuoteRepo;
     @Inject(dependencies.UserRepo) private userRepo: UserRepo;
     @Inject(dependencies.NotificationManager) private notificationManager: NotificationManager;
     @Inject(dependencies.FilesManager) private filesManager: FilesManager;
@@ -39,6 +40,10 @@ export class AppointmentManager {
 
         return new Promise<Appointment>((resolve, reject) => {
             this.appointmentRepo.add(appointment).then(result => {
+                // update quote if exists
+                if (appointment.quoteId)
+                    this.updateQuoteWithAppointment(appointment.id, appointment.quoteId);
+
                 // add notification
                 let notifier = appointment.userId == null ? [] : appointment.userId;
                 this.buildAppointCreatedNotification([notifier], result.id)
@@ -338,6 +343,13 @@ export class AppointmentManager {
         }
 
         this.notificationManager.addNotifications(notifications);
+    }
+
+    private updateQuoteWithAppointment(appointmentId, quoteId) {
+        this.quoteRepo.updateQuoteAppoitnemnt(quoteId, appointmentId).then((result: any) => {
+
+            console.log('saved ');
+        }).catch((error: Error) => console.log(error));
     }
 
     sendCheckInNotification(appointmentId, notifierId) {

@@ -18,7 +18,7 @@ export class QuoteRepo extends Repo<Quote> {
         let filtersObj: any = {};
         if (filters.statuses && filters.statuses.length > 0)
             filtersObj.status = { $in: filters.statuses };
-        if(filters.userId)
+        if (filters.userId)
             filtersObj.userId = { $in: [filters.userId] };
 
         return new Promise<Quote[]>((resolve, reject) => {
@@ -42,6 +42,19 @@ export class QuoteRepo extends Repo<Quote> {
                 return resolve(this.mapModelToEntity(result));
             });
         });
+    }
+
+    updateQuoteAppoitnemnt(quoteId, appointmentId) {
+        let model = this.createSet();
+
+        return new Promise<Quote>((resolve, reject) => {
+            model.findOneAndUpdate({ _id: quoteId }, { $set: { appointmentId: appointmentId } }, { new: true }, (err, result) => {
+                if (err)
+                    return reject(err);
+                return resolve(this.mapModelToEntity(result));
+            });
+        });
+
     }
 
     // getAppointmentsFilteredByDatesAndStatusAndType(from: Date, to: Date, status: AppointmentStatus[], typeids: string[]) {

@@ -18,6 +18,7 @@ export class CallsQuotesFormComponent implements OnInit {
 
   @Input() mode: CallsQuotesMode;
   @Input() adminMode = false;
+  @Input() forQuote = false;
   existingCustomer = false;
   modes = CallsQuotesMode;
   appointmentForm: FormGroup;
@@ -72,10 +73,12 @@ export class CallsQuotesFormComponent implements OnInit {
   }
 
   createForm() {
-    this.appointmentForm = this.fb.group({
-      appointmentType: ['', this.validateDropdownRequired],
-      message: ['']
-    });
+    this.appointmentForm = this.fb.group({});
+
+    if (!this.forQuote) {
+      this.appointmentForm.addControl('appointmentType', new FormControl(null, [this.validateDropdownRequired]))
+      this.appointmentForm.addControl('message', new FormControl(null))
+    }
 
     if (this.mode == CallsQuotesMode.call) {
       this.appointmentForm.addControl('date', new FormControl(null, [Validators.required, (control: FormControl) => {
@@ -109,7 +112,7 @@ export class CallsQuotesFormComponent implements OnInit {
         zipCode: [null]
       });
     }
-    else
+    else if (!this.forQuote)
       this.appointmentForm.addControl('site', new FormControl(null, this.validateDropdownRequired));
   }
 
@@ -136,7 +139,7 @@ export class CallsQuotesFormComponent implements OnInit {
     this.appointment.date = convertFromBootstrapDate(this.appointment.dateObj, this.appointment.time);
     if (this.isLoggedIn && !this.adminMode)
       this.appointment.userId = this.environmentService.currentUser.id;
-    else if(this.existingCustomer)
+    else if (this.existingCustomer)
       this.appointment.userId = this.selectedUser.id;
 
     this.submitted.emit({

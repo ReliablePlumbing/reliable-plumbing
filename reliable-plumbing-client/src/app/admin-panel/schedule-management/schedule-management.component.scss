@@ -79,16 +79,24 @@
 .header {
     padding-top: 10px;
     background-color: lightgray;
-
     & label {
         font-size: 25px;
     }
 }
 
-.msg{
+.msg {
     margin-top: 10px;
 }
 
 .schedule-content {
     margin-top: 10px;
+}
+
+.appointemt-quote {
+    & .btn-link {
+        color: #0056b3 !important;
+        & :hover {
+            text-decoration: underline !important;
+        }
+    }
 }
