@@ -88,6 +88,49 @@ input[type=checkbox],
 input[type=radio] {
   vertical-align: middle; }
 
+.sidenav {
+  height: 100%;
+  width: 320px;
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  background-color: #fff;
+  overflow-x: hidden;
+  transition: 0.5s; }
+  .sidenav .list-group {
+    min-height: inherit !important; }
+
+.sidenav a {
+  padding: 8px 8px 8px 32px;
+  text-decoration: none;
+  font-size: 25px;
+  color: #818181;
+  display: block;
+  transition: 0.3s; }
+
+.sidenav a:hover {
+  color: #f1f1f1; }
+
+.sidenav .closebtn {
+  position: absolute;
+  top: -19px;
+  right: 25px;
+  font-size: 40px;
+  margin-left: 50px; }
+
+#main {
+  transition: margin-left .5s;
+  padding: 16px;
+  margin-left: 320px;
+  min-height: 72vh; }
+
+@media screen and (max-height: 450px) {
+  .sidenav {
+    padding-top: 15px; }
+
+  .sidenav a {
+    font-size: 18px; } }
 .btn.google-btn {
   display: inline-block;
   background-color: #ea4335 !important;

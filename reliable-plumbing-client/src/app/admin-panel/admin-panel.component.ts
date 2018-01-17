@@ -31,11 +31,17 @@ export class AdminPanelComponent implements OnInit {
   constructor(private environmentService: EnvironmentService, private router: Router, private routeHandlerService: RouteHandlerService) { }
 
   ngOnInit() {
+
+
+
+
     this.currentUser = this.environmentService.currentUser;
     this.constructTabsPermissions();
     this.subscribeToRouterEvents();
     this.setCurrentTabFromUrl(this.router.url);
   }
+
+
 
   constructTabsPermissions() {
     let roles = this.currentUser.roles;
@@ -88,5 +94,17 @@ export class AdminPanelComponent implements OnInit {
       this.currentSelectedTab = this.tabs.profile.index;
     else if (~url.indexOf(systemRoutes.changePassword))
       this.currentSelectedTab = this.tabs.changePassword.index;
+  }
+
+  op/* Set the width of the side navigation to 250px and the left margin of the page content to 250px and add a black background color to body */
+  openNav() {
+    document.getElementById("mySidenav").style.width = "320px";
+    document.getElementById("main").style.marginLeft = "320px";
+  }
+
+  /* Set the width of the side navigation to 0 and the left margin of the page content to 0, and the background color of body to white */
+  closeNav() {
+    document.getElementById("mySidenav").style.width = "0";
+    document.getElementById("main").style.marginLeft = "0";
   }
 }
