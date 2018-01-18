@@ -94,10 +94,14 @@ input[type=radio] {
     vertical-align: middle;
 }
 
+.admin-panel {
+    display: flex;
+}
+
 .sidenav {
-    height: 100%;
     width: 320px;
-    position: fixed;
+    display: inline-block;
+    vertical-align: top;
     z-index: 1;
     top: 0;
     left: 0;
@@ -107,6 +111,49 @@ input[type=radio] {
     .list-group {
         min-height: inherit !important;
     }
+    li {
+        i {
+            display: inline-block;
+        }
+        span {
+            display: inline-block;
+        }
+    }
+}
+
+.sidenav {
+    width: 68px;
+    transition: all 0.3s;
+    ul {
+        li {
+            span {
+                display: none;
+                transition: all 0.3s;
+                &:first-child {
+                    display: inline-block;
+                    font-size: 28px;
+                    cursor: pointer;
+                    line-height: 18px;
+                    cursor: pointer;
+                    margin: -4px;
+                    transition: all 0.3s;
+                }
+            }
+        }
+    }
+}
+
+.sidenav.opened {
+    width: 320px;
+    transition: all 0.3s;
+    ul {
+        li {
+            span {
+                display: inline-block;
+                transition: all 0.3s;
+            }
+        }
+    }
 }
 
 .sidenav a {
@@ -115,7 +162,7 @@ input[type=radio] {
     font-size: 25px;
     color: #818181;
     display: block;
-    transition: 0.3s;
+    transition: all 0.3s;
 }
 
 .sidenav a:hover {
@@ -123,18 +170,22 @@ input[type=radio] {
 }
 
 .sidenav .closebtn {
-    position: absolute;
-    top: -19px;
-    right: 25px;
+    float: right;
     font-size: 40px;
     margin-left: 50px;
 }
 
 #main {
-    transition: margin-left .5s;
+    display: inline-block;
+    transition: all 0.3s;
     padding: 16px;
-    margin-left: 320px;
-    min-height: 72vh;
+    width: calc(100% - 73px);
+    min-height: 80vh;
+}
+
+#main.opened {
+    width: calc(100% - 325px);
+    transition: all 0.3s;
 }
 
 @media screen and (max-height: 450px) {
