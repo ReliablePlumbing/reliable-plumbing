@@ -1,5 +1,16 @@
-<section class="schedule-sec">
-    <div class="container schedule-form">
-        <rb-calls-quotes-form [mode]="mode" (submitted)="callSubmitted($event)"></rb-calls-quotes-form>
+<loader *ngIf="loading"></loader>
+
+<ng-container *ngIf="showMsg">
+    <div class="full-height">
+        <message></message>
     </div>
-</section>
+
+</ng-container>
+
+<ng-container *ngIf="!showMsg">
+    <section class="schedule-sec">
+        <div class="container schedule-form">
+            <rb-calls-quotes-form [mode]="mode" (submitted)="callSubmitted($event)"></rb-calls-quotes-form>
+        </div>
+    </section>
+</ng-container>

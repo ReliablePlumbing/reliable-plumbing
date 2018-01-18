@@ -31,10 +31,6 @@ export class AdminPanelComponent implements OnInit {
   constructor(private environmentService: EnvironmentService, private router: Router, private routeHandlerService: RouteHandlerService) { }
 
   ngOnInit() {
-
-
-
-
     this.currentUser = this.environmentService.currentUser;
     this.constructTabsPermissions();
     this.subscribeToRouterEvents();

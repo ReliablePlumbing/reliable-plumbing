@@ -32,6 +32,9 @@ export class RouteHandlerService {
           route = 'control-panel/schedule-management';
           break;
         }
+        else if(role == Role.Customer)
+        route = 'customer-portal/calls-history';
+        break;
       }
     return route;
   }

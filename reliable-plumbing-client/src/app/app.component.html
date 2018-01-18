@@ -1,14 +1,15 @@
 <header id="header">
     <div class="container-fluid">
         <nav class="navbar navbar-toggleable-md navbar-expand-lg">
-            <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon fa fa-bars"></span>
             </button>
             <a id="logo" class="navbar-brand" [routerLink]="['/']">
                 <img src="assets/img/rb-logo.png" />
             </a>
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ng-container *ngIf="!isControlPanel">
+                <ng-container *ngIf="!isControlPanel && !isCustomerPortal">
                     <ul class="navbar-nav m-auto">
                         <li class="nav-item">
                             <a class="nav-link" href="#home">Home</a>
@@ -41,7 +42,8 @@
                     </ng-container>
                     <ng-container *ngIf="isUserLoggedIn && currentUser != null">
                         <li class="notification-container" placement="top" ngbTooltip="Notifications">
-                            <a class="nav-link pointer" [ngbPopover]="notificationsContent" popoverTitle="Notifications" placement="bottom" #p="ngbPopover" closePopoverOnOutsideClick>
+                            <a class="nav-link pointer" [ngbPopover]="notificationsContent" popoverTitle="Notifications" placement="bottom" #p="ngbPopover"
+                                closePopoverOnOutsideClick>
                                 <i class="fa fa-bell" style="font-size: 22px;" aria-hidden="true"></i>
                             </a>
                         </li>
@@ -55,11 +57,12 @@
                         </li>
                         <li class="nav-item panel-link">
                             <ng-container *ngIf="isSystemUser">
-                                <a *ngIf="isControlPanel" [routerLink]="['/']" class="nav-link pointer">Go to App</a>
+                                <a *ngIf="isControlPanel" [routerLink]="['/']" class="nav-link pointer">Home</a>
                                 <a *ngIf="!isControlPanel" [routerLink]="getDefaultPanelRoute()" class="nav-link pointer">Go to Panel</a>
                             </ng-container>
                             <ng-container *ngIf="!isSystemUser">
-                                <a [routerLink]="[systemRoutes.customerPortal]" class="nav-link pointer">Go to Portal</a>
+                                <a *ngIf="isCustomerPortal" [routerLink]="['/']" class="nav-link pointer">Home</a>
+                                <a *ngIf="!isCustomerPortal" [routerLink]="getDefaultPanelRoute()" class="nav-link pointer">Go to Portal</a>
                             </ng-container>
                         </li>
                     </ng-container>

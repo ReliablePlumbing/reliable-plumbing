@@ -51,6 +51,7 @@ export class DynamicFormComponent implements OnInit {
   mapSite() {
     if (~this.controlsCofig.findIndex(c => c.type == regControls.address)) {
       let site = this.user.site;
+      this.user.site.state = 'California';
       if (site && site.coords)
         this.mapMarker = {
           lat: site.coords.lat,
@@ -111,6 +112,8 @@ export class DynamicFormComponent implements OnInit {
           this.registerForm.addControl('city', new FormControl(null));
           this.registerForm.addControl('state', new FormControl(null));
           this.registerForm.addControl('zipCode', new FormControl(null));
+
+          this.registerForm.controls['state'].disable();
           break;
         case regControls.roles:
           let roles = control.roles;

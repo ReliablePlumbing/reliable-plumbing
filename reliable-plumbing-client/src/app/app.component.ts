@@ -23,6 +23,7 @@ export class AppComponent {
   registerMode;
   systemRoutes = systemRoutes;
   isControlPanel = false;
+  isCustomerPortal = false;
 
   constructor(private socketsSerivce: SocketsService, private notificationService: NotificationService, private router: Router,
     private modalService: NgbModal, private environmentService: EnvironmentService, private routeHandlerService: RouteHandlerService) { }
@@ -35,6 +36,8 @@ export class AppComponent {
     this.router.events.subscribe(event => {
       if (event instanceof NavigationEnd)
         this.isControlPanel = this.router.url.indexOf(systemRoutes.controlPanel) != -1;
+      if (!this.isControlPanel)
+        this.isCustomerPortal = this.router.url.indexOf(systemRoutes.customerPortal) != -1;
     });
   }
 

@@ -4,6 +4,7 @@ import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { EnvironmentService } from '../services/environment.service';
 import { Role, RegistrationMode } from '../models/enums';
 import { systemRoutes } from '../models/constants';
+import { isSystemUser } from '../utils/user-helpers';
 
 @Component({
   selector: 'home',
@@ -17,7 +18,10 @@ export class HomeComponent implements OnInit, AfterViewInit {
   constructor(private activatedRoute: ActivatedRoute, private modalService: NgbModal, private environmentService: EnvironmentService) { }
 
   ngOnInit() {
-   
+  }
+
+  checkSystemUser(){
+    return this.environmentService.isUserLoggedIn && isSystemUser(this.environmentService.currentUser);
   }
 
   ngAfterViewInit() {

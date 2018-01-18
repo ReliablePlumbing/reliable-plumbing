@@ -18,7 +18,7 @@ Hero Section
             <h2>We offer
                 <span class="rotating">Free Visits and Estimates!, Residential and Commercial, Drain Cleaning, Plumbing</span>
             </h2>
-            <div class="actions">
+            <div class="actions" *ngIf="!checkSystemUser()">
                 <a *ngIf="!isSystemUser" [routerLink]="systemRoutes.scheduleCall" class="btn-get-started pointer">Schedule a Call</a>
                 <a *ngIf="!isSystemUser" [routerLink]="systemRoutes.requestQuote" class="btn-get-started pointer">Request a Quote</a>
             </div>

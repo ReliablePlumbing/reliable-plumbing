@@ -13,8 +13,8 @@ export class UsersManagementComponent implements OnInit {
 
   users = [];
   displayedUsers = [];
-  page = 0;
-  pageSize = 20;
+  page = 1;
+  pageSize = 1;
   registerModelRef: NgbModalRef;
   registrationMode: RegistrationMode;
   loading = true;
@@ -34,7 +34,7 @@ export class UsersManagementComponent implements OnInit {
     this.loading = true;
     this.userManagementService.getAllSystemUsers([Role.Customer]).subscribe(users => {
       this.users = users;
-      this.displayedUsers = this.users.slice(0, 20);
+      this.displayedUsers = this.users.slice(0, this.pageSize);
       this.loading = false;
     })
   }
@@ -47,8 +47,10 @@ export class UsersManagementComponent implements OnInit {
   }
 
   userAdded(user) {
-    if (this.registrationMode == RegistrationMode.signup)
+    if (this.registrationMode == RegistrationMode.addCustomer) {
       this.users.push(user);
+      this.pageChange();
+    }
     else if (this.registrationMode == RegistrationMode.edit) {
       user.rolesString = '';
       for (let i = 0; i < user.rolesObj.length; i++) {
@@ -72,12 +74,16 @@ export class UsersManagementComponent implements OnInit {
       this.userManagementService.deleteUserById(user.id).subscribe(success => {
         if (success) {
           this.users = this.users.filter(u => user.id != u.id);
-          this.displayedUsers = this.users.slice(this.page * this.pageSize, (this.page * this.pageSize) + this.pageSize);
+          this.pageChange();
           this.alertifyService.success('User deleted succefully');
         }
       });
 
     })
+  }
+
+  pageChange() {
+    this.displayedUsers = this.users.slice((this.page - 1) * this.pageSize, (this.page * this.pageSize) + this.pageSize - 1);
   }
 
 

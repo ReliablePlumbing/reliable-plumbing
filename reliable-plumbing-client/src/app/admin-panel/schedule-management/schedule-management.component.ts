@@ -20,7 +20,10 @@ export class ScheduleManagementComponent implements OnInit {
   callsQuotesMode: CallsQuotesMode = CallsQuotesMode.call;
   @ViewChild('appointmentDetails') appointmentDetailsTemplate: ElementRef;
   appointmentDetailsModalRef: NgbModalRef;
+  @ViewChild('quoteDetails') quoteDetailsTemplate: ElementRef;
+  quoteDetailsModalRef: NgbModalRef;
   selectedAppointment = null;
+  selectedQuote = null;
   selectedDate = null;
   urlIdParam = null;
   loading: boolean = true;
@@ -175,9 +178,11 @@ export class ScheduleManagementComponent implements OnInit {
       if (this.appointments[appointmentDate] == null)
         this.appointments[appointmentDate] = [];
 
-      let typeIndex = this.lookups.types.findIndex(t => t.id == appointment.typeId)
+      let typeId = appointment.typeId == '-1' ? appointment.quote.typeId : appointment.typeId;
+      let typeIndex = this.lookups.types.findIndex(t => t.id == typeId)
       if (typeIndex != -1)
-        appointment.typeObj = this.lookups.types[typeIndex]
+        appointment.typeObj = this.lookups.types[typeIndex];
+      appointment.quoteTotalEstimate = this.calculateTotalQuoteEstimate(appointment);
       let appointmentDateLocalized = new Date(appointment.date);
       appointment.time = convertTimeTo12String(appointmentDateLocalized.getHours(), appointmentDateLocalized.getMinutes());
       this.appointments[appointmentDate].push(appointment);
@@ -187,6 +192,16 @@ export class ScheduleManagementComponent implements OnInit {
 
     }
     this.constructDaysArrayBetweenFilterDates();
+  }
+
+  calculateTotalQuoteEstimate(appointment) {
+    if (!appointment.quote)
+      return null;
+
+    let totalEstimate = 0;
+    appointment.quote.estimateFields.forEach(f => totalEstimate += parseFloat(f.cost));
+
+    return totalEstimate;
   }
 
   constructDaysArrayBetweenFilterDates() {
@@ -222,6 +237,14 @@ export class ScheduleManagementComponent implements OnInit {
       this.closeAppointmentDetailsModal();
     });
   }
+
+  openQuoteDetails(quote) {
+    this.selectedQuote = quote;
+    this.quoteDetailsModalRef = this.modalService.open(this.quoteDetailsTemplate, { size: 'lg' });
+    this.quoteDetailsModalRef.result.then(_ => this.selectedQuote = null, _ => this.selectedQuote = null);
+  }
+
+  closeQuoteDetailsModal = () => this.quoteDetailsModalRef.close();
 
   closeAppointmentDetailsModal() {
     this.selectedAppointment = null;

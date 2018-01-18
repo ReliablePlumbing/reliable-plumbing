@@ -5,6 +5,7 @@ import { SocialMediaProvider } from '../enums/social-media-provider';
 import { User } from './user';
 import { AppointmentType } from './appointment-type';
 import { StatusHistory } from './helpers/status-history';
+import { Quote } from '../domain-module';
 
 export class Appointment extends BaseEntity {
 
@@ -24,6 +25,7 @@ export class Appointment extends BaseEntity {
     siteId?: string;
     date: Date;
     typeId: string;
+    quoteId?: string;
     message: string;
     status: AppointmentStatus;
     statusHistory: StatusHistory[];
@@ -41,6 +43,7 @@ export class Appointment extends BaseEntity {
     assignees?: User[];
     type?: AppointmentType;
     relatedFiles: any[];
+    quote?: Quote; 
 
     constructor(appointment: any) {
         super();
@@ -51,6 +54,7 @@ export class Appointment extends BaseEntity {
             this.customerInfo = appointment.customerInfo;
             this.userId = appointment.userId;
             this.siteId = appointment.siteId;
+            this.quoteId = appointment.quoteId;
             this.date = appointment.date;
             this.typeId = appointment.typeId;
             this.message = appointment.message;
@@ -85,12 +89,14 @@ export class Appointment extends BaseEntity {
             customerInfo: this.customerInfo,
             userId: this.userId,
             siteId: this.siteId,
+            quoteId: this.quoteId,
             date: this.date,
             typeId: this.typeId,
             message: this.message,
             status: this.status,
             user: this.user == null ? null : this.user.toLightModel(),
             type: this.type == null ? null : this.type.toLightModel(),
+            quote: this.quote == null ? null : this.quote.toLightModel(),
             statusHistory: this.statusHistory.map(s => s.toLightModel()),
             assigneeIds: this.assigneeIds,
             assignees: this.assignees == null ? null : this.assignees.map(a => a.toLightModel()),

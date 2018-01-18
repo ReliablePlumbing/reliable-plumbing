@@ -1,11 +1,12 @@
 import { Component, OnInit, EventEmitter, Input, Output } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Role, RegistrationMode, regControls } from '../../models/enums';
 import { Marker } from '../../models/marker';
 import { AlertifyService, EnvironmentService, RouteHandlerService, UserManagementService } from '../../services/services.exports';
 import { ProfileEventsService } from './profile-events.service';
 import { isSystemUser } from '../../utils/user-helpers';
+import { systemRoutes } from '../../models/constants';
 
 @Component({
   selector: 'rb-registeration',
@@ -28,10 +29,12 @@ export class RegisterationComponent implements OnInit {
   isValid = true;
   actionType: actionType;
   showSteps = false;
+  loading = false;
+  showMsg = false;
 
   constructor(private fb: FormBuilder, private userManagementService: UserManagementService, private alertifyService: AlertifyService,
     private environmentService: EnvironmentService, private routeHandler: RouteHandlerService, private activatedRoute: ActivatedRoute,
-    private profileEventsService: ProfileEventsService) { }
+    private profileEventsService: ProfileEventsService, private router: Router) { }
 
   ngOnInit() {
     this.subsciptionToForms();
@@ -191,7 +194,7 @@ export class RegisterationComponent implements OnInit {
     this.profileEventsService.isFormValid();
   }
 
-  initNewSite = () => this.user.site = {};
+  initNewSite = () => this.user.site = { state: 'California' };
 
   editSite(index) {
     this.user.site = this.user.sites[index];
@@ -253,8 +256,14 @@ export class RegisterationComponent implements OnInit {
       case RegistrationMode.addSystemUser:
       case RegistrationMode.signup:
       case RegistrationMode.addCustomer:
+        this.loading = true;
         this.userManagementService.register(this.user).subscribe(x => {
           if (x) {
+            this.loading = false;
+            if (this.router.url.indexOf(systemRoutes.register) != -1) {
+              this.showMsg = true;
+              setTimeout(() => this.router.navigate(['/']), 3000);
+            }
             this.alertifyService.success('Save Completed Successfully');
             this.userAdded.emit(this.user);
           }
@@ -262,10 +271,16 @@ export class RegisterationComponent implements OnInit {
         break;
       case RegistrationMode.editSystemUser:
       case RegistrationMode.edit:
+        this.loading = true;
         this.userManagementService.updateProfile(this.user).subscribe(user => {
           if (user) {
+            this.loading = false;
             this.alertifyService.success('Profile updated successfully');
             this.userAdded.emit(user);
+            if (this.router.url.indexOf(systemRoutes.register) != -1) {
+              this.showMsg = true;
+              setTimeout(() => this.router.navigate(['/']), 3000);
+            }
           }
           else
             this.alertifyService.error('profile not updated, please try again');
