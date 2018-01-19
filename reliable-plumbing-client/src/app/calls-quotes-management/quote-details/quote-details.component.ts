@@ -20,7 +20,7 @@ export class QuoteDetailsComponent implements OnInit {
     total: 0
   };
   statusEnum = QuoteStatus;
-
+  loading = false;
   @Output() quoteUpdated: EventEmitter<any> = new EventEmitter<any>();
   @Output() close: EventEmitter<any> = new EventEmitter<any>();
 

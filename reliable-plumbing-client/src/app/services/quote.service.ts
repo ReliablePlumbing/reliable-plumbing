@@ -28,7 +28,7 @@ export class QuoteService {
   }
 
   getFiles(body) {
-    return this.httpService.post('http://localhost:3000/api/files/getFiles', body, true, {
+    return this.httpService.post(environment.apiUrl + 'files/getFiles', body, true, {
       responseType: ResponseContentType.Blob
     }).map(res => {
       return new Blob([res._body], {

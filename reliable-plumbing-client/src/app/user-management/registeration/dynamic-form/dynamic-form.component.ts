@@ -37,10 +37,10 @@ export class DynamicFormComponent implements OnInit {
     this.subscription = this.profileEventsService.validateForm.subscribe(_ => {
       this.trySubmit = true;
       if (~this.controlsCofig.findIndex(c => c.type == regControls.address))
-        this.user.site.coords = {
+        this.user.site.coords = this.mapMarker ? {
           lat: this.mapMarker.lat,
           lng: this.mapMarker.lng
-        }
+        } : {};
       this.profileEventsService.isFormValidResponse(this.registerForm.valid);
     });
     this.mapSite();
