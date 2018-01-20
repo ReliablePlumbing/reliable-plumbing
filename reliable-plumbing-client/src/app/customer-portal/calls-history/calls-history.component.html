@@ -86,7 +86,7 @@
                     <b>{{call.date | date:'EEE, MMM dd yyyy, hh:mm a'}}</b>
                   </div>
                   <div>
-                    <button class="pull-right btn btn-danger btn-sm"  (click)="changeCallStatus(call, statusEnum.Canceled)">Cancel</button>
+                    <button *ngIf="call.status == statusEnum.Pending" class="pull-right btn btn-danger btn-sm"  (click)="changeCallStatus(call, statusEnum.Canceled)">Cancel</button>
                   </div>
                 </div>
               </div>

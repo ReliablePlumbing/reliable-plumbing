@@ -120,7 +120,7 @@ export class AppointmentDetailsComponent implements OnInit {
 
     switch (status) {
       case AppointmentStatus.Pending:
-        this.allowedStatus = [ AppointmentStatus.Pending, AppointmentStatus.Confirmed, AppointmentStatus.Rejected];
+        this.allowedStatus = [AppointmentStatus.Pending, AppointmentStatus.Confirmed, AppointmentStatus.Rejected];
         break;
       case AppointmentStatus.Confirmed:
         this.allowedStatus = [AppointmentStatus.Confirmed, AppointmentStatus.Canceled];
@@ -133,8 +133,14 @@ export class AppointmentDetailsComponent implements OnInit {
         this.allowedStatus = [];
         break;
     }
+  }
 
-
-
+  getGalleryDimensions() {
+    // 992
+    if (screen.width < 992) {
+      return { width: 200, height: 100 };
+    }
+    else
+      return { width: 500, height: 313 };
   }
 }

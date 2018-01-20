@@ -23,13 +23,14 @@
                   <!-- <i *ngIf="getControlValidation('firstName','required')">*</i> -->
                 </label>
                 <input type="text" class="form-control" [class.is-invalid]="searchFailed" [(ngModel)]="selectedUser" [ngbTypeahead]="search"
-                  placeholder="Customers Search" [ngModelOptions]="{standalone: true}" [inputFormatter]="inputFormatter" [resultTemplate]="rt"/>
+                  placeholder="Customers Search" [ngModelOptions]="{standalone: true}" [inputFormatter]="inputFormatter" [resultTemplate]="rt"
+                />
                 <span *ngIf="searching">searching...</span>
               </div>
             </div>
 
             <ng-template #rt let-r="result" let-t="term">
-              {{ r.firstName + ' ' + r.lastName  + '  (' +r.email +')'}}
+              {{ r.firstName + ' ' + r.lastName + ' (' +r.email +')'}}
             </ng-template>
 
             <ng-container *ngIf="!adminMode || !existingCustomer">
@@ -61,7 +62,7 @@
                   </label>
                   <input type="tel" name="mobile" class="form-control" formControlName="mobile" [(ngModel)]="appointment.customerInfo.mobile"
                     placeholder="ex: (123) 123-1234" [textMask]="mobileMaskOpts" />
-                <label *ngIf="getControlValidation('mobile','required', false)" class="validation-text">* Required</label>                  
+                  <label *ngIf="getControlValidation('mobile','required', false)" class="validation-text">* Required</label>
                 </div>
               </div>
 
@@ -73,7 +74,7 @@
                   <input type="email" name="email" class="form-control" placeholder="ex: exmple@domain.com" formControlName="email" [(ngModel)]="appointment.customerInfo.email"
                   />
                   <span class="error-message" *ngIf="getControlValidation('email','email', false)">Please enter a valid email</span>
-                <label *ngIf="getControlValidation('email','required', false)" class="validation-text">* Required</label>                  
+                  <label *ngIf="getControlValidation('email','required', false)" class="validation-text">* Required</label>
                 </div>
               </div>
 
@@ -84,7 +85,7 @@
                   </label>
                   <input type="text" name="street" class="form-control" formControlName="street" [(ngModel)]="appointment.customerInfo.street"
                   />
-                <label *ngIf="getControlValidation('street','required', false)" class="validation-text">* Required</label>                  
+                  <label *ngIf="getControlValidation('street','required', false)" class="validation-text">* Required</label>
                 </div>
               </div>
 
@@ -94,7 +95,7 @@
                     <i *ngIf="getControlValidation('city','required')">*</i>
                   </label>
                   <input type="text" name="city" class="form-control" formControlName="city" [(ngModel)]="appointment.customerInfo.city" />
-                <label *ngIf="getControlValidation('city','required', false)" class="validation-text">* Required</label>                  
+                  <label *ngIf="getControlValidation('city','required', false)" class="validation-text">* Required</label>
                 </div>
               </div>
 
@@ -105,7 +106,7 @@
                   </label>
                   <input type="text" name="state" class="form-control" formControlName="state" [(ngModel)]="appointment.customerInfo.state"
                   />
-                <label *ngIf="getControlValidation('state','required', false)" class="validation-text">* Required</label>                  
+                  <label *ngIf="getControlValidation('state','required', false)" class="validation-text">* Required</label>
                 </div>
               </div>
 
@@ -116,7 +117,7 @@
                   </label>
                   <input type="text" name="zipCode" class="form-control" formControlName="zipCode" [(ngModel)]="appointment.customerInfo.zipCode"
                   />
-                <label *ngIf="getControlValidation('zipCode','required', false)" class="validation-text">* Required</label>                  
+                  <label *ngIf="getControlValidation('zipCode','required', false)" class="validation-text">* Required</label>
                 </div>
               </div>
             </ng-container>
@@ -144,7 +145,7 @@
                     <option disabled value="-1" selected>Select Site</option>
                     <option *ngFor="let site of sites" [ngValue]="site.id">{{constructSite(site)}}</option>
                   </select>
-                  <label *ngIf="getControlValidation('site','req', false)" class="validation-text">* Required</label>                  
+                  <label *ngIf="getControlValidation('site','req', false)" class="validation-text">* Required</label>
                 </div>
               </div>
             </ng-container>
@@ -161,7 +162,7 @@
                   <button class="input-group-addon" (click)="d.toggle()" type="button">
                     <i class="fa fa-calendar" aria-hidden="true"></i>
                   </button>
-                  <label *ngIf="getControlValidation('date','required', false)" class="validation-text">* Required</label>                  
+                  <label *ngIf="getControlValidation('date','required', false)" class="validation-text">* Required</label>
                   <span class="error-message" *ngIf="getControlValidation('date','invalidDate')">only valid date are today or after that</span>
                 </div>
               </div>
@@ -175,7 +176,7 @@
                     <option disabled value="-1" selected>select time</option>
                     <option *ngFor="let time of timeList" [ngValue]="time">{{time.timeStr}}</option>
                   </select>
-                  <label *ngIf="getControlValidation('time','req', false)" class="validation-text">* Required</label>                  
+                  <label *ngIf="getControlValidation('time','req', false)" class="validation-text">* Required</label>
                 </div>
               </div>
             </ng-container>
@@ -190,7 +191,7 @@
                   <option disabled selected value="-1">Select Service</option>
                   <option *ngFor="let appoinType of appointmentTypes" [value]="appoinType.id">{{appoinType.name}}</option>
                 </select>
-                <label *ngIf="getControlValidation('appointmentType','req', false)" class="validation-text">* Required</label>                  
+                <label *ngIf="getControlValidation('appointmentType','req', false)" class="validation-text">* Required</label>
               </div>
             </div>
 

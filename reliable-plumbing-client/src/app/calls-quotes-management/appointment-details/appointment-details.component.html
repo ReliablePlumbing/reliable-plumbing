@@ -2,35 +2,46 @@
 
 <ng-container *ngIf="!loading">
   <div class="row">
-    <div class="col-md-3">
+    <div class="col-3">
       <label>
         <b>Name</b>
       </label>
     </div>
-    <div class="col-md-9">
+    <div class="col-9">
       <span>{{appointment?.user == null ? appointment?.fullName : appointment?.user?.firstName + ' ' + appointment?.user?.lastName}}</span>
     </div>
   </div>
   <div class="row">
-    <div class="col-md-3">
+    <div class="col-3">
       <label>
-        <b>Appointment Date:</b>
+        <b>Date</b>
       </label>
     </div>
-    <div class="col-md-9">
+    <div class="col-9">
       <span>{{mappedAppointment?.date | date}}</span>
     </div>
   </div>
   <div class="row">
-    <div class="col-md-3">
+    <div class="col-3">
       <label>
-        <b>Appointment Time:</b>
+        <b>Time</b>
       </label>
     </div>
-    <div class="col-md-9">
+    <div class="col-9">
       <span>{{mappedAppointment?.time}}</span>
     </div>
   </div>
+  <div class="row">
+    <div class="col-3">
+      <label>
+        <b>Description</b>
+      </label>
+    </div>
+    <div class="col-9">
+      <span>{{mappedAppointment?.message}}</span>
+    </div>
+  </div>
+
   <div class="row justify-content-center">
     <div class="btn-group status-btns-group">
       <label class="btn btn-info pointer" *ngFor="let status of allowedStatus" [class.selected-status-btn]="mappedAppointment.status.id == status">
@@ -40,19 +51,22 @@
     </div>
   </div>
 
-  <div class="row">
-    <p-galleria *ngIf="mappedAppointment.images.length>0" [images]="mappedAppointment.images" panelWidth="500" panelHeight="313"
-      [showCaption]="false"></p-galleria>
+  <div class="row justify-content-center">
+    <div class="call-gallery">
+
+      <p-galleria *ngIf="mappedAppointment.images.length>0" [images]="mappedAppointment.images" [panelWidth]="getGalleryDimensions().width" [panelHeight]="getGalleryDimensions().height"
+        [showCaption]="false"></p-galleria>
+    </div>
   </div>
 
   <div class="row">
-    <div class="col-md-3">
+    <div class="col-4 col-sm-3">
       <label>
         <b>Assignees</b>
       </label>
     </div>
 
-    <div class="col-md-9">
+    <div class="col-8 col-sm-9">
       <ul class="tags">
         <li class="tagg" *ngFor="let assignee of mappedAppointment.assignees">
           {{assignee.technician.firstName + ' ' + (assignee.technician.lastName ? assignee.technician.lastName: '')}}
@@ -62,18 +76,16 @@
     </div>
   </div>
 
-  <table class="table table-bordered table-scrollable">
+  <table class="table table-bordered table-scrollable table-responsive">
     <thead>
       <th>Name</th>
-      <th>Email</th>
       <th>Status</th>
       <th>Appointments That Day</th>
       <th>Assign</th>
     </thead>
     <tbody>
       <tr *ngFor="let tech of mappedTechnicians">
-        <td>{{tech?.technician.firstName}}</td>
-        <td>{{tech?.technician.email}}</td>
+        <td>{{tech?.technician.firstName + ' ' + (tech?.technician.lastName ? tech?.technician.lastName : '')}}</td>
         <td>
           <p>
             <span class="appointemt-status" [ngClass]="tech?.status | technicianStatusColor"></span>

@@ -39,7 +39,7 @@ export class CallsHistoryComponent implements OnInit {
 
     let filters = {
       userIds: [this.environmentService.currentUser.id],
-      status: [AppointmentStatus.Pending, AppointmentStatus.Confirmed]
+      // status: [AppointmentStatus.Pending, AppointmentStatus.Confirmed]
     };
 
     this.lookupsService.getAppointmentSettingsAndTypes().subscribe(results => {

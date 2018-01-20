@@ -25,7 +25,7 @@ export class QuoteManagementComponent implements OnInit {
   ngOnInit() {
     this.tabs = getEnumEntries(QuoteStatus);
 
-    this.quoteService.getQuotesFilteredByStatus([QuoteStatus.Approved, QuoteStatus.Open, QuoteStatus.Pending, QuoteStatus.Rejected])
+    this.quoteService.getQuotesFilteredByStatus([])
       .subscribe(results => {
         this.quotes = results;
         this.mappedQuotes = this.mapAndGroupQuotes(results);

@@ -35,7 +35,7 @@ export class QuotesHistoryComponent implements OnInit {
   ngOnInit() {
     this.tabs = getEnumEntries(QuoteStatus).filter(t => t.id != QuoteStatus.Open);
 
-    this.quoteService.getQuotesFilteredByStatus([QuoteStatus.Pending, QuoteStatus.Approved, QuoteStatus.Rejected], this.environemntService.currentUser.id)
+    this.quoteService.getQuotesFilteredByStatus([QuoteStatus.Pending, QuoteStatus.Approved, QuoteStatus.Rejected, QuoteStatus.Closed], this.environemntService.currentUser.id)
       .subscribe(results => {
         this.quotes = results;
         this.mappedQuotes = this.mapAndGroupQuotes(results);
