@@ -3,13 +3,30 @@
     padding-right: 0 !important;
 }
 
+.admin-panel {
+    position: relative;
+}
+
+.toggle-nav {
+    position: absolute;
+    cursor: pointer;
+    left: 0;
+    top: 0;
+    color: #fff;
+    padding: 10px 24px;
+    background-color: #c82333 !important;
+    z-index: 9;
+    font-size: 22px;
+    i {
+        font-style: normal;
+    }
+}
+
 .list-group {
-    // width: 25%;
-    // position: fixed;
     min-height: 100vh;
     height: 100%;
     border-right: 1px solid rgba(0, 0, 0, .125);
-    padding-top: 15px;
+    padding-top: 50px;
     .list-group-item {
         color: #40a4df;
         background-color: transparent;
