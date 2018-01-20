@@ -1,17 +1,24 @@
 <div class="admin-panel">
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-md-3 col-sm-12 col-xs-123 side-menu">
-                <ul class="list-group">
-                    <li class="list-group-item pointer" [routerLink]="['./' + systemRoutes.callsHistory]" [class.selected]="currentSelectedTab == tabs.calls" (click)="currentSelectedTab = tabs.calls"><i class="fa fa-calendar" aria-hidden="true"></i> Calls History</li>
-                    <li class="list-group-item pointer" [routerLink]="['./' + systemRoutes.quotesHistory]" [class.selected]="currentSelectedTab == tabs.quotes" (click)="currentSelectedTab = tabs.quotes"><i class="fa fa-calendar-check-o" aria-hidden="true"></i> Quotes History</li>
-                    <li class="list-group-item pointer" [routerLink]="['./' + systemRoutes.myProfile]" [class.selected]="currentSelectedTab == tabs.profile" (click)="currentSelectedTab = tabs.profile"><i class="fa fa-user" aria-hidden="true"></i> My Profile</li>
-                    <li class="list-group-item pointer" [routerLink]="['./' + systemRoutes.changePassword]" [class.selected]="currentSelectedTab == tabs.changePassword" (click)="currentSelectedTab = tabs.changePassword"><i class="fa fa-user" aria-hidden="true"></i> Change Password</li>
-                </ul>
-            </div>
-            <div class="col-md-9 col-sm-12 col-xs-129 panel-content">
-                <router-outlet></router-outlet>
-            </div>
-        </div>
+    <span class="toggle-nav" (click)="toggleNav(true)">
+        <i class="">&#9776;</i>
+    </span>
+    <div class="side-menu sidenav" id="mySidenav">
+        <ul class="list-group">
+            <li placement="right" ngbTooltip="Calls History" class="list-group-item pointer" [routerLink]="['./' + systemRoutes.callsHistory]"
+                [class.selected]="currentSelectedTab == tabs.calls" (click)="currentSelectedTab = tabs.calls;toggleNav()">
+                <i class="fa fa-calendar" aria-hidden="true"></i><span class="nav-text"> Calls History</span></li>
+            <li placement="right" ngbTooltip="Quote History" class="list-group-item pointer" [routerLink]="['./' + systemRoutes.quotesHistory]"
+                [class.selected]="currentSelectedTab == tabs.quotes" (click)="currentSelectedTab = tabs.quotes;toggleNav()">
+                <i class="fa fa-calendar-check-o" aria-hidden="true"></i><span class="nav-text"> Quotes History</span></li>
+            <li placement="right" ngbTooltip="My Profile" class="list-group-item pointer" [routerLink]="['./' + systemRoutes.myProfile]"
+                [class.selected]="currentSelectedTab == tabs.profile" (click)="currentSelectedTab = tabs.profile;toggleNav()">
+                <i class="fa fa-user" aria-hidden="true"></i><span class="nav-text"> My Profile</span></li>
+            <li placement="right" ngbTooltip="Change Password" class="list-group-item pointer" [routerLink]="['./' + systemRoutes.changePassword]"
+                [class.selected]="currentSelectedTab == tabs.changePassword" (click)="currentSelectedTab = tabs.changePassword;toggleNav()">
+                <i class="fa fa-user" aria-hidden="true"></i><span class="nav-text"> Change Password</span></li>
+        </ul>
+    </div>
+    <div class="panel-content" id="main" *ngIf="showContent">
+        <router-outlet></router-outlet>
     </div>
 </div>

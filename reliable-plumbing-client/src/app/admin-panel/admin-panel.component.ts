@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { EnvironmentService, RouteHandlerService } from '../services/services.exports';
+import { EnvironmentService, RouteHandlerService, NavEventsService } from '../services/services.exports';
 import { Router, NavigationEnd } from '@angular/router';
 import { Role } from '../models/enums';
 import { systemRoutes } from '../models/constants';
+import { Subscription } from 'rxjs/Subscription';
 
 @Component({
   selector: 'rb-admin-panel',
@@ -27,14 +28,17 @@ export class AdminPanelComponent implements OnInit {
     changePassword: { index: 9, hasPermission: true },
   }
   systemRoutes = systemRoutes;
+  navSubscription: Subscription;
 
-  constructor(private environmentService: EnvironmentService, private router: Router, private routeHandlerService: RouteHandlerService) { }
+  constructor(private environmentService: EnvironmentService, private router: Router, private routeHandlerService: RouteHandlerService,
+  private navEventsService: NavEventsService) { }
 
   ngOnInit() {
     this.currentUser = this.environmentService.currentUser;
     this.constructTabsPermissions();
     this.subscribeToRouterEvents();
     this.setCurrentTabFromUrl(this.router.url);
+    this.navSubscription = this.navEventsService.nav.subscribe(() => this.toggleNav());
   }
 
 
@@ -106,5 +110,9 @@ export class AdminPanelComponent implements OnInit {
     else
       this.showContent = true;
 
+  }
+
+  ngOnDestroy(){
+    this.navSubscription.unsubscribe();
   }
 }

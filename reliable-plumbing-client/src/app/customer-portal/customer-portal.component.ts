@@ -45,4 +45,19 @@ export class CustomerPortalComponent implements OnInit {
       this.currentSelectedTab = this.tabs.changePassword;
   }
 
+  showContent = true;
+  toggleNav(fromTogglerBtn = false) {
+    if (fromTogglerBtn || screen.width < 769) {
+      document.getElementById("mySidenav").classList.toggle("opened");
+      if (document.getElementById("main"))
+        document.getElementById("main").classList.toggle("opened");
+
+    }
+
+    if (screen.width < 769)
+      this.showContent = !this.showContent;
+    else
+      this.showContent = true;
+
+  }
 }

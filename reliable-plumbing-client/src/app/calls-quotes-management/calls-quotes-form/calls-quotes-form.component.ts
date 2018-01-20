@@ -155,7 +155,7 @@ export class CallsQuotesFormComponent implements OnInit {
   }
 
   nextStep() {
-    if (!this.adminMode && this.customerInfoForm.invalid) {
+    if ((!this.adminMode && this.customerInfoForm.invalid) || (this.adminMode && !this.existingCustomer && this.customerInfoForm.invalid)) {
       this.trySubmit = true;
       return;
     }

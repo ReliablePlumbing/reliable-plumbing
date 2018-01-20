@@ -1,7 +1,11 @@
 <header id="header">
     <div class="container-fluid">
         <nav class="navbar navbar-toggleable-md navbar-expand-lg">
-            <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            <button *ngIf="isControlPanel||isCustomerPortal" (click)="toggleNavigations()" class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon fa fa-bars"></span>
+            </button>
+            <button *ngIf="!isControlPanel&&!isCustomerPortal" class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
                 aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon fa fa-bars"></span>
             </button>
@@ -58,11 +62,11 @@
                         <li class="nav-item panel-link">
                             <ng-container *ngIf="isSystemUser">
                                 <a *ngIf="isControlPanel" [routerLink]="['/']" class="nav-link pointer">Home</a>
-                                <a *ngIf="!isControlPanel" [routerLink]="getDefaultPanelRoute()" class="nav-link pointer">Go to Panel</a>
+                                <a *ngIf="!isControlPanel" [routerLink]="getDefaultPanelRoute()" class="nav-link pointer">Panel</a>
                             </ng-container>
                             <ng-container *ngIf="!isSystemUser">
                                 <a *ngIf="isCustomerPortal" [routerLink]="['/']" class="nav-link pointer">Home</a>
-                                <a *ngIf="!isCustomerPortal" [routerLink]="getDefaultPanelRoute()" class="nav-link pointer">Go to Portal</a>
+                                <a *ngIf="!isCustomerPortal" [routerLink]="getDefaultPanelRoute()" class="nav-link pointer">Portal</a>
                             </ng-container>
                         </li>
                     </ng-container>
