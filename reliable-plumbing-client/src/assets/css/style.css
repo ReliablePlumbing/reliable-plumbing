@@ -956,20 +956,29 @@ form .btn {
     font-size: 12px; }
 
   ngb-datepicker {
-    font-size: 12px; }
+    font-size: 12px;
+    width: 100%; }
+    ngb-datepicker > .ngb-dp-months {
+      display: block !important; }
+      ngb-datepicker > .ngb-dp-months:last-child {
+        margin-left: 0 !important; }
+    ngb-datepicker .ngb-dp-header .btn-link:last-child {
+      position: absolute;
+      bottom: 41%;
+      right: 15px; }
 
   .ngb-dp-day {
-    width: 24px !important;
-    height: 24px !important; }
+    width: 42px !important;
+    height: 25px !important; }
     .ngb-dp-day .custom-day {
-      width: 24px !important;
-      height: 24px !important; }
+      width: 42px !important;
+      height: 25px !important; }
 
   .ngb-dp-day,
   .ngb-dp-weekday,
   .ngb-dp-week-number {
-    width: 24px !important;
-    height: 24px !important; }
+    width: 42px !important;
+    height: 25px !important; }
 
   .ngb-dp-header {
     height: 2.25rem !important;
