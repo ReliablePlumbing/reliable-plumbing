@@ -46,9 +46,6 @@
 
             <div class="quotes-cards-list">
               <div class="quote-card pointer" *ngFor="let quote of mappedQuotes[tab.id]" (click)="openQuoteDetailsModal(quote)">
-                <h6>
-                  <b>{{quote.fullName}}</b>
-                </h6>
                 <div>
                   <b>{{quote.type.name}}</b>
                 </div>

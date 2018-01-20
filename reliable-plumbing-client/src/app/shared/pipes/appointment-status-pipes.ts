@@ -10,17 +10,15 @@ export class AppointmentStatusColor implements PipeTransform {
     transform(status: AppointmentStatus) {
         switch (status) {
             case AppointmentStatus.Pending:
-                return 'pending'
+                return 'pending';
             case AppointmentStatus.Confirmed:
-                return 'confirmed'
-            case AppointmentStatus.NotAvailable:
-                return 'not-available'
+                return 'confirmed';
             case AppointmentStatus.Rejected:
-                return 'rejected'
+                return 'rejected';
             case AppointmentStatus.Canceled:
-                return ''
-            case AppointmentStatus.Rescheduled:
-                return ''
+                return 'cancelled';
+            case AppointmentStatus.Completed:
+                return 'completed';
             default:
                 break;
         }
@@ -35,17 +33,15 @@ export class AppointmentStatusTxt implements PipeTransform {
     transform(status: AppointmentStatus) {
         switch (status) {
             case AppointmentStatus.Pending:
-                return 'Pending'
+                return 'Pending';
             case AppointmentStatus.Confirmed:
-                return 'Confirmed'
-            case AppointmentStatus.NotAvailable:
-                return 'Not Available'
+                return 'Confirmed';
             case AppointmentStatus.Rejected:
-                return 'Rejected'
+                return 'Rejected';
             case AppointmentStatus.Canceled:
-                return ''
-            case AppointmentStatus.Rescheduled:
-                return ''
+                return 'Canceled';
+            case AppointmentStatus.Completed:
+                return 'Completed';
             default:
                 break;
         }

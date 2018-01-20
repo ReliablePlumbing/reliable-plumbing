@@ -41,12 +41,12 @@
                         </li>
                     </ng-container>
                     <ng-container *ngIf="isUserLoggedIn && currentUser != null">
-                        <li class="notification-container" placement="top" ngbTooltip="Notifications">
+                        <!-- <li class="notification-container" placement="top" ngbTooltip="Notifications">
                             <a class="nav-link pointer" [ngbPopover]="notificationsContent" popoverTitle="Notifications" placement="bottom" #p="ngbPopover"
                                 closePopoverOnOutsideClick>
                                 <i class="fa fa-bell" style="font-size: 22px;" aria-hidden="true"></i>
                             </a>
-                        </li>
+                        </li> -->
                         <li class="nav-item">
                             <div ngbDropdown>
                                 <a class="nav-link pointer">{{currentUser.firstName + ' ' + currentUser.lastName}}</a>
@@ -86,7 +86,7 @@
                 </div>
                 <div class="credits">
                     Designed and Developed by
-                    <a href="#">BearToe Design</a>
+                    <a href="#">Your Simple IT</a>
                 </div>
             </div>
         </div>

@@ -83,7 +83,7 @@
                             <!-- appointments Listing -->
                             <ng-container *ngIf="!loadingFiltered">
                                 <br />
-                                <h3>Appointemts List</h3>
+                                <!-- <h3>Appointemts List</h3> -->
                                 <div class="appointemts-list" *ngFor="let date of datesArrayBetweenFilterDates">
                                     <h5>{{date | date}}</h5>
                                     <div class="section-title-divider"></div>
@@ -107,7 +107,7 @@
                                             </div>
                                             <div class="appointemt-quote">
                                                 <span>
-                                                    <b>Quote Estimate: </b> 
+                                                    <b>Quote Estimate </b> 
                                                     <ng-container *ngIf="appointment.quoteTotalEstimate!= null">
                                                         {{appointment.quoteTotalEstimate}}
                                                         <a (click)="$event.stopPropagation();openQuoteDetails(appointment.quote)" class="btn btn-link"><b>(Details)</b></a>

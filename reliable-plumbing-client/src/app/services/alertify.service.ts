@@ -40,4 +40,8 @@ export class AlertifyService {
           this.router.navigateByUrl(notification.url)
         });
   }
+
+  alert(message: string){
+    this.notifier.alert(message);
+  }
 }

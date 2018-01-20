@@ -22,7 +22,7 @@ export class AppointmentController {
     }
 
     @Post('/getAppointmentsFiltered')
-    @Authorized([Role.Supervisor, Role.Admin, Role.SystemAdmin])
+    @Authorized([Role.Supervisor, Role.Admin, Role.SystemAdmin, Role.Customer])
     getAppointmentsFiltered( @Body() filters) {
         return new Promise<Appointment[]>((resolve, reject) => {
             this.appointmentManager.getAppointmentFiltered(filters).then(appointments => {
@@ -75,7 +75,7 @@ export class AppointmentController {
     }
 
     @Post('/updateAppointmentStatusAndAssignees')
-    @Authorized([Role.Supervisor, Role.Admin, Role.SystemAdmin])
+    @Authorized([Role.Supervisor, Role.Admin, Role.SystemAdmin, Role.Customer])
     updateAppointmentStatusAndAssignees( @Body() appointment) {
         return new Promise<any>((resolve, reject) => {
             this.appointmentManager.updateAppointmentStatusAndAssignees(appointment)

@@ -23,6 +23,7 @@ export class Appointment extends BaseEntity {
     }
     userId?: string;
     siteId?: string;
+    rate?: number;
     date: Date;
     typeId: string;
     quoteId?: string;
@@ -55,6 +56,7 @@ export class Appointment extends BaseEntity {
             this.userId = appointment.userId;
             this.siteId = appointment.siteId;
             this.quoteId = appointment.quoteId;
+            this.rate = appointment.rate;
             this.date = appointment.date;
             this.typeId = appointment.typeId;
             this.message = appointment.message;
@@ -92,6 +94,7 @@ export class Appointment extends BaseEntity {
             quoteId: this.quoteId,
             date: this.date,
             typeId: this.typeId,
+            rate: this.rate,
             message: this.message,
             status: this.status,
             user: this.user == null ? null : this.user.toLightModel(),

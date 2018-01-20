@@ -178,7 +178,7 @@ export class ScheduleManagementComponent implements OnInit {
       if (this.appointments[appointmentDate] == null)
         this.appointments[appointmentDate] = [];
 
-      let typeId = appointment.typeId == '-1' ? appointment.quote.typeId : appointment.typeId;
+      let typeId = appointment.typeId ? appointment.typeId : appointment.quote.typeId;
       let typeIndex = this.lookups.types.findIndex(t => t.id == typeId)
       if (typeIndex != -1)
         appointment.typeObj = this.lookups.types[typeIndex];

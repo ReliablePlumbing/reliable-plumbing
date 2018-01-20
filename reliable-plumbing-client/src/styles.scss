@@ -71,15 +71,19 @@ select {
 }
 
 .appointemt-status.confirmed {
-    background-color: #719ad2;
+    background-color: #005c1f;
 }
 
-.appointemt-status.not-available {
-    background-color: #93745f;
+.appointemt-status.completed {
+    background-color: #2204a9;
 }
 
 .appointemt-status.rejected {
     background-color: #FF3B30;
+}
+
+.appointemt-status.cancelled {
+    background-color: #e8ff1a;
 }
 
 .greenBg {

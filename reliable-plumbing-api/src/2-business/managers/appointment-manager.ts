@@ -60,12 +60,14 @@ export class AppointmentManager {
 
     getAppointmentFiltered(filters) {
 
-        let fromDate = this.constructAppointmentDate(filters.date.from, filters.time.from);
-        let toDate = filters.date.to == null ? null : this.constructAppointmentDate(filters.date.to, filters.time.to);
+        let fromDate = (filters.date && filters.date.from) ? this.constructAppointmentDate(filters.date.from, filters.time.from) : null;
+        let toDate = (filters.date && filters.date.to) ? this.constructAppointmentDate(filters.date.to, filters.time.to) : null;
         return new Promise<Appointment[]>((resolve, reject) => {
-            this.appointmentRepo.getAppointmentsFilteredByDatesAndStatusAndType(fromDate, toDate, filters.status, filters.typeIds)
+            this.appointmentRepo.getAppointmentsFilteredByDatesAndStatusAndType(fromDate, toDate, filters.status, filters.typeIds, filters.userIds)
                 .then(results => {
-                    let filteredAppointments = this.filterAppointmentsByTime(filters.time.from, filters.time.to, results);
+                    let filteredAppointments = results;
+                    if (filters.time)
+                        filteredAppointments = this.filterAppointmentsByTime(filters.time.from, filters.time.to, results);
                     return resolve(filteredAppointments);
                 }).catch((error: Error) => reject(error));
         })
@@ -93,7 +95,7 @@ export class AppointmentManager {
 
                 // todo: get boundaries from settings
                 let boundaryDates = this.getPossibleOverlappingDates(appointment.date, 4);
-                let filterStatus = [AppointmentStatus.Pending, AppointmentStatus.NotAvailable, AppointmentStatus.Confirmed]
+                let filterStatus = [AppointmentStatus.Pending, AppointmentStatus.Rejected, AppointmentStatus.Confirmed]
                 let technicianIds = technicians.map(tech => tech.id);
 
                 this.appointmentRepo.getAppointmentsFilteredByDatesAndStatusAndType(boundaryDates.from, boundaryDates.to, filterStatus, null)
@@ -132,6 +134,7 @@ export class AppointmentManager {
                 let oldAssignees = oldAppointment.assigneeIds;
                 let newAssignees = appointment.assigneeIds;
                 oldAppointment.assigneeIds = appointment.assigneeIds;
+                oldAppointment.rate = appointment.rate;
 
                 this.appointmentRepo.updateAppointment(oldAppointment).then(result => {
                     this.sendAppointmentUpdatedNotification(oldStatus, newStatus, oldAssignees, newAssignees, appointment);
@@ -247,7 +250,7 @@ export class AppointmentManager {
         }
         if (appointment.date == null)
             errors.push('appointment date cann\'t be empty');
-        if (appointment.typeId == null)
+        if (!appointment.quoteId &&appointment.typeId == null)
             errors.push('appointment type cann\'t be empty');
 
         return errors;

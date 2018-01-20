@@ -24,10 +24,13 @@ export class AppointmentDetailsComponent implements OnInit {
   mappedTechnicians;
   appointmentStatusEnum = AppointmentStatus;
   @Output() appointmentUpdated = new EventEmitter<any>();
+  allowedStatus = [];
+
 
   constructor(private appointmentService: AppointmentService, private alertifyService: AlertifyService, private environmentService: EnvironmentService) { }
 
   ngOnInit() {
+    this.getAllowedStatuses();
     this.mappedAppointment = this.mapAppointment(this.appointment);
     this.appointmentService.getTechniciansWithStatusInTime(this.appointment.id).subscribe(results => {
       this.technicians = results;
@@ -109,5 +112,29 @@ export class AppointmentDetailsComponent implements OnInit {
       this.appointmentUpdated.emit(x);
       this.alertifyService.success('Appointment updated successfully');
     })
+  }
+
+  getAllowedStatuses() {
+    let status = this.appointment.status;
+    let isExistingUser = this.appointment.userId != null;
+
+    switch (status) {
+      case AppointmentStatus.Pending:
+        this.allowedStatus = [ AppointmentStatus.Pending, AppointmentStatus.Confirmed, AppointmentStatus.Rejected];
+        break;
+      case AppointmentStatus.Confirmed:
+        this.allowedStatus = [AppointmentStatus.Confirmed, AppointmentStatus.Canceled];
+        if (!isExistingUser)
+          this.allowedStatus.push(AppointmentStatus.Completed);
+        break;
+      case AppointmentStatus.Rejected:
+      case AppointmentStatus.Canceled:
+      case AppointmentStatus.Completed:
+        this.allowedStatus = [];
+        break;
+    }
+
+
+
   }
 }

@@ -2,64 +2,65 @@
 
 <ng-container *ngIf="!loading">
   <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-3">
       <label>
-        <b>Name:</b>
+        <b>Name</b>
       </label>
     </div>
-    <div class="col-md-8">
+    <div class="col-md-9">
       <span>{{appointment?.user == null ? appointment?.fullName : appointment?.user?.firstName + ' ' + appointment?.user?.lastName}}</span>
     </div>
   </div>
   <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-3">
       <label>
         <b>Appointment Date:</b>
       </label>
     </div>
-    <div class="col-md-8">
+    <div class="col-md-9">
       <span>{{mappedAppointment?.date | date}}</span>
     </div>
   </div>
   <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-3">
       <label>
         <b>Appointment Time:</b>
       </label>
     </div>
-    <div class="col-md-8">
+    <div class="col-md-9">
       <span>{{mappedAppointment?.time}}</span>
     </div>
   </div>
-  <div class="btn-group status-btns-group">
-    <label class="btn btn-secondary">
-      <input type="radio" name="appointmentStatus" [checked]="mappedAppointment.status.id == appointmentStatusEnum.Pending" (click)="changeAppointmentStatus(appointmentStatusEnum.Pending)"
-      />Pending
-    </label>
-    <label class="btn btn-secondary">
-      <input type="radio" name="appointmentStatus" [checked]="mappedAppointment.status.id == appointmentStatusEnum.Confirmed" (click)="changeAppointmentStatus(appointmentStatusEnum.Confirmed)"
-      />Confirm
-    </label>
-    <label class="btn btn-secondary">
-      <input type="radio" name="appointmentStatus" [checked]="mappedAppointment.status.id == appointmentStatusEnum.NotAvailable"
-        (click)="changeAppointmentStatus(appointmentStatusEnum.NotAvailable)" />Not available
-    </label>
-    <label class="btn btn-secondary">
-      <input type="radio" name="appointmentStatus" [checked]="mappedAppointment.status.id == appointmentStatusEnum.Rejected" (click)="changeAppointmentStatus(appointmentStatusEnum.Rejected)"
-      />Reject
-    </label>
+  <div class="row justify-content-center">
+    <div class="btn-group status-btns-group">
+      <label class="btn btn-info pointer" *ngFor="let status of allowedStatus" [class.selected-status-btn]="mappedAppointment.status.id == status">
+        <input type="radio" name="appointmentStatus" [checked]="mappedAppointment.status.id == status" (click)="changeAppointmentStatus(status)"
+        />{{status | appointmentStatusTxt}}
+      </label>
+    </div>
   </div>
 
   <div class="row">
-    <p-galleria *ngIf="mappedAppointment.images.length>0" [images]="mappedAppointment.images" panelWidth="500" panelHeight="313" [showCaption]="false"></p-galleria>
+    <p-galleria *ngIf="mappedAppointment.images.length>0" [images]="mappedAppointment.images" panelWidth="500" panelHeight="313"
+      [showCaption]="false"></p-galleria>
   </div>
 
-  <h5>Assignees:
-    <span class="tag" *ngFor="let assignee of mappedAppointment.assignees">
-      {{assignee.technician.firstName}}
-      <span (click)="removeAssignee(assignee)">x</span>
-    </span>
-  </h5>
+  <div class="row">
+    <div class="col-md-3">
+      <label>
+        <b>Assignees</b>
+      </label>
+    </div>
+
+    <div class="col-md-9">
+      <ul class="tags">
+        <li class="tagg" *ngFor="let assignee of mappedAppointment.assignees">
+          {{assignee.technician.firstName + ' ' + (assignee.technician.lastName ? assignee.technician.lastName: '')}}
+          <span (click)="removeAssignee(assignee)">x</span>
+        </li>
+      </ul>
+    </div>
+  </div>
 
   <table class="table table-bordered table-scrollable">
     <thead>

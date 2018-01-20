@@ -1,4 +1,3 @@
-<button *ngIf="mode != modes.addCall" class="btn btn-success" (click)="setMode(modes.addCall)">New Call</button>
 <div class="row">
   <div class="col-sm-12">
 
@@ -14,6 +13,136 @@
   <message [text]="'Saved Successfully'"></message>
 </ng-container>
 
-<ng-container *ngIf="mode == modes.history">
+<ng-container *ngIf="!loading&&mode==modes.history">
 
+  <section class="listing-content">
+
+    <button *ngIf="mode != modes.addCall" class="btn btn-success pull-right" (click)="setMode(modes.addCall)">New Call</button>
+
+    <ngb-tabset type="pills">
+      <ngb-tab *ngFor="let pill of pills" [title]="pill.text + ' (' + mappedCalls[pill.id].length + ')'" [id]="pill.id">
+        <ng-template ngbTabContent>
+
+          <ng-container *ngIf="pill.id == statusEnum.Confirmed">
+            <div class="custom-list calls-list">
+              <h5>Previous</h5>
+              <div class="section-title-divider"></div>
+
+              <div class="calls-cards-list">
+                <div class="call-card" *ngFor="let call of mappedCalls[pill.id].done">
+                  <div>
+                  </div>
+                  <div>
+                    <b>{{call.typeObj?.text}}</b>
+                  </div>
+                  <div class="call-quote">
+                    <span>
+                      <b>Quote Estimate </b>
+                      <ng-container *ngIf="call.quoteTotalEstimate!= null">
+                        {{call.quoteTotalEstimate}}
+                        <a (click)="$event.stopPropagation();openQuoteDetails(call.quote, quoteDetails)" class="btn btn-link">
+                          <b>(Details)</b>
+                        </a>
+                      </ng-container>
+                      <ng-container *ngIf="call.quoteTotalEstimate == null">
+                        No Attached Quote
+                      </ng-container>
+                    </span>
+                  </div>
+                  <div class="call-date">
+                    <b>{{call.date | date:'EEE, MMM dd yyyy, hh:mm a'}}</b>
+                  </div>
+                  <div>
+                    <ngb-rating class="rating-call" [max]="5" [(rate)]="call.rate"></ngb-rating>
+                    <button class="pull-right btn btn-success btn-sm" (click)="changeCallStatus(call, statusEnum.Completed)">Complete</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="custom-list calls-list">
+              <h5>Up Coming</h5>
+              <div class="section-title-divider"></div>
+              <div class="calls-cards-list">
+                <div class="call-card" *ngFor="let call of mappedCalls[pill.id].upcoming">
+                  <div>
+                    <b>{{call.typeObj?.text}}</b>
+                  </div>
+                  <div class="call-quote">
+                    <span>
+                      <b>Quote Estimate </b>
+                      <ng-container *ngIf="call.quoteTotalEstimate!= null">
+                        {{call.quoteTotalEstimate}}
+                        <a (click)="$event.stopPropagation();openQuoteDetails(call.quote, quoteDetails)" class="btn btn-link">
+                          <b>(Details)</b>
+                        </a>
+                      </ng-container>
+                      <ng-container *ngIf="call.quoteTotalEstimate == null">
+                        No Attached Quote
+                      </ng-container>
+                    </span>
+                  </div>
+                  <div class="call-date">
+                    <b>{{call.date | date:'EEE, MMM dd yyyy, hh:mm a'}}</b>
+                  </div>
+                  <div>
+                    <button class="pull-right btn btn-danger btn-sm"  (click)="changeCallStatus(call, statusEnum.Canceled)">Cancel</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </ng-container>
+
+          <ng-container *ngIf="pill.id != statusEnum.Confirmed">
+            <div class="calls-list">
+              <div class="calls-cards-list">
+                <div class="call-card" *ngFor="let call of mappedCalls[pill.id]">
+                  <div>
+                    <b>{{call.typeObj?.text}}</b>
+                  </div>
+                  <div class="call-quote">
+                    <span>
+                      <b>Quote Estimate </b>
+                      <ng-container *ngIf="call.quoteTotalEstimate!= null">
+                        {{call.quoteTotalEstimate}}
+                        <a (click)="$event.stopPropagation();openQuoteDetails(call.quote, quoteDetails)" class="btn btn-link">
+                          <b>(Details)</b>
+                        </a>
+                      </ng-container>
+                      <ng-container *ngIf="call.quoteTotalEstimate == null">
+                        No Attached Quote
+                      </ng-container>
+                    </span>
+                  </div>
+                  <div class="call-date">
+                    <b>{{call.date | date:'EEE, MMM dd yyyy, hh:mm a'}}</b>
+                  </div>
+                  <div>
+                    <button class="pull-right btn btn-danger btn-sm">Cancel</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </ng-container>
+
+        </ng-template>
+      </ngb-tab>
+
+    </ngb-tabset>
+  </section>
 </ng-container>
+
+
+<ng-template #quoteDetails let-c="close" let-d="dismiss">
+  <div class="modal-header">
+    <h5 class="modal-title">Quote Details</h5>
+    <button type="button" class="close" aria-label="Close" (click)="closeQuoteDetailsModal()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <rb-quote-details [quote]="selectedQuote" (close)="closeQuoteDetailsModal()"></rb-quote-details>
+  </div>
+
+</ng-template>

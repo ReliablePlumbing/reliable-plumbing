@@ -10,18 +10,21 @@ export class AppointmentRepo extends Repo<Appointment> {
         super(appointmentSchema)
     }
 
-    getAppointmentsFilteredByDatesAndStatusAndType(from: Date, to: Date, status: AppointmentStatus[], typeids: string[]) {
+    getAppointmentsFilteredByDatesAndStatusAndType(from?: Date, to?: Date, status?: AppointmentStatus[], typeids?: string[], userIds?: string[]) {
         let model = this.createSet();
 
-        let filterObj: any = {
-            date: { $gt: from },
-        };
+        let filterObj: any = {};
+
+        if (from != null)
+            filterObj.date = { $gt: from };
         if (to != null)
             filterObj.date.$lt = to;
         if (status != null && status.length > 0)
             filterObj.status = { $in: status };
         if (typeids != null && typeids.length > 0)
             filterObj.typeId = { $in: typeids };
+        if (userIds && userIds.length > 0)
+            filterObj.userId = { $in: userIds };
 
         return new Promise<Appointment[]>((resolve, reject) => {
 

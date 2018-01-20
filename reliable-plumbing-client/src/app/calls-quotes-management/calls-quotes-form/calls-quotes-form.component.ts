@@ -29,13 +29,7 @@ export class CallsQuotesFormComponent implements OnInit {
   isLoggedIn: boolean = false;
   images = [];
   appointment: any = {
-    customerInfo: {
-      state: 'California'
-    },
-    preferedContactType: 'Email',
-    typeId: '-1',
-    time: '-1',
-    siteId: '-1'
+    time: '-1'
   };
   mobileMaskOpts = {
     mask: ['(', /[1-9]/, /\d/, /\d/, ')', ' ', /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/],
@@ -78,7 +72,9 @@ export class CallsQuotesFormComponent implements OnInit {
     this.appointmentForm = this.fb.group({});
 
     if (!this.forQuote) {
-      this.appointmentForm.addControl('appointmentType', new FormControl(null, [this.validateDropdownRequired]))
+      this.appointment.typeId = '-1';
+      this.appointment.preferedContactType = 'Email';
+      this.appointmentForm.addControl('appointmentType', new FormControl(null, [this.validateDropdownRequired]));
       this.appointmentForm.addControl('message', new FormControl(null))
     }
 
@@ -103,21 +99,26 @@ export class CallsQuotesFormComponent implements OnInit {
     }
 
     if (!this.isLoggedIn || this.adminMode) {
-      this.customerInfoForm = this.fb.group({
-        firstName: [null, [Validators.required]],
-        lastName: [null],
-        email: [null, [Validators.required, Validators.email]],
-        mobile: [null, [Validators.required]],
-        street: [null, [Validators.required]],
-        city: [null, [Validators.required]],
-        state: [null, [Validators.required]],
-        zipCode: [null]
-      });
+      this.appointment.customerInfo = {
+        state: 'California'
+      },
+        this.customerInfoForm = this.fb.group({
+          firstName: [null, [Validators.required]],
+          lastName: [null],
+          email: [null, [Validators.required, Validators.email]],
+          mobile: [null, [Validators.required]],
+          street: [null, [Validators.required]],
+          city: [null, [Validators.required]],
+          state: [null, [Validators.required]],
+          zipCode: [null]
+        });
       //California
       this.customerInfoForm.controls['state'].disable();
     }
-    else if (!this.forQuote)
+    else if (!this.forQuote) {
+      this.appointment.siteId = '-1';
       this.appointmentForm.addControl('site', new FormControl(null, this.validateDropdownRequired));
+    }
   }
 
   validateDropdownRequired(control: AbstractControl) {

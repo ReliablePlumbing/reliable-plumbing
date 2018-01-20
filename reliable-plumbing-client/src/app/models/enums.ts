@@ -34,10 +34,9 @@ export enum regControls {
 export enum AppointmentStatus {
     Pending = 1,
     Confirmed,
-    NotAvailable,
-    Rescheduled,
+    Rejected,
     Canceled,
-    Rejected
+    Completed
 }
 
 export enum QuoteStatus {
