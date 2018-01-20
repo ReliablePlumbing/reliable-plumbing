@@ -162,7 +162,8 @@ input[type=radio] {
     display: none !important; }
 
   .admin-panel {
-    position: relative; }
+    position: relative;
+    display: block; }
 
   .schedule-content {
     margin-top: 30px !important; }
@@ -171,7 +172,11 @@ input[type=radio] {
     display: none;
     width: 50px; }
     .sidenav .list-group-item {
-      padding: 6px 11px; }
+      padding: 6px 11px;
+      padding: 6px 11px;
+      border: 1px solid #ddd !important;
+      margin: 5px 0;
+      text-align: center; }
     .sidenav .list-group {
       padding-top: 50px !important; }
 
@@ -186,7 +191,7 @@ input[type=radio] {
   .sidenav.opened {
     display: block;
     width: 100%;
-    position: absolute;
+    position: relative;
     height: inherit;
     box-shadow: 1px 4px 6px #ddd; }
 
