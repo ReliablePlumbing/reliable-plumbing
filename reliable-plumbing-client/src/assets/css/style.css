@@ -103,13 +103,16 @@ input[type=radio] {
   transition: 0.5s; }
   .sidenav .list-group {
     min-height: inherit !important; }
+    .sidenav .list-group .list-group-item {
+      padding: 8px 12px !important;
+      margin-bottom: 2px; }
   .sidenav li i {
     display: inline-block; }
   .sidenav li span {
     display: inline-block; }
 
 .sidenav {
-  width: 68px;
+  width: 52px;
   transition: all 0.3s; }
   .sidenav ul li span {
     display: none;
@@ -150,7 +153,7 @@ input[type=radio] {
   display: inline-block;
   transition: all 0.3s;
   padding: 16px;
-  width: calc(100% - 73px);
+  width: calc(100% - 52px);
   min-height: 80vh; }
 
 #main.opened {
@@ -186,7 +189,8 @@ input[type=radio] {
     line-height: 22px; }
 
   #main {
-    width: 100%; }
+    width: 100%;
+    padding-top: 50px; }
 
   .sidenav.opened {
     display: block;

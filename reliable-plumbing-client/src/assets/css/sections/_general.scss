@@ -110,6 +110,10 @@ input[type=radio] {
     transition: 0.5s;
     .list-group {
         min-height: inherit !important;
+        .list-group-item {
+            padding: 8px 12px !important;
+            margin-bottom: 2px;
+        }
     }
     li {
         i {
@@ -122,7 +126,7 @@ input[type=radio] {
 }
 
 .sidenav {
-    width: 68px;
+    width: 52px;
     transition: all 0.3s;
     ul {
         li {
@@ -179,7 +183,7 @@ input[type=radio] {
     display: inline-block;
     transition: all 0.3s;
     padding: 16px;
-    width: calc(100% - 73px);
+    width: calc(100% - 52px);
     min-height: 80vh;
 }
 
@@ -222,6 +226,7 @@ input[type=radio] {
     }
     #main {
         width: 100%;
+        padding-top: 50px;
     }
     .sidenav.opened {
         display: block;
