@@ -18,6 +18,9 @@ export class HomeComponent implements OnInit, AfterViewInit {
   constructor(private activatedRoute: ActivatedRoute, private modalService: NgbModal, private environmentService: EnvironmentService) { }
 
   ngOnInit() {
+      $(".navbar-nav li a").click(function (event) {
+        $(".navbar-collapse").collapse('hide');
+      });
   }
 
   checkSystemUser(){

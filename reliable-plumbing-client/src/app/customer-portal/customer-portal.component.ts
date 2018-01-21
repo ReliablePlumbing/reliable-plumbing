@@ -25,6 +25,9 @@ export class CustomerPortalComponent implements OnInit {
     this.currentSelectedTab = this.tabs.calls;
     this.subscribeToRouterEvents();
     this.setCurrentTabFromUrl(this.router.url);
+    $(".navbar-nav li a").click(function (event) {
+      $(".navbar-collapse").collapse('hide');
+    });
   }
 
   subscribeToRouterEvents() {
