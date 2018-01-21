@@ -29,7 +29,7 @@ export class RouteHandlerService {
           break;
         }
         else if (role == Role.Admin || role == Role.SystemAdmin || role == Role.Supervisor) {
-          route = 'control-panel/schedule-management';
+          route = 'control-panel/dashboard';
           break;
         }
         else if(role == Role.Customer)
