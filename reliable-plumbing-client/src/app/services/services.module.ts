@@ -13,14 +13,17 @@ import { SocketsService } from './sockets.service';
 import { AuthService } from './auth.service';
 import { UserManagementService } from './user-management.service';
 import { QuoteService } from './quote.service';
+import { NavEventsService } from './nav-events.service';
 
 @NgModule({
   imports: [
     CommonModule
   ],
   declarations: [],
-  providers: [HttpExtensionService, UserManagementService, EnvironmentService, ExceptionHandlingService, AlertifyService, RouteHandlerService,
-    AuthGuard, LoginAuthGuard, LookupsService, AppointmentService, NotificationService, SocketsService, AuthService, QuoteService
+  providers: [
+    HttpExtensionService, UserManagementService, EnvironmentService, ExceptionHandlingService, AlertifyService, RouteHandlerService,
+    AuthGuard, LoginAuthGuard, LookupsService, AppointmentService, NotificationService, SocketsService, AuthService, QuoteService,
+    NavEventsService
   ]
 })
 export class ServicesModule { }

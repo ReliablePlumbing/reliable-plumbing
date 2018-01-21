@@ -22,6 +22,8 @@
     }
 }
 
+
+
 .list-group {
     min-height: 100vh;
     height: 100%;
@@ -48,8 +50,18 @@
     }
 }
 
+.home-item{
+    display: none;
+}
+
 @media (max-width: 768px) {
     .list-group {
         min-height: inherit !important;
+    }
+    .toggle-nav {
+        display: none;
+    }
+    .home-item{
+        display: block;
     }
 }

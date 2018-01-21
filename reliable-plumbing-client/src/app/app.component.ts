@@ -1,5 +1,5 @@
 import { Component, ViewChild, ElementRef } from '@angular/core';
-import { NotificationService, SocketsService, EnvironmentService, RouteHandlerService } from './services/services.exports';
+import { NotificationService, SocketsService, EnvironmentService, RouteHandlerService, NavEventsService } from './services/services.exports';
 import { ActivatedRoute, Router, NavigationEnd } from '@angular/router';
 import { NgbModal, NgbModalRef, NgbPopover } from '@ng-bootstrap/ng-bootstrap';
 import { Role, RegistrationMode } from './models/enums';
@@ -26,7 +26,8 @@ export class AppComponent {
   isCustomerPortal = false;
 
   constructor(private socketsSerivce: SocketsService, private notificationService: NotificationService, private router: Router,
-    private modalService: NgbModal, private environmentService: EnvironmentService, private routeHandlerService: RouteHandlerService) { }
+    private modalService: NgbModal, private environmentService: EnvironmentService, private routeHandlerService: RouteHandlerService,
+    private navEventsSevice: NavEventsService) { }
 
   ngOnInit() {
     this.notificationService.connectSockets();
@@ -38,6 +39,13 @@ export class AppComponent {
         this.isControlPanel = this.router.url.indexOf(systemRoutes.controlPanel) != -1;
       if (!this.isControlPanel)
         this.isCustomerPortal = this.router.url.indexOf(systemRoutes.customerPortal) != -1;
+    });
+
+    // for closing the navbar when any item is clicked
+    $(document).ready(function () {
+      $(".navbar-nav li a").click(function (event) {
+        $(".navbar-collapse").collapse('hide');
+      });
     });
   }
 
@@ -67,4 +75,8 @@ export class AppComponent {
   }
 
   closeNotifications = () => this.notificationsPopover.close();
+
+  toggleNavigations() {
+    this.navEventsSevice.navCicked();
+  }
 }
