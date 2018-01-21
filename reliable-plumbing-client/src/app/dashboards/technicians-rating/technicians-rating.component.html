@@ -1,3 +1,5 @@
-<p>
-  technicians-rating works!
-</p>
+<loader *ngIf="loading">
+  </loader>
+  
+  
+  <p-chart *ngIf="!loading" type="horizontalBar" [data]="data" [options]="options"></p-chart>

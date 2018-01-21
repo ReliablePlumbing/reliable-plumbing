@@ -11,6 +11,7 @@ export class DashboardController {
     private dashboardManager: DashboardManager;
 
     @Get('/getServicesStats')
+    @Authorized()
     addAppointment() {
         return new Promise<any>((resolve, reject) => {
             this.dashboardManager.getServicesStats()
@@ -19,6 +20,38 @@ export class DashboardController {
         })
     }
 
+    @Get('/getTechniciansCallsStats')
+    @Authorized()
+    getTechniciansCallsStats() {
+        return new Promise<any>((resolve, reject) => {
+            this.dashboardManager.getTechniciansCallsStats()
+                .then((result: any) => resolve(result))
+                .catch((error: Error) => reject(error));
+
+        });
+    }
+
+    @Get('/getTechniciansRating')
+    @Authorized()
+    getTechniciansRating() {
+        return new Promise<any>((resolve, reject) => {
+            this.dashboardManager.getTechniciansRating()
+                .then((result: any) => resolve(result))
+                .catch((error: Error) => reject(error));
+
+        });
+    }
+
+    @Get('/getCallsCounts')
+    @Authorized()
+    getCallsCounts() {
+        return new Promise<any>((resolve, reject) => {
+            this.dashboardManager.getCallsCounts()
+                .then((result: any) => resolve(result))
+                .catch((error: Error) => reject(error));
+
+        });
+    }
 
 
 }

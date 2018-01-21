@@ -1,1 +1,73 @@
-<rb-services-dashboard></rb-services-dashboard>
+<div class="dashboard-wrapper">
+    <loader *ngIf="loading"></loader>
+
+    <ng-container *ngIf="!loading">
+        <div class="row calls-count-wrapper">
+            <div class="col">
+                <div class="colorbox completed">
+                    <div class="icon-cont">
+                        <i class="fa fa-check-square-o" aria-hidden="true"></i>
+                    </div>
+                    <div class="data-cont">
+                        Completed
+                        <span>{{callsCounts.completed}}</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="colorbox pending">
+                    <div class="icon-cont">
+                        <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+                    </div>
+                    <div class="data-cont">
+                        Pending
+                        <span>{{callsCounts.pending}}</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="colorbox upcomming">
+                    <div class="icon-cont">
+                        <i class="fa fa-clock-o" aria-hidden="true"></i>
+                    </div>
+                    <div class="data-cont">
+                        Upcomming
+                        <span>{{callsCounts.upcoming}}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </ng-container>
+
+
+
+
+    <div class="row">
+        <div class="col margin-10">
+            <p-panel header="Services Calls">
+                <rb-services-dashboard></rb-services-dashboard>
+            </p-panel>
+
+        </div>
+        <div class="col margin-10">
+            <p-panel header="Services Calls">
+                <rb-technicians-calls></rb-technicians-calls>
+            </p-panel>
+        </div>
+    </div>
+
+    <div class="row justify-content-center rate-chart">
+        <div class="col-lg-8 col-sm-12">
+            <p-panel header="Techicians Rating">
+                <rb-technicians-rating></rb-technicians-rating>
+            </p-panel>
+
+        </div>
+        <!-- <div class="col">
+            <p-panel header="Services Calls">
+                <rb-technicians-calls></rb-technicians-calls>
+            </p-panel>
+        </div> -->
+    </div>
+
+</div>

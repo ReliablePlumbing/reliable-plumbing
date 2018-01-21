@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { DashboardService } from '../../services/services.exports';
 
 @Component({
   selector: 'rb-dashboards',
@@ -7,9 +8,16 @@ import { Component, OnInit } from '@angular/core';
 })
 export class DashboardsComponent implements OnInit {
 
-  constructor() { }
+  loading;
+  callsCounts;
+  constructor(private dashboardService: DashboardService) { }
 
   ngOnInit() {
+    this.loading = true;
+    this.dashboardService.getCallsCounts().subscribe(results => {
+      this.loading = false;
+      this.callsCounts = results;
+    });
   }
 
 }

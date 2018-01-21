@@ -46,4 +46,71 @@ export class DashboardManager {
         return servicesStats;
     }
 
+    async getTechniciansCallsStats() {
+        let calls = await this.callsRepo.getAppointmentsFilteredByDatesAndStatusAndType(null, null, [AppointmentStatus.Completed]);
+        let technicians = await this.userRepo.getUsersByRoles([Role.Technician]);
+
+        let techiciansModel = [];
+        technicians.forEach(t => {
+            let model: any = t.toLightModel();
+            model.callsCount = calls.filter(call => {
+                return call.assigneeIds && call.assigneeIds.length > 0 &&
+                    call.assigneeIds.findIndex(assigneeId => assigneeId == t.id) != -1;
+            }).length;
+
+            techiciansModel.push(model);
+        });
+
+        return techiciansModel;
+
+    }
+
+    async getTechniciansRating() {
+        let calls = await this.callsRepo.getAppointmentsFilteredByDatesAndStatusAndType(null, null, [AppointmentStatus.Completed]);
+        let technicians = await this.userRepo.getUsersByRoles([Role.Technician]);
+
+        let techiciansModel = [];
+        technicians.forEach(t => {
+            let techModel: any = t.toLightModel();
+            let technicianRateSum = 0;
+            let technicianCallsCount = 0;
+            calls.forEach(call => {
+                if (call.rate && call.rate != 0 && call.assigneeIds && call.assigneeIds.length > 0 &&
+                    call.assigneeIds.findIndex(assigneeId => assigneeId == t.id) != -1) {
+                    technicianRateSum += call.rate;
+                    technicianCallsCount++;
+                }
+            });
+
+            techModel.rate = technicianRateSum / technicianCallsCount;
+            techiciansModel.push(techModel);
+        });
+
+        return techiciansModel;
+    }
+
+    async getCallsCounts() {
+        let calls = await this.callsRepo.getAppointmentsFilteredByDatesAndStatusAndType(null, null, [AppointmentStatus.Completed, AppointmentStatus.Pending, AppointmentStatus.Confirmed]);
+
+        let callsCounts = { completed: 0, pending: 0, upcoming: 0 };
+
+        calls.forEach(call => {
+            switch (call.status) {
+                case AppointmentStatus.Completed:
+                    callsCounts.completed++;
+                    break;
+                case AppointmentStatus.Pending:
+                    if (call.date > new Date())
+                        callsCounts.pending++;
+                    break;
+                case AppointmentStatus.Confirmed:
+                    if (call.date > new Date())
+                        callsCounts.upcoming++;
+                    break;
+            }
+        });
+
+        return callsCounts;
+    }
+
 }

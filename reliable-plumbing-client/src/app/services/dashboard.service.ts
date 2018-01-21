@@ -16,5 +16,20 @@ export class DashboardService {
       .map((response: Response) => response.json());
   }
 
+  getTechniciansCallsStats(): Observable<any> {
+    return this.httpService.get(this.basePath + 'getTechniciansCallsStats')
+      .map((response: Response) => response.json());
+  }
+
+  getTechniciansRating(): Observable<any> {
+    return this.httpService.get(this.basePath + 'getTechniciansRating')
+      .map((response: Response) => response.json());
+  }
+
+  getCallsCounts(): Observable<any> {
+    return this.httpService.get(this.basePath + 'getCallsCounts')
+      .map((response: Response) => response.json());
+  }
+
 }
 

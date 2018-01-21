@@ -177,16 +177,16 @@ input[type=radio] {
   text-align: center;
   overflow: hidden;
   display: flex;
-  height: 90px;
+  height: 70px;
   color: #fff;
   margin: 10px 0; }
   .colorbox .icon-cont {
     width: 34%;
     font-size: 40px;
-    padding: 17px; }
+    padding: 5px; }
   .colorbox .data-cont {
     width: 66%;
-    padding: 19px; }
+    padding: 10px; }
     .colorbox .data-cont span {
       display: block;
       font-size: 32px;

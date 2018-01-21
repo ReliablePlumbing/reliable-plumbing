@@ -1,3 +1,5 @@
-<p>
-  technicians-calls works!
-</p>
+<loader *ngIf="loading">
+</loader>
+
+
+<p-chart *ngIf="!loading" type="bar" [data]="data" [options]="options"></p-chart>
