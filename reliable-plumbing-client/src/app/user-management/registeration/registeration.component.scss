@@ -45,6 +45,28 @@
     }
 }
 
-.full-height{
+.full-height {
     min-height: 80vh;
+}
+
+.user-site {
+    padding: 6px 15px;
+    border: 1px solid #ddd;
+    margin-bottom: 10px;
+    border-radius: 4px;
+    display: flex;
+    &:first-child {
+        margin-top: 10px;
+    }
+    >span {
+        padding-top: 6px;
+    }
+    .user-site-btns {
+        margin-left: auto
+    }
+}
+
+span.error-message {
+    display: block;
+    line-height: 34px;
 }

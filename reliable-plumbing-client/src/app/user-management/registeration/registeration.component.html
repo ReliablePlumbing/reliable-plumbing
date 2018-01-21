@@ -6,9 +6,6 @@
     </div>
 
 </ng-container>
-
-
-
 <ng-container *ngIf="!showMsg">
 
     <section class="schedule-sec">
@@ -24,25 +21,30 @@
                             <dynamic-form [controlsCofig]="basicInfoControls" [user]="user"></dynamic-form>
                         </ng-container>
 
-
                         <ng-container *ngIf="activeIndex==1">
-                            <button (click)="initNewSite()">New Site (Address)</button>
-
                             <div *ngFor="let site of user.sites; let i = index">
                                 <div class="row">
-                                    <span>{{site.streetAddress + ' - ' + site.city + ' - ' + site.state}}</span>
-                                    <a (click)="editSite(i)" class="btn btn-link">Edit</a>
-                                    <a (click)="deleteSite(i)" class="btn btn-link">Delete</a>
+                                    <div class="col-md-12">
+                                        <div class="user-site">
+                                            <span>
+                                                <i class="fa fa-map-marker" aria-hidden="true"></i>
+                                                {{site.streetAddress + ' - ' + site.city + ' - ' + site.state}}
+                                            </span>
+                                            <div class="user-site-btns">
+                                                <a (click)="deleteSite(i)" class="btn btn-link error-message">Delete</a>
+                                                <a (click)="editSite(i)" class="btn btn-link">Edit</a>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-
-
                             <dynamic-form [controlsCofig]="[{type: 7}]" [user]="user"></dynamic-form>
-                            <button (click)="addUserSite()">Add Site</button>
+                            <button class="btn btn-success" (click)="addUserSite()">Add Site</button>
+                            <button class="btn btn-primary" (click)="initNewSite()">New Site (Address)</button>
                         </ng-container>
 
                         <h4 *ngIf="!isValid">Some fields are required or invalid, please complete all form data</h4>
-                        <div class="col-md-12">
+                        <div class="text-center">
                             <button *ngIf="activeIndex==1 || !showSteps" type="submit" [disabled]="false" (click)="save()" class="btn btn-success">Save</button> &nbsp;
                             <button *ngIf="activeIndex==0 && showSteps" type="submit" [disabled]="false" (click)="nextStep()" class="btn btn-success">Next</button> &nbsp;
                             <button *ngIf="activeIndex==1 && showSteps" type="submit" [disabled]="false" (click)="activeIndex = 0" class="btn btn-success">Back</button> &nbsp;

@@ -42,6 +42,10 @@ h6 {
   margin: 0 0 20px 0;
   padding: 0; }
 
+.ui-steps .ui-steps-number {
+  font-size: 120% !important;
+  display: block !important; }
+
 /* Prelaoder */
 #preloader {
   position: fixed;
@@ -304,6 +308,9 @@ input[type=radio] {
   background: #c82333 !important;
   background-color: #c82333 !important;
   border-color: #bd2130 !important; }
+
+.btn-link {
+  color: #007bff !important; }
 
 /*--------------------------------------------------------------
 # Welcome
