@@ -160,6 +160,49 @@ input[type=radio] {
   width: calc(100% - 325px);
   transition: all 0.3s; }
 
+.colorbox {
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.14), 0 2px 1px -1px rgba(0, 0, 0, 0.12);
+  -webkit-box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.14), 0 2px 1px -1px rgba(0, 0, 0, 0.12);
+  -moz-box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.14), 0 2px 1px -1px rgba(0, 0, 0, 0.12);
+  -moz-border-radius: 2px;
+  -webkit-border-radius: 2px;
+  border-radius: 2px;
+  background: #ffffff;
+  box-sizing: border-box;
+  padding: 0 !important;
+  text-align: center;
+  overflow: hidden;
+  display: flex;
+  height: 90px;
+  color: #fff;
+  margin: 10px 0; }
+  .colorbox .icon-cont {
+    width: 34%;
+    font-size: 40px;
+    padding: 17px; }
+  .colorbox .data-cont {
+    width: 66%;
+    padding: 19px; }
+    .colorbox .data-cont span {
+      display: block;
+      font-size: 32px;
+      line-height: 24px; }
+
+.colorbox.completed {
+  background-color: #2E7D32; }
+  .colorbox.completed .data-cont {
+    background-color: #3ca241; }
+
+.colorbox.pending {
+  background-color: #616161; }
+  .colorbox.pending .data-cont {
+    background-color: #7b7b7b; }
+
+.colorbox.upcomming {
+  background-color: #3F51B5; }
+  .colorbox.upcomming .data-cont {
+    background-color: #606fc7; }
+
 @media (max-width: 768px) {
   ngb-tooltip-window {
     display: none !important; }

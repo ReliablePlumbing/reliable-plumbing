@@ -192,6 +192,60 @@ input[type=radio] {
     transition: all 0.3s;
 }
 
+// dashboard
+.colorbox {
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.14), 0 2px 1px -1px rgba(0, 0, 0, 0.12);
+    -webkit-box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.14), 0 2px 1px -1px rgba(0, 0, 0, 0.12);
+    -moz-box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.14), 0 2px 1px -1px rgba(0, 0, 0, 0.12);
+    -moz-border-radius: 2px;
+    -webkit-border-radius: 2px;
+    border-radius: 2px;
+    background: #ffffff;
+    box-sizing: border-box;
+    padding: 0 !important;
+    text-align: center;
+    overflow: hidden;
+    display: flex;
+    height: 90px;
+    color: #fff;
+    margin: 10px 0;
+    .icon-cont {
+        width: 34%;
+        font-size: 40px;
+        padding: 17px;
+    }
+    .data-cont {
+        width: 66%;
+        padding: 19px;
+        span {
+            display: block;
+            font-size: 32px;
+            line-height: 24px;
+        }
+    }
+}
+
+.colorbox.completed {
+    background-color: #2E7D32;
+    .data-cont {
+        background-color: lighten(#2E7D32, 10%);
+    }
+}
+
+.colorbox.pending {
+    background-color: #616161;
+    .data-cont {
+        background-color: lighten(#616161, 10%);
+    }
+}
+
+.colorbox.upcomming {
+    background-color: #3F51B5;
+    .data-cont {
+        background-color: lighten(#3F51B5, 10%);
+    }
+}
+
 @media (max-width: 768px) {
     ngb-tooltip-window {
         display: none !important;
