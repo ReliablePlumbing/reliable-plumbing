@@ -41,6 +41,11 @@
             display: block !important;
             &:last-child {
                 margin-left: 0 !important;
+                .ngb-dp-month.d-block.ml-3 {
+                    &:last-child {
+                        margin-left: 0 !important;
+                    }
+                }
             }
         }
         .ngb-dp-header .btn-link {
@@ -52,18 +57,18 @@
         }
     }
     .ngb-dp-day {
-        width: 42px !important;
-        height: 25px !important;
+        width: 15% !important;
+        height: 26px !important;
         .custom-day {
-            width: 42px !important;
-            height: 25px !important;
+            width: 100% !important;
+            height: 26px !important;
         }
     }
     .ngb-dp-day,
     .ngb-dp-weekday,
     .ngb-dp-week-number {
-        width: 42px !important;
-        height: 25px !important;
+        width: 15% !important;
+        height: 26px !important;
     }
     .ngb-dp-header {
         height: 2.25rem !important;

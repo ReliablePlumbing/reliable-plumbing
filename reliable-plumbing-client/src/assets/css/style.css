@@ -962,23 +962,25 @@ form .btn {
       display: block !important; }
       ngb-datepicker > .ngb-dp-months:last-child {
         margin-left: 0 !important; }
+        ngb-datepicker > .ngb-dp-months:last-child .ngb-dp-month.d-block.ml-3:last-child {
+          margin-left: 0 !important; }
     ngb-datepicker .ngb-dp-header .btn-link:last-child {
       position: absolute;
       bottom: 41%;
       right: 15px; }
 
   .ngb-dp-day {
-    width: 42px !important;
-    height: 25px !important; }
+    width: 15% !important;
+    height: 26px !important; }
     .ngb-dp-day .custom-day {
-      width: 42px !important;
-      height: 25px !important; }
+      width: 100% !important;
+      height: 26px !important; }
 
   .ngb-dp-day,
   .ngb-dp-weekday,
   .ngb-dp-week-number {
-    width: 42px !important;
-    height: 25px !important; }
+    width: 15% !important;
+    height: 26px !important; }
 
   .ngb-dp-header {
     height: 2.25rem !important;
