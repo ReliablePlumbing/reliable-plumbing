@@ -24,8 +24,9 @@ export class AdminPanelComponent implements OnInit {
     users: { index: 5, hasPermission: false },
     myAppointments: { index: 6, hasPermission: false },
     tracking: { index: 7, hasPermission: false },
-    profile: { index: 8, hasPermission: true },
-    changePassword: { index: 9, hasPermission: true },
+    dashboard: { index: 8, hasPermission: false },
+    profile: { index: 9, hasPermission: true },
+    changePassword: { index: 10, hasPermission: true },
   }
   systemRoutes = systemRoutes;
   navSubscription: Subscription;
@@ -56,6 +57,7 @@ export class AdminPanelComponent implements OnInit {
         this.tabs.settings.hasPermission = true;
         this.tabs.systemUsers.hasPermission = true;
         this.tabs.users.hasPermission = true;
+        this.tabs.dashboard.hasPermission = true;
       }
       if (role == Role.Admin || role == Role.SystemAdmin || role == Role.Supervisor) {
         this.tabs.scheduleManagement.hasPermission = true;
@@ -90,6 +92,8 @@ export class AdminPanelComponent implements OnInit {
       this.currentSelectedTab = this.tabs.myAppointments.index;
     else if (~url.indexOf(systemRoutes.tracking))
       this.currentSelectedTab = this.tabs.tracking.index;
+    else if (~url.indexOf(systemRoutes.dashboard))
+      this.currentSelectedTab = this.tabs.dashboard.index;
     else if (~url.indexOf(systemRoutes.editProfile))
       this.currentSelectedTab = this.tabs.profile.index;
     else if (~url.indexOf(systemRoutes.changePassword))

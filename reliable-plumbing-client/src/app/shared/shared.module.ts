@@ -2,13 +2,14 @@ import { NgModule } from '@angular/core';
 import { AgmCoreModule } from '@agm/core';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from "@angular/router";
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CommonModule } from '@angular/common';
 import { TextMaskModule } from 'angular2-text-mask';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { environment } from '../../environments/environment';
 
 // prime ng components
-import { StepsModule, TabViewModule, MenuModule, FileUploadModule, GalleriaModule, InputSwitchModule } from 'primeng/primeng';
+import { StepsModule, TabViewModule, MenuModule, FileUploadModule, GalleriaModule, InputSwitchModule, ChartModule, PanelModule } from 'primeng/primeng';
 
 // components
 import { LoaderComponent } from './loader/loader.component';
@@ -38,10 +39,13 @@ let declarations = [
 
 @NgModule({
   imports: [
-    CommonModule, FormsModule, NgbModule, TextMaskModule, RouterModule, InputSwitchModule,
-    AgmCoreModule.forRoot({ apiKey: environment.mapsApiKey }), StepsModule, TabViewModule, MenuModule, FileUploadModule, GalleriaModule
+    CommonModule, FormsModule, NgbModule, TextMaskModule, RouterModule, InputSwitchModule, AgmCoreModule.forRoot({ apiKey: environment.mapsApiKey }),
+    StepsModule, TabViewModule, MenuModule, FileUploadModule, GalleriaModule, ChartModule, PanelModule, BrowserAnimationsModule
   ],
   declarations: declarations,
-  exports: [declarations, AgmCoreModule, TextMaskModule, StepsModule, TabViewModule, MenuModule, FileUploadModule, GalleriaModule, InputSwitchModule, NgbModule]
+  exports: [
+    declarations, AgmCoreModule, TextMaskModule, StepsModule, TabViewModule, MenuModule, FileUploadModule, GalleriaModule, InputSwitchModule,
+    NgbModule, ChartModule, PanelModule
+  ]
 })
 export class SharedModule { }

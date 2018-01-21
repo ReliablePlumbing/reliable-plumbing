@@ -7,6 +7,7 @@ export const dependencies = {
     LookupsManager: 'business.LookupsManager',
     NotificationManager: 'business.NotificationManager',
     FilesManager: 'business.FilesManager',
+    DashboardManager: 'business.DashboardManager',
     
     // business notifiers
     NotificationBroadcastingService: 'business.notifier.NotificationBroadcastingService',

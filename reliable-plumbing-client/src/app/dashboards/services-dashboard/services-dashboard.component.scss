@@ -1,0 +1,27 @@
+:host ::ng-deep {
+    .ui-panel-titlebar {
+        // background-color: blue;
+        border: 0 none;
+        border-bottom: 1px solid #607D8B;
+        padding: 0.625em 1em;
+        -moz-border-radius-topleft: 2px;
+        -webkit-border-top-left-radius: 2px;
+        border-top-left-radius: 2px;
+        -moz-border-radius-topright: 2px;
+        -webkit-border-top-right-radius: 2px;
+        border-top-right-radius: 2px;
+        -moz-border-radius-bottomleft: 0;
+        -webkit-border-bottom-left-radius: 0;
+        border-bottom-left-radius: 0;
+        -moz-border-radius-bottomright: 0;
+        -webkit-border-bottom-right-radius: 0;
+        border-bottom-right-radius: 0;
+    }
+    .ui-widget-header {
+        background: none;
+        background-color: #607D8B;
+        color: #ffffff;
+        font-size: 1em;
+        border: 1px solid #607D8B;
+    }
+}

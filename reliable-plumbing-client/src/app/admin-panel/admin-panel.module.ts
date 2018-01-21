@@ -8,6 +8,7 @@ import { ServicesModule } from '../services/services.module';
 import { UserManagementModule } from '../user-management/user-management.module';
 import { SharedModule } from '../shared/shared.module';
 import { CallsQuotesManagementModule } from '../calls-quotes-management/calls-quotes-management.module';
+import { DashboardsModule } from '../dashboards/dashboards.module';
 
 // components
 import { AdminPanelRoutingModule } from './admin-panel-routing.module';
@@ -19,14 +20,15 @@ import { TechniciansTrackingComponent } from './technicians-tracking/technicians
 import { EditProfileComponent } from './edit-profile/edit-profile.component';
 import { ResetPasswordComponent } from './reset-password/reset-password.component';
 import { QuoteManagementComponent } from './quote-management/quote-management.component';
+import { DashboardsComponent } from './dashboards/dashboards.component';
 
 @NgModule({
   imports: [
     CommonModule, AdminPanelRoutingModule, ServicesModule, FormsModule, UserManagementModule,
-    SharedModule, SelectModule, CallsQuotesManagementModule, ReactiveFormsModule
+    SharedModule, SelectModule, CallsQuotesManagementModule, ReactiveFormsModule, DashboardsModule
   ],
   declarations: [
-    AppointmentSettingsomponent, AdminPanelComponent, ScheduleManagementComponent, MyAppointmentsComponent, TechniciansTrackingComponent, EditProfileComponent, ResetPasswordComponent, QuoteManagementComponent
+    AppointmentSettingsomponent, AdminPanelComponent, ScheduleManagementComponent, MyAppointmentsComponent, TechniciansTrackingComponent, EditProfileComponent, ResetPasswordComponent, QuoteManagementComponent, DashboardsComponent
   ]
 })
 export class AdminPanelModule { }

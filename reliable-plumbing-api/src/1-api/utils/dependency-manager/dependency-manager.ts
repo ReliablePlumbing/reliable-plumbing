@@ -20,6 +20,7 @@ export function registerDependencies() {
     Container.registerService({ id: dependencies.LookupsManager, type: business.LookupsManager });
     Container.registerService({ id: dependencies.NotificationManager, type: business.NotificationManager });
     Container.registerService({ id: dependencies.FilesManager, type: business.FilesManager });
+    Container.registerService({ id: dependencies.DashboardManager, type: business.DashboardManager });
     
     /*** Data Access ***/
     Container.registerService({ id: dependencies.MongoContext, type: data.MongoContext, instance: dbContext });

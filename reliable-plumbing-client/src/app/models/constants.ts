@@ -22,6 +22,7 @@ export const systemRoutes = {
     users: 'users-management',
     myAppointments: 'my-appointments',
     tracking: 'technicians-tracking',
+    dashboard: 'dashboard',
 
     activateMail: 'activate-mail',
     socialMediaAuthenticate: 'social-media-authenticate',

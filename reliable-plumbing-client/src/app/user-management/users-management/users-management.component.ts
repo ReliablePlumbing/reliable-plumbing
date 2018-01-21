@@ -14,7 +14,7 @@ export class UsersManagementComponent implements OnInit {
   users = [];
   displayedUsers = [];
   page = 1;
-  pageSize = 1;
+  pageSize = 20;
   registerModelRef: NgbModalRef;
   registrationMode: RegistrationMode;
   loading = true;
