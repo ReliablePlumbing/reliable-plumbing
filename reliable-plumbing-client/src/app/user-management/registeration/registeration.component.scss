@@ -70,3 +70,20 @@ span.error-message {
     display: block;
     line-height: 34px;
 }
+
+.reg-btns {
+    padding: 10px;
+    margin-top: 10px;
+    border-radius: 8px;
+    button {
+        width: 150px;
+    }
+}
+
+@media (max-width: 768px){
+    .reg-btns {
+        button {
+            width: 100px;
+        }
+    }
+}

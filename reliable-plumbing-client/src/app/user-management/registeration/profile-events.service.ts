@@ -14,5 +14,10 @@ export class ProfileEventsService {
   validateFormResponse: Observable<boolean> = this.validateFormResponseSource.asObservable();
 
   isFormValidResponse = (isValid) => this.validateFormResponseSource.next(isValid);
+  
+  private resetFormSource: Subject<any> = new Subject<any>()
+  resetForm$: Observable<any> = this.resetFormSource.asObservable();
+
+  resetForm = (args) => this.resetFormSource.next(args);
 
 }

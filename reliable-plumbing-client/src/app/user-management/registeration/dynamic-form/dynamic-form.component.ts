@@ -27,14 +27,14 @@ export class DynamicFormComponent implements OnInit {
     replceRegex: /\W/g
   };
   userRoles = {};
-  subscription;
+  subscriptions = [];
 
   constructor(private fb: FormBuilder, private userManagementService: UserManagementService, private alertifyService: AlertifyService,
     private environmentService: EnvironmentService, private routeHandler: RouteHandlerService, private profileEventsService: ProfileEventsService) { }
 
   ngOnInit() {
 
-    this.subscription = this.profileEventsService.validateForm.subscribe(_ => {
+    let subscription1 = this.profileEventsService.validateForm.subscribe(_ => {
       this.trySubmit = true;
       if (~this.controlsCofig.findIndex(c => c.type == regControls.address))
         this.user.site.coords = this.mapMarker ? {
@@ -43,6 +43,15 @@ export class DynamicFormComponent implements OnInit {
         } : {};
       this.profileEventsService.isFormValidResponse(this.registerForm.valid);
     });
+
+    let subscription2 = this.profileEventsService.resetForm$.subscribe(allFormValidations => {
+      if (allFormValidations)
+        this.registerForm.reset();
+
+      this.trySubmit = false;
+    });
+
+    this.subscriptions.push(subscription1, subscription2);
     this.mapSite();
     this.mapUserRoles();
     this.createForm();
@@ -108,10 +117,10 @@ export class DynamicFormComponent implements OnInit {
           this.registerForm.addControl('confirmPassword', new FormControl(null, [Validators.required, this.matchOtherValidator('password')]));
           break;
         case regControls.address:
-          this.registerForm.addControl('streetAddress', new FormControl(null));
-          this.registerForm.addControl('city', new FormControl(null));
-          this.registerForm.addControl('state', new FormControl(null));
-          this.registerForm.addControl('zipCode', new FormControl(null));
+          this.registerForm.addControl('streetAddress', new FormControl(null, [Validators.required]));
+          this.registerForm.addControl('city', new FormControl(null, [Validators.required]));
+          this.registerForm.addControl('state', new FormControl(null, [Validators.required]));
+          this.registerForm.addControl('zipCode', new FormControl(null, [Validators.required]));
 
           this.registerForm.controls['state'].disable();
           break;
@@ -207,7 +216,7 @@ export class DynamicFormComponent implements OnInit {
   }
 
   ngOnDestroy() {
-    if (this.subscription)
-      this.subscription.unsubscribe();
+    if (this.subscriptions && this.subscriptions.length > 0)
+      this.subscriptions.forEach(s => s.unsubscribe());
   }
 }

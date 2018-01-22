@@ -210,7 +210,7 @@ export class RegisterationComponent implements OnInit {
       }
 
       this.user.sites = sites;
-      this.user.site = {};
+      this.initNewSite();
     });
   }
 
@@ -227,27 +227,31 @@ export class RegisterationComponent implements OnInit {
   subsciptionToForms() {
     this.subscription = this.profileEventsService.validateFormResponse.subscribe(isValid => {
       this.isValid = isValid;
-      if (isValid) {
-        switch (this.actionType) {
-          case actionType.addSite:
-            let site = this.user.site;
-            if (site.index != null)
-              this.user.sites[site.index] = site;
-            else
-              this.user.sites.push(site);
-            this.user.site = {};
-            break;
-          case actionType.nextStep:
-            this.isValid = true;
-            this.activeIndex = 1;
-            break;
-          case actionType.save:
-            this.addEditUser();
-            break;
-        }
+
+      switch (this.actionType) {
+        case actionType.addSite:
+          if (!isValid) return;
+          let site = this.user.site;
+          if (site.index != null)
+            this.user.sites[site.index] = site;
+          else
+            this.user.sites.push(site);
+          this.initNewSite();
+          this.profileEventsService.resetForm(false);
+          break;
+        case actionType.nextStep:
+          if (!isValid) return;
+          this.isValid = true;
+          this.activeIndex = 1;
+          break;
+        case actionType.save:
+          let isCustomer = (!this.user.roles || (this.user.roles.length > 0 && !isSystemUser(this.user)));
+          if (isCustomer && (!this.user.sites || this.user.sites.length == 0))
+            return;
+          else if (!isCustomer && !isValid) return;
+          this.addEditUser();
+          break;
       }
-
-
     });
   }
 
@@ -265,7 +269,7 @@ export class RegisterationComponent implements OnInit {
               setTimeout(() => this.router.navigate(['/']), 3000);
             }
             this.alertifyService.success('Save Completed Successfully');
-            this.userAdded.emit(this.user);
+            this.userAdded.emit(x);
           }
         });
         break;

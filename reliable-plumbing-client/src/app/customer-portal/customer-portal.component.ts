@@ -28,6 +28,8 @@ export class CustomerPortalComponent implements OnInit {
     $(".navbar-nav li a").click(function (event) {
       $(".navbar-collapse").collapse('hide');
     });
+    if(screen.width > 768)
+      this.toggleNav(true);
   }
 
   subscribeToRouterEvents() {

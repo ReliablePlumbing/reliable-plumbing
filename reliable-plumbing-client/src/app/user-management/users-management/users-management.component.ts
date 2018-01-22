@@ -49,7 +49,6 @@ export class UsersManagementComponent implements OnInit {
   userAdded(user) {
     if (this.registrationMode == RegistrationMode.addCustomer) {
       this.users.push(user);
-      this.pageChange();
     }
     else if (this.registrationMode == RegistrationMode.edit) {
       user.rolesString = '';
@@ -61,7 +60,7 @@ export class UsersManagementComponent implements OnInit {
       }
       this.users[this.selectedIndex] = user;
     }
-
+    this.pageChange();
     this.registerModelRef.close();
     this.clonedEditedUser = null;
     this.registrationMode = null;

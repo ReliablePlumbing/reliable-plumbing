@@ -43,11 +43,11 @@
                             <button class="btn btn-primary" (click)="initNewSite()">New Site (Address)</button>
                         </ng-container>
 
-                        <h4 *ngIf="!isValid">Some fields are required or invalid, please complete all form data</h4>
-                        <div class="text-center">
+                        <!-- <h4 *ngIf="!isValid">Some fields are required or invalid, please complete all form data</h4> -->
+                        <div class="text-center reg-btns">
                             <button *ngIf="activeIndex==1 || !showSteps" type="submit" [disabled]="false" (click)="save()" class="btn btn-success">Save</button> &nbsp;
-                            <button *ngIf="activeIndex==0 && showSteps" type="submit" [disabled]="false" (click)="nextStep()" class="btn btn-success">Next</button> &nbsp;
-                            <button *ngIf="activeIndex==1 && showSteps" type="submit" [disabled]="false" (click)="activeIndex = 0" class="btn btn-success">Back</button> &nbsp;
+                            <button *ngIf="activeIndex==0 && showSteps" type="submit" [disabled]="false" (click)="nextStep()" class="btn btn-primary">Next</button> &nbsp;
+                            <button *ngIf="activeIndex==1 && showSteps" type="submit" [disabled]="false" (click)="activeIndex = 0" class="btn btn-primary">Back</button> &nbsp;
                         </div>
                     </div>
                 </div>

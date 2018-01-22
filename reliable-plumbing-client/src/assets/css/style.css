@@ -161,7 +161,7 @@ input[type=radio] {
   min-height: 80vh; }
 
 #main.opened {
-  width: calc(100% - 325px);
+  /* width: calc(100% - 325px); */
   transition: all 0.3s; }
 
 .colorbox {

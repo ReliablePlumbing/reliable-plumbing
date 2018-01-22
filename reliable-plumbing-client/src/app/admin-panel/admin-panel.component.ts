@@ -40,6 +40,8 @@ export class AdminPanelComponent implements OnInit {
     this.subscribeToRouterEvents();
     this.setCurrentTabFromUrl(this.router.url);
     this.navSubscription = this.navEventsService.nav.subscribe(() => this.toggleNav());
+    if(screen.width > 768)
+      this.toggleNav(true);
   }
 
 

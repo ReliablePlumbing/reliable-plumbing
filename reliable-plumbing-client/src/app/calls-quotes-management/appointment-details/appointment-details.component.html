@@ -54,8 +54,8 @@
   <div class="row justify-content-center">
     <div class="call-gallery">
 
-      <p-galleria *ngIf="mappedAppointment.images.length>0" [images]="mappedAppointment.images" [panelWidth]="getGalleryDimensions().width" [panelHeight]="getGalleryDimensions().height"
-        [showCaption]="false"></p-galleria>
+      <p-galleria *ngIf="mappedAppointment.images.length>0" [images]="mappedAppointment.images" [panelWidth]="getGalleryDimensions().width"
+        [panelHeight]="getGalleryDimensions().height" [showCaption]="false"></p-galleria>
     </div>
   </div>
 
@@ -76,34 +76,36 @@
     </div>
   </div>
 
-  <table class="table table-bordered table-scrollable table-responsive">
-    <thead>
-      <th>Name</th>
-      <th>Status</th>
-      <th>Appointments That Day</th>
-      <th>Assign</th>
-    </thead>
-    <tbody>
-      <tr *ngFor="let tech of mappedTechnicians">
-        <td>{{tech?.technician.firstName + ' ' + (tech?.technician.lastName ? tech?.technician.lastName : '')}}</td>
-        <td>
-          <p>
-            <span class="appointemt-status" [ngClass]="tech?.status | technicianStatusColor"></span>
-            <span>{{tech?.status | technicianStatusTxt}}</span>
-          </p>
-        </td>
-        <td>
-          <ng-container>
-            <span *ngFor="let appoint of tech.appointments">{{appoint?.time}}</span>
-          </ng-container>
-          <span *ngIf="tech.appointments.length == 0">no appointments</span>
-        </td>
-        <td>
-          <button class="btn btn-primary filters-toggle-btn" (click)="assign(tech)">Assign</button>
-        </td>
-      </tr>
-    </tbody>
-  </table>
+  <div class="table-responsive">
+    <table class="table table-bordered table-scrollable">
+      <thead>
+        <th>Name</th>
+        <th>Status</th>
+        <th>Appointments That Day</th>
+        <th>Assign</th>
+      </thead>
+      <tbody>
+        <tr *ngFor="let tech of mappedTechnicians">
+          <td>{{tech?.technician.firstName + ' ' + (tech?.technician.lastName ? tech?.technician.lastName : '')}}</td>
+          <td>
+            <div>
+              <span class="appointemt-status" [ngClass]="tech?.status | technicianStatusColor"></span>
+              <span>{{tech?.status | technicianStatusTxt}}</span>
+            </div>
+          </td>
+          <td>
+            <ng-container>
+              <span *ngFor="let appoint of tech.appointments">{{appoint?.time}}</span>
+            </ng-container>
+            <span *ngIf="tech.appointments.length == 0">no appointments</span>
+          </td>
+          <td>
+            <button class="btn btn-primary filters-toggle-btn" (click)="assign(tech)">Assign</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 
   <button class="btn btn-primary filters-toggle-btn" (click)="save()">Save</button>
 </ng-container>
