@@ -117,7 +117,7 @@ export class DynamicFormComponent implements OnInit {
           this.registerForm.addControl('confirmPassword', new FormControl(null, [Validators.required, this.matchOtherValidator('password')]));
           break;
         case regControls.address:
-          this.registerForm.addControl('streetAddress', new FormControl(null, [Validators.required]));
+          this.registerForm.addControl('street', new FormControl(null, [Validators.required]));
           this.registerForm.addControl('city', new FormControl(null, [Validators.required]));
           this.registerForm.addControl('state', new FormControl(null, [Validators.required]));
           this.registerForm.addControl('zipCode', new FormControl(null, [Validators.required]));

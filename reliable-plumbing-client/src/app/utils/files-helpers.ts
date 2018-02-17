@@ -45,3 +45,15 @@ export function buildImagesObjects(objectId, filesNames: string | string[]) {
     }
 }
 
+export function buildImagesObjectsForLightBox(objectId, filesNames) {
+    let baseFilesUrl = environment.filesUrl + objectId + '/';
+    let images = [];
+
+    for (let i = 0; i < filesNames.length; i++) {
+        let fileName = filesNames[i];
+        let url = baseFilesUrl + fileName
+        images.push({ src: url, caption: '', thumb: url, index: i });
+    }
+
+    return images;
+}

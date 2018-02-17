@@ -23,7 +23,7 @@ export var userSchema: genericSchema = {
                     lng: { type: Number, required: true }
                 }, required: false
             },
-            streetAddress: { type: String, required: true },
+            street: { type: String, required: true },
             city: { type: String, required: true },
             state: { type: String, required: true },
             zipCode: { type: String, required: false }

@@ -28,7 +28,7 @@ export class AppointmentRepo extends Repo<Appointment> {
 
         return new Promise<Appointment[]>((resolve, reject) => {
 
-            model.find(filterObj).populate('userId').populate('quoteId').exec((err, results) => {
+            model.find(filterObj).populate('userId').populate('quoteId').populate('typeId').exec((err, results) => {
                 if (err != null)
                     return reject(err);
 
@@ -81,7 +81,7 @@ export class AppointmentRepo extends Repo<Appointment> {
 
         return new Promise<Appointment[]>((resolve, reject) => {
 
-            model.find(filterObj).populate('userId').populate('typeId').exec((err, results) => {
+            model.find(filterObj).populate('userId').populate('typeId').populate('assigneeIds').exec((err, results) => {
                 if (err != null)
                     return reject(err);
 
@@ -113,6 +113,21 @@ export class AppointmentRepo extends Repo<Appointment> {
         }
         else
             appointment.quoteId = obj.quoteId;
+
+        if (obj.assigneeIds) {
+            let assignees = [], assigneeIds = [];
+            for (let assigneeId of obj.assigneeIds) {
+                if (assigneeId != null && typeof assigneeId == 'object') {
+                    let assignee = new User(obj.userId);
+                    assignees.push(assignee);
+                    assigneeIds.push(assignee.id);
+                }
+                else
+                    assigneeIds.push(assigneeId);
+            }
+            appointment.assigneeIds = assigneeIds;
+            appointment.assignees = assignees;
+        }
 
         appointment.statusHistory = this.mapStatusHistory(obj.statusHistory)
 

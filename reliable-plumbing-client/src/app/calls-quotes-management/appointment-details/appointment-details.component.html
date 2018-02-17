@@ -1,6 +1,6 @@
-<loader *ngIf="loading"></loader>
+<loader *ngIf="loading && !isReadOnly"></loader>
 
-<ng-container *ngIf="!loading">
+<ng-container *ngIf="!loading || isReadOnly">
   <div class="row">
     <div class="col-3">
       <label>
@@ -18,17 +18,27 @@
       </label>
     </div>
     <div class="col-9">
-      <span>{{mappedAppointment?.date | date}}</span>
+      <span>{{mappedAppointment?.date | date:'MMM dd yyyy HH:mm a'}}</span>
     </div>
   </div>
   <div class="row">
     <div class="col-3">
       <label>
-        <b>Time</b>
+        <b>Address</b>
       </label>
     </div>
     <div class="col-9">
-      <span>{{mappedAppointment?.time}}</span>
+      <span>{{mappedAppointment?.address}}</span>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-3">
+      <label>
+        <b>Contact</b>
+      </label>
+    </div>
+    <div class="col-9">
+      <span>{{mappedAppointment?.contact}}</span>
     </div>
   </div>
   <div class="row">
@@ -42,20 +52,28 @@
     </div>
   </div>
 
-  <div class="row justify-content-center">
-    <div class="btn-group status-btns-group">
-      <label class="btn btn-info pointer" *ngFor="let status of allowedStatus" [class.selected-status-btn]="mappedAppointment.status.id == status">
-        <input type="radio" name="appointmentStatus" [checked]="mappedAppointment.status.id == status" (click)="changeAppointmentStatus(status)"
-        />{{status | appointmentStatusTxt}}
-      </label>
+  <ng-container *ngIf="!isReadOnly">
+    <div class="row justify-content-center">
+      <div class="btn-group status-btns-group">
+        <label class="btn btn-info pointer" *ngFor="let status of allowedStatus" [class.selected-status-btn]="mappedAppointment.status.id == status">
+          <input type="radio" name="appointmentStatus" [checked]="mappedAppointment.status.id == status" (click)="changeAppointmentStatus(status)"
+          />{{status | appointmentStatusTxt}}
+        </label>
+      </div>
     </div>
-  </div>
+  </ng-container>
 
   <div class="row justify-content-center">
     <div class="call-gallery">
-
+      <!-- 
       <p-galleria *ngIf="mappedAppointment.images.length>0" [images]="mappedAppointment.images" [panelWidth]="getGalleryDimensions().width"
-        [panelHeight]="getGalleryDimensions().height" [showCaption]="false"></p-galleria>
+        [panelHeight]="getGalleryDimensions().height" [showCaption]="false"></p-galleria> -->
+        <p-carousel [value]="mappedAppointment.images">
+            <ng-template let-item pTemplate="item">
+
+              <img [src]="item.src" (click)="openLightBox(item.index)" />
+            </ng-template>
+        </p-carousel>
     </div>
   </div>
 
@@ -70,42 +88,45 @@
       <ul class="tags">
         <li class="tagg" *ngFor="let assignee of mappedAppointment.assignees">
           {{assignee.technician.firstName + ' ' + (assignee.technician.lastName ? assignee.technician.lastName: '')}}
-          <span (click)="removeAssignee(assignee)">x</span>
+          <span *ngIf="!isReadOnly" (click)="removeAssignee(assignee)">x</span>
         </li>
       </ul>
     </div>
   </div>
 
-  <div class="table-responsive">
-    <table class="table table-bordered table-scrollable">
-      <thead>
-        <th>Name</th>
-        <th>Status</th>
-        <th>Appointments That Day</th>
-        <th>Assign</th>
-      </thead>
-      <tbody>
-        <tr *ngFor="let tech of mappedTechnicians">
-          <td>{{tech?.technician.firstName + ' ' + (tech?.technician.lastName ? tech?.technician.lastName : '')}}</td>
-          <td>
-            <div>
-              <span class="appointemt-status" [ngClass]="tech?.status | technicianStatusColor"></span>
-              <span>{{tech?.status | technicianStatusTxt}}</span>
-            </div>
-          </td>
-          <td>
-            <ng-container>
-              <span *ngFor="let appoint of tech.appointments">{{appoint?.time}}</span>
-            </ng-container>
-            <span *ngIf="tech.appointments.length == 0">no appointments</span>
-          </td>
-          <td>
-            <button class="btn btn-primary filters-toggle-btn" (click)="assign(tech)">Assign</button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
+  <ng-container *ngIf="!isReadOnly">
+    <div class="table-responsive">
+      <table class="table table-bordered table-scrollable">
+        <thead>
+          <th>Name</th>
+          <th>Status</th>
+          <th>Appointments That Day</th>
+          <th>Assign</th>
+        </thead>
+        <tbody>
+          <tr *ngFor="let tech of mappedTechnicians">
+            <td>{{tech?.technician.firstName + ' ' + (tech?.technician.lastName ? tech?.technician.lastName : '')}}</td>
+            <td>
+              <div>
+                <span class="appointemt-status" [ngClass]="tech?.status | technicianStatusColor"></span>
+                <span>{{tech?.status | technicianStatusTxt}}</span>
+              </div>
+            </td>
+            <td>
+              <ng-container>
+                <span *ngFor="let appoint of tech.appointments">{{appoint?.time}}</span>
+              </ng-container>
+              <span *ngIf="tech.appointments.length == 0">no appointments</span>
+            </td>
+            <td>
+              <button class="btn btn-primary filters-toggle-btn" (click)="assign(tech)">Assign</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
 
-  <button class="btn btn-primary filters-toggle-btn" (click)="save()">Save</button>
+    <button class="btn btn-primary filters-toggle-btn" (click)="save()">Save</button>
+  </ng-container>
+
 </ng-container>

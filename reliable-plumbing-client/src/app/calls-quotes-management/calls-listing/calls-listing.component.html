@@ -1,0 +1,100 @@
+<div class="appointemts-list" *ngFor="let date of datesArrayBetweenFilterDates">
+  <h5>{{date | date}}</h5>
+  <div class="section-title-divider"></div>
+  <no-data *ngIf="mappedCalls[date] == null || mappedCalls[date].length == 0" [message]="'No Appointemts'"></no-data>
+
+  <div class="appointemt-cards-list">
+    <div class="appointemt-card pointer" *ngFor="let appointment of mappedCalls[date]" (click)="openAppointmentDetailsModal(appointment, date)">
+      <span class="appointemt-status pending" [ngClass]="appointment.status | appointmentStatusColor" placement="top" ngbTooltip="{{appointment.status | appointmentStatusTxt}}"></span>
+      <h6>
+        <b>{{appointment.user == null ? appointment.customerInfo?.firstName + ' ' + appointment.customerInfo?.lastName : appointment.user?.firstName
+          + ' ' + appointment.user?.lastName}}</b>
+      </h6>
+      <div class="appointemt-time">
+        <span>
+          <b>Time: </b> {{appointment.time}}</span>
+      </div>
+      <div class="appointemt-type">
+        <span>
+          <b>Service: </b> {{appointment.type?.name}}</span>
+      </div>
+      <div class="appointemt-quote">
+        <span>
+          <b>Quote Estimate </b>
+          <ng-container *ngIf="appointment.quoteTotalEstimate!= null">
+            {{appointment.quoteTotalEstimate}}
+            <a (click)="$event.stopPropagation();openQuoteDetails(appointment.quote)" class="btn btn-link">
+              <b>(Details)</b>
+            </a>
+          </ng-container>
+          <ng-container *ngIf="appointment.quoteTotalEstimate == null">
+            No Attached Quote
+          </ng-container>
+        </span>
+      </div>
+      <div class="appointemt-last-checkin">
+        <span>
+          <b>last check-in:</b>  {{appointment.checkInDetails ? (appointment.checkInDetails.date | date:'MMM dd yyyy HH:mm a') : 'No one checked-in'}}</span>
+      </div>
+      <div *ngIf="allowUserCheckIn && appointment.allowCheckIn" class="check-in">
+        <button (click)="$event.stopPropagation();openCheckInMap(appointment, checkInMap)" class="btn btn-primary filters-toggle-btn ">
+          <i class="fa fa-sign-in" aria-hidden="true"></i> check in
+        </button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+
+
+
+<ng-template #appointmentDetails let-c="close" let-d="dismiss">
+  <div class="modal-header">
+    <h5 class="modal-title">Appointment Details</h5>
+    <button type="button" class="close" aria-label="Close" (click)="closeAppointmentDetailsModal()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <appointment-details [appointment]="selectedAppointment" (appointmentUpdated)="appointmentUpdated($event)"></appointment-details>
+  </div>
+
+</ng-template>
+
+<ng-template #quoteDetails let-c="close" let-d="dismiss">
+  <div class="modal-header">
+    <h5 class="modal-title">Quote Details</h5>
+    <button type="button" class="close" aria-label="Close" (click)="closeQuoteDetailsModal()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <rb-quote-details [quote]="selectedQuote" (close)="closeQuoteDetailsModal()"></rb-quote-details>
+  </div>
+
+</ng-template>
+
+<ng-template #checkInMap let-c="close" let-d="dismiss">
+  <div class="modal-header">
+    <h5 class="modal-title">Current Location</h5>
+    <button type="button" class="close" aria-label="Close" (click)="c()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="map-container">
+      <agm-map [latitude]="mapMarker.lat" [longitude]="mapMarker.lng" [zoom]="15" [disableDefaultUI]="false" [zoomControl]="true">
+        <agm-marker [latitude]="mapMarker.lat" [longitude]="mapMarker.lng" [label]="mapMarker.label" [markerDraggable]="mapMarker.draggable"
+          (dragEnd)="markerDragEnd(m, $event)">
+          <agm-info-window>
+            <strong>Your Location</strong>
+          </agm-info-window>
+        </agm-marker>
+      </agm-map>
+    </div>
+
+    <button class="btn btn-primary" (click)="checkIn()">Check in</button>
+  </div>
+
+</ng-template>

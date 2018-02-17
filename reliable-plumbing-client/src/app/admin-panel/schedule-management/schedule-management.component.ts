@@ -1,11 +1,9 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { AppointmentStatus, CallsQuotesMode } from '../../models/enums';
 import { LookupsService, AppointmentService, AlertifyService } from '../../services/services.exports';
-import { getEnumEntries, getDatesArray, getDateString, convertFromBootstrapDate, convertDateParamToDateObj } from '../../utils/date-helpers';
+import { getEnumEntries, convertFromBootstrapDate, convertDateParamToDateObj } from '../../utils/date-helpers';
 import * as moment from 'moment';
-import { NgbModalRef, NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { convertTimeTo12String } from '../../utils/date-helpers';
 import { FormControl } from '@angular/forms';
 
 @Component({
@@ -18,29 +16,19 @@ export class ScheduleManagementComponent implements OnInit {
   modes = { listing: 1, addCall: 2, msg: 3 };
   mode = this.modes.listing;
   callsQuotesMode: CallsQuotesMode = CallsQuotesMode.call;
-  @ViewChild('appointmentDetails') appointmentDetailsTemplate: ElementRef;
-  appointmentDetailsModalRef: NgbModalRef;
-  @ViewChild('quoteDetails') quoteDetailsTemplate: ElementRef;
-  quoteDetailsModalRef: NgbModalRef;
-  selectedAppointment = null;
-  selectedQuote = null;
-  selectedDate = null;
-  urlIdParam = null;
   loading: boolean = true;
   loadingFiltered = true;
-  appointments = {};
-  datesArrayBetweenFilterDates;
   filters: any = {};
   lookups: {
     types: { id: string, text: string }[],
     status: any[]
   };
-
   timeTo: FormControl;
   timeFrom: FormControl;
+  calls;
 
   constructor(private lookupsService: LookupsService, private appointmentService: AppointmentService, private alertifyService: AlertifyService,
-    private modalService: NgbModal, private router: Router, private activatedRoute: ActivatedRoute) { }
+    private router: Router, private activatedRoute: ActivatedRoute) { }
 
   ngOnInit() {
     this.timeTo = this.timeFrom = new FormControl('', (control: FormControl) => {
@@ -58,7 +46,6 @@ export class ScheduleManagementComponent implements OnInit {
       return null;
     });
     let urlParams = this.activatedRoute.snapshot.params;
-    this.urlIdParam = urlParams['id'];
     this.lookupsService.getAppointmentSettingsAndTypes().subscribe(results => {
       this.lookups = {
         types: this.mapTypes(results.types),
@@ -81,7 +68,6 @@ export class ScheduleManagementComponent implements OnInit {
       this.filter(urlParams['dFrom'] == null && urlParams['dFrom'] == null)
 
       this.activatedRoute.params.subscribe(params => {
-        let urlIdParam = params['id'];
         let fromString = !this.filters.date.from ? null : moment(convertFromBootstrapDate(this.filters.date.from)).format('YYYY-M-D');
         let toString = !this.filters.date.to ? null : moment(convertFromBootstrapDate(this.filters.date.to)).format('YYYY-M-D');
 
@@ -89,7 +75,6 @@ export class ScheduleManagementComponent implements OnInit {
           // (!urlIdParam || this.urlIdParam == urlIdParam))
           return;
 
-        this.urlIdParam = urlIdParam;
         let nowDate = moment();
         let afterWeekDate = moment().add(1, 'week');
         this.filters.date = {
@@ -153,14 +138,13 @@ export class ScheduleManagementComponent implements OnInit {
     if (changeUrlParams)
       this.changeUrlParams();
     this.appointmentService.getAppointmentsFiltered(requestFilters).subscribe(results => {
-      this.mapAndGroupAppointmentsByDay(results);
+      this.calls = results;
       this.loading = false;
       this.loadingFiltered = false;
     });
   }
 
   changeUrlParams() {
-
     let params = {
       dFrom: moment(convertFromBootstrapDate(this.filters.date.from)).format('YYYY-M-D'),
       dTo: this.filters.date.to == null ? null : moment(convertFromBootstrapDate(this.filters.date.to)).format('YYYY-M-D'),
@@ -169,103 +153,7 @@ export class ScheduleManagementComponent implements OnInit {
     this.router.navigate([url, params], { replaceUrl: true });
   }
 
-  mapAndGroupAppointmentsByDay(appointments) {
-    this.appointments = {};
-    for (let appointment of appointments) {
-
-      let appointmentDate = moment(appointment.date, 'YYYY-MM-DD').format('MM-DD-YYYY');
-
-      if (this.appointments[appointmentDate] == null)
-        this.appointments[appointmentDate] = [];
-
-      let typeId = appointment.typeId ? appointment.typeId : appointment.quote.typeId;
-      let typeIndex = this.lookups.types.findIndex(t => t.id == typeId)
-      if (typeIndex != -1)
-        appointment.typeObj = this.lookups.types[typeIndex];
-      appointment.quoteTotalEstimate = this.calculateTotalQuoteEstimate(appointment);
-      let appointmentDateLocalized = new Date(appointment.date);
-      appointment.time = convertTimeTo12String(appointmentDateLocalized.getHours(), appointmentDateLocalized.getMinutes());
-      this.appointments[appointmentDate].push(appointment);
-      if (this.urlIdParam != null && appointment.id == this.urlIdParam) {
-        this.openAppointmentDetailsModal(appointment, appointmentDate);
-      }
-
-    }
-    this.constructDaysArrayBetweenFilterDates();
-  }
-
-  calculateTotalQuoteEstimate(appointment) {
-    if (!appointment.quote)
-      return null;
-
-    let totalEstimate = 0;
-    appointment.quote.estimateFields.forEach(f => totalEstimate += parseFloat(f.cost));
-
-    return totalEstimate;
-  }
-
-  constructDaysArrayBetweenFilterDates() {
-    let from = getDateString(this.filters.date.from);
-    let to = this.filters.date.to == null ? from : getDateString(this.filters.date.to);
-
-    let startDate = moment(from, 'MM-DD-YYYY');
-    let endDate = moment(to, 'MM-DD-YYYY');
-
-    this.datesArrayBetweenFilterDates = getDatesArray(startDate, endDate);
-
-  }
-
-  openAppointmentDetailsModal(appointment, date) {
-    this.selectedAppointment = appointment;
-    this.selectedDate = date;
-    let url = this.router.url + ';id=' + appointment.id;
-    this.router.navigateByUrl(url);
-    this.appointmentDetailsModalRef = this.modalService.open(this.appointmentDetailsTemplate, { size: 'lg' });
-    this.appointmentDetailsModalRef.result.then(_ => {
-
-      this.selectedAppointment = null;
-      this.selectedDate = null;
-      let params = Object.assign({}, this.activatedRoute.snapshot.params);
-      delete params['id'];
-      let url = this.router.url.split(';')[0];
-      this.router.navigate([url, params]);
-    }, _ => {
-      let params = Object.assign({}, this.activatedRoute.snapshot.params);
-      delete params['id'];
-      let url = this.router.url.split(';')[0];
-      this.router.navigate([url, params]);
-      this.closeAppointmentDetailsModal();
-    });
-  }
-
-  openQuoteDetails(quote) {
-    this.selectedQuote = quote;
-    this.quoteDetailsModalRef = this.modalService.open(this.quoteDetailsTemplate, { size: 'lg' });
-    this.quoteDetailsModalRef.result.then(_ => this.selectedQuote = null, _ => this.selectedQuote = null);
-  }
-
-  closeQuoteDetailsModal = () => this.quoteDetailsModalRef.close();
-
-  closeAppointmentDetailsModal() {
-    this.selectedAppointment = null;
-    this.selectedDate = null;
-    this.urlIdParam = null;
-    this.appointmentDetailsModalRef.close();
-  }
-
-  appointmentUpdated(appointment) {
-    let index = this.appointments[this.selectedDate].filter(appoint => appoint.id == appointment.id);
-
-    this.appointments[this.selectedDate][index] = appointment;
-
-    this.selectedAppointment = null;
-    this.selectedDate = null;
-    this.appointmentDetailsModalRef.close();
-  }
-
-
   callSubmitted(call) {
-
     this.appointmentService.addAppointment(call.obj, call.images).subscribe(result => {
       if (result.id != null) {
         this.mode = this.modes.msg;

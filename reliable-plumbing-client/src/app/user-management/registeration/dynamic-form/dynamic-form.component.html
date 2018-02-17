@@ -108,12 +108,12 @@
         <ng-container *ngSwitchCase="regControls.address">
           <div class="col-md-6">
             <div class="form-group">
-              <label for="streetAddress" class="">Street Address
-                <i *ngIf="getControlValidation('streetAddress','required')">*</i>
+              <label for="street" class="">Street Address
+                <i *ngIf="getControlValidation('street','required')">*</i>
               </label>
-              <input type="text" name="streetAddress" class="form-control" formControlName="streetAddress" [(ngModel)]="user.site.streetAddress"
+              <input type="text" name="street" class="form-control" formControlName="street" [(ngModel)]="user.site.street"
               />
-            <label *ngIf="getControlValidation('streetAddress','required', false)" class="validation-text">* Required</label>                  
+            <label *ngIf="getControlValidation('street','required', false)" class="validation-text">* Required</label>                  
             </div>
           </div>
           <div class="col-md-6">

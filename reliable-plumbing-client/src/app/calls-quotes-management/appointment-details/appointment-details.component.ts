@@ -1,10 +1,12 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import * as moment from 'moment';
 import { convertTimeTo12String } from '../../utils/date-helpers';
-import { AppointmentStatus, TechnicianStatus } from '../../models/enums';
+import { AppointmentStatus, TechnicianStatus, Role } from '../../models/enums';
 import { AppointmentService, AlertifyService, EnvironmentService } from '../../services/services.exports';
-import { buildImagesObjects } from '../../utils/files-helpers';
-// todo: loader
+import { buildImagesObjects, buildImagesObjectsForLightBox } from '../../utils/files-helpers';
+import { isAnyEligible } from '../../utils/user-helpers';
+import { Lightbox } from 'angular2-lightbox';
+
 @Component({
   selector: 'appointment-details',
   templateUrl: './appointment-details.component.html',
@@ -14,61 +16,74 @@ export class AppointmentDetailsComponent implements OnInit {
 
   loading = true;
   @Input() appointment;
-  mappedAppointment: {
-    date: any,
-    time: string,
-    status: { id: number, text: string },
-    assignees: any[]
-  };
+  mappedAppointment;
   technicians;
   mappedTechnicians;
   appointmentStatusEnum = AppointmentStatus;
   @Output() appointmentUpdated = new EventEmitter<any>();
   allowedStatus = [];
+  isReadOnly = false;
 
-
-  constructor(private appointmentService: AppointmentService, private alertifyService: AlertifyService, private environmentService: EnvironmentService) { }
+  constructor(private appointmentService: AppointmentService, private alertifyService: AlertifyService, private environmentService: EnvironmentService,
+    private lightBox: Lightbox) { }
 
   ngOnInit() {
-    this.getAllowedStatuses();
+    this.isReadOnly = !isAnyEligible(this.environmentService.currentUser, [Role.Admin, Role.Supervisor, Role.SystemAdmin]);
     this.mappedAppointment = this.mapAppointment(this.appointment);
-    this.appointmentService.getTechniciansWithStatusInTime(this.appointment.id).subscribe(results => {
-      this.technicians = results;
-      this.mappedTechnicians = this.mapTechnicians(results);
-      this.loading = false;
-    });
+    if (!this.isReadOnly) {
+      this.getAllowedStatuses();
+      this.appointmentService.getTechniciansWithStatusInTime(this.appointment.id).subscribe(results => {
+        this.technicians = results;
+        this.mappedTechnicians = this.mapTechnicians(results);
+        this.loading = false;
+      });
+    }
   }
 
   mapAppointment(appointment) {
-
-    let apppointmentDate = moment(appointment.date);
-
     return {
       date: this.appointment.date,
-      time: convertTimeTo12String(apppointmentDate.hour(), apppointmentDate.minutes()),
+      address: this.getAddress(this.appointment),
+      contact: this.getCustomerContact(this.appointment),
       status: { id: this.appointment.status, text: AppointmentStatus[this.appointment.status] },
-      images: buildImagesObjects(this.appointment.id, this.appointment.relatedFileNames),
-      assignees: []
+      images: buildImagesObjectsForLightBox(this.appointment.id, this.appointment.relatedFileNames),
+      assignees: !this.isReadOnly ? [] : this.mapTechnicians(appointment.assignees)
     }
   }
 
+  getAddress(call) {
+    let address = call.user ? call.user.sites.find(x => x.id == call.siteId) : call.customerInfo;
+
+    return address.street + ' - ' + address.city + ' - ' + address.state;
+  }
+
+  getCustomerContact(call) {
+    let user = call.user ? call.user : call.customerInfo;
+
+    return user.email + ' - ' + user.mobile;
+  }
+
   mapTechnicians(technicians) {
-    let mappedTechs = technicians.map(tech => {
+    let mappedTechs;
+
+    mappedTechs = technicians.map(tech => {
       return {
-        technician: tech.technician,
-        status: tech.status,
-        appointments: tech.appointments.map(appoint => this.mapAppointment(appoint)),
+        technician: this.isReadOnly ? tech : tech.technician,
+        status: this.isReadOnly ? null : tech.status,
+        appointments: this.isReadOnly ? null : tech.appointments.map(appoint => this.mapAppointment(appoint)),
       }
     });
 
-    for (let tech of mappedTechs) {
-      for (let assigneeId of this.appointment.assigneeIds)
-        if (assigneeId == tech.technician.id) {
-          this.mappedAppointment.assignees.push(tech);
-          tech.selected = true;
-        }
+    if (!this.isReadOnly) {
+      for (let tech of mappedTechs) {
+        for (let assigneeId of this.appointment.assigneeIds)
+          if (assigneeId == tech.technician.id) {
+            this.mappedAppointment.assignees.push(tech);
+            tech.selected = true;
+          }
+      }
+      mappedTechs = mappedTechs.filter(tech => !tech.selected)
     }
-    mappedTechs = mappedTechs.filter(tech => !tech.selected)
     return mappedTechs;
   }
 
@@ -79,6 +94,7 @@ export class AppointmentDetailsComponent implements OnInit {
     this.mappedTechnicians = this.mappedTechnicians.filter(x => x.technician.id != tech.technician.id);
     this.mappedAppointment.assignees.push(tech);
   }
+
   removeAssignee(assignee) {
     this.mappedAppointment.assignees = this.mappedAppointment.assignees.filter(assign => assign.technician.id != assignee.technician.id);
     this.mappedTechnicians.splice(0, 0, assignee);
@@ -135,12 +151,8 @@ export class AppointmentDetailsComponent implements OnInit {
     }
   }
 
-  getGalleryDimensions() {
-    // 992
-    if (screen.width < 992) {
-      return { width: 200, height: 100 };
-    }
-    else
-      return { width: 500, height: 313 };
+  openLightBox(index: number): void {
+    // open lightbox
+    this.lightBox.open(this.mappedAppointment.images, index);
   }
 }

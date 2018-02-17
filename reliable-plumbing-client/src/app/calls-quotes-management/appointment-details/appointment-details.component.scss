@@ -56,6 +56,21 @@
         }
     }
 
-    .call-gallery{
+    .call-gallery {
         margin-bottom: 10px;
+        width: 98%;
+        height: 165px;
+    }
+
+     :host ::ng-deep {
+        .call-gallery {
+            img {
+                width: 100px;
+                height: 100px;
+            }
+        }
+        .ui-carousel-item{
+            width: 100px !important;
+            height: 100px;
+        }
     }

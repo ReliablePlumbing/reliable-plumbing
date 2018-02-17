@@ -26,7 +26,7 @@ export class User extends BaseEntity {
       lat: number,
       lng: number
     },
-    streetAddress: string,
+    street: string,
     city: string,
     state: string,
     zipCode: string
@@ -57,7 +57,7 @@ export class User extends BaseEntity {
             lat: s.coords.lat,
             lng: s.coords.lng
           },
-          streetAddress: s.streetAddress,
+          street: s.street,
           city: s.city,
           state: s.state,
           zipCode: s.zipCode

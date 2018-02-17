@@ -223,7 +223,7 @@ export class CallsQuotesFormComponent implements OnInit {
   }
 
   constructSite(site) {
-    return site.streetAddress + ' - ' + site.city + ' - ' + site.state;
+    return site.street + ' - ' + site.city + ' - ' + site.state;
   }
 
   onUploadFile(files) {

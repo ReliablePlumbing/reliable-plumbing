@@ -1,0 +1,84 @@
+.appointemts-list {
+    background-color: #f6f6f6;
+    padding: 15px;
+    margin-bottom: 15px;
+    border-radius: 4px;
+    h5 {
+        text-align: center;
+        font-size: 24px;
+        font-weight: 900 !important;
+    }
+}
+
+.appointemt-cards-list {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-gap: 1em;
+    grid-auto-rows: minmax(100px, auto);
+}
+
+.appointemt-card {
+    padding: 15px;
+    border-radius: 0;
+    background-color: #fff;
+    box-shadow: 1px 2px 8px #c4c4c4;
+    position: relative;
+    &:hover {
+        box-shadow: 1px 2px 14px #888888;
+    }
+    .appointemt-status {
+        position: absolute;
+        left: 0;
+        top: 0;
+        height: 100%;
+        width: 8px;
+        border-radius: 0;
+    }
+    div.check-in {
+        position: absolute;
+        right: 7px;
+        top: 2px;
+        .btn {
+            margin-top: 5px;
+            padding: 5px;
+            font-size: 12px;
+        }
+    }
+}
+
+@media (max-width: 1024px) {
+    .appointemt-cards-list {
+        -ms-grid-columns: 1fr 1fr;
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+@media (max-width: 768px) {
+    .appointemt-cards-list {
+        -ms-grid-columns: 1fr;
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 425px){
+    .appointemt-card {
+        h6 {
+            margin-bottom: 5px;
+        }
+        span{
+            font-size: 12px;
+        }
+        div {
+            line-height: 1;
+        }
+    }
+}
+
+.appointemt-quote {
+    & .btn-link {
+        color: #0056b3 !important;
+        & :hover {
+            text-decoration: underline !important;
+        }
+    }
+}

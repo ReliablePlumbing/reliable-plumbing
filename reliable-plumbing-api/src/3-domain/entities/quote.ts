@@ -16,7 +16,7 @@ export class Quote extends BaseEntity {
         lastName: string,
         mobile: string,
         email: string,
-        streetAddress: string,
+        street: string,
         city: string,
         state:string,
         zipCode: string
