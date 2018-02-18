@@ -25,13 +25,15 @@
                     }
                 }
             }
-            button {
-                background: #40a4df;
-                border-radius: 0;
-                border: 0;
-                padding: 8px 24px;
-                color: #fff;
-                transition: 0.4s;
+            .reg-btns {
+                button {
+                    background: #40a4df;
+                    border-radius: 0;
+                    border: 0;
+                    padding: 8px 24px;
+                    color: #fff;
+                    transition: 0.4s;
+                }
             }
         }
         .ui-galleria.ui-widget.ui-widget-content {
