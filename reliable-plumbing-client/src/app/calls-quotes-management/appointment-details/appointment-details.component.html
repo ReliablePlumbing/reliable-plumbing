@@ -8,7 +8,7 @@
       </label>
     </div>
     <div class="col-9">
-      <span>{{appointment?.user == null ? appointment?.fullName : appointment?.user?.firstName + ' ' + appointment?.user?.lastName}}</span>
+      <span>{{mappedAppointment?.customerName}}</span>
     </div>
   </div>
   <div class="row">
@@ -48,7 +48,9 @@
       </label>
     </div>
     <div class="col-9">
-      <span>{{mappedAppointment?.message}}</span>
+      <span class="limit-text" [class.show-more]="showMoreText">{{mappedAppointment?.message}}</span>
+      <button *ngIf="!showMoreText" (click)="showMoreText=true" class="btn btn-link txt-btn">see more</button>
+      <button *ngIf="showMoreText" (click)="showMoreText=false" class="btn btn-link txt-btn">see less</button>
     </div>
   </div>
 

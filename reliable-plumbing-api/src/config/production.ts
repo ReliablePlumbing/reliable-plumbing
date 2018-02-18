@@ -7,7 +7,8 @@ export const config: ProductionConfig = {
         tokenExpiration: "1 day"
     },
     db: {
-        mongoConnectionString: process.env.MONGO_CONNECTION
+        mongoConnectionString: process.env.MONGO_CONNECTION,
+        showMongoLogs: false
     },
     mailSettings: {
         service: "gmail",

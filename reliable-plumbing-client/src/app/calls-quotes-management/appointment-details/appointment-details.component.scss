@@ -69,8 +69,31 @@
                 height: 100px;
             }
         }
-        .ui-carousel-item{
+        .ui-carousel-item {
             width: 100px !important;
             height: 100px;
         }
+    }
+
+    .limit-text {
+        // font-size: 16px;
+        // line-height: 16px;
+        // height: 32px;
+        // overflow: hidden;
+        white-space: nowrap;
+        width: 75%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        vertical-align: middle;
+        display: inline-block;
+    }
+
+    .show-more {
+        overflow: visible;
+        white-space: normal;
+        display: inline;
+    }
+    .txt-btn{
+        padding: 0;
+        border: none;
     }

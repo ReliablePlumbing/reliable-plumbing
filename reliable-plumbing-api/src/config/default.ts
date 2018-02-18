@@ -8,7 +8,8 @@ export const config: Config = {
         tokenExpiration: "1 day"
     },
     db: {
-        mongoConnectionString: "mongodb://localhost:27017/developmentDb"
+        mongoConnectionString: "mongodb://localhost:27017/developmentDb",
+        showMongoLogs: false
     },
     mailSettings: {
         service: "gmail",

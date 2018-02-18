@@ -5,3 +5,9 @@ export function isCallOpened(call){
 
     return call.status === AppointmentStatus.Confirmed;
 }
+
+export function getCustomerFullName(call){
+    let customer = call.user ? call.user : call.customerInfo;
+
+    return customer.firstName + ' ' + (customer.lastName ? customer.lastName : '');
+}

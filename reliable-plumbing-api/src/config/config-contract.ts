@@ -6,7 +6,8 @@ export interface Config {
     };
 
     db: {
-        mongoConnectionString: string
+        mongoConnectionString: string,
+        showMongoLogs: boolean
     };
 
     mailSettings: {
@@ -85,7 +86,8 @@ export interface ProductionConfig {
     };
 
     db: {
-        mongoConnectionString: string
+        mongoConnectionString: string,
+        showMongoLogs: boolean
     };
 
     mailSettings: {

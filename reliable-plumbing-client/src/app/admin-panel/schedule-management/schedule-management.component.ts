@@ -157,7 +157,10 @@ export class ScheduleManagementComponent implements OnInit {
     this.appointmentService.addAppointment(call.obj, call.images).subscribe(result => {
       if (result.id != null) {
         this.mode = this.modes.msg;
-        setTimeout(() => this.mode = this.modes.listing, 5000);
+        setTimeout(() => {
+          this.mode = this.modes.listing
+          this.filter(false);
+        }, 5000);
         this.alertifyService.success('Your call has been submitted');
       }
     });

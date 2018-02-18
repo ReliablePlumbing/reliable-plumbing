@@ -6,6 +6,7 @@ import { AppointmentService, AlertifyService, EnvironmentService } from '../../s
 import { buildImagesObjects, buildImagesObjectsForLightBox } from '../../utils/files-helpers';
 import { isAnyEligible } from '../../utils/user-helpers';
 import { Lightbox } from 'angular2-lightbox';
+import { getCustomerFullName } from '../../utils/call-helpers';
 
 @Component({
   selector: 'appointment-details',
@@ -23,6 +24,7 @@ export class AppointmentDetailsComponent implements OnInit {
   @Output() appointmentUpdated = new EventEmitter<any>();
   allowedStatus = [];
   isReadOnly = false;
+  showMoreText = false;
 
   constructor(private appointmentService: AppointmentService, private alertifyService: AlertifyService, private environmentService: EnvironmentService,
     private lightBox: Lightbox) { }
@@ -42,12 +44,14 @@ export class AppointmentDetailsComponent implements OnInit {
 
   mapAppointment(appointment) {
     return {
+      customerName: getCustomerFullName(appointment),
       date: this.appointment.date,
       address: this.getAddress(this.appointment),
       contact: this.getCustomerContact(this.appointment),
       status: { id: this.appointment.status, text: AppointmentStatus[this.appointment.status] },
       images: buildImagesObjectsForLightBox(this.appointment.id, this.appointment.relatedFileNames),
-      assignees: !this.isReadOnly ? [] : this.mapTechnicians(appointment.assignees)
+      assignees: !this.isReadOnly ? [] : this.mapTechnicians(appointment.assignees),
+      message: appointment.message
     }
   }
 

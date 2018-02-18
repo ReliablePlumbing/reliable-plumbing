@@ -31,7 +31,7 @@ export class MongoContext {
     }
 
     createModel<T>(schema: genericSchema): mongoose.Model<GenericModel<T>> {
-        if (!config.production)
+        if (config.db.showMongoLogs)
             mongoose.set('debug', function (coll, method, query, doc) {
                 console.log(coll + " " + method + " " + JSON.stringify(query) + " " + JSON.stringify(doc));
             });
