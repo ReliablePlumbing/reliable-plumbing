@@ -127,6 +127,7 @@ export class ScheduleManagementComponent implements OnInit {
         to: this.filters.date.to == null ? null : new Date(this.filters.date.to.year, this.filters.date.to.month - 1, this.filters.date.to.day),
       },
       time: this.filters.time,
+      customerName: this.filters.customerName,
       status: [],
       typeIds: []
     }

@@ -49,8 +49,8 @@
     </div>
     <div class="col-9">
       <span class="limit-text" [class.show-more]="showMoreText">{{mappedAppointment?.message}}</span>
-      <button *ngIf="!showMoreText" (click)="showMoreText=true" class="btn btn-link txt-btn">see more</button>
-      <button *ngIf="showMoreText" (click)="showMoreText=false" class="btn btn-link txt-btn">see less</button>
+      <button *ngIf="mappedAppointment?.message && mappedAppointment?.message.length > 26 && !showMoreText" (click)="showMoreText=true" class="btn btn-link txt-btn">see more</button>
+      <button *ngIf="mappedAppointment?.message && mappedAppointment?.message.length > 26 && showMoreText" (click)="showMoreText=false" class="btn btn-link txt-btn">see less</button>
     </div>
   </div>
 

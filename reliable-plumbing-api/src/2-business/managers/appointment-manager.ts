@@ -68,6 +68,8 @@ export class AppointmentManager {
                     let filteredAppointments = results;
                     if (filters.time)
                         filteredAppointments = this.filterAppointmentsByTime(filters.time.from, filters.time.to, results);
+                    if (filters.customerName && filters.customerName.length > 0)
+                        filteredAppointments = this.filterCallsByCustomerName(filters.customerName, filteredAppointments);
                     return resolve(filteredAppointments);
                 }).catch((error: Error) => reject(error));
         })
@@ -239,6 +241,22 @@ export class AppointmentManager {
         return filteredAppointments;
     }
 
+    private filterCallsByCustomerName(customerName, calls) {
+        if (!customerName && customerName.length == 0)
+            return calls;
+
+        customerName = customerName.replace(/\s/g, '').toLowerCase();
+        if (customerName.length == 0)
+            return calls;
+
+        return calls.filter(call => {
+            let customer = call.user ? call.user : call.customerInfo;
+            let fullName = (customer.firstName + ' ' + (customer.lastName ? customer.lastName : '')).replace(/\s/g, '').toLowerCase();
+
+            return fullName.indexOf(customerName) != -1;
+        });
+    }
+
     private validateAppointment(appointment: Appointment) {
         let errors = [];
 
@@ -250,7 +268,7 @@ export class AppointmentManager {
         }
         if (appointment.date == null)
             errors.push('appointment date cann\'t be empty');
-        if (!appointment.quoteId &&appointment.typeId == null)
+        if (!appointment.quoteId && appointment.typeId == null)
             errors.push('appointment type cann\'t be empty');
 
         return errors;
