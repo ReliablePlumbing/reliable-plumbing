@@ -65,11 +65,8 @@
     </div>
   </ng-container>
 
-  <div class="row justify-content-center">
+  <div class="row justify-content-center" *ngIf="mappedAppointment.images && mappedAppointment.images.length>0">
     <div class="call-gallery">
-      <!-- 
-      <p-galleria *ngIf="mappedAppointment.images.length>0" [images]="mappedAppointment.images" [panelWidth]="getGalleryDimensions().width"
-        [panelHeight]="getGalleryDimensions().height" [showCaption]="false"></p-galleria> -->
         <p-carousel [value]="mappedAppointment.images">
             <ng-template let-item pTemplate="item">
 

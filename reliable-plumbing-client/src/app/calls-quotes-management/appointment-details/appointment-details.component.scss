@@ -73,6 +73,15 @@
             width: 100px !important;
             height: 100px;
         }
+
+        .ui-carousel-page-links{
+            display: none;
+        }
+
+        .ui-carousel-header.ui-widget-header.ui-corner-all{
+            height: 20px !important;
+            padding: 2px 10px 0 0 !important;
+        }
     }
 
     .limit-text {

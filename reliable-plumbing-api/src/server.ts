@@ -16,6 +16,10 @@ const port = normalizePort(process.env.PORT || 3000);
 
 var app = express();
 
+if (config.filesSettings.enableGetFiles) {
+  app.use('/files', express.static(__dirname + "/files"));
+}
+
 if (config.production) {
   app.use(express.static(__dirname + "/dist-client"));
   app.use(/^(\/\/.+|(?!\/api).*)$/, function (req, res, next) {
@@ -23,12 +27,9 @@ if (config.production) {
   });
 }
 
-if (config.filesSettings.enableGetFiles){
-  app.use('/files', express.static(__dirname + "/files"));
-}
 
-app.use(bodyParser.json({limit: "50mb"}));
-app.use(bodyParser.urlencoded({limit: "50mb", extended: true, parameterLimit:50000}));
+app.use(bodyParser.json({ limit: "50mb" }));
+app.use(bodyParser.urlencoded({ limit: "50mb", extended: true, parameterLimit: 50000 }));
 
 var server = http.createServer(app);
 SocketContext.io = socketio().listen(server);
