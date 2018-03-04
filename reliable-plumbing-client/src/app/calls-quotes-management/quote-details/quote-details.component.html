@@ -13,6 +13,28 @@
   </div>
 
   <div class="row">
+    <div class="col-md-3">
+      <label>
+        <b>Address</b>
+      </label>
+    </div>
+    <div class="col-md-8">
+      <span>{{mappedQuote?.address}}</span>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-3">
+      <label>
+        <b>Contact</b>
+      </label>
+    </div>
+    <div class="col-md-8">
+      <span>{{mappedQuote?.contact}}</span>
+    </div>
+  </div>
+
+  <div class="row">
     <label class="col-md-3">
       <b>Description</b>
     </label>
@@ -21,12 +43,17 @@
     </div>
   </div>
 
+  <div class="row justify-content-center" *ngIf="mappedQuote.images && mappedQuote.images.length>0">
+    <div class="call-gallery">
+      <p-carousel [value]="mappedQuote.images">
+        <ng-template let-item pTemplate="item">
 
-  <div class="row" *ngIf="mappedQuote.images.length>0">
-    <a *ngIf="!showImages" class="btn btn-link" (click)="showImages=!showImages">Show Images</a>
-    <a *ngIf="showImages" class="btn btn-link" (click)="showImages=!showImages">Hide Images</a>
-    <p-galleria *ngIf="showImages" [images]="mappedQuote.images" panelWidth="500" panelHeight="313" [showCaption]="false"></p-galleria>
+          <img [src]="item.src" (click)="openLightBox(item.index)" />
+        </ng-template>
+      </p-carousel>
+    </div>
   </div>
+
   <!-- 
   <h5>Assignees:
     <span class="tag" *ngFor="let assignee of mappedAppointment.assignees">
@@ -77,7 +104,8 @@
 
   </div>
 
-  <button *ngIf="quote.status == statusEnum.Open" class="btn btn-primary filters-toggle-btn" [disabled]="estimates.fields.length<=1" (click)="save(statusEnum.Pending)">Send</button>
+  <button *ngIf="quote.status == statusEnum.Open" class="btn btn-primary filters-toggle-btn" [disabled]="estimates.fields.length<=1"
+    (click)="save(statusEnum.Pending)">Send</button>
   <ng-container *ngIf="quote.status == statusEnum.Pending && isCustomer">
     <button class="btn btn-success filters-toggle-btn" (click)="save(statusEnum.Approved)">Approve</button>
     <button class="btn btn-danger filters-toggle-btn" (click)="save(statusEnum.Rejected)">Reject</button>

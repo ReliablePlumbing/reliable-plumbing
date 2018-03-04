@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
-import { QuoteStatus } from '../../models/enums';
+import { QuoteStatus, CallsQuotesMode } from '../../models/enums';
 import { getEnumEntries } from '../../utils/date-helpers';
 import { QuoteService, AlertifyService } from '../../services/services.exports';
 import { NgbModalRef, NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -10,7 +10,9 @@ import { NgbModalRef, NgbModal } from '@ng-bootstrap/ng-bootstrap';
   styleUrls: ['./quote-management.component.scss']
 })
 export class QuoteManagementComponent implements OnInit {
-
+  modes = { listing: 1, addQuote: 2, msg: 3 };
+  callsQuotesMode: CallsQuotesMode = CallsQuotesMode.quote;
+  mode = this.modes.listing;
   tabs = [];
   quotes;
   mappedQuotes;
@@ -79,4 +81,9 @@ export class QuoteManagementComponent implements OnInit {
     this.closeQuoteDetailsModal();
   }
 
+  quoteSubmitted(quote){
+    console.log(quote);
+  }
+
+  setMode = (currentMode) => this.mode = currentMode;
 }

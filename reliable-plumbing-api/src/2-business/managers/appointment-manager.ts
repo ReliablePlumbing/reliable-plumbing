@@ -61,7 +61,7 @@ export class AppointmentManager {
     getAppointmentFiltered(filters) {
 
         let fromDate = (filters.date && filters.date.from) ? this.constructAppointmentDate(filters.date.from, filters.time.from) : null;
-        if (filters.time.to.hour == 0 && filters.time.to.minute == 0)
+        if (filters.time && filters.time.to.hour == 0 && filters.time.to.minute == 0)
             filters.time.to = { hour: 23, minute: 59 };
         let toDate = (filters.date && filters.date.to) ? this.constructAppointmentDate(filters.date.to, filters.time.to) : null;
         return new Promise<Appointment[]>((resolve, reject) => {

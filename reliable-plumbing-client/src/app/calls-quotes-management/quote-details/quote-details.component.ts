@@ -1,8 +1,9 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { buildImagesObjects } from '../../utils/files-helpers';
+import { buildImagesObjects, buildImagesObjectsForLightBox } from '../../utils/files-helpers';
 import { QuoteService, AlertifyService, EnvironmentService } from '../../services/services.exports';
 import { QuoteStatus } from '../../models/enums';
 import { isSystemUser } from '../../utils/user-helpers';
+import { Lightbox } from 'angular2-lightbox';
 
 @Component({
   selector: 'rb-quote-details',
@@ -14,7 +15,6 @@ export class QuoteDetailsComponent implements OnInit {
   @Input() quote;
   isCustomer = false;
   mappedQuote;
-  showImages = false;
   estimates = {
     fields: [{ desc: null, cost: '0' }],
     total: 0
@@ -24,12 +24,13 @@ export class QuoteDetailsComponent implements OnInit {
   @Output() quoteUpdated: EventEmitter<any> = new EventEmitter<any>();
   @Output() close: EventEmitter<any> = new EventEmitter<any>();
 
-  constructor(private QuoteService: QuoteService, private alertifyService: AlertifyService, private environemntService: EnvironmentService) { }
+  constructor(private QuoteService: QuoteService, private alertifyService: AlertifyService, private environemntService: EnvironmentService,
+    private lightBox: Lightbox) { }
 
   ngOnInit() {
     this.isCustomer = !isSystemUser(this.environemntService.currentUser);
     this.mappedQuote = this.mapQuote(this.quote);
-
+    console.log(this.quote);
   }
 
   mapQuote(quote) {
@@ -38,11 +39,24 @@ export class QuoteDetailsComponent implements OnInit {
       this.sumFields();
     }
     return {
-      images: buildImagesObjects(quote.id, quote.relatedFileNames),
       fullName: quote.fullName,
+      address: this.getAddress(quote),
+      contact: this.getCustomerContact(quote),
+      images: buildImagesObjectsForLightBox(quote.id, quote.relatedFileNames),
       message: quote.message,
 
     }
+  }
+  getCustomerContact(quote) {
+    let user = quote.user ? quote.user : quote.customerInfo;
+
+    return user.email + ' - ' + user.mobile;
+  }
+
+  getAddress(quote) {
+    let site = quote.user ? quote.user.sites.find(x => x.id == quote.siteId) : quote.customerInfo;
+
+    return site.street + ' - ' + site.city + ' - ' + site.state;
   }
 
   addAnotherField() {
@@ -88,6 +102,11 @@ export class QuoteDetailsComponent implements OnInit {
 
   closeModal() {
     this.close.emit();
+  }
+
+  openLightBox(index: number): void {
+    // open lightbox
+    this.lightBox.open(this.mappedQuote.images, index);
   }
 
 }

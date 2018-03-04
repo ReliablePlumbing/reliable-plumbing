@@ -2,36 +2,61 @@
 
 <ng-container *ngIf="!loading">
 
-  <section class="listing-content">
+  <ng-container *ngIf="mode==modes.addQuote">
+    <section class="row header">
+      <div class="col-sm-12">
+        <label>New Quote</label>
+        <button class="btn btn-success float-right" (click)="setMode(modes.listing)">Back</button>
+      </div>
+    </section>
+    <section class="schedule-content">
+      <rb-calls-quotes-form [mode]="callsQuotesMode" [adminMode]="true" (submitted)="quoteSubmitted($event)"></rb-calls-quotes-form>
+    </section>
+  </ng-container>
 
-    <ngb-tabset type="pills">
-      <ngb-tab *ngFor="let tab of tabs" [title]="tab.text + ' (' + mappedQuotes[tab.id].length + ')'" [id]="tab.id">
-        <ng-template ngbTabContent>
+  <ng-container *ngIf="mode==modes.msg">
+    <section class="row msg">
+      <div class="col-sm-12">
+        <button class="btn btn-success float-right" (click)="setMode(modes.listing)">Back</button>
+      </div>
+    </section>
+    <message [text]="'Saved Successfully'"></message>
+  </ng-container>
 
-          <div class="quotes-list">
+  <ng-container *ngIf="mode==modes.listing">
+    <button class="btn btn-success add-call" (click)="setMode(modes.addQuote)">Add New Quote</button>
 
-            <div class="quotes-cards-list">
-              <div class="quote-card pointer" *ngFor="let quote of mappedQuotes[tab.id]" (click)="openQuoteDetailsModal(quote)">
-                <h6>
-                  <b>{{quote.fullName}}</b>
-                </h6>
-                <div>
-                  <b>{{quote.type.name}}</b>
-                </div>
-                <div *ngIf="quote.totalEstimate != null">
-                  <label>Total Estimation (</label>
-                  <b>{{quote.totalEstimate}})</b>
+    <section class="listing-content">
+
+      <ngb-tabset type="pills">
+        <ngb-tab *ngFor="let tab of tabs" [title]="tab.text + ' (' + mappedQuotes[tab.id].length + ')'" [id]="tab.id">
+          <ng-template ngbTabContent>
+
+            <div class="quotes-list">
+
+              <div class="quotes-cards-list">
+                <div class="quote-card pointer" *ngFor="let quote of mappedQuotes[tab.id]" (click)="openQuoteDetailsModal(quote)">
+                  <h6>
+                    <b>{{quote.fullName}}</b>
+                  </h6>
+                  <div>
+                    <b>{{quote.type.name}}</b>
+                  </div>
+                  <div *ngIf="quote.totalEstimate != null">
+                    <label>Total Estimation (</label>
+                    <b>{{quote.totalEstimate}})</b>
+                  </div>
                 </div>
               </div>
+
             </div>
 
-          </div>
+          </ng-template>
+        </ngb-tab>
 
-        </ng-template>
-      </ngb-tab>
-
-    </ngb-tabset>
-  </section>
+      </ngb-tabset>
+    </section>
+  </ng-container>
 </ng-container>
 
 
