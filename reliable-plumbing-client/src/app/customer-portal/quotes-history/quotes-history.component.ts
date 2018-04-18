@@ -113,8 +113,10 @@ export class QuotesHistoryComponent implements OnInit {
   }
 
   callSubmitted(call) {
-    call.obj.quoteId = this.selectedQuote.id;
-
+    call.obj.quoteIds = [this.selectedQuote.id];
+    call.obj.preferedContactType = this.selectedQuote.preferedContactType;
+    call.obj.typeId = this.selectedQuote.typeId;
+    call.obj.siteId = this.selectedQuote.siteId;
     this.appointmentService.addAppointment(call.obj, call.images).subscribe(result => {
       if (result.id != null) {
         this.selectedQuote.appointmentId = result.id;

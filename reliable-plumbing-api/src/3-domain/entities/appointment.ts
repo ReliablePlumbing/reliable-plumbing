@@ -26,8 +26,9 @@ export class Appointment extends BaseEntity {
     rate?: number;
     date: Date;
     typeId: string;
-    quoteId?: string;
+    quoteIds?: string[];
     message: string;
+    preferedContactType: string;
     status: AppointmentStatus;
     statusHistory: StatusHistory[];
     assigneeIds?: string[];
@@ -44,7 +45,7 @@ export class Appointment extends BaseEntity {
     assignees?: User[];
     type?: AppointmentType;
     relatedFiles: any[];
-    quote?: Quote; 
+    quotes?: Quote[]; 
 
     constructor(appointment: any) {
         super();
@@ -55,11 +56,12 @@ export class Appointment extends BaseEntity {
             this.customerInfo = appointment.customerInfo;
             this.userId = appointment.userId;
             this.siteId = appointment.siteId;
-            this.quoteId = appointment.quoteId;
+            this.quoteIds = appointment.quoteIds;
             this.rate = appointment.rate;
             this.date = appointment.date;
             this.typeId = appointment.typeId;
             this.message = appointment.message;
+            this.preferedContactType = appointment.preferedContactType;
             this.status = appointment.status;
             this.assigneeIds = appointment.assigneeIds;
             this.user = appointment.user;
@@ -91,15 +93,16 @@ export class Appointment extends BaseEntity {
             customerInfo: this.customerInfo,
             userId: this.userId,
             siteId: this.siteId,
-            quoteId: this.quoteId,
+            quoteIds: this.quoteIds,
             date: this.date,
             typeId: this.typeId,
             rate: this.rate,
             message: this.message,
+            preferedContactType: this.preferedContactType,            
             status: this.status,
             user: this.user == null ? null : this.user.toLightModel(),
             type: this.type == null ? null : this.type.toLightModel(),
-            quote: this.quote == null ? null : this.quote.toLightModel(),
+            quotes: this.quotes == null ? null : this.quotes.map(q => q.toLightModel()),
             statusHistory: this.statusHistory.map(s => s.toLightModel()),
             assigneeIds: this.assigneeIds,
             assignees: this.assignees == null ? null : this.assignees.map(a => a.toLightModel()),

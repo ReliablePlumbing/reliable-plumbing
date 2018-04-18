@@ -6,34 +6,36 @@
   <div class="register-container">
     <div class="container">
       <ng-container *ngIf="(!isLoggedIn || adminMode) && activeIndex==0">
-        <form [formGroup]="customerInfoForm" novalidate>
-          <div class="row">
+        <div class="row">
 
-            <div class="col-md-12" *ngIf="adminMode">
-              <div class="form-group">
-                <label class="">Existing User
-                </label>
-                <p-inputSwitch onLabel="Yes" offLabel="No" [(ngModel)]="existingCustomer" [ngModelOptions]="{standalone: true}"></p-inputSwitch>
-              </div>
+          <div class="col-md-12" *ngIf="adminMode">
+            <div class="form-group">
+              <label class="">Existing User
+              </label>
+              <p-inputSwitch onLabel="Yes" offLabel="No" [(ngModel)]="existingCustomer" [ngModelOptions]="{standalone: true}"></p-inputSwitch>
             </div>
+          </div>
 
-            <div class="col-md-6" *ngIf="adminMode&&existingCustomer">
-              <div class="form-group">
-                <label for="firstName" class="">Search Customers (first/last name, phone or email)
-                  <!-- <i *ngIf="getControlValidation('firstName','required')">*</i> -->
-                </label>
-                <input type="text" class="form-control" [class.is-invalid]="searchFailed" [(ngModel)]="selectedUser" [ngbTypeahead]="search"
-                  placeholder="Customers Search" [ngModelOptions]="{standalone: true}" [inputFormatter]="inputFormatter" [resultTemplate]="rt"
-                />
-                <span *ngIf="searching">searching...</span>
-              </div>
+          <div class="col-md-6" *ngIf="adminMode&&existingCustomer">
+            <div class="form-group">
+              <label for="firstName" class="">Search Customers (first/last name, phone or email)
+                <!-- <i *ngIf="getControlValidation('firstName','required')">*</i> -->
+              </label>
+              <input type="text" class="form-control" [class.is-invalid]="searchFailed" [(ngModel)]="selectedUser" [ngbTypeahead]="search"
+                placeholder="Customers Search" [ngModelOptions]="{standalone: true}" [inputFormatter]="inputFormatter" [resultTemplate]="rt"
+              />
+              <span *ngIf="searching">searching...</span>
             </div>
+          </div>
+        </div>
+        <ng-template #rt let-r="result" let-t="term">
+          {{ r.firstName + ' ' + r.lastName + ' (' +r.email +')'}}
+        </ng-template>
 
-            <ng-template #rt let-r="result" let-t="term">
-              {{ r.firstName + ' ' + r.lastName + ' (' +r.email +')'}}
-            </ng-template>
+        <ng-container *ngIf="!isLoggedIn || (adminMode && !existingCustomer)">
+          <form [formGroup]="customerInfoForm" novalidate>
+            <div class="row">
 
-            <ng-container *ngIf="!adminMode || !existingCustomer">
               <div class="col-md-6">
                 <div class="form-group">
                   <label for="firstName" class="">First Name
@@ -120,14 +122,15 @@
                   <label *ngIf="getControlValidation('zipCode','required', false)" class="validation-text">* Required</label>
                 </div>
               </div>
-            </ng-container>
-
-            <div class="col-md-12">
-              <button type="submit" (click)="nextStep()" class="btn btn-success">Next</button> &nbsp;
-              <button type="reset" (click)="resetUserInfoForm()" class="btn btn-danger">Clear</button>
             </div>
+          </form>
+        </ng-container>
+        <div class="row">
+          <div class="col-md-12">
+            <button type="submit" (click)="nextStep()" class="btn btn-success">Next</button> &nbsp;
+            <button type="reset" (click)="resetUserInfoForm()" class="btn btn-danger">Clear</button>
           </div>
-        </form>
+        </div>
       </ng-container>
       <ng-container *ngIf="activeIndex==1 || (isLoggedIn && !adminMode)">
 

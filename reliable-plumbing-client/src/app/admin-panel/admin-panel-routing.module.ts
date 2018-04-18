@@ -14,12 +14,13 @@ import { EditProfileComponent } from './edit-profile/edit-profile.component';
 import { ResetPasswordComponent } from './reset-password/reset-password.component';
 import { QuoteManagementComponent } from './quote-management/quote-management.component';
 import { DashboardsComponent } from './dashboards/dashboards.component';
+import { CallManagementComponent } from './call-management/call-management.component';
 
 const routes: Routes = [
   {
     path: systemRoutes.controlPanel, component: AdminPanelComponent, canActivate: [LoginAuthGuard], data: { roles: [Role.Supervisor, Role.Technician, Role.Admin, Role.SystemAdmin] },
     children: [
-      { path: systemRoutes.scheduleManagement, canActivate: [LoginAuthGuard], component: ScheduleManagementComponent, data: { roles: [Role.Admin, Role.SystemAdmin, Role.Supervisor] } },
+      { path: systemRoutes.scheduleManagement, canActivate: [LoginAuthGuard], component: CallManagementComponent, data: { roles: [Role.Admin, Role.SystemAdmin, Role.Supervisor] } },
       { path: systemRoutes.quoteManagement, canActivate: [LoginAuthGuard], component: QuoteManagementComponent, data: { roles: [Role.Admin, Role.SystemAdmin, Role.Supervisor] } },
       { path: systemRoutes.settings, component: AppointmentSettingsomponent, canActivate: [LoginAuthGuard], data: { roles: [Role.Admin, Role.SystemAdmin] } },
       { path: systemRoutes.systemUsers, component: SystemUsersManagementComponent, canActivate: [LoginAuthGuard], data: { roles: [Role.Admin, Role.SystemAdmin] } },

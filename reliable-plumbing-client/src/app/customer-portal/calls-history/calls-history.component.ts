@@ -86,8 +86,7 @@ export class CallsHistoryComponent implements OnInit {
     for (let call of calls) {
       let customer = call.user ? call.user : call.customerInfo;
       call.fullName = customer.firstName + ' ' + (customer.lastName ? customer.lastName : '');
-      let typeId = call.typeId ? call.typeId : call.quote.typeId;
-      let typeIndex = this.lookups.types.findIndex(t => t.id == typeId)
+      let typeIndex = this.lookups.types.findIndex(t => t.id == call.typeId)
       if (typeIndex != -1)
         call.typeObj = this.lookups.types[typeIndex];
       call.quoteTotalEstimate = this.calculateTotalQuoteEstimate(call);

@@ -2,8 +2,7 @@
 
 @import url('~primeng/resources/primeng.min.css');
 @import url('~primeng/resources/themes/omega/theme.css');
-@import url('~angular2-lightbox/lightbox.css');
-
+// @import url('~angular2-lightbox/lightbox.css');
 .modal-content {
     margin-top: 110px;
 }
@@ -146,19 +145,18 @@ rb-technicians-tracking .agm-map-container-inner {
 }
 
 .ui-panel-images {
-    width: 100%;
-    // height: 100%;
+    width: 100%; // height: 100%;
 }
 
-.alertify{
+.alertify {
     z-index: 1100;
 }
 
-.table td, .table th {
+.table td,
+.table th {
     padding: 0.5rem !important;
     vertical-align: middle !important;
 }
-
 
 // ng prime steps
 .ui-steps .ui-steps-item {
@@ -175,7 +173,7 @@ rb-technicians-tracking .agm-map-container-inner {
     padding: 0 1em;
 }
 
-.ui-steps.steps-custom .ui-state-default{
+.ui-steps.steps-custom .ui-state-default {
     background-color: #b3b1b1 !important;
     border: 0 !important;
 }
@@ -196,4 +194,47 @@ rb-technicians-tracking .agm-map-container-inner {
 
 .ui-button .ui-button-text {
     line-height: 1.8 !important;
+}
+
+.custom-left-scrollbar {
+    &.ui-scrollpanel {
+        border: none;
+        border-radius: 0;
+    }
+    & .ui-scrollpanel-wrapper {
+        border-right: 0;
+        border-left: 9px solid transparent;
+        z-index: 0;
+        box-sizing: unset;
+    }
+    & .ui-scrollpanel-bar {
+        left: 0;
+        background-color: #757575;
+        border-radius: 0;
+        opacity: 1;
+        transition: background-color .3s;
+    }
+    & :hover .ui-scrollpanel-bar {
+        background-color: #757575;
+    }
+}
+
+.custom-scrollbar {
+    &.ui-scrollpanel {
+        border: none;
+        border-radius: 0;
+    }
+    & .ui-scrollpanel-wrapper {
+        border-right: 9px solid #dadada;
+        background-color: #D3E6F8;
+    }
+    & .ui-scrollpanel-bar {
+        background-color: #757575;
+        border-radius: 0;
+        opacity: 1;
+        transition: background-color .3s;
+    }
+    & :hover .ui-scrollpanel-bar {
+        background-color: #757575;
+    }
 }

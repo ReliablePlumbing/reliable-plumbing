@@ -28,7 +28,7 @@ export class AppointmentRepo extends Repo<Appointment> {
 
         return new Promise<Appointment[]>((resolve, reject) => {
 
-            model.find(filterObj).populate('userId').populate('quoteId').populate('typeId').exec((err, results) => {
+            model.find(filterObj).populate('userId').populate('quoteIds').populate('typeId').exec((err, results) => {
                 if (err != null)
                     return reject(err);
 
@@ -91,7 +91,7 @@ export class AppointmentRepo extends Repo<Appointment> {
     }
 
     private mapModelToEntity(appointmentModel: GenericModel<Appointment>) {
-        let obj: any = appointmentModel.toObject({ transform: Object });
+        let obj: any = appointmentModel.toObject();
         let appointment = new Appointment(obj);
         if (obj.userId != null && typeof obj.userId == 'object') {
             appointment.user = new User(obj.userId);
@@ -107,12 +107,15 @@ export class AppointmentRepo extends Repo<Appointment> {
         else
             appointment.typeId = obj.typeId;
 
-        if (obj.quoteId != null && typeof obj.quoteId == 'object') {
-            appointment.quote = new Quote(obj.quoteId);
-            appointment.quoteId = appointment.quote.id;
+        if (obj.quoteIds != null && obj.quoteIds.length > 0 && typeof obj.quoteIds[0] == 'object') {
+            appointment.quoteIds = [];
+            appointment.quotes = obj.quoteIds.map((q: any) => {
+                appointment.quoteIds.push(q.id);
+                return new Quote(q)
+            });
         }
         else
-            appointment.quoteId = obj.quoteId;
+            appointment.quoteIds = obj.quoteIds;
 
         if (obj.assigneeIds) {
             let assignees = [], assigneeIds = [];

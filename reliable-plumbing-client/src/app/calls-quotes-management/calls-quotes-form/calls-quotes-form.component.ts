@@ -28,9 +28,7 @@ export class CallsQuotesFormComponent implements OnInit {
   trySubmit: boolean = false;
   isLoggedIn: boolean = false;
   images = [];
-  appointment: any = {
-    time: '-1'
-  };
+  appointment: any = {};
   mobileMaskOpts = {
     mask: ['(', /[1-9]/, /\d/, /\d/, ')', ' ', /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/],
     guide: false,
@@ -57,8 +55,11 @@ export class CallsQuotesFormComponent implements OnInit {
     this.config.markDisabled = (date: NgbDateStruct) => {
       return compareBootstrapDate(date, { day: nowDate.date(), month: nowDate.month() + 1, year: nowDate.year() }) > 0;
     };
-    let date = new Date();
-    this.appointment.dateObj = { day: nowDate.date(), month: nowDate.month() + 1, year: nowDate.year() };
+    if (this.mode == CallsQuotesMode.call) {
+      let date = new Date();
+      this.appointment.dateObj = { day: nowDate.date(), month: nowDate.month() + 1, year: nowDate.year() };
+      this.appointment.time = '-1';
+    }
     this.isLoggedIn = this.environmentService.isUserLoggedIn;
     if (this.isLoggedIn && !this.adminMode) {
       this.activeIndex = 1;
@@ -98,7 +99,7 @@ export class CallsQuotesFormComponent implements OnInit {
       this.appointmentForm.addControl('time', new FormControl(null, this.validateDropdownRequired));
     }
 
-    if (!this.isLoggedIn || this.adminMode) {
+    if (!this.isLoggedIn || (this.adminMode && !this.existingCustomer)) {
       this.appointment.customerInfo = {
         state: 'California'
       },
@@ -142,7 +143,8 @@ export class CallsQuotesFormComponent implements OnInit {
     if (this.appointmentForm.invalid)
       return;
 
-    this.appointment.date = convertFromBootstrapDate(this.appointment.dateObj, this.appointment.time);
+    if (this.mode == CallsQuotesMode.call)
+      this.appointment.date = convertFromBootstrapDate(this.appointment.dateObj, this.appointment.time);
     if (this.isLoggedIn && !this.adminMode)
       this.appointment.userId = this.environmentService.currentUser.id;
     else if (this.existingCustomer)
@@ -185,7 +187,8 @@ export class CallsQuotesFormComponent implements OnInit {
     this.lookupsService.getAppointmentSettingsAndTypes().subscribe(results => {
 
       this.settings = results.settings;
-      this.createTimeArray()
+      if (this.mode == CallsQuotesMode.call)
+        this.createTimeArray()
       this.appointmentTypes = results.types;
     })
   }

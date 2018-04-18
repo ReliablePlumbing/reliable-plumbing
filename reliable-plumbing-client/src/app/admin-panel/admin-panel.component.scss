@@ -29,6 +29,7 @@
     height: 100%;
     border-right: 1px solid rgba(0, 0, 0, .125);
     padding-top: 50px;
+    font-size: 14px;
     .list-group-item {
         color: #40a4df;
         background-color: transparent;
@@ -64,4 +65,8 @@
     .home-item{
         display: block;
     }
+}
+
+.panel-content{
+    font-size: 12px;
 }

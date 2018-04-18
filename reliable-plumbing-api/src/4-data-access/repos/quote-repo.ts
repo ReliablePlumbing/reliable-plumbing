@@ -57,6 +57,17 @@ export class QuoteRepo extends Repo<Quote> {
 
     }
 
+    updateQuotesAppointment(quoteIds, callId) {
+        let model = this.createSet();
+        return new Promise<boolean>((resolve, reject) => {
+            model.find({ id: { $in: quoteIds } }).update({ $set: { appointmentId: callId } }, (err, rows) => {
+                if (err)
+                    return reject(err);
+                return resolve(rows > 0)
+            });
+        });
+    }
+
     // getAppointmentsFilteredByDatesAndStatusAndType(from: Date, to: Date, status: AppointmentStatus[], typeids: string[]) {
     //     let model = this.createSet();
 

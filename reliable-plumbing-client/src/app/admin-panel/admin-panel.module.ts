@@ -21,6 +21,7 @@ import { EditProfileComponent } from './edit-profile/edit-profile.component';
 import { ResetPasswordComponent } from './reset-password/reset-password.component';
 import { QuoteManagementComponent } from './quote-management/quote-management.component';
 import { DashboardsComponent } from './dashboards/dashboards.component';
+import { CallManagementComponent } from './call-management/call-management.component';
 
 @NgModule({
   imports: [
@@ -28,7 +29,7 @@ import { DashboardsComponent } from './dashboards/dashboards.component';
     SharedModule, SelectModule, CallsQuotesManagementModule, ReactiveFormsModule, DashboardsModule
   ],
   declarations: [
-    AppointmentSettingsomponent, AdminPanelComponent, ScheduleManagementComponent, MyAppointmentsComponent, TechniciansTrackingComponent, EditProfileComponent, ResetPasswordComponent, QuoteManagementComponent, DashboardsComponent
+    AppointmentSettingsomponent, AdminPanelComponent, ScheduleManagementComponent, MyAppointmentsComponent, TechniciansTrackingComponent, EditProfileComponent, ResetPasswordComponent, QuoteManagementComponent, DashboardsComponent, CallManagementComponent
   ]
 })
 export class AdminPanelModule { }

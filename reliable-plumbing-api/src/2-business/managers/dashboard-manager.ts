@@ -32,11 +32,7 @@ export class DashboardManager {
         });
 
         for (let call of calls) {
-            if (call.typeId)
-                servicesDic[call.typeId].callsCount++;
-            else if (call.quote && call.quote.typeId)
-                servicesDic[call.quote.typeId].callsCount++;
-
+            servicesDic[call.typeId].callsCount++;
         }
 
         let servicesStats = [];

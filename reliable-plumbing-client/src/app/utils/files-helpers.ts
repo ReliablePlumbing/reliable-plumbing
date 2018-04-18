@@ -52,7 +52,7 @@ export function buildImagesObjectsForLightBox(objectId, filesNames) {
     for (let i = 0; i < filesNames.length; i++) {
         let fileName = filesNames[i];
         let url = baseFilesUrl + fileName
-        images.push({ src: url, caption: '', thumb: url, index: i });
+        images.push({ source: url, thumbnail: url, index: i });
     }
 
     return images;

@@ -3,7 +3,6 @@ import { buildImagesObjects, buildImagesObjectsForLightBox } from '../../utils/f
 import { QuoteService, AlertifyService, EnvironmentService } from '../../services/services.exports';
 import { QuoteStatus } from '../../models/enums';
 import { isSystemUser } from '../../utils/user-helpers';
-import { Lightbox } from 'angular2-lightbox';
 
 @Component({
   selector: 'rb-quote-details',
@@ -24,8 +23,7 @@ export class QuoteDetailsComponent implements OnInit {
   @Output() quoteUpdated: EventEmitter<any> = new EventEmitter<any>();
   @Output() close: EventEmitter<any> = new EventEmitter<any>();
 
-  constructor(private QuoteService: QuoteService, private alertifyService: AlertifyService, private environemntService: EnvironmentService,
-    private lightBox: Lightbox) { }
+  constructor(private QuoteService: QuoteService, private alertifyService: AlertifyService, private environemntService: EnvironmentService) { }
 
   ngOnInit() {
     this.isCustomer = !isSystemUser(this.environemntService.currentUser);
@@ -104,9 +102,9 @@ export class QuoteDetailsComponent implements OnInit {
     this.close.emit();
   }
 
-  openLightBox(index: number): void {
-    // open lightbox
-    this.lightBox.open(this.mappedQuote.images, index);
-  }
+  // openLightBox(index: number): void {
+  //   // open lightbox
+  //   this.lightBox.open(this.mappedQuote.images, index);
+  // }
 
 }

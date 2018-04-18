@@ -64,6 +64,8 @@ export class CallsListingComponent implements OnInit {
         this.mappedCalls[appointmentDate] = [];
 
       call.quoteTotalEstimate = this.calculateTotalQuoteEstimate(call);
+      if (call.quote && call.user)
+        call.quote.user = call.user;
       let appointmentDateLocalized = new Date(call.date);
       call.time = convertTimeTo12String(appointmentDateLocalized.getHours(), appointmentDateLocalized.getMinutes());
       call.allowCheckIn = isCallOpened(call);

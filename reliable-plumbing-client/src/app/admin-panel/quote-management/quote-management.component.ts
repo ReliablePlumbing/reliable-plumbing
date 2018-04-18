@@ -27,6 +27,12 @@ export class QuoteManagementComponent implements OnInit {
   ngOnInit() {
     this.tabs = getEnumEntries(QuoteStatus);
 
+    this.getQuotes();
+  }
+
+
+  getQuotes() {
+    this.loading = true;
     this.quoteService.getQuotesFilteredByStatus([])
       .subscribe(results => {
         this.quotes = results;
@@ -49,7 +55,7 @@ export class QuoteManagementComponent implements OnInit {
     return mappedQuotes;
   }
 
-  sumEstimateFields(quote){
+  sumEstimateFields(quote) {
     let total = 0;
     quote.estimateFields.forEach(f => total += f.cost);
 
@@ -70,8 +76,8 @@ export class QuoteManagementComponent implements OnInit {
   closeQuoteDetailsModal() {
     this.selectedQuote = null;
     this.quoteDetailsModalRef.close();
-  }
 
+  }
   quoteUpdated(quote) {
     let index = this.quotes.filter(q => q.id == quote.id);
 
@@ -81,8 +87,17 @@ export class QuoteManagementComponent implements OnInit {
     this.closeQuoteDetailsModal();
   }
 
-  quoteSubmitted(quote){
-    console.log(quote);
+  quoteSubmitted(quote) {
+    this.quoteService.addQuote(quote.obj, quote.images).subscribe(result => {
+      if (result.id != null) {
+        this.mode = this.modes.msg;
+        setTimeout(() => {
+          this.mode = this.modes.listing
+          this.getQuotes();
+        }, 5000);
+        this.alertifyService.success('Your call has been submitted');
+      }
+    });
   }
 
   setMode = (currentMode) => this.mode = currentMode;

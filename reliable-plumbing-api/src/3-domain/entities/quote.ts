@@ -26,6 +26,7 @@ export class Quote extends BaseEntity {
     appointmentId?: string;
     typeId: string;
     message: string;
+    preferedContactType: string;
     status: QuoteStatus;
     statusHistory: StatusHistory[];
     relatedFileNames: string[];
@@ -52,6 +53,7 @@ export class Quote extends BaseEntity {
             this.appointmentId = quote.appointmentId;
             this.typeId = quote.typeId;
             this.message = quote.message;
+            this.preferedContactType = quote.preferedContactType;
             this.status = quote.status;
             this.user = quote.user;
             this.type = quote.type;
@@ -87,6 +89,7 @@ export class Quote extends BaseEntity {
             appointmentId: this.appointmentId,
             typeId: this.typeId,
             message: this.message,
+            preferedContactType: this.preferedContactType,            
             status: this.status,
             user: this.user == null ? null : this.user.toLightModel(),
             type: this.type == null ? null : this.type.toLightModel(),

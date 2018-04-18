@@ -40,9 +40,9 @@ export class AppointmentManager {
 
         return new Promise<Appointment>((resolve, reject) => {
             this.appointmentRepo.add(appointment).then(result => {
-                // update quote if exists
-                if (appointment.quoteId)
-                    this.updateQuoteWithAppointment(appointment.id, appointment.quoteId);
+                // update quotes if exists
+                if (appointment.quoteIds)
+                    this.updateQuoteWithAppointment(appointment.id, appointment.quoteIds);
 
                 // add notification
                 let notifier = appointment.userId == null ? [] : appointment.userId;
@@ -270,7 +270,7 @@ export class AppointmentManager {
         }
         if (appointment.date == null)
             errors.push('appointment date cann\'t be empty');
-        if (!appointment.quoteId && appointment.typeId == null)
+        if (appointment.typeId == null)
             errors.push('appointment type cann\'t be empty');
 
         return errors;
@@ -368,8 +368,8 @@ export class AppointmentManager {
         this.notificationManager.addNotifications(notifications);
     }
 
-    private updateQuoteWithAppointment(appointmentId, quoteId) {
-        this.quoteRepo.updateQuoteAppoitnemnt(quoteId, appointmentId).then((result: any) => {
+    private updateQuoteWithAppointment(appointmentId, quoteIds) {
+        this.quoteRepo.updateQuoteAppoitnemnt(quoteIds, appointmentId).then((result: any) => {
 
             console.log('saved ');
         }).catch((error: Error) => console.log(error));
