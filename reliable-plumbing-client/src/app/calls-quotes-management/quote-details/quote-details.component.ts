@@ -42,9 +42,28 @@ export class QuoteDetailsComponent implements OnInit {
       contact: this.getCustomerContact(quote),
       images: buildImagesObjectsForLightBox(quote.id, quote.relatedFileNames),
       message: quote.message,
-
+      actions: this.getQuoteActions(quote)
     }
   }
+
+  getQuoteActions(quote) {
+    let actions = [];
+    switch (quote.status) {
+      case QuoteStatus.Open:
+        actions.push({ status: QuoteStatus.Pending, label: 'Send', cssClass: 'btn-primary' });
+        actions.push({ status: QuoteStatus.Approved, label: 'Save As Approved', cssClass: 'btn-success' });
+        break;
+      case QuoteStatus.Pending:
+        actions.push({ status: QuoteStatus.Approved, label: 'Approve', cssClass: 'btn-success' });
+        actions.push({ status: QuoteStatus.Rejected, label: 'Reject', cssClass: 'btn-danger' });
+        break;
+      case QuoteStatus.Approved:
+        actions.push({ status: QuoteStatus.Closed, label: 'Close', cssClass: 'btn-info' });
+        break;
+    }
+    return actions;
+  }
+
   getCustomerContact(quote) {
     let user = quote.user ? quote.user : quote.customerInfo;
 
