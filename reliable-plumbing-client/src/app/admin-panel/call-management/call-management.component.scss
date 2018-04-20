@@ -170,6 +170,7 @@ $group-date-calls-indentation: 10px;
                 button {
                     padding: 0 2px;
                     height: 18px;
+                    margin-left: 5px;
                 }
             }
         }
@@ -184,4 +185,12 @@ $group-date-calls-indentation: 10px;
     .ui-inputgroup {
         margin-top: 0;
     }
+}
+
+.status-border {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 5px;
+    height: 100%;
 }

@@ -49,6 +49,7 @@
                                         </li>
                                         <li *ngFor="let call of mappedCalls[tab.id][groupDate]" class="call" [class.selected]="call.id == selectedCall.id" (click)="selectedCall = call" [attr.data-date]="call.time">
                                             <h3>
+                                                <span class="status-border grayBg"></span>
                                                 <div class="dropdown">
                                                     <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
                                                     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
