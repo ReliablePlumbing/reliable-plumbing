@@ -1,90 +1,92 @@
 <div class="row">
-  <div class="col-3">
-    <label>
-      <b>Customer Name</b>
+    <div class="col-3">
+        <label>
+      <b>Customer Name:</b>
     </label>
-  </div>
-  <div class="col-9">
-    <span>{{mappedCall?.customerName}}</span>
-  </div>
+    </div>
+    <div class="col-9">
+        <span>{{mappedCall?.customerName}}</span>
+    </div>
 </div>
 
 <div class="row">
-  <div class="col-3">
-    <label>
-      <b>Call Date</b>
+    <div class="col-3">
+        <label>
+      <b>Call Date:</b>
     </label>
-  </div>
-  <div class="col-9">
-    <span>{{mappedCall?.date | date:'MMM dd yyyy HH:mm a'}}</span>
-  </div>
+    </div>
+    <div class="col-9">
+        <span>{{mappedCall?.date | date:'MMM dd yyyy HH:mm a'}}</span>
+    </div>
 </div>
 
 <div class="row">
-  <div class="col-3">
-    <label>
-      <b>Address</b>
+    <div class="col-3">
+        <label>
+      <b>Address:</b>
     </label>
-  </div>
-  <div class="col-9">
-    <span>{{mappedCall?.address}}</span>
-  </div>
+    </div>
+    <div class="col-9">
+        <span>{{mappedCall?.address}}</span>
+    </div>
 </div>
 
 <div class="row">
-  <div class="col-3">
-    <label>
-      <b>Email</b>
+    <div class="col-3">
+        <label>
+      <b>Email:</b>
     </label>
-  </div>
-  <div class="col-9">
-    <span>{{mappedCall?.email}}</span>
-  </div>
+    </div>
+    <div class="col-9">
+        <span>{{mappedCall?.email}}</span>
+    </div>
 </div>
 
 <div class="row">
-  <div class="col-3">
-    <label>
-      <b>Tel. (Mobile)</b>
+    <div class="col-3">
+        <label>
+      <b>Tel. (Mobile):</b>
     </label>
-  </div>
-  <div class="col-9">
-    <span>{{mappedCall?.mobile}}</span>
-  </div>
+    </div>
+    <div class="col-9">
+        <span>{{mappedCall?.mobile}}</span>
+    </div>
 </div>
 
 <div class="row">
-  <div class="col-3">
-    <label>
-      <b>Description</b>
+    <div class="col-3">
+        <label>
+      <b>Description:</b>
     </label>
-  </div>
-  <div class="col-9">
-    <p>{{mappedCall.message}}</p>
-    <!-- <span class="limit-text" [class.show-more]="showMoreText">{{mappedAppointment?.message}}</span>
+    </div>
+    <div class="col-9">
+        <p>{{mappedCall.message}}</p>
+        <!-- <span class="limit-text" [class.show-more]="showMoreText">{{mappedAppointment?.message}}</span>
     <button *ngIf="mappedAppointment?.message && mappedAppointment?.message.length > 26 && !showMoreText" (click)="showMoreText=true"
       class="btn btn-link txt-btn">see more</button>
     <button *ngIf="mappedAppointment?.message && mappedAppointment?.message.length > 26 && showMoreText" (click)="showMoreText=false"
       class="btn btn-link txt-btn">see less</button> -->
-  </div>
+    </div>
 </div>
 
 <div class="row">
-  <div class="col-3">
-    <label>
-      <b>Images</b>
+    <div class="col-3">
+        <label>
+      <b>Images:</b>
     </label>
-  </div>
-  <p-lightbox [images]="mappedCall.images" styleClass="call-details-lightbox" appendTo="body"></p-lightbox>
+    </div>
+    <div class="col-9">
+        <p-lightbox [images]="mappedCall.images" styleClass="call-details-lightbox" appendTo="body"></p-lightbox>
+    </div>
 </div>
 
 <div class="row">
-  <div class="col-3">
-    <label>
-      <b>Quotes</b>
+    <div class="col-3">
+        <label>
+      <b>Quotes:</b>
     </label>
-  </div>
-  <div class="col-9">
-    {{mappedCall.quotes == null ? 'No Quotes' : mappedCall.quotes.length}}
-  </div>
+    </div>
+    <div class="col-9">
+        {{mappedCall.quotes == null ? 'No Quotes' : mappedCall.quotes.length}}
+    </div>
 </div>

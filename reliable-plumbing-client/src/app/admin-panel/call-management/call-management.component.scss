@@ -22,7 +22,6 @@ $group-date-calls-indentation: 10px;
         border-left: $line solid $color-primary;
         border-bottom-right-radius: $radius;
         border-top-right-radius: $radius;
-        font-family: $font-text;
         margin-left: 80px;
         margin-bottom: 0;
         letter-spacing: 0.5px;
@@ -37,7 +36,6 @@ $group-date-calls-indentation: 10px;
         h1,
         h2,
         h3 {
-            font-family: $font-title;
             letter-spacing: 1.5px;
             font-weight: 100;
             font-size: 1.2em;
@@ -71,7 +69,6 @@ $group-date-calls-indentation: 10px;
             h3 {
                 font-size: 16px;
                 font-weight: 900!important;
-                font-family: "Raleway", sans-serif;
             }
         }
         .call {
@@ -154,6 +151,37 @@ $group-date-calls-indentation: 10px;
     }
 }
 
-.call-details{
+.call-details {
     padding: 25px;
+}
+
+// 
+.timeline {
+    width: calc(100% - 56.24px + 21px) !important;
+    margin-left: 25px !important;
+    li {
+        &:before {
+            right: 17px;
+            left: inherit;
+        }
+        h3 {
+            .dropdown {
+                display: inline-block;
+                button {
+                    padding: 0 2px;
+                    height: 18px;
+                }
+            }
+        }
+    }
+}
+
+// filters inputs
+.filters {
+    input {
+        border-radius: 0 !important;
+    }
+    .ui-inputgroup {
+        margin-top: 0;
+    }
 }

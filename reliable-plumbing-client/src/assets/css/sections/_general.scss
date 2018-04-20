@@ -38,6 +38,7 @@ h6 {
     padding: 0;
 }
 
+
 /* Prelaoder */
 
 #preloader {
@@ -302,4 +303,37 @@ input[type=radio] {
     .sidenav a {
         font-size: 18px;
     }
+}
+
+// nodata small-font-size
+.small-font-nodata {
+    .no-data {
+        margin: 0 25px !important;
+        .icon {
+            font-size: 22px !important;
+        }
+        .text {
+            font-size: 14px !important;
+        }
+    }
+}
+
+.ui-datepicker.ui-widget .ui-datepicker-calendar thead th {
+    padding: inherit !important;
+}
+
+.ui-multiselect:not(.ui-state-disabled):hover {
+    background: #fff !important;
+}
+
+.ui-datepicker {
+    width: 100% !important;
+}
+
+.ui-calendar .ui-inputtext {
+    width: calc(100% - 22px) !important;
+}
+
+.custom-left-scrollbar .ui-scrollpanel-wrapper {
+    border-left: 0 !important;
 }

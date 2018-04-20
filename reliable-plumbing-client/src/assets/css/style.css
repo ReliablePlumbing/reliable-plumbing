@@ -157,7 +157,6 @@ input[type=radio] {
   min-height: 80vh; }
 
 #main.opened {
-  /* width: calc(100% - 325px); */
   transition: all 0.3s; }
 
 .colorbox {
@@ -251,6 +250,28 @@ input[type=radio] {
 
   .sidenav a {
     font-size: 18px; } }
+.small-font-nodata .no-data {
+  margin: 0 25px !important; }
+  .small-font-nodata .no-data .icon {
+    font-size: 22px !important; }
+  .small-font-nodata .no-data .text {
+    font-size: 14px !important; }
+
+.ui-datepicker.ui-widget .ui-datepicker-calendar thead th {
+  padding: inherit !important; }
+
+.ui-multiselect:not(.ui-state-disabled):hover {
+  background: #fff !important; }
+
+.ui-datepicker {
+  width: 100% !important; }
+
+.ui-calendar .ui-inputtext {
+  width: calc(100% - 22px) !important; }
+
+.custom-left-scrollbar .ui-scrollpanel-wrapper {
+  border-left: 0 !important; }
+
 .btn.google-btn {
   display: inline-block;
   background-color: #ea4335 !important;
@@ -885,6 +906,18 @@ body.mobile-nav-active {
     transition: 0.4s; }
     #contact .form button[type="submit"]:hover {
       background: #6cb9e6; }
+
+.call-details {
+  font-size: 14px; }
+  .call-details label {
+    font-size: 16px; }
+  .call-details span {
+    font-size: 16px; }
+  .call-details .call-details-lightbox a img {
+    width: 150px;
+    height: 150px;
+    max-width: 300px;
+    margin-bottom: 10px; }
 
 .register {
   width: 100%; }
