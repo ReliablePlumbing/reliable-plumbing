@@ -11,7 +11,7 @@ import { environment } from '../../environments/environment';
 // prime ng components
 import {
   StepsModule, TabViewModule, MenuModule, FileUploadModule, GalleriaModule, InputSwitchModule, ChartModule, PanelModule, CarouselModule,
-  ScrollPanelModule, MultiSelectModule, OverlayPanelModule, TooltipModule, CalendarModule, LightboxModule
+  ScrollPanelModule, MultiSelectModule, OverlayPanelModule, TooltipModule, CalendarModule, LightboxModule, AccordionModule
 } from 'primeng/primeng';
 // import { LightboxModule } from 'angular2-lightbox';
 
@@ -45,13 +45,13 @@ let declarations = [
   imports: [
     CommonModule, FormsModule, NgbModule, TextMaskModule, RouterModule, InputSwitchModule, AgmCoreModule.forRoot({ apiKey: environment.mapsApiKey }),
     StepsModule, TabViewModule, MenuModule, FileUploadModule, GalleriaModule, ChartModule, PanelModule, BrowserAnimationsModule, LightboxModule,
-    CarouselModule, ScrollPanelModule, MultiSelectModule, OverlayPanelModule, CalendarModule
+    CarouselModule, ScrollPanelModule, MultiSelectModule, OverlayPanelModule, CalendarModule, AccordionModule
   ],
   declarations: declarations,
   exports: [
     declarations, AgmCoreModule, TextMaskModule, StepsModule, TabViewModule, MenuModule, FileUploadModule, GalleriaModule, InputSwitchModule,
     NgbModule, ChartModule, PanelModule, LightboxModule, CarouselModule, ScrollPanelModule, MultiSelectModule, OverlayPanelModule, TooltipModule,
-    CalendarModule
+    CalendarModule, AccordionModule
   ]
 })
 export class SharedModule { }

@@ -1,65 +1,70 @@
+<div class="quotes-btn" (click)="quotes.toggle($event)">
+    <i class="fa fa-calculator"></i>
+</div>
+
+
 <div class="row">
-    <div class="col-3">
+    <div class="col-4">
         <label>
-      <b>Customer Name:</b>
+      <b>Customer Name</b>
     </label>
     </div>
-    <div class="col-9">
+    <div class="col-8">
         <span>{{mappedCall?.customerName}}</span>
     </div>
 </div>
 
 <div class="row">
-    <div class="col-3">
+    <div class="col-4">
         <label>
-      <b>Call Date:</b>
+      <b>Call Date</b>
     </label>
     </div>
-    <div class="col-9">
+    <div class="col-8">
         <span>{{mappedCall?.date | date:'MMM dd yyyy HH:mm a'}}</span>
     </div>
 </div>
 
 <div class="row">
-    <div class="col-3">
+    <div class="col-4">
         <label>
-      <b>Address:</b>
+      <b>Address</b>
     </label>
     </div>
-    <div class="col-9">
+    <div class="col-8">
         <span>{{mappedCall?.address}}</span>
     </div>
 </div>
 
 <div class="row">
-    <div class="col-3">
+    <div class="col-4">
         <label>
-      <b>Email:</b>
+      <b>Email</b>
     </label>
     </div>
-    <div class="col-9">
+    <div class="col-8">
         <span>{{mappedCall?.email}}</span>
     </div>
 </div>
 
 <div class="row">
-    <div class="col-3">
+    <div class="col-4">
         <label>
-      <b>Tel. (Mobile):</b>
+      <b>Tel. (Mobile)</b>
     </label>
     </div>
-    <div class="col-9">
+    <div class="col-8">
         <span>{{mappedCall?.mobile}}</span>
     </div>
 </div>
 
 <div class="row">
-    <div class="col-3">
+    <div class="col-4">
         <label>
-      <b>Description:</b>
+      <b>Description</b>
     </label>
     </div>
-    <div class="col-9">
+    <div class="col-8">
         <p>{{mappedCall.message}}</p>
         <!-- <span class="limit-text" [class.show-more]="showMoreText">{{mappedAppointment?.message}}</span>
     <button *ngIf="mappedAppointment?.message && mappedAppointment?.message.length > 26 && !showMoreText" (click)="showMoreText=true"
@@ -70,23 +75,48 @@
 </div>
 
 <div class="row">
-    <div class="col-3">
+    <div class="col-4">
         <label>
-      <b>Images:</b>
+      <b>Images</b>
     </label>
     </div>
-    <div class="col-9">
+    <div class="col-8">
         <p-lightbox [images]="mappedCall.images" styleClass="call-details-lightbox" appendTo="body"></p-lightbox>
     </div>
 </div>
 
 <div class="row">
-    <div class="col-3">
+    <div class="col-4">
         <label>
-      <b>Quotes:</b>
+      <b>Quotes</b>
     </label>
     </div>
-    <div class="col-9">
+    <div class="col-8">
         {{mappedCall.quotes == null ? 'No Quotes' : mappedCall.quotes.length}}
     </div>
 </div>
+
+<p-overlayPanel [appendTo]="'body'" #quotes>
+    <p-accordion [multiple]="true">
+        <p-accordionTab *ngFor="let quote of mappedCall.quotes">
+            <p-header>
+                Header Content
+            </p-header>
+
+            <table class="table table-bordered table-scrollable">
+                <thead>
+                    <th>#</th>
+                    <th>Description</th>
+                    <th>Estimate</th>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let field of quote.estimateFields; let i = index">
+                        <td>{{i+1}}</td>
+                        <td class="text-center">{{field.desc}}</td>
+                        <td class="text-center">{{field.cost}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </p-accordionTab>
+    </p-accordion>
+</p-overlayPanel>
