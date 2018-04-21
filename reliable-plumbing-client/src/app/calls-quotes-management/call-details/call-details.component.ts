@@ -2,6 +2,8 @@ import { Component, OnInit, Input, OnChanges } from '@angular/core';
 import { getCustomerFullName } from '../../utils/call-helpers';
 import { AppointmentStatus } from '../../models/enums';
 import { buildImagesObjectsForLightBox } from '../../utils/files-helpers';
+import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { QuoteService, AlertifyService } from '../../services/services.exports';
 
 @Component({
   selector: 'call-details',
@@ -14,7 +16,7 @@ export class CallDetailsComponent implements OnInit, OnChanges {
   mappedCall;
   isReadOnly
 
-  constructor() { }
+  constructor(private modalService: NgbModal, private quoteService: QuoteService, private alertifyService: AlertifyService) { }
 
   ngOnInit() {
     this.mappedCall = this.mapCall(this.call);
@@ -70,5 +72,30 @@ export class CallDetailsComponent implements OnInit, OnChanges {
     let address = call.user ? call.user.sites.find(x => x.id == call.siteId) : call.customerInfo;
 
     return address.street + ' - ' + address.city + ' - ' + address.state;
+  }
+
+  quickAddModalRef: NgbModalRef
+  openQuoteQuickAdd(template) {
+    this.quickAddModalRef = this.modalService.open(template);
+  }
+
+  closeQuoteQuickAdd = () => this.quickAddModalRef.close();
+
+  quickAddQuoteSubmitted(quote) {
+    let attachedQuote = quote.obj;
+    attachedQuote.appointmentId = this.call.id;
+    attachedQuote.siteId = this.call.siteId;
+    attachedQuote.preferedContactType = this.call.preferedContactType;
+    if (this.call.userId)
+      attachedQuote.userId = this.call.userId;
+    else
+      attachedQuote.customerInfo = this.call.customerInfo;
+
+    this.quoteService.addQuote(attachedQuote, quote.images).subscribe(result => {
+      if (result.id != null) {
+        this.alertifyService.success('Your call has been submitted');
+        this.quickAddModalRef.close();
+      }
+    });
   }
 }

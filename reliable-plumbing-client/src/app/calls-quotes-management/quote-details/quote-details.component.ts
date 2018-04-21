@@ -98,7 +98,7 @@ export class QuoteDetailsComponent implements OnInit {
   }
 
   save(nextStatus) {
-    if (nextStatus == QuoteStatus.Pending) {
+    if (this.quote.status == QuoteStatus.Open) {
       this.quote.estimateFields = this.estimates.fields
         .filter(f => f.desc != null || parseFloat(f.cost) > 0)
         .map(f => {

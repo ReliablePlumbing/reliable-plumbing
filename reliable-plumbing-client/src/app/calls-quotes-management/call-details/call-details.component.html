@@ -1,13 +1,18 @@
-<div class="quotes-btn" (click)="quotes.toggle($event)">
-    <i class="fa fa-calculator"></i>
+<div class="quotes-btns">
+    <div (click)="quotes.toggle($event)">
+        <i class="fa fa-calculator"></i>
+    </div>
+    <div (click)="openQuoteQuickAdd(quoteQuickAdd)">
+        <i class="fa fa-plus"></i>
+    </div>
 </div>
 
 
 <div class="row">
     <div class="col-4">
         <label>
-      <b>Customer Name</b>
-    </label>
+            <b>Customer Name</b>
+        </label>
     </div>
     <div class="col-8">
         <span>{{mappedCall?.customerName}}</span>
@@ -17,8 +22,8 @@
 <div class="row">
     <div class="col-4">
         <label>
-      <b>Call Date</b>
-    </label>
+            <b>Call Date</b>
+        </label>
     </div>
     <div class="col-8">
         <span>{{mappedCall?.date | date:'MMM dd yyyy HH:mm a'}}</span>
@@ -28,8 +33,8 @@
 <div class="row">
     <div class="col-4">
         <label>
-      <b>Address</b>
-    </label>
+            <b>Address</b>
+        </label>
     </div>
     <div class="col-8">
         <span>{{mappedCall?.address}}</span>
@@ -39,8 +44,8 @@
 <div class="row">
     <div class="col-4">
         <label>
-      <b>Email</b>
-    </label>
+            <b>Email</b>
+        </label>
     </div>
     <div class="col-8">
         <span>{{mappedCall?.email}}</span>
@@ -50,8 +55,8 @@
 <div class="row">
     <div class="col-4">
         <label>
-      <b>Tel. (Mobile)</b>
-    </label>
+            <b>Tel. (Mobile)</b>
+        </label>
     </div>
     <div class="col-8">
         <span>{{mappedCall?.mobile}}</span>
@@ -61,8 +66,8 @@
 <div class="row">
     <div class="col-4">
         <label>
-      <b>Description</b>
-    </label>
+            <b>Description</b>
+        </label>
     </div>
     <div class="col-8">
         <p>{{mappedCall.message}}</p>
@@ -77,8 +82,8 @@
 <div class="row">
     <div class="col-4">
         <label>
-      <b>Images</b>
-    </label>
+            <b>Images</b>
+        </label>
     </div>
     <div class="col-8">
         <p-lightbox [images]="mappedCall.images" styleClass="call-details-lightbox" appendTo="body"></p-lightbox>
@@ -88,8 +93,8 @@
 <div class="row">
     <div class="col-4">
         <label>
-      <b>Quotes</b>
-    </label>
+            <b>Quotes</b>
+        </label>
     </div>
     <div class="col-8">
         {{mappedCall.quotes == null ? 'No Quotes' : mappedCall.quotes.length}}
@@ -120,3 +125,18 @@
         </p-accordionTab>
     </p-accordion>
 </p-overlayPanel>
+
+
+
+<ng-template #quoteQuickAdd let-c="close" let-d="dismiss">
+    <div class="modal-header">
+        <h5 class="modal-title">Attach Quote</h5>
+        <button type="button" class="close" aria-label="Close" (click)="closeQuoteQuickAdd()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <rb-quote-quick-add (submitted)="quickAddQuoteSubmitted($event)" (close)="closeQuoteQuickAdd()"></rb-quote-quick-add>
+    </div>
+
+</ng-template>

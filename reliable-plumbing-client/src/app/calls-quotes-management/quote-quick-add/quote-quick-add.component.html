@@ -1,0 +1,51 @@
+<section class="register">
+  <div class="register-container">
+    <div class="container">
+
+      <form [formGroup]="form" novalidate>
+        <div class="row">
+
+          <!-- Services -->
+          <div class="col-md-12">
+            <div class="form-group">
+              <label for="appointmentType" class="">Service
+                <i *ngIf="getControlValidation('service','req')">*</i>
+              </label>
+              <select name="appointmentType" formControlName="service" [(ngModel)]="quote.typeId">
+                <option disabled selected value="-1">Select Service</option>
+                <option *ngFor="let service of services" [value]="service.id">{{service.name}}</option>
+              </select>
+              <label *ngIf="getControlValidation('service','req', false)" class="validation-text">* Required</label>
+            </div>
+          </div>
+
+          <!-- Images -->
+          <div class="col-md-12">
+            <div class="form-group photos-sec">
+              <label for="preferedContactType" class="">Post photos</label>
+              <p-fileUpload mode="basic" name="demo[]" accept="image/*" maxFileSize="1000000" (onSelect)="onUploadFile($event)" multiple="multiple"
+                auto="true"></p-fileUpload>
+              <button class="btn btn-danger" (click)="removeAllImages()">Clear</button>
+            </div>
+            <p-galleria *ngIf="images.length>0" [images]="images" panelWidth="500" panelHeight="313" [showCaption]="false"></p-galleria>
+          </div>
+
+          <!-- Description -->
+          <div class="col-md-12">
+            <div class="form-group">
+              <label for="message" class="">Description</label>
+              <textarea type="text" name="message" class="form-control" formControlName="desc" [(ngModel)]="quote.desc"></textarea>
+            </div>
+          </div>
+
+          <div class="col-md-12">
+            <button type="submit" (click)="save()" class="btn btn-success">Send</button> &nbsp;
+            <button type="reset" (click)="resetForm()" class="btn btn-danger">Clear</button>
+          </div>
+        </div>
+      </form>
+
+    </div>
+  </div>
+  <!-- /.registeration-container -->
+</section>

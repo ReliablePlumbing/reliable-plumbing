@@ -369,7 +369,7 @@ export class AppointmentManager {
     }
 
     private updateQuoteWithAppointment(appointmentId, quoteIds) {
-        this.quoteRepo.updateQuoteAppoitnemnt(quoteIds, appointmentId).then((result: any) => {
+        this.quoteRepo.updateQuotesAppointment(quoteIds, appointmentId).then((result: any) => {
 
             console.log('saved ');
         }).catch((error: Error) => console.log(error));

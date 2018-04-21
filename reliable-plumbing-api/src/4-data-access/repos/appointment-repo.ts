@@ -60,6 +60,19 @@ export class AppointmentRepo extends Repo<Appointment> {
         });
     }
 
+    updateAppoitnemntQuotes(quoteId, appointmentId) {
+        let model = this.createSet();
+
+        return new Promise<Appointment>((resolve, reject) => {
+            model.findOneAndUpdate({ _id: appointmentId }, { $push: { quoteIds: quoteId } }, { new: true }, (err, result) => {
+                if (err)
+                    return reject(err);
+                return resolve(this.mapModelToEntity(result));
+            });
+        });
+
+    }
+
     getAppointmentsFilteredByAssigneesAndDates(assigneeIds: string[], from?: Date, to?: Date) {
 
         let model = this.createSet();

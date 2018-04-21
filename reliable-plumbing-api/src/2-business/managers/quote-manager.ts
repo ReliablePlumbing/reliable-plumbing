@@ -3,7 +3,7 @@ import {
     AppError, ErrorType, Appointment, QuoteStatus, NotificationType,
     Notification, ObjectType, Role, TechnicianStatus, User, StatusHistory, Quote
 } from '../../3-domain/domain-module';
-import { QuoteRepo, UserRepo } from '../../4-data-access/data-access.module';
+import { QuoteRepo, UserRepo, AppointmentRepo } from '../../4-data-access/data-access.module';
 import { NotificationManager } from './notification-manager';
 import { FilesManager } from './files-manager';
 import { AccountSecurity, dependencies, TokenManager } from '../../5-cross-cutting/cross-cutting.module';
@@ -14,6 +14,7 @@ import config from '../../config';
 export class QuoteManager {
 
     @Inject(dependencies.QuoteRepo) private quoteRepo: QuoteRepo;
+    @Inject(dependencies.AppointmentRepo) private callRepo: AppointmentRepo;
     @Inject(dependencies.UserRepo) private userRepo: UserRepo;
     @Inject(dependencies.NotificationManager) private notificationManager: NotificationManager;
     @Inject(dependencies.FilesManager) private filesManager: FilesManager;
@@ -38,6 +39,11 @@ export class QuoteManager {
 
         return new Promise<Quote>((resolve, reject) => {
             this.quoteRepo.add(quote).then(result => {
+
+                // update quotes if exists
+                if (quote.appointmentId)
+                    this.updateQuoteCall(quote.id, quote.appointmentId);
+
                 // add notification
                 let notifier = quote.userId == null ? [] : quote.userId;
                 this.buildQuoteCreatedNotification([notifier], result.id)
@@ -72,6 +78,12 @@ export class QuoteManager {
         });
     }
 
+    private updateQuoteCall(quoteId, callId) {
+        this.callRepo.updateAppoitnemntQuotes(quoteId, callId).then((result: any) => {
+
+            console.log('saved ');
+        }).catch((error: Error) => console.log(error));
+    }
     // getAppointmentFiltered(filters) {
 
     //     let fromDate = this.constructAppointmentDate(filters.date.from, filters.time.from);

@@ -12,6 +12,7 @@ import { CallsQuotesFormComponent } from './calls-quotes-form/calls-quotes-form.
 import { QuoteDetailsComponent } from './quote-details/quote-details.component';
 import { CallsListingComponent } from './calls-listing/calls-listing.component';
 import { CallDetailsComponent } from './call-details/call-details.component';
+import { QuoteQuickAddComponent } from './quote-quick-add/quote-quick-add.component';
 
 @NgModule({
   imports: [
@@ -20,11 +21,12 @@ import { CallDetailsComponent } from './call-details/call-details.component';
   declarations: [
     ScheduleCallComponent, AppointmentDetailsComponent, RequestQuoteComponent, CallsQuotesFormComponent, QuoteDetailsComponent,
     CallsListingComponent,
-    CallDetailsComponent
+    CallDetailsComponent,
+    QuoteQuickAddComponent
   ],
   exports: [
     ScheduleCallComponent, AppointmentDetailsComponent, CallsQuotesFormComponent, RequestQuoteComponent, QuoteDetailsComponent,
-    CallsListingComponent, CallDetailsComponent
+    CallsListingComponent, CallDetailsComponent, QuoteQuickAddComponent
   ]
 })
 export class CallsQuotesManagementModule { }
