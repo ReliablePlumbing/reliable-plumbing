@@ -250,12 +250,10 @@ input[type=radio] {
 
   .sidenav a {
     font-size: 18px; } }
-.small-font-nodata .no-data {
-  margin: 0 25px !important; }
-  .small-font-nodata .no-data .icon {
-    font-size: 22px !important; }
-  .small-font-nodata .no-data .text {
-    font-size: 14px !important; }
+.small-font-nodata .no-data .icon {
+  font-size: 22px !important; }
+.small-font-nodata .no-data .text {
+  font-size: 14px !important; }
 
 .ui-datepicker.ui-widget .ui-datepicker-calendar thead th {
   padding: inherit !important; }
@@ -948,7 +946,8 @@ body.mobile-nav-active {
       transition: 0.4s; }
   .register .register-container .ui-galleria.ui-widget.ui-widget-content {
     height: 250px !important;
-    margin: auto; }
+    margin: auto;
+    max-width: 100% !important; }
     .register .register-container .ui-galleria.ui-widget.ui-widget-content .ui-galleria-panel-wrapper {
       height: 100% !important;
       width: 100% !important; }
