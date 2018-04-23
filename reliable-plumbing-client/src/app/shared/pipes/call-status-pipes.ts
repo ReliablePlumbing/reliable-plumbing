@@ -2,23 +2,23 @@ import { Pipe, PipeTransform } from '@angular/core';
 import { AppointmentStatus } from '../../models/enums';
 
 @Pipe({
-    name: 'appointmentStatusColor'
+    name: 'CallStatusColor'
 })
 
-export class AppointmentStatusColor implements PipeTransform {
+export class CallStatusColor implements PipeTransform {
 
     transform(status: AppointmentStatus) {
         switch (status) {
             case AppointmentStatus.Pending:
-                return 'pending';
+                return 'grayBg';
             case AppointmentStatus.Confirmed:
-                return 'confirmed';
+                return 'greenBg';
             case AppointmentStatus.Rejected:
-                return 'rejected';
+                return 'redBg';
             case AppointmentStatus.Canceled:
-                return 'cancelled';
+                return 'yellowBg';
             case AppointmentStatus.Completed:
-                return 'completed';
+                return 'blueBg';
             default:
                 break;
         }
@@ -26,9 +26,9 @@ export class AppointmentStatusColor implements PipeTransform {
 }
 
 @Pipe({
-    name: 'appointmentStatusTxt'
+    name: 'CallStatusTxt'
 })
-export class AppointmentStatusTxt implements PipeTransform {
+export class CallStatusTxt implements PipeTransform {
 
     transform(status: AppointmentStatus) {
         switch (status) {

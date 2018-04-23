@@ -29,13 +29,13 @@ import { ClosePopoverOnOutsideClickDirective } from './directives/close-popover-
 
 // pipes 
 import { TechnicianStatusColor, TechnicianStatusTxt } from './pipes/technician-status-pipes';
-import { AppointmentStatusColor, AppointmentStatusTxt } from './pipes/appointment-status-pipes';
+import { CallStatusColor, CallStatusTxt } from './pipes/call-status-pipes';
 
 let declarations = [
   // components
   LoaderComponent, MultiSelectDatepickerComponent, NoDataComponent, NotificationsComponent, MessageComponent,
   // pipes
-  AppointmentStatusColor, AppointmentStatusTxt, TechnicianStatusColor, TechnicianStatusTxt,
+  CallStatusColor, CallStatusTxt, TechnicianStatusColor, TechnicianStatusTxt,
   // directives
   ModelCharsReplaceDirective, InputNumberDirective, ClosePopoverOnOutsideClickDirective
 ];

@@ -64,24 +64,8 @@ select {
     vertical-align: inherit;
 }
 
-.appointemt-status.pending {
+.grayBg {
     background-color: #d1c8e3;
-}
-
-.appointemt-status.confirmed {
-    background-color: #005c1f;
-}
-
-.appointemt-status.completed {
-    background-color: #2204a9;
-}
-
-.appointemt-status.rejected {
-    background-color: #FF3B30;
-}
-
-.appointemt-status.cancelled {
-    background-color: #e8ff1a;
 }
 
 .greenBg {
@@ -96,10 +80,9 @@ select {
     background-color: #FF3B30;
 }
 
-.grayBg {
-    background-color: #d1c8e3;
+.yellowBg {
+    background-color: #e8ff1a;
 }
-
 
 /* general styles for map */
 

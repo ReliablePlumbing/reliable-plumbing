@@ -5,7 +5,7 @@
 
   <div class="appointemt-cards-list">
     <div class="appointemt-card pointer" *ngFor="let appointment of mappedCalls[date]" (click)="openAppointmentDetailsModal(appointment, date)">
-      <span class="appointemt-status pending" [ngClass]="appointment.status | appointmentStatusColor" placement="top" ngbTooltip="{{appointment.status | appointmentStatusTxt}}"></span>
+      <span class="appointemt-status pending" [ngClass]="appointment.status | CallStatusColor" placement="top" ngbTooltip="{{appointment.status | CallStatusTxt}}"></span>
       <h6>
         <b>{{appointment.user == null ? appointment.customerInfo?.firstName + ' ' + appointment.customerInfo?.lastName : appointment.user?.firstName
           + ' ' + appointment.user?.lastName}}</b>
