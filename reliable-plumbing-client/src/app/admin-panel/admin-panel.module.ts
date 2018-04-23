@@ -14,7 +14,6 @@ import { DashboardsModule } from '../dashboards/dashboards.module';
 import { AdminPanelRoutingModule } from './admin-panel-routing.module';
 import { AppointmentSettingsomponent } from './appointment-settings/appointment-settings.component';
 import { AdminPanelComponent } from './admin-panel.component';
-import { ScheduleManagementComponent } from './schedule-management/schedule-management.component';
 import { MyAppointmentsComponent } from './my-appointments/my-appointments.component';
 import { TechniciansTrackingComponent } from './technicians-tracking/technicians-tracking.component';
 import { EditProfileComponent } from './edit-profile/edit-profile.component';
@@ -29,7 +28,7 @@ import { CallManagementComponent } from './call-management/call-management.compo
     SharedModule, SelectModule, CallsQuotesManagementModule, ReactiveFormsModule, DashboardsModule
   ],
   declarations: [
-    AppointmentSettingsomponent, AdminPanelComponent, ScheduleManagementComponent, MyAppointmentsComponent, TechniciansTrackingComponent, EditProfileComponent, ResetPasswordComponent, QuoteManagementComponent, DashboardsComponent, CallManagementComponent
+    AppointmentSettingsomponent, AdminPanelComponent, MyAppointmentsComponent, TechniciansTrackingComponent, EditProfileComponent, ResetPasswordComponent, QuoteManagementComponent, DashboardsComponent, CallManagementComponent
   ]
 })
 export class AdminPanelModule { }

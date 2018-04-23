@@ -5,7 +5,6 @@ import { LoginAuthGuard } from "../services/auth-guard.service";
 import { Role } from '../models/enums';
 import { AdminPanelComponent } from './admin-panel.component';
 import { AppointmentSettingsomponent } from './appointment-settings/appointment-settings.component';
-import { ScheduleManagementComponent } from './schedule-management/schedule-management.component';
 import { SystemUsersManagementComponent } from '../user-management/system-users-management/system-users-management.component';
 import { UsersManagementComponent } from '../user-management/users-management/users-management.component';
 import { MyAppointmentsComponent } from './my-appointments/my-appointments.component';

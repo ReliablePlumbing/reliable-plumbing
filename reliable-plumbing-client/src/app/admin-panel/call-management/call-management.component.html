@@ -48,51 +48,8 @@
         </div>
         <hr />
         <div class="row no-gutters">
-            <div class="col-sm-6 status-tabs">
-                <ngb-tabset>
-                    <ngb-tab *ngFor="let tab of statusTabs">
-                        <ng-template ngbTabTitle>
-                            <div class="status-tab-header" [pTooltip]="tab.text" tooltipPosition="bottom" showDelay="100" hideDelay="300">
-                                <i [ngClass]="tab.icon"></i>
-                                <span>{{tab.id == '0' ? 'All ' : ''}}({{mappedCalls[tab.id].callsCount}})</span>
-                            </div>
-                        </ng-template>
-                        <ng-template ngbTabContent>
-                            <p-scrollPanel [style]="{width: '100%', height: '100vh'}" styleClass="custom-left-scrollbar">
-                                <div class="timeline-content">
-                                    <ul class="timeline">
-                                        <ng-container *ngFor="let groupDate of datesArrayBetweenFilterDates">
-                                            <li class="group-date">
-                                                <h3>{{groupDate | date}}</h3>
-                                            </li>
-                                            <li *ngIf="mappedCalls[tab.id][groupDate] == null || mappedCalls[tab.id][groupDate].length == 0">
-                                                <span class="small-font-nodata">
-                                                    <no-data [message]="'No Calls'"></no-data>
-                                                </span>
-                                            </li>
-                                            <li *ngFor="let call of mappedCalls[tab.id][groupDate]" class="call" [class.selected]="call.id == selectedCall.id" (click)="selectedCall = call"
-                                                [attr.data-date]="call.time">
-                                                <h3>
-                                                    <span class="status-border" [ngClass]="call.status | CallStatusColor" placement="top" ngbTooltip="{{call.status | CallStatusTxt}}"></span>
-                                                    <div class="dropdown">
-                                                        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
-                                                            aria-expanded="false"></button>
-                                                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                                            <a class="dropdown-item" href="#">confirm</a>
-                                                        </div>
-                                                    </div>
-                                                    <span>{{call.customerName}}</span>
-                                                </h3>
-                                            </li>
-                                        </ng-container>
-
-                                    </ul>
-                                </div>
-                            </p-scrollPanel>
-                        </ng-template>
-                    </ngb-tab>
-                </ngb-tabset>
-
+            <div class="col-sm-6">
+                <calls-listing [rangeDates]="rangeDates" [calls]="calls" (callSelected)="callSelected($event)"></calls-listing>
             </div>
             <div class="col-sm-6">
                 <ng-container>

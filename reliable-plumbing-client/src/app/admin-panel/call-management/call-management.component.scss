@@ -1,127 +1,8 @@
-@import url(https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,300,400,600,700|Oswald:400,300,700);
-$selected-color: #D3E6F8;
-$background: #252827;
-$color-primary: #4298C3;
-$color-light: white;
-$spacing: 20px;
-$call-padding: 10px;
-$radius: 4px;
-$date: 70px;
-$dotborder: 3px;
-$dot: 11px;
-$line: 4px;
-$font-title: 'Oswald',
-sans-serif;
-$font-text: 'Source Sans Pro',
-sans-serif;
-$time-width: ((($date * 0.6) + $spacing + $line + $dot + ($dotborder * 2)) * 1.28);
-$group-date-calls-indentation: 10px;
-.timeline-content {
-    text-align: center;
-    .timeline {
-        border-left: $line solid $color-primary;
-        border-bottom-right-radius: $radius;
-        border-top-right-radius: $radius;
-        margin-left: 80px;
-        margin-bottom: 0;
-        letter-spacing: 0.5px;
-        position: relative;
-        line-height: 1.4em;
-        font-size: 1.03em;
-        padding: 0 0 0 $spacing;
-        list-style: none;
-        text-align: left;
-        font-weight: 100;
-        width: calc(100% - #{$time-width} + 21px);
-        h1,
-        h2,
-        h3 {
-            letter-spacing: 1.5px;
-            font-weight: 100;
-            font-size: 1.2em;
-            margin: 0;
-        }
-        .group-date,
-        .call {
-            padding: $call-padding;
-            position: relative;
-            &:before,
-            &:after {
-                position: absolute;
-                display: block;
-                top: 0;
-            }
-            &:after {
-                background: #ffffff;
-                border-radius: 50%;
-                height: $dot;
-                width: $dot;
-                content: "";
-                top: $call-padding + 7px;
-            }
-        }
-        .group-date {
-            padding-left: 0;
-            &:after {
-                box-shadow: 0 0 0 $dotborder #4298c3;
-                left: ($spacing + $line + ($dot * 0.35)) * -1;
-            }
-            h3 {
-                font-size: 16px;
-                font-weight: 900!important;
-            }
-        }
-        .call {
-            margin-left: $group-date-calls-indentation;
-            border-bottom: 1px dashed rgba(3, 2, 2, 0.21);
-            background-color: antiquewhite;
-            cursor: pointer;
-            &.selected,
-            &:hover {
-                background-color: $selected-color;
-            }
-            &:before {
-                left: ($time-width + $group-date-calls-indentation) * -1;
-                color: black;
-                content: attr(data-date);
-                text-align: right;
-                font-weight: 300;
-                font-size: 1em;
-                min-width: $date;
-                padding-top: $call-padding;
-            }
-            &:after {
-                background: #313534;
-                left: ($spacing + $line + ($dot * 0.35) + $group-date-calls-indentation) * -1;
-            }
-        }
-    }
-}
-
 .filters {
     margin: 10px 10px 10px 0;
 }
 
 :host::ng-deep {
-    .status-tabs {
-        .nav-link {
-            border: 1px solid #b1b1b1;
-            background: #f6f7f9;
-            color: black;
-            &.active {
-                box-shadow: 0 -3px 0 0;
-                border-bottom-color: #fff;
-                background: #fff;
-                font-weight: bold;
-            }
-        }
-        .green {
-            color: green;
-        }
-        .red {
-            color: red;
-        }
-    }
     .ui-multiselect {
         width: 100%;
         height: 100%;
@@ -155,28 +36,6 @@ $group-date-calls-indentation: 10px;
     padding: 25px;
 }
 
-// 
-.timeline {
-    width: calc(100% - 106.24px + 40px);
-    margin-left: 40px !important;
-    li {
-        &:before {
-            right: 17px;
-            left: inherit;
-        }
-        h3 {
-            .dropdown {
-                display: inline-block;
-                button {
-                    padding: 0 2px;
-                    height: 18px;
-                    margin-left: 5px;
-                }
-            }
-        }
-    }
-}
-
 // filters inputs
 .filters {
     input {
@@ -185,12 +44,4 @@ $group-date-calls-indentation: 10px;
     .ui-inputgroup {
         margin-top: 0;
     }
-}
-
-.status-border {
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 5px;
-    height: 100%;
 }
