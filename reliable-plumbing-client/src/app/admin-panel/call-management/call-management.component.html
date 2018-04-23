@@ -1,83 +1,109 @@
 <loader *ngIf="loading"></loader>
 <ng-container *ngIf="!loading">
-    <div class="filters">
-        <div class="row">
-            <div class="col-sm-3">
-                <p-multiSelect [options]="services" [(ngModel)]="selectedServices" [panelStyle]="{minWidth:'100%'}" (onPanelHide)="filter($event)">
-                    <ng-template let-service pTemplate="item">
-                        <span>{{service.value.name}}</span>
-                    </ng-template>
-                </p-multiSelect>
+
+    <ng-container *ngIf="mode==modes.addCall">
+        <section class="row header">
+            <div class="col-sm-12">
+                <label>New Call</label>
+                <button class="btn btn-success float-right" (click)="setMode(modes.listing)">Back</button>
             </div>
-            <div class="col-sm-4">
-                <p-calendar [(ngModel)]="rangeDates" [showIcon]="true" selectionMode="range" readonlyInput="true" (onClose)="filter($event)"></p-calendar>
+        </section>
+        <section class="schedule-content">
+            <rb-calls-quotes-form [mode]="callsQuotesMode" [adminMode]="true" (submitted)="callSubmitted($event)"></rb-calls-quotes-form>
+        </section>
+    </ng-container>
+
+    <ng-container *ngIf="mode==modes.msg">
+        <section class="row msg">
+            <div class="col-sm-12">
+                <button class="btn btn-success float-right" (click)="setMode(modes.listing)">Back</button>
             </div>
-            <div class="col-sm-3">
-                <div class="ui-inputgroup">
-                    <input type="text" class="form-control customer-name" pInputText placeholder="Customer Name" [(ngModel)]="customerName" (keyup.enter)="filter()">
-                    <button pButton type="button" icon="fa fa-search" class="ui-button-secondary" (click)="filter()"></button>
+        </section>
+        <message [text]="'Saved Successfully'"></message>
+    </ng-container>
+
+    <ng-container *ngIf="mode==modes.listing">
+        <div class="filters">
+            <div class="row">
+                <div class="col-sm-3">
+                    <p-multiSelect [options]="services" [(ngModel)]="selectedServices" [panelStyle]="{minWidth:'100%'}" (onPanelHide)="filter($event)">
+                        <ng-template let-service pTemplate="item">
+                            <span>{{service.value.name}}</span>
+                        </ng-template>
+                    </p-multiSelect>
+                </div>
+                <div class="col-sm-4">
+                    <p-calendar [(ngModel)]="rangeDates" [showIcon]="true" selectionMode="range" readonlyInput="true" (onClose)="filter($event)"></p-calendar>
+                </div>
+                <div class="col-sm-3">
+                    <div class="ui-inputgroup">
+                        <input type="text" class="form-control customer-name" pInputText placeholder="Customer Name" [(ngModel)]="customerName" (keyup.enter)="filter()">
+                        <button pButton type="button" icon="fa fa-search" class="ui-button-secondary" (click)="filter()"></button>
+                    </div>
+                </div>
+                <div class="col-sm-2">
+                    <button class="btn btn-primary filters-toggle-btn pull-right" (click)="setMode(modes.addCall)">Add New Call</button>
                 </div>
             </div>
-            <div class="col-sm-2">
-                <button class="btn btn-primary filters-toggle-btn pull-right">Add New Call</button>
-            </div>
         </div>
-    </div>
-    <hr />
-    <div class="row no-gutters">
-        <div class="col-sm-6 status-tabs">
-            <ngb-tabset>
-                <ngb-tab *ngFor="let tab of statusTabs">
-                    <ng-template ngbTabTitle>
-                        <div class="status-tab-header" [pTooltip]="tab.text" tooltipPosition="bottom" showDelay="100" hideDelay="300">
-                            <i [ngClass]="tab.icon"></i>
-                            <span>{{tab.id == '0' ? 'All ' : ''}}({{mappedCalls[tab.id].callsCount}})</span>
-                        </div>
-                    </ng-template>
-                    <ng-template ngbTabContent>
-                        <p-scrollPanel [style]="{width: '100%', height: '100vh'}" styleClass="custom-left-scrollbar">
-                            <div class="timeline-content">
-                                <ul class="timeline">
-                                    <ng-container *ngFor="let groupDate of datesArrayBetweenFilterDates">
-                                        <li class="group-date">
-                                            <h3>{{groupDate | date}}</h3>
-                                        </li>
-                                        <li *ngIf="mappedCalls[tab.id][groupDate] == null || mappedCalls[tab.id][groupDate].length == 0">
-                                            <span class="small-font-nodata">
-                                              <no-data [message]="'No Calls'"></no-data>
-                                            </span>
-                                        </li>
-                                        <li *ngFor="let call of mappedCalls[tab.id][groupDate]" class="call" [class.selected]="call.id == selectedCall.id" (click)="selectedCall = call" [attr.data-date]="call.time">
-                                            <h3>
-                                                <span class="status-border grayBg"></span>
-                                                <div class="dropdown">
-                                                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
-                                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                                        <a class="dropdown-item" href="#">confirm</a>
-                                                    </div>
-                                                </div>
-                                                <span>{{call.customerName}}</span>
-                                            </h3>
-                                        </li>
-                                    </ng-container>
-
-                                </ul>
+        <hr />
+        <div class="row no-gutters">
+            <div class="col-sm-6 status-tabs">
+                <ngb-tabset>
+                    <ngb-tab *ngFor="let tab of statusTabs">
+                        <ng-template ngbTabTitle>
+                            <div class="status-tab-header" [pTooltip]="tab.text" tooltipPosition="bottom" showDelay="100" hideDelay="300">
+                                <i [ngClass]="tab.icon"></i>
+                                <span>{{tab.id == '0' ? 'All ' : ''}}({{mappedCalls[tab.id].callsCount}})</span>
                             </div>
-                        </p-scrollPanel>
-                    </ng-template>
-                </ngb-tab>
-            </ngb-tabset>
+                        </ng-template>
+                        <ng-template ngbTabContent>
+                            <p-scrollPanel [style]="{width: '100%', height: '100vh'}" styleClass="custom-left-scrollbar">
+                                <div class="timeline-content">
+                                    <ul class="timeline">
+                                        <ng-container *ngFor="let groupDate of datesArrayBetweenFilterDates">
+                                            <li class="group-date">
+                                                <h3>{{groupDate | date}}</h3>
+                                            </li>
+                                            <li *ngIf="mappedCalls[tab.id][groupDate] == null || mappedCalls[tab.id][groupDate].length == 0">
+                                                <span class="small-font-nodata">
+                                                    <no-data [message]="'No Calls'"></no-data>
+                                                </span>
+                                            </li>
+                                            <li *ngFor="let call of mappedCalls[tab.id][groupDate]" class="call" [class.selected]="call.id == selectedCall.id" (click)="selectedCall = call"
+                                                [attr.data-date]="call.time">
+                                                <h3>
+                                                    <span class="status-border grayBg"></span>
+                                                    <div class="dropdown">
+                                                        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
+                                                            aria-expanded="false"></button>
+                                                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                                            <a class="dropdown-item" href="#">confirm</a>
+                                                        </div>
+                                                    </div>
+                                                    <span>{{call.customerName}}</span>
+                                                </h3>
+                                            </li>
+                                        </ng-container>
+
+                                    </ul>
+                                </div>
+                            </p-scrollPanel>
+                        </ng-template>
+                    </ngb-tab>
+                </ngb-tabset>
+
+            </div>
+            <div class="col-sm-6">
+                <ng-container>
+                    <p-scrollPanel [style]="{width: '100%', height: '100vh', marginTop: '35px'}" styleClass="custom-scrollbar">
+                        <div class="call-details" *ngIf="calls && calls.length > 0">
+                            <call-details [call]="selectedCall"></call-details>
+                        </div>
+                    </p-scrollPanel>
+                </ng-container>
+            </div>
 
         </div>
-        <div class="col-sm-6">
-            <ng-container>
-                <p-scrollPanel [style]="{width: '100%', height: '100vh', marginTop: '35px'}" styleClass="custom-scrollbar">
-                    <div class="call-details" *ngIf="calls && calls.length > 0">
-                        <call-details [call]="selectedCall"></call-details>
-                    </div>
-                </p-scrollPanel>
-            </ng-container>
-        </div>
-
-    </div>
+    </ng-container>
 </ng-container>

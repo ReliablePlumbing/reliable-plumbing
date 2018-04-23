@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { AppointmentStatus } from '../../models/enums';
+import { AppointmentStatus, CallsQuotesMode } from '../../models/enums';
 import { getEnumEntries, convertDateParamToDateObj, convertTimeTo12String, getDatesArray } from '../../utils/date-helpers';
 import { LookupsService } from '../../services/lookups.service';
 import * as moment from 'moment';
-import { AppointmentService } from '../../services/services.exports';
+import { AppointmentService, AlertifyService } from '../../services/services.exports';
 import { isCallOpened } from '../../utils/call-helpers';
 
 @Component({
@@ -13,6 +13,9 @@ import { isCallOpened } from '../../utils/call-helpers';
 })
 export class CallManagementComponent implements OnInit {
 
+  modes = { listing: 1, addCall: 2, msg: 3 };
+  mode = this.modes.listing;
+  callsQuotesMode: CallsQuotesMode = CallsQuotesMode.call;
   statusTabs;
   services;
   selectedServices = [];
@@ -24,7 +27,8 @@ export class CallManagementComponent implements OnInit {
   customerName;
   selectedCall;
 
-  constructor(private lookupsService: LookupsService, private callService: AppointmentService) { }
+  constructor(private lookupsService: LookupsService, private callService: AppointmentService, private appointmentService: AppointmentService, 
+    private alertifyService: AlertifyService) { }
 
   ngOnInit() {
     this.loading = true;
@@ -35,7 +39,6 @@ export class CallManagementComponent implements OnInit {
     this.rangeDates = [nowDate, afterWeekDate];
     this.lookupsService.getAppointmentSettingsAndTypes().subscribe(results => {
       this.services = results.types.map(t => { return { label: t.name, value: t } });
-      // this.loading = false;
       this.filter();
     });
   }
@@ -66,13 +69,11 @@ export class CallManagementComponent implements OnInit {
   }
 
   filter() {
-    // this.loadingFiltered = true;
     let requestFilters = {
       date: {
         from: this.rangeDates[0],
         to: this.rangeDates[1],
       },
-      // time: this.filters.time,
       time: { from: { hour: 0, minute: 0 }, to: { hour: 0, minute: 0 } },
       customerName: this.customerName,
       status: [],
@@ -81,8 +82,6 @@ export class CallManagementComponent implements OnInit {
     for (let type of this.selectedServices)
       requestFilters.typeIds.push(type.id);
 
-    // if (changeUrlParams)
-    //   this.changeUrlParams();
     this.callService.getAppointmentsFiltered(requestFilters).subscribe(results => {
       console.log(results);
       this.calls = results;
@@ -90,7 +89,6 @@ export class CallManagementComponent implements OnInit {
       if (this.calls && this.calls.length > 0)
         this.selectedCall = this.calls[0];
       this.loading = false;
-      // this.loadingFiltered = false;
     });
   }
 
@@ -103,14 +101,12 @@ export class CallManagementComponent implements OnInit {
 
       let callDate = moment(call.date, 'YYYY-MM-DD').format('MM-DD-YYYY');
 
-      // if (this.mappedCalls[call.status] == undefined)
       this.mappedCalls[call.status].callsCount++;
       this.mappedCalls[0].callsCount++;
       if (this.mappedCalls[call.status][callDate] == null)
         this.mappedCalls[call.status][callDate] = [];
       if (this.mappedCalls[0][callDate] == null)
         this.mappedCalls[0][callDate] = [];
-      // call.quoteTotalEstimate = this.calculateTotalQuoteEstimate(call);
       if (call.quote && call.user)
         call.quote.user = call.user;
       let appointmentDateLocalized = new Date(call.date);
@@ -121,10 +117,6 @@ export class CallManagementComponent implements OnInit {
       this.mappedCalls[call.status][callDate].push(call);
       // handle all tab
       this.mappedCalls[0][callDate].push(call);
-      // if (this.urlIdParam != null && call.id == this.urlIdParam) {
-      //   this.openAppointmentDetailsModal(call, appointmentDate);
-      // }
-
     }
     this.constructDaysArrayBetweenFilterDates();
   }
@@ -138,11 +130,22 @@ export class CallManagementComponent implements OnInit {
 
     this.datesArrayBetweenFilterDates = getDatesArray(startDate, endDate);
   }
+  
+  callSubmitted(call) {
+    this.appointmentService.addAppointment(call.obj, call.images).subscribe(result => {
+      if (result.id != null) {
+        this.mode = this.modes.msg;
+        setTimeout(() => {
+          this.mode = this.modes.listing
+          this.filter();
+        }, 5000);
+        this.alertifyService.success('Your call has been submitted');
+      }
+    });
+  }
 
-  servicesChanged = (x) => console.log(x)
-
-  datesChanged = (x) => {
-    console.log(x)
-  };
+  setMode(currentMode) {
+    this.mode = currentMode;
+  }
 
 }
