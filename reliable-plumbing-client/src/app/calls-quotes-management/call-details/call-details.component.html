@@ -1,9 +1,9 @@
 <div class="quotes-btns">
     <span (click)="quotes.toggle($event)">
-        <i class="fa fa-calculator"></i>
+        <i pTooltip="Related Quotes" tooltipPosition="left" [appendTo]="'body'" class="fa fa-calculator"></i>
     </span>
     <span (click)="openQuoteQuickAdd(quoteQuickAdd)">
-        <i class="fa fa-plus"></i>
+        <i pTooltip="Request Quote" tooltipPosition="left" [appendTo]="'body'" class="fa fa-plus"></i>
     </span>
 </div>
 
@@ -123,8 +123,8 @@
 
 <p-overlayPanel [appendTo]="'body'" #technicianCalls>
     <div *ngIf="selectedtech">
-       <span *ngFor="let techCall of selectedtech.calls">{{techCall?.time}}</span>
-       <no-data *ngIf="!selectedtech.calls || selectedtech.calls.length == 0" [message]="'No Calls This Day'"></no-data>
+        <span *ngFor="let techCall of selectedtech.calls">{{techCall?.time}}</span>
+        <no-data *ngIf="!selectedtech.calls || selectedtech.calls.length == 0" [message]="'No Calls Might Overlap'"></no-data>
     </div>
 </p-overlayPanel>
 
@@ -132,10 +132,11 @@
     <p-accordion [multiple]="true">
         <p-accordionTab *ngFor="let quote of mappedCall.quotes">
             <p-header>
-                Header Content
+                #{{quote.status | QuoteStatusTxt}}
+                <b>{{' (' + quote.total + ')'}}</b>
             </p-header>
 
-            <table class="table table-bordered table-scrollable">
+            <table *ngIf="quote.estimateFields && quote.estimateFields.length > 0" class="table table-bordered table-scrollable">
                 <thead>
                     <th>#</th>
                     <th>Description</th>
@@ -149,8 +150,10 @@
                     </tr>
                 </tbody>
             </table>
+            <div *ngIf="!quote.estimateFields || quote.estimateFields.length == 0">Quote Hasn't been Estimated Yet</div>
         </p-accordionTab>
     </p-accordion>
+    <no-data *ngIf="!mappedCall.quotes || mappedCall.quotes.length==0" [message]="'No Quotes Attached'"></no-data>
 </p-overlayPanel>
 
 

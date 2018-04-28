@@ -13,6 +13,9 @@
     cursor: pointer;
     position: absolute;
     z-index: 9;
+    span{
+        margin-right: 2px;
+    }
 }
 
 .tags {

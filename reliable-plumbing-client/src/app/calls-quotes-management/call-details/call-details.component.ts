@@ -24,6 +24,7 @@ export class CallDetailsComponent implements OnInit, OnChanges {
   selectedtech;
   loading = true;
   overlayLoading = false;
+  quickAddModalRef: NgbModalRef
 
   constructor(private modalService: NgbModal, private quoteService: QuoteService, private alertifyService: AlertifyService,
     private callService: AppointmentService, private environmentService: EnvironmentService) { }
@@ -77,8 +78,15 @@ export class CallDetailsComponent implements OnInit, OnChanges {
       images: buildImagesObjectsForLightBox(call.id, call.relatedFileNames),
       assignees: !this.isReadOnly ? [] : this.mapTechnicians(call.assignees),
       message: call.message,
-      quotes: call.quotes
+      quotes: !call.quotes ? null : call.quotes.map(q => this.mapCallQuote(q))
     }
+  }
+
+  mapCallQuote(quote) {
+    quote.total = quote.estimateFields.length > 0 ? 0 : '-';
+    quote.estimateFields.forEach(f => quote.total += parseFloat(f.cost));
+
+    return quote;
   }
 
   private mapTechnicians(technicians) {
@@ -160,7 +168,6 @@ export class CallDetailsComponent implements OnInit, OnChanges {
   //#endregion
 
   //#region Quick Quote Modal & Methods
-  quickAddModalRef: NgbModalRef
   openQuoteQuickAdd(template) {
     this.quickAddModalRef = this.modalService.open(template);
   }
@@ -179,6 +186,11 @@ export class CallDetailsComponent implements OnInit, OnChanges {
 
     this.quoteService.addQuote(attachedQuote, quote.images).subscribe(result => {
       if (result.id != null) {
+        if (!this.call.quotes)
+          this.call.quotes = [result];
+        else
+          this.call.quotes.push(result);
+        this.mappedCall = this.mapCall(this.call);
         this.alertifyService.success('Your call has been submitted');
         this.quickAddModalRef.close();
       }
