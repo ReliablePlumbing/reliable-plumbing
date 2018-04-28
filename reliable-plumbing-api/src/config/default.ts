@@ -9,7 +9,7 @@ export const config: Config = {
     },
     db: {
         mongoConnectionString: "mongodb://localhost:27017/developmentDb",
-        showMongoLogs: true
+        showMongoLogs: false
     },
     mailSettings: {
         service: "gmail",

@@ -21,6 +21,7 @@ import { NoDataComponent } from './no-data/no-data.component';
 import { NotificationsComponent } from './notifications/notifications.component';
 import { MultiSelectDatepickerComponent } from './multi-select-datepicker/multi-select-datepicker.component';
 import { MessageComponent } from './message/message.component';
+import { OverlayLoaderComponent } from './overlay-loader/overlay-loader.component';
 
 // directives
 import { ModelCharsReplaceDirective } from './directives/model-chars-replace.directive';
@@ -33,7 +34,7 @@ import { CallStatusColor, CallStatusTxt } from './pipes/call-status-pipes';
 
 let declarations = [
   // components
-  LoaderComponent, MultiSelectDatepickerComponent, NoDataComponent, NotificationsComponent, MessageComponent,
+  LoaderComponent, MultiSelectDatepickerComponent, NoDataComponent, NotificationsComponent, MessageComponent, OverlayLoaderComponent,
   // pipes
   CallStatusColor, CallStatusTxt, TechnicianStatusColor, TechnicianStatusTxt,
   // directives

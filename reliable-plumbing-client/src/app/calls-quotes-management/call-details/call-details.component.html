@@ -93,13 +93,40 @@
 <div class="row">
     <div class="col-4">
         <label>
-            <b>Quotes</b>
+            <b>Assignees</b>
         </label>
     </div>
     <div class="col-8">
-        {{mappedCall.quotes == null ? 'No Quotes' : mappedCall.quotes.length}}
+        <ul class="tags">
+            <li class="tagg" *ngFor="let assignee of mappedCall.assignees">
+                {{assignee.technician.firstName + ' ' + (assignee.technician.lastName ? assignee.technician.lastName: '')}}
+                <span *ngIf="!isReadOnly" (click)="removeAssignee(assignee)">x</span>
+            </li>
+        </ul>
     </div>
 </div>
+
+<div class="row">
+    <p-scrollPanel [style]="{width: '100%', height: '100px'}">
+        <div *ngFor="let tech of mappedTechnicians">
+            <div [pTooltip]="tech?.status | technicianStatusTxt" tooltipPosition="top">
+                <span class="appointemt-status" [ngClass]="tech?.status | technicianStatusColor"></span>
+                <span>{{tech?.technician.name}}</span>
+            </div>
+            <div>
+                <span pTooltip="Calls Details" tooltipPosition="top" class="fa fa-info-circle pointer" (click)="openTechCallsDetails(tech, technicianCalls, $event)"></span>
+                <span pTooltip="Assign" tooltipPosition="top" class="fa fa-plus pointer" (click)="assign(tech)"></span>
+            </div>
+        </div>
+    </p-scrollPanel>
+</div>
+
+<p-overlayPanel [appendTo]="'body'" #technicianCalls>
+    <div *ngIf="selectedtech">
+       <span *ngFor="let techCall of selectedtech.calls">{{techCall?.time}}</span>
+       <no-data *ngIf="!selectedtech.calls || selectedtech.calls.length == 0" [message]="'No Calls This Day'"></no-data>
+    </div>
+</p-overlayPanel>
 
 <p-overlayPanel [appendTo]="'body'" #quotes>
     <p-accordion [multiple]="true">
@@ -140,3 +167,5 @@
     </div>
 
 </ng-template>
+
+<overlay-loader *ngIf="overlayLoading"></overlay-loader>

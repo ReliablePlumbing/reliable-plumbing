@@ -53,7 +53,6 @@ export class CallManagementComponent implements OnInit {
       requestFilters.typeIds.push(type.id);
 
     this.callService.getAppointmentsFiltered(requestFilters).subscribe(results => {
-      console.log(results);
       this.calls = results;
       if (this.calls && this.calls.length > 0)
         this.selectedCall = this.calls[0];

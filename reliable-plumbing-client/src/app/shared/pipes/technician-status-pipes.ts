@@ -7,13 +7,13 @@ export class TechnicianStatusColor implements PipeTransform {
     transform(status: TechnicianStatus) {
         switch (status) {
             case TechnicianStatus.Available:
-                return 'green';
+                return 'greenBg';
             case TechnicianStatus.Busy:
-                return 'red';
+                return 'redBg';
             case TechnicianStatus.PossibleBusy:
-                return 'yellow';
+                return 'yellowBg';
             case TechnicianStatus.HardlyBusy:
-                return 'orange';
+                return 'orangeBg';
 
             default:
                 break;

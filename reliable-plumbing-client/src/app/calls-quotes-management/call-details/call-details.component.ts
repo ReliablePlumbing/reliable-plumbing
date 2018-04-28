@@ -1,9 +1,13 @@
 import { Component, OnInit, Input, OnChanges } from '@angular/core';
 import { getCustomerFullName } from '../../utils/call-helpers';
-import { AppointmentStatus } from '../../models/enums';
+import { AppointmentStatus, Role } from '../../models/enums';
 import { buildImagesObjectsForLightBox } from '../../utils/files-helpers';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-import { QuoteService, AlertifyService } from '../../services/services.exports';
+import { QuoteService, AlertifyService, AppointmentService, EnvironmentService } from '../../services/services.exports';
+import { isAnyEligible } from '../../utils/user-helpers';
+import { OverlayPanel } from 'primeng/primeng';
+import { convertTimeTo12String } from '../../utils/date-helpers';
+import * as moment from 'moment';
 
 @Component({
   selector: 'call-details',
@@ -14,20 +18,54 @@ export class CallDetailsComponent implements OnInit, OnChanges {
 
   @Input() call;
   mappedCall;
-  isReadOnly
+  isReadOnly;
+  technicians;
+  mappedTechnicians;
+  selectedtech;
+  loading = true;
+  overlayLoading = false;
 
-  constructor(private modalService: NgbModal, private quoteService: QuoteService, private alertifyService: AlertifyService) { }
+  constructor(private modalService: NgbModal, private quoteService: QuoteService, private alertifyService: AlertifyService,
+    private callService: AppointmentService, private environmentService: EnvironmentService) { }
 
   ngOnInit() {
-    this.mappedCall = this.mapCall(this.call);
+    this.isReadOnly = !isAnyEligible(this.environmentService.currentUser, [Role.Admin, Role.Supervisor, Role.SystemAdmin]);
   }
 
   ngOnChanges() {
-    this.mappedCall = this.mapCall(this.call);
+    if (this.call) {
+      this.loading = true;
+      this.mappedCall = this.mapCall(this.call);
+      this.getTechsStatuses();
+    }
   }
 
+  //#region API Services Calls
 
-  mapCall(call) {
+  getTechsStatuses() {
+    return new Promise<boolean>((resolve, reject) => {
+      this.callService.getTechniciansWithStatusInTime(this.call.id).subscribe(results => {
+        this.technicians = results;
+        this.mappedTechnicians = this.mapTechnicians(results);
+        this.loading = false;
+        resolve(true);
+      });
+    });
+  }
+
+  updateCall() {
+    // map assignees
+    this.call.assigneeIds = this.mappedCall.assignees.map(assignee => assignee.technician.id);
+
+    return new Promise<boolean>((resolve, reject) => {
+      // call service
+      this.callService.updateAppointmentStatusAndAssignees(this.call).subscribe(x => resolve(x != null));
+    });
+  }
+  //#endregion
+
+  //#region Mapping Methods
+  private mapCall(call) {
     let user = call.user ? call.user : call.customerInfo;
     return {
       customerName: getCustomerFullName(call),
@@ -43,14 +81,16 @@ export class CallDetailsComponent implements OnInit, OnChanges {
     }
   }
 
-  mapTechnicians(technicians) {
+  private mapTechnicians(technicians) {
     let mappedTechs;
 
     mappedTechs = technicians.map(tech => {
+      let techObj = this.isReadOnly ? tech : tech.technician;
+      techObj.name = techObj.firstName + ' ' + (techObj.lastName ? techObj.lastName : '')
       return {
-        technician: this.isReadOnly ? tech : tech.technician,
+        technician: techObj,
         status: this.isReadOnly ? null : tech.status,
-        appointments: this.isReadOnly ? null : tech.appointments.map(call => this.mappedCall(call)),
+        calls: this.isReadOnly ? null : tech.appointments.map(call => this.mapTechCall(call)),
       }
     });
 
@@ -67,13 +107,59 @@ export class CallDetailsComponent implements OnInit, OnChanges {
     return mappedTechs;
   }
 
+  private mapTechCall(call) {
+    let callDate = moment(call.date);
+    return {
+      date: call.date,
+      time: convertTimeTo12String(callDate.hour(), callDate.minutes()),
+      // status: { id: call.status, text: AppointmentStatus[call.status] },
+    }
+  }
 
-  getAddress(call) {
+  private getAddress(call) {
     let address = call.user ? call.user.sites.find(x => x.id == call.siteId) : call.customerInfo;
 
     return address.street + ' - ' + address.city + ' - ' + address.state;
   }
+  //#endregion
 
+  //#region Call Assignees Action Methods
+  assign(tech) {
+    this.overlayLoading = true;
+    if (this.mappedCall.assignees == null)
+      this.mappedCall.assignees = [];
+
+    this.mappedTechnicians = this.mappedTechnicians.filter(x => x.technician.id != tech.technician.id);
+    this.mappedCall.assignees.push(tech);
+    this.updateCall().then(success => {
+      if (success) {
+        this.alertifyService.success('Technician Assigned Successfully');
+        this.overlayLoading = false;
+      }
+    });
+  }
+
+  removeAssignee(assignee) {
+    this.alertifyService.confirmDialog('Are You Sure Removing <b>' + assignee.technician.name + '</b>', () => {
+      this.overlayLoading = true;
+      this.mappedCall.assignees = this.mappedCall.assignees.filter(assign => assign.technician.id != assignee.technician.id);
+      this.mappedTechnicians.splice(0, 0, assignee);
+      this.updateCall().then(success => {
+        this.getTechsStatuses().then(success => {
+          this.alertifyService.success('Technician Assigned Successfully');
+          this.overlayLoading = false;
+        });
+      });
+    });
+  }
+
+  openTechCallsDetails(tech, techOverLayPanel: OverlayPanel, event) {
+    this.selectedtech = tech;
+    techOverLayPanel.toggle(event);
+  }
+  //#endregion
+
+  //#region Quick Quote Modal & Methods
   quickAddModalRef: NgbModalRef
   openQuoteQuickAdd(template) {
     this.quickAddModalRef = this.modalService.open(template);
@@ -98,4 +184,5 @@ export class CallDetailsComponent implements OnInit, OnChanges {
       }
     });
   }
+  //#endregion
 }
