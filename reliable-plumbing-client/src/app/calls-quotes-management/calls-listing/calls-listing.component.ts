@@ -5,7 +5,7 @@ import { NgbModalRef, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { AlertifyService, EnvironmentService, AppointmentService } from '../../services/services.exports';
 import { ActivatedRoute, Router } from '@angular/router';
 import { isAnyEligible } from '../../utils/user-helpers';
-import { Role, AppointmentStatus } from '../../models/enums';
+import { Role, AppointmentStatus, Permission } from '../../models/enums';
 import { isCallOpened } from '../../utils/call-helpers';
 
 @Component({
@@ -23,30 +23,33 @@ export class CallsListingComponent implements OnInit {
   statusTabs;
   selectedCall;
   //////////////////////////
-  allowUserCheckIn = false;
-  mapMarker: any = { lat: 36.778259, lng: -119.417931 }; // california coordinates
+  permissions: {
+    confirmCall: boolean,
+    rejectCall: boolean,
+    completeCall: boolean,
+    cancelCall: boolean,
+  };
   checkInMapModalRef: NgbModalRef;
 
   constructor(private alertifyService: AlertifyService, private modalService: NgbModal, private router: Router,
     private activatedRoute: ActivatedRoute, private environmentService: EnvironmentService, private callService: AppointmentService) { }
 
   ngOnInit() {
-    this.allowUserCheckIn = isAnyEligible(this.environmentService.currentUser, [Role.Technician]);
-    if (this.allowUserCheckIn) {
-      navigator.geolocation.getCurrentPosition(position => {
-        this.mapMarker = {
-          lat: position.coords.latitude,
-          lng: position.coords.longitude,
-          draggable: true,
-          label: null
-        }
-      });
-    }
+    this.initPermissions();
     this.statusTabs = [{ id: '0', text: 'All' }];
     this.statusTabs = this.getStatusIcons(this.statusTabs.concat(getEnumEntries(AppointmentStatus)));
     this.mapAndGroupAppointmentsByDay();
     if (this.calls && this.calls.length > 0)
       this.selectedCall = this.calls[0];
+  }
+
+  initPermissions() {
+    this.permissions = {
+      confirmCall: this.environmentService.hasPermission(Permission.ConfirmCall),
+      rejectCall: this.environmentService.hasPermission(Permission.RejectCall),
+      completeCall: this.environmentService.hasPermission(Permission.CompleteCall),
+      cancelCall: this.environmentService.hasPermission(Permission.CancelCall),
+    }
   }
 
   getStatusIcons(statusArr: any[]) {
@@ -97,6 +100,7 @@ export class CallsListingComponent implements OnInit {
       let customer = call.user == null ? call.customerInfo : call.user;
       call.customerName = customer.firstName + ' ' + (customer.lastName ? customer.lastName : '');
       call.actions = this.getAllowedCallActions(call);
+      call.allowCheckIn = isCallOpened(call);
       this.mappedCalls[call.status][callDate].push(call);
       // handle all tab
       this.mappedCalls[0][callDate].push(call);
@@ -108,12 +112,16 @@ export class CallsListingComponent implements OnInit {
     let actions = [];
     switch (call.status) {
       case AppointmentStatus.Pending:
-        actions.push({ status: AppointmentStatus.Confirmed, label: 'Confirm', cssClass: 'btn-primary' });
-        actions.push({ status: AppointmentStatus.Rejected, label: 'Reject', cssClass: 'btn-primary' });
+        if (this.permissions.confirmCall)
+          actions.push({ status: AppointmentStatus.Confirmed, label: 'Confirm', cssClass: 'btn-primary' });
+        if (this.permissions.rejectCall)
+          actions.push({ status: AppointmentStatus.Rejected, label: 'Reject', cssClass: 'btn-primary' });
         break;
       case AppointmentStatus.Confirmed:
-        actions.push({ status: AppointmentStatus.Completed, label: 'Done', cssClass: 'btn-primary' });
-        actions.push({ status: AppointmentStatus.Canceled, label: 'Cancel', cssClass: 'btn-primary' });
+        if (this.permissions.completeCall)
+          actions.push({ status: AppointmentStatus.Completed, label: 'Done', cssClass: 'btn-primary' });
+        if (this.permissions.cancelCall)
+          actions.push({ status: AppointmentStatus.Canceled, label: 'Cancel', cssClass: 'btn-primary' });
         break;
     }
     return actions;

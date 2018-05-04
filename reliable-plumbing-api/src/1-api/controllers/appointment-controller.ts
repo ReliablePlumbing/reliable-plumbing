@@ -21,7 +21,7 @@ export class AppointmentController {
   }
 
   @Post('/getAppointmentsFiltered')
-  @Authorized([Role.Supervisor, Role.Admin, Role.SystemAdmin, Role.Customer])
+  @Authorized()
   getAppointmentsFiltered(@Body() filters) {
     return new Promise<Appointment[]>((resolve, reject) => {
       this.appointmentManager

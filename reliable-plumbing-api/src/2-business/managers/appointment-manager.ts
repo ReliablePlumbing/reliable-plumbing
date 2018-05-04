@@ -65,7 +65,7 @@ export class AppointmentManager {
             filters.time.to = { hour: 23, minute: 59 };
         let toDate = (filters.date && filters.date.to) ? this.constructAppointmentDate(filters.date.to, filters.time.to) : null;
         return new Promise<Appointment[]>((resolve, reject) => {
-            this.appointmentRepo.getAppointmentsFilteredByDatesAndStatusAndType(fromDate, toDate, filters.status, filters.typeIds, filters.userIds)
+            this.appointmentRepo.getAppointmentsFiltered(fromDate, toDate, filters.status, filters.typeIds, filters.userIds, filters.assigneeIds)
                 .then(results => {
                     let filteredAppointments = results;
                     if (filters.time)
@@ -102,7 +102,7 @@ export class AppointmentManager {
                 let filterStatus = [AppointmentStatus.Pending, AppointmentStatus.Rejected, AppointmentStatus.Confirmed]
                 let technicianIds = technicians.map(tech => tech.id);
 
-                this.appointmentRepo.getAppointmentsFilteredByDatesAndStatusAndType(boundaryDates.from, boundaryDates.to, filterStatus, null)
+                this.appointmentRepo.getAppointmentsFiltered(boundaryDates.from, boundaryDates.to, filterStatus, null)
                     .then(results => {
                         let techniciansWithAppointmentsAndStatus = [];
 

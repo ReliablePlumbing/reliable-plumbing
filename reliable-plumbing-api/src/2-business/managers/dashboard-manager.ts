@@ -22,7 +22,7 @@ export class DashboardManager {
 
 
     async getServicesStats() {
-        let calls = await this.callsRepo.getAppointmentsFilteredByDatesAndStatusAndType(null, null, [AppointmentStatus.Completed]);
+        let calls = await this.callsRepo.getAppointmentsFiltered(null, null, [AppointmentStatus.Completed]);
         let services = await this.lookupsManager.getAllAppointmentTypes();
 
         let servicesDic = {};
@@ -43,7 +43,7 @@ export class DashboardManager {
     }
 
     async getTechniciansCallsStats() {
-        let calls = await this.callsRepo.getAppointmentsFilteredByDatesAndStatusAndType(null, null, [AppointmentStatus.Completed]);
+        let calls = await this.callsRepo.getAppointmentsFiltered(null, null, [AppointmentStatus.Completed]);
         let technicians = await this.userRepo.getUsersByRoles([Role.Technician]);
 
         let techiciansModel = [];
@@ -62,7 +62,7 @@ export class DashboardManager {
     }
 
     async getTechniciansRating() {
-        let calls = await this.callsRepo.getAppointmentsFilteredByDatesAndStatusAndType(null, null, [AppointmentStatus.Completed]);
+        let calls = await this.callsRepo.getAppointmentsFiltered(null, null, [AppointmentStatus.Completed]);
         let technicians = await this.userRepo.getUsersByRoles([Role.Technician]);
 
         let techiciansModel = [];
@@ -86,7 +86,7 @@ export class DashboardManager {
     }
 
     async getCallsCounts() {
-        let calls = await this.callsRepo.getAppointmentsFilteredByDatesAndStatusAndType(null, null, [AppointmentStatus.Completed, AppointmentStatus.Pending, AppointmentStatus.Confirmed]);
+        let calls = await this.callsRepo.getAppointmentsFiltered(null, null, [AppointmentStatus.Completed, AppointmentStatus.Pending, AppointmentStatus.Confirmed]);
 
         let callsCounts = { completed: 0, pending: 0, upcoming: 0 };
 

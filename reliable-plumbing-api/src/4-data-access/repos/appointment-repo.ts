@@ -10,7 +10,7 @@ export class AppointmentRepo extends Repo<Appointment> {
         super(appointmentSchema)
     }
 
-    getAppointmentsFilteredByDatesAndStatusAndType(from?: Date, to?: Date, status?: AppointmentStatus[], typeids?: string[], userIds?: string[]) {
+    getAppointmentsFiltered(from?: Date, to?: Date, status?: AppointmentStatus[], typeids?: string[], userIds?: string[], assigneeIds?: string[]) {
         let model = this.createSet();
 
         let filterObj: any = {};
@@ -25,6 +25,8 @@ export class AppointmentRepo extends Repo<Appointment> {
             filterObj.typeId = { $in: typeids };
         if (userIds && userIds.length > 0)
             filterObj.userId = { $in: userIds };
+        if (assigneeIds && assigneeIds.length > 0)
+            filterObj.assigneeIds = { $in: assigneeIds };
 
         return new Promise<Appointment[]>((resolve, reject) => {
 

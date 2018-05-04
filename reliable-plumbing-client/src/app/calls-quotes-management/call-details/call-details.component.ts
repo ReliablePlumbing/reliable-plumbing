@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, OnChanges } from '@angular/core';
-import { getCustomerFullName } from '../../utils/call-helpers';
-import { AppointmentStatus, Role } from '../../models/enums';
+import { getCustomerFullName, isCallOpened } from '../../utils/call-helpers';
+import { AppointmentStatus, Role, Permission } from '../../models/enums';
 import { buildImagesObjectsForLightBox } from '../../utils/files-helpers';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { QuoteService, AlertifyService, AppointmentService, EnvironmentService } from '../../services/services.exports';
@@ -18,23 +18,49 @@ export class CallDetailsComponent implements OnInit, OnChanges {
 
   @Input() call;
   mappedCall;
-  isReadOnly;
   technicians;
   mappedTechnicians;
   selectedtech;
   loading = true;
   overlayLoading = false;
-  quickAddModalRef: NgbModalRef
+  quickAddModalRef: NgbModalRef;
+  permissions: {
+    attachQuote: boolean,
+    updateAssignees: boolean,
+    collaborate: boolean,
+    checkIn: boolean,
+  };
+  mapMarker: any = { lat: 36.778259, lng: -119.417931 }; // california coordinates
 
   constructor(private modalService: NgbModal, private quoteService: QuoteService, private alertifyService: AlertifyService,
     private callService: AppointmentService, private environmentService: EnvironmentService) { }
 
   ngOnInit() {
-    this.isReadOnly = !isAnyEligible(this.environmentService.currentUser, [Role.Admin, Role.Supervisor, Role.SystemAdmin]);
+    this.initPermissions();
+    if (this.permissions.checkIn) {
+      navigator.geolocation.getCurrentPosition(position => {
+        this.mapMarker = {
+          lat: position.coords.latitude,
+          lng: position.coords.longitude,
+          draggable: true,
+          label: null
+        }
+      });
+    }
+  }
+
+  initPermissions() {
+    this.permissions = {
+      attachQuote: this.environmentService.hasPermission(Permission.AttachQuote),
+      updateAssignees: this.environmentService.hasPermission(Permission.UpdateAssignees),
+      collaborate: this.environmentService.hasPermission(Permission.Collaborate),
+      checkIn: this.environmentService.hasPermission(Permission.CheckIn) && isCallOpened(this.call)
+    }
   }
 
   ngOnChanges() {
     if (this.call) {
+      this.initPermissions();
       this.loading = true;
       this.mappedCall = this.mapCall(this.call);
       this.getTechsStatuses();
@@ -76,7 +102,7 @@ export class CallDetailsComponent implements OnInit, OnChanges {
       mobile: user.mobile,
       status: { id: call.status, text: AppointmentStatus[call.status] },
       images: buildImagesObjectsForLightBox(call.id, call.relatedFileNames),
-      assignees: !this.isReadOnly ? [] : this.mapTechnicians(call.assignees),
+      // assignees: !this.permissions.updateAssignees ? [] : this.mapTechnicians(call.assignees),
       message: call.message,
       quotes: !call.quotes ? null : call.quotes.map(q => this.mapCallQuote(q))
     }
@@ -93,16 +119,16 @@ export class CallDetailsComponent implements OnInit, OnChanges {
     let mappedTechs;
 
     mappedTechs = technicians.map(tech => {
-      let techObj = this.isReadOnly ? tech : tech.technician;
+      let techObj = !this.permissions.updateAssignees ? tech : tech.technician;
       techObj.name = techObj.firstName + ' ' + (techObj.lastName ? techObj.lastName : '')
       return {
         technician: techObj,
-        status: this.isReadOnly ? null : tech.status,
-        calls: this.isReadOnly ? null : tech.appointments.map(call => this.mapTechCall(call)),
+        status: !this.permissions.updateAssignees ? null : tech.status,
+        calls: !this.permissions.updateAssignees ? null : tech.appointments.map(call => this.mapTechCall(call)),
       }
     });
     this.mappedCall.assignees = [];
-    if (!this.isReadOnly) {
+    if (this.permissions.updateAssignees) {
       for (let tech of mappedTechs) {
         for (let assigneeId of this.call.assigneeIds)
           if (assigneeId == tech.technician.id) {

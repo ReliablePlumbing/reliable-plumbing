@@ -2,7 +2,7 @@
     <span (click)="quotes.toggle($event)">
         <i pTooltip="Related Quotes" tooltipPosition="left" [appendTo]="'body'" class="fa fa-calculator"></i>
     </span>
-    <span (click)="openQuoteQuickAdd(quoteQuickAdd)">
+    <span *ngIf="permissions.attachQuote" (click)="openQuoteQuickAdd(quoteQuickAdd)">
         <i pTooltip="Request Quote" tooltipPosition="left" [appendTo]="'body'" class="fa fa-plus"></i>
     </span>
 </div>
@@ -100,13 +100,13 @@
         <ul class="tags">
             <li class="tagg" *ngFor="let assignee of mappedCall.assignees">
                 {{assignee.technician.firstName + ' ' + (assignee.technician.lastName ? assignee.technician.lastName: '')}}
-                <span *ngIf="!isReadOnly" (click)="removeAssignee(assignee)">x</span>
+                <span *ngIf="permissions.updateAssignees" (click)="removeAssignee(assignee)">x</span>
             </li>
         </ul>
     </div>
 </div>
 
-<div class="row">
+<div class="row" *ngIf="permissions.updateAssignees">
     <p-scrollPanel [style]="{width: '100%', height: '100px'}">
         <div *ngFor="let tech of mappedTechnicians">
             <div [pTooltip]="tech?.status | technicianStatusTxt" tooltipPosition="top">
@@ -119,6 +119,19 @@
             </div>
         </div>
     </p-scrollPanel>
+</div>
+
+<div class="row">
+    <div *ngIf="permissions.checkIn" class="check-in">
+        <button (click)="openCheckInMap(call, checkInMap)" class="btn btn-primary filters-toggle-btn ">
+            <i class="fa fa-sign-in" aria-hidden="true"></i> check in
+        </button>
+    </div>
+    <div class="appointemt-last-checkin">
+        <span>
+            <b>last check-in:</b> {{call.checkInDetails ? (call.checkInDetails.date | date:'MMM dd yyyy HH:mm a') : 'No one checked-in'}}
+        </span>
+    </div>
 </div>
 
 <p-overlayPanel [appendTo]="'body'" #technicianCalls>
@@ -172,3 +185,29 @@
 </ng-template>
 
 <overlay-loader *ngIf="overlayLoading"></overlay-loader>
+
+
+
+<ng-template #checkInMap let-c="close" let-d="dismiss">
+    <div class="modal-header">
+        <h5 class="modal-title">Current Location</h5>
+        <button type="button" class="close" aria-label="Close" (click)="c()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="map-container">
+            <agm-map [latitude]="mapMarker.lat" [longitude]="mapMarker.lng" [zoom]="15" [disableDefaultUI]="false" [zoomControl]="true">
+                <agm-marker [latitude]="mapMarker.lat" [longitude]="mapMarker.lng" [label]="mapMarker.label" [markerDraggable]="mapMarker.draggable"
+                    (dragEnd)="markerDragEnd(m, $event)">
+                    <agm-info-window>
+                        <strong>Your Location</strong>
+                    </agm-info-window>
+                </agm-marker>
+            </agm-map>
+        </div>
+
+        <button class="btn btn-primary" (click)="checkIn()">Check in</button>
+    </div>
+
+</ng-template>

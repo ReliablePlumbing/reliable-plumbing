@@ -2,6 +2,7 @@ import { Injectable, Inject, PLATFORM_ID } from '@angular/core';
 import { isPlatformBrowser, isPlatformServer } from '@angular/common';
 import { UserInfo } from '../models/user-info';
 import { Subject, Observable } from 'rxjs'
+import { Permission } from '../models/enums';
 
 @Injectable()
 export class EnvironmentService {
@@ -77,4 +78,7 @@ export class EnvironmentService {
         this.logoutSource$.next();
     }
 
+    hasPermission(permission: Permission): boolean{
+        return this._currentUser != null && this._currentUser.permissions.indexOf(permission) != -1;
+    }
 }

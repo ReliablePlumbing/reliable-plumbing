@@ -24,7 +24,7 @@ const routes: Routes = [
       { path: systemRoutes.settings, component: AppointmentSettingsomponent, canActivate: [LoginAuthGuard], data: { roles: [Role.Admin, Role.SystemAdmin] } },
       { path: systemRoutes.systemUsers, component: SystemUsersManagementComponent, canActivate: [LoginAuthGuard], data: { roles: [Role.Admin, Role.SystemAdmin] } },
       { path: systemRoutes.users, component: UsersManagementComponent, canActivate: [LoginAuthGuard], data: { roles: [Role.Admin, Role.SystemAdmin] } },
-      { path: systemRoutes.myAppointments, component: MyAppointmentsComponent, canActivate: [LoginAuthGuard], data: { roles: [Role.Technician] } },
+      { path: systemRoutes.myAppointments, component: CallManagementComponent, canActivate: [LoginAuthGuard], data: { roles: [Role.Technician], myCalls: true } },
       { path: systemRoutes.tracking, component: TechniciansTrackingComponent, canActivate: [LoginAuthGuard], data: { roles: [Role.Supervisor, Role.Admin, Role.SystemAdmin] } },
       { path: systemRoutes.editProfile, component: EditProfileComponent, canActivate: [LoginAuthGuard] },
       { path: systemRoutes.changePassword, component: ResetPasswordComponent, canActivate: [LoginAuthGuard] },

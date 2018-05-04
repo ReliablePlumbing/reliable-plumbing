@@ -3,8 +3,9 @@ import { AppointmentStatus, CallsQuotesMode } from '../../models/enums';
 import { getEnumEntries, convertDateParamToDateObj, convertTimeTo12String, getDatesArray } from '../../utils/date-helpers';
 import { LookupsService } from '../../services/lookups.service';
 import * as moment from 'moment';
-import { AppointmentService, AlertifyService } from '../../services/services.exports';
+import { AppointmentService, AlertifyService, EnvironmentService } from '../../services/services.exports';
 import { isCallOpened } from '../../utils/call-helpers';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'rb-call-management',
@@ -23,12 +24,14 @@ export class CallManagementComponent implements OnInit {
   rangeDates;
   customerName;
   selectedCall;
+  isMyCalls;
 
-  constructor(private lookupsService: LookupsService, private callService: AppointmentService, private appointmentService: AppointmentService,
-    private alertifyService: AlertifyService) { }
+  constructor(private lookupsService: LookupsService, private callService: AppointmentService, private activatedRoute: ActivatedRoute,
+    private alertifyService: AlertifyService, private enviromentService: EnvironmentService) { }
 
   ngOnInit() {
     this.loading = true;
+    this.isMyCalls = this.activatedRoute.snapshot.data.myCalls;
     let nowDate = moment().toDate();
     let afterWeekDate = moment().add(1, 'week').toDate();
     this.rangeDates = [nowDate, afterWeekDate];
@@ -40,7 +43,7 @@ export class CallManagementComponent implements OnInit {
 
   filter() {
     this.loading = true;
-    let requestFilters = {
+    let requestFilters:any = {
       date: {
         from: this.rangeDates[0],
         to: this.rangeDates[1],
@@ -52,7 +55,9 @@ export class CallManagementComponent implements OnInit {
     }
     for (let type of this.selectedServices)
       requestFilters.typeIds.push(type.id);
-
+    if(this.isMyCalls)
+      requestFilters.assigneeIds = [this.enviromentService.currentUser.id];
+    
     this.callService.getAppointmentsFiltered(requestFilters).subscribe(results => {
       this.calls = results;
       if (this.calls && this.calls.length > 0)
@@ -64,7 +69,7 @@ export class CallManagementComponent implements OnInit {
   callSelected = call => this.selectedCall = call;
 
   callSubmitted(call) {
-    this.appointmentService.addAppointment(call.obj, call.images).subscribe(result => {
+    this.callService.addAppointment(call.obj, call.images).subscribe(result => {
       if (result.id != null) {
         this.mode = this.modes.msg;
         setTimeout(() => {
