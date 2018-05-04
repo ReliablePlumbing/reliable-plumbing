@@ -8,12 +8,14 @@ export * from './entities/quote';
 export * from './entities/appointment-type';
 export * from './entities/notification';
 export * from './entities/settings';
+export * from './entities/role-permission';
 
 /*** Helpers ***/
 export * from './entities/helpers/status-history';
 
 /*** Enums ***/
 export * from './enums/role';
+export * from './enums/permission';
 export * from './enums/error-type';
 export * from './enums/mail-status';
 export * from './enums/notification-type';

@@ -9,3 +9,4 @@ export * from './repos/quote-repo';
 export * from './repos/appointment-type-repo';
 export * from './repos/notification-repo';
 export * from './repos/settings-repo';
+export * from './repos/role-permission-repo';

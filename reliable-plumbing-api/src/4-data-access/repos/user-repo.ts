@@ -18,7 +18,7 @@ export class UserRepo extends Repo<User> {
 
                 if (result == null)
                     return resolve(null);
-                let user = new User(result.toObject({ transform: Object }));
+                let user = new User(result.toObject());
                 return resolve(user);
 
             });

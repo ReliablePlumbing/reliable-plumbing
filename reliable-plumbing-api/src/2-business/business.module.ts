@@ -6,6 +6,7 @@ export * from './managers/lookups-manager';
 export * from './managers/notification-manager';
 export * from './managers/files-manager';
 export * from './managers/dashboard-manager';
+export * from './managers/security-manager';
 
 // notifiers
 export * from './notifiers/notification-broadcasting-service';

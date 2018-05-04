@@ -39,6 +39,7 @@ export class CallManagementComponent implements OnInit {
   }
 
   filter() {
+    this.loading = true;
     let requestFilters = {
       date: {
         from: this.rangeDates[0],

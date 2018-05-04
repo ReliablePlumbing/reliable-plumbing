@@ -1,6 +1,7 @@
 import { BaseEntity } from './base/base-entity';
 import { SocialMediaProvider } from '../enums/social-media-provider';
 import { Role } from '../enums/role';
+import { Permission } from '../enums/permission';
 
 export class User extends BaseEntity {
 
@@ -14,6 +15,7 @@ export class User extends BaseEntity {
   emailActivationDate?: Date;
   mobile: string;
   roles?: Role[];
+  permissions?: Permission[];
   creationDate: Date;
   createdByUserId?: string;
   isActivated: boolean;
@@ -43,6 +45,7 @@ export class User extends BaseEntity {
       this.emailActivationDate = user.emailActivationDate;
       this.mobile = user.mobile;
       this.roles = user.roles;
+      this.permissions = user.permissions ? user.permissions : [];
       this.creationDate = user.creationDate;
       this.hashedPassword = user.hashedPassword;
       this.password = user.password;
@@ -78,6 +81,7 @@ export class User extends BaseEntity {
       emailActivationDate: this.emailActivationDate,
       mobile: this.mobile,
       roles: this.roles,
+      permissions: this.permissions,
       rolesObj: this.mapRoles(),
       creationDate: this.creationDate,
       isActivated: this.isActivated,

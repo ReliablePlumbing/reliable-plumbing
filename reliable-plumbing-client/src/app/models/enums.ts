@@ -29,7 +29,7 @@ export enum regControls {
     roles,
     address,
     accountType
-  }
+}
 
 export enum AppointmentStatus {
     Pending = 1,
@@ -68,4 +68,15 @@ export enum NotificationType {
     AssigneeAdded,
     AssigneeRemoved,
 
+}
+
+export enum Permission {
+    ConfirmCall = 1,
+    RejectCall,
+    CancelCall,
+    CompleteCall,
+    CheckIn,
+    UpdateAssignees,
+    AttachQuote,
+    Collaborate
 }

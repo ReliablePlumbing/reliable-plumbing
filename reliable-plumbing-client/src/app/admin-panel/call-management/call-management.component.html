@@ -1,53 +1,52 @@
-<loader *ngIf="loading"></loader>
-<ng-container *ngIf="!loading">
+<ng-container *ngIf="mode==modes.addCall">
+    <section class="row header">
+        <div class="col-sm-12">
+            <label>New Call</label>
+            <button class="btn btn-success float-right" (click)="setMode(modes.listing)">Back</button>
+        </div>
+    </section>
+    <section class="schedule-content">
+        <rb-calls-quotes-form [mode]="callsQuotesMode" [adminMode]="true" (submitted)="callSubmitted($event)"></rb-calls-quotes-form>
+    </section>
+</ng-container>
 
-    <ng-container *ngIf="mode==modes.addCall">
-        <section class="row header">
-            <div class="col-sm-12">
-                <label>New Call</label>
-                <button class="btn btn-success float-right" (click)="setMode(modes.listing)">Back</button>
+<ng-container *ngIf="mode==modes.msg">
+    <section class="row msg">
+        <div class="col-sm-12">
+            <button class="btn btn-success float-right" (click)="setMode(modes.listing)">Back</button>
+        </div>
+    </section>
+    <message [text]="'Saved Successfully'"></message>
+</ng-container>
+
+<ng-container *ngIf="mode==modes.listing">
+    <div class="filters">
+        <div class="row">
+            <div class="col-sm-3">
+                <p-multiSelect [options]="services" [(ngModel)]="selectedServices" [panelStyle]="{minWidth:'100%'}" (onPanelHide)="filter($event)">
+                    <ng-template let-service pTemplate="item">
+                        <span>{{service.value.name}}</span>
+                    </ng-template>
+                </p-multiSelect>
             </div>
-        </section>
-        <section class="schedule-content">
-            <rb-calls-quotes-form [mode]="callsQuotesMode" [adminMode]="true" (submitted)="callSubmitted($event)"></rb-calls-quotes-form>
-        </section>
-    </ng-container>
-
-    <ng-container *ngIf="mode==modes.msg">
-        <section class="row msg">
-            <div class="col-sm-12">
-                <button class="btn btn-success float-right" (click)="setMode(modes.listing)">Back</button>
+            <div class="col-sm-4">
+                <p-calendar [(ngModel)]="rangeDates" [showIcon]="true" selectionMode="range" readonlyInput="true" (onClose)="filter($event)"></p-calendar>
             </div>
-        </section>
-        <message [text]="'Saved Successfully'"></message>
-    </ng-container>
-
-    <ng-container *ngIf="mode==modes.listing">
-        <div class="filters">
-            <div class="row">
-                <div class="col-sm-3">
-                    <p-multiSelect [options]="services" [(ngModel)]="selectedServices" [panelStyle]="{minWidth:'100%'}" (onPanelHide)="filter($event)">
-                        <ng-template let-service pTemplate="item">
-                            <span>{{service.value.name}}</span>
-                        </ng-template>
-                    </p-multiSelect>
+            <div class="col-sm-3">
+                <div class="ui-inputgroup">
+                    <input type="text" class="form-control customer-name" pInputText placeholder="Customer Name" [(ngModel)]="customerName" (keyup.enter)="filter()">
+                    <button pButton type="button" icon="fa fa-search" class="ui-button-secondary" (click)="filter()"></button>
                 </div>
-                <div class="col-sm-4">
-                    <p-calendar [(ngModel)]="rangeDates" [showIcon]="true" selectionMode="range" readonlyInput="true" (onClose)="filter($event)"></p-calendar>
-                </div>
-                <div class="col-sm-3">
-                    <div class="ui-inputgroup">
-                        <input type="text" class="form-control customer-name" pInputText placeholder="Customer Name" [(ngModel)]="customerName" (keyup.enter)="filter()">
-                        <button pButton type="button" icon="fa fa-search" class="ui-button-secondary" (click)="filter()"></button>
-                    </div>
-                </div>
-                <div class="col-sm-2">
-                    <button class="btn btn-primary filters-toggle-btn pull-right" (click)="setMode(modes.addCall)">Add New Call</button>
-                </div>
+            </div>
+            <div class="col-sm-2">
+                <button class="btn btn-primary filters-toggle-btn pull-right" (click)="setMode(modes.addCall)">Add New Call</button>
             </div>
         </div>
-        <hr />
-        <div class="row no-gutters">
+    </div>
+    <hr />
+    <div class="row no-gutters">
+        <loader *ngIf="loading"></loader>
+        <ng-container *ngIf="!loading">
             <div class="col-sm-6">
                 <calls-listing [rangeDates]="rangeDates" [calls]="calls" (callSelected)="callSelected($event)"></calls-listing>
             </div>
@@ -60,7 +59,6 @@
                     </p-scrollPanel>
                 </ng-container>
             </div>
-
-        </div>
-    </ng-container>
+        </ng-container>
+    </div>
 </ng-container>

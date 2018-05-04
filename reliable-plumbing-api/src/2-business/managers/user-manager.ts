@@ -5,6 +5,7 @@ import { AccountSecurity, dependencies, TokenManager } from '../../5-cross-cutti
 import { Inject, Service } from 'typedi';
 import { NotificationManager } from './notification-manager';
 import config from '../../config';
+import { SecurityManager } from './security-manager';
 
 @Service()
 export class UserManager {
@@ -13,6 +14,7 @@ export class UserManager {
     @Inject(dependencies.UserLoginRepo) private userLoginRepo: UserLoginRepo;
     @Inject(dependencies.mailNotifier) private mailNotifier: MailNotifier;
     @Inject(dependencies.NotificationManager) private notificationManager: NotificationManager;
+    @Inject(dependencies.SecurityManager) private securityManager: SecurityManager;
 
     registerUser(user: User): Promise<any> {
         if (user == null)
@@ -113,26 +115,25 @@ export class UserManager {
         });
     }
 
-    authenticateUser(email, password): Promise<any> {
+    async authenticateUser(email, password): Promise<any> {
         let loginError = new Error('email or password is incorrect');
-        return new Promise<any>((resolve, reject) => {
-            if (email == null || password == null)
-                reject(loginError);
-            else {
-                email = email.toLowerCase();
-                this.userRepo.findByEmail(email).then(result => {
-                    if (result == null)
-                        return reject(loginError);
+        if (email == null || password == null)
+            return Promise.reject(loginError);
+        else {
+            email = email.toLowerCase();
+            let user = await this.userRepo.findByEmail(email);
+            if (user == null)
+                return Promise.reject(loginError);
 
-                    let passwordHash = AccountSecurity.hashPassword(password, result.salt);
+            let passwordHash = AccountSecurity.hashPassword(password, user.salt);
 
-                    if (result.hashedPassword != passwordHash)
-                        return reject(loginError);
+            if (user.hashedPassword != passwordHash)
+                return Promise.reject(loginError);
 
-                    return resolve(result);
-                }).catch((error: Error) => reject(error));
-            }
-        });
+            user.permissions = await this.securityManager.getPermissionsByRoles(user.roles);
+
+            return user;
+        }
     }
 
     checkEmailExistence(email: string) {
@@ -370,15 +371,15 @@ export class UserManager {
         });
     }
 
-    searchUsers(searchText: string){
+    searchUsers(searchText: string) {
         return new Promise<User[]>((resolve, reject) => {
-            if(searchText == null || searchText.length == 0)
+            if (searchText == null || searchText.length == 0)
                 return resolve([]);
 
             this.userRepo.getUsersByRoles([Role.Customer]).then(results => {
                 searchText = searchText.toLowerCase();
                 let filteredUsers = results.filter(user => {
-                    
+
                     return user.firstName.toLowerCase().indexOf(searchText) != -1 ||
                         user.lastName.toLowerCase().indexOf(searchText) != -1 ||
                         (user.firstName + ' ' + user.lastName).toLowerCase().indexOf(searchText) != -1 ||
@@ -388,7 +389,7 @@ export class UserManager {
 
                 return resolve(filteredUsers);
             });
-            
+
         });
     }
 

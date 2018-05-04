@@ -21,6 +21,7 @@ export function registerDependencies() {
     Container.registerService({ id: dependencies.NotificationManager, type: business.NotificationManager });
     Container.registerService({ id: dependencies.FilesManager, type: business.FilesManager });
     Container.registerService({ id: dependencies.DashboardManager, type: business.DashboardManager });
+    Container.registerService({ id: dependencies.SecurityManager, type: business.SecurityManager });
     
     /*** Data Access ***/
     Container.registerService({ id: dependencies.MongoContext, type: data.MongoContext, instance: dbContext });
@@ -32,6 +33,7 @@ export function registerDependencies() {
     Container.registerService({ id: dependencies.AppointmentTypeRepo, type: data.AppointmentTypeRepo });
     Container.registerService({ id: dependencies.NotificationRepo, type: data.NotificationRepo });
     Container.registerService({ id: dependencies.SettingsRepo, type: data.SettingsRepo });
+    Container.registerService({ id: dependencies.RolePermissionRepo, type: data.RolePermissionRepo });
     
     /*** Business Notifiers ***/
     Container.registerService({ id: dependencies.NotificationBroadcastingService, type: business.NotificationBroadcastingService, instance: notificationBroadcastingService });

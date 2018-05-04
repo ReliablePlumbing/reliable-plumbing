@@ -101,7 +101,7 @@ export class CallDetailsComponent implements OnInit, OnChanges {
         calls: this.isReadOnly ? null : tech.appointments.map(call => this.mapTechCall(call)),
       }
     });
-
+    this.mappedCall.assignees = [];
     if (!this.isReadOnly) {
       for (let tech of mappedTechs) {
         for (let assigneeId of this.call.assigneeIds)

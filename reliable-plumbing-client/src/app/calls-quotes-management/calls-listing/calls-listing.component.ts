@@ -74,11 +74,6 @@ export class CallsListingComponent implements OnInit {
     })
   }
 
-  ngOnChanges() {
-    if (this.rangeDates && this.statusTabs)
-      this.mapAndGroupAppointmentsByDay();
-  }
-
   mapAndGroupAppointmentsByDay() {
     this.mappedCalls = {};
     this.statusTabs.forEach(tab => {
