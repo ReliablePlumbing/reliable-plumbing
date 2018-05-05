@@ -2,7 +2,7 @@ import { Component, OnInit, Input, ViewChild, ElementRef, Output, EventEmitter }
 import { getDateString, getDatesArray, convertTimeTo12String, getEnumEntries } from '../../utils/date-helpers';
 import * as moment from 'moment';
 import { NgbModalRef, NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { AlertifyService, EnvironmentService, AppointmentService } from '../../services/services.exports';
+import { AlertifyService, EnvironmentService, AppointmentService, EventsService } from '../../services/services.exports';
 import { ActivatedRoute, Router } from '@angular/router';
 import { isAnyEligible } from '../../utils/user-helpers';
 import { Role, AppointmentStatus, Permission } from '../../models/enums';
@@ -31,7 +31,7 @@ export class CallsListingComponent implements OnInit {
   };
   checkInMapModalRef: NgbModalRef;
 
-  constructor(private alertifyService: AlertifyService, private modalService: NgbModal, private router: Router,
+  constructor(private alertifyService: AlertifyService, private modalService: NgbModal, private router: Router, private eventsService: EventsService,
     private activatedRoute: ActivatedRoute, private environmentService: EnvironmentService, private callService: AppointmentService) { }
 
   ngOnInit() {
@@ -83,8 +83,8 @@ export class CallsListingComponent implements OnInit {
       this.mappedCalls[tab.id] = { callsCount: 0 };
     });
     for (let call of this.calls) {
-
-      let callDate = moment(call.date, 'YYYY-MM-DD').format('MM-DD-YYYY');
+      let dateLocalized = new Date(call.date);
+      let callDate = moment(dateLocalized).format('MM-DD-YYYY');
 
       this.mappedCalls[call.status].callsCount++;
       this.mappedCalls[0].callsCount++;
@@ -147,42 +147,6 @@ export class CallsListingComponent implements OnInit {
     return totalEstimate;
   }
 
-  // openCheckInMap(appointment, template) {
-
-  //   this.selectedAppointment = appointment;
-
-  //   this.checkInMapModalRef = this.modalService.open(template, { size: 'lg' });
-  //   this.checkInMapModalRef.result.then(_ => {
-  //     this.selectedAppointment = null;
-  //   }, _ => {
-  //     this.selectedAppointment = null;
-  //     this.checkInMapModalRef.close();
-  //   });
-  // }
-
-  // markerDragEnd(m, $event) {
-  //   this.mapMarker.lat = $event.coords.lat;
-  //   this.mapMarker.lng = $event.coords.lng;
-  // }
-
-  // checkIn() {
-  //   let checkInDetails = {
-  //     appointmentId: this.selectedAppointment.id,
-  //     lat: this.mapMarker.lat,
-  //     lng: this.mapMarker.lng,
-  //     userId: this.environmentService.currentUser.id
-  //   }
-  //   this.appointmentService.technicianCheckIn(checkInDetails).subscribe(success => {
-  //     if (success) {
-  //       this.checkInMapModalRef.close();
-  //       this.alertifyService.success('check in completed successfully');
-  //     }
-  //     else
-  //       this.alertifyService.error('unsuccessful check in, please try again');
-
-  //   });
-  // }
-
   selectCall(call) {
     this.selectedCall = call;
     this.callSelected.emit(call);
@@ -199,6 +163,7 @@ export class CallsListingComponent implements OnInit {
     this.callService.updateAppointmentStatusAndAssignees(call).subscribe(result => {
       if (result) {
         call.actions = this.getAllowedCallActions(call);
+        this.eventsService.updateCall(call);
         this.alertifyService.success('Call Status Updated Successfully');
       }
     });

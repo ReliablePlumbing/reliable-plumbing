@@ -13,7 +13,7 @@ import { SocketsService } from './sockets.service';
 import { AuthService } from './auth.service';
 import { UserManagementService } from './user-management.service';
 import { QuoteService } from './quote.service';
-import { NavEventsService } from './nav-events.service';
+import { EventsService } from './events.service';
 import { DashboardService } from './dashboard.service';
 
 @NgModule({
@@ -24,7 +24,7 @@ import { DashboardService } from './dashboard.service';
   providers: [
     HttpExtensionService, UserManagementService, EnvironmentService, ExceptionHandlingService, AlertifyService, RouteHandlerService,
     AuthGuard, LoginAuthGuard, LookupsService, AppointmentService, NotificationService, SocketsService, AuthService, QuoteService,
-    NavEventsService, DashboardService
+    EventsService, DashboardService
   ]
 })
 export class ServicesModule { }

@@ -3,7 +3,7 @@ import { getCustomerFullName, isCallOpened } from '../../utils/call-helpers';
 import { AppointmentStatus, Role, Permission } from '../../models/enums';
 import { buildImagesObjectsForLightBox } from '../../utils/files-helpers';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-import { QuoteService, AlertifyService, AppointmentService, EnvironmentService } from '../../services/services.exports';
+import { QuoteService, AlertifyService, AppointmentService, EnvironmentService, EventsService } from '../../services/services.exports';
 import { isAnyEligible } from '../../utils/user-helpers';
 import { OverlayPanel } from 'primeng/primeng';
 import { convertTimeTo12String } from '../../utils/date-helpers';
@@ -33,20 +33,10 @@ export class CallDetailsComponent implements OnInit, OnChanges {
   mapMarker: any = { lat: 36.778259, lng: -119.417931 }; // california coordinates
 
   constructor(private modalService: NgbModal, private quoteService: QuoteService, private alertifyService: AlertifyService,
-    private callService: AppointmentService, private environmentService: EnvironmentService) { }
+    private callService: AppointmentService, private environmentService: EnvironmentService, private eventsService: EventsService) { }
 
   ngOnInit() {
-    this.initPermissions();
-    if (this.permissions.checkIn) {
-      navigator.geolocation.getCurrentPosition(position => {
-        this.mapMarker = {
-          lat: position.coords.latitude,
-          lng: position.coords.longitude,
-          draggable: true,
-          label: null
-        }
-      });
-    }
+    this.eventsService.callUpdated.subscribe(call => this.callChanged());
   }
 
   initPermissions() {
@@ -59,11 +49,25 @@ export class CallDetailsComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges() {
+    this.callChanged();
+  }
+
+  callChanged() {
     if (this.call) {
       this.initPermissions();
       this.loading = true;
       this.mappedCall = this.mapCall(this.call);
       this.getTechsStatuses();
+      if (this.permissions.checkIn) {
+        navigator.geolocation.getCurrentPosition(position => {
+          this.mapMarker = {
+            lat: position.coords.latitude,
+            lng: position.coords.longitude,
+            draggable: true,
+            label: null
+          }
+        });
+      }
     }
   }
 
@@ -191,6 +195,40 @@ export class CallDetailsComponent implements OnInit, OnChanges {
     this.selectedtech = tech;
     techOverLayPanel.toggle(event);
   }
+  //#endregion
+
+  //#region Map & check-in
+  checkInMapModalRef;
+  openCheckInMap(appointment, template) {
+    this.checkInMapModalRef = this.modalService.open(template, { size: 'lg' });
+    this.checkInMapModalRef.result.then(_ => { }, _ => {
+      this.checkInMapModalRef.close();
+    });
+  }
+
+  markerDragEnd(m, $event) {
+    this.mapMarker.lat = $event.coords.lat;
+    this.mapMarker.lng = $event.coords.lng;
+  }
+
+  checkIn() {
+    let checkInDetails = {
+      appointmentId: this.call.id,
+      lat: this.mapMarker.lat,
+      lng: this.mapMarker.lng,
+      userId: this.environmentService.currentUser.id
+    }
+    this.callService.technicianCheckIn(checkInDetails).subscribe(success => {
+      if (success) {
+        this.checkInMapModalRef.close();
+        this.alertifyService.success('check in completed successfully');
+      }
+      else
+        this.alertifyService.error('unsuccessful check in, please try again');
+
+    });
+  }
+
   //#endregion
 
   //#region Quick Quote Modal & Methods

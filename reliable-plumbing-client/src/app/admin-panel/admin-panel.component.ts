@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { EnvironmentService, RouteHandlerService, NavEventsService } from '../services/services.exports';
+import { EnvironmentService, RouteHandlerService, EventsService } from '../services/services.exports';
 import { Router, NavigationEnd } from '@angular/router';
 import { Role } from '../models/enums';
 import { systemRoutes } from '../models/constants';
@@ -32,14 +32,14 @@ export class AdminPanelComponent implements OnInit {
   navSubscription: Subscription;
 
   constructor(private environmentService: EnvironmentService, private router: Router, private routeHandlerService: RouteHandlerService,
-  private navEventsService: NavEventsService) { }
+  private eventsService: EventsService) { }
 
   ngOnInit() {
     this.currentUser = this.environmentService.currentUser;
     this.constructTabsPermissions();
     this.subscribeToRouterEvents();
     this.setCurrentTabFromUrl(this.router.url);
-    this.navSubscription = this.navEventsService.nav.subscribe(() => this.toggleNav());
+    this.navSubscription = this.eventsService.nav.subscribe(() => this.toggleNav());
     if(screen.width > 768)
       this.toggleNav(true);
   }

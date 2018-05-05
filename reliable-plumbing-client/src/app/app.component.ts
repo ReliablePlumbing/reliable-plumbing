@@ -1,5 +1,5 @@
 import { Component, ViewChild, ElementRef } from '@angular/core';
-import { NotificationService, SocketsService, EnvironmentService, RouteHandlerService, NavEventsService } from './services/services.exports';
+import { NotificationService, SocketsService, EnvironmentService, RouteHandlerService, EventsService } from './services/services.exports';
 import { ActivatedRoute, Router, NavigationEnd } from '@angular/router';
 import { NgbModal, NgbModalRef, NgbPopover } from '@ng-bootstrap/ng-bootstrap';
 import { Role, RegistrationMode } from './models/enums';
@@ -27,7 +27,7 @@ export class AppComponent {
 
   constructor(private socketsSerivce: SocketsService, private notificationService: NotificationService, private router: Router,
     private modalService: NgbModal, private environmentService: EnvironmentService, private routeHandlerService: RouteHandlerService,
-    private navEventsSevice: NavEventsService) { }
+    private eventsSevice: EventsService) { }
 
   ngOnInit() {
     this.notificationService.connectSockets();
@@ -77,6 +77,6 @@ export class AppComponent {
   closeNotifications = () => this.notificationsPopover.close();
 
   toggleNavigations() {
-    this.navEventsSevice.navCicked();
+    this.eventsSevice.navCicked();
   }
 }
