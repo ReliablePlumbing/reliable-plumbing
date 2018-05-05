@@ -82,6 +82,17 @@
 <div class="row">
     <div class="col-4">
         <label>
+            <b>Call Rate</b>
+        </label>
+    </div>
+    <div class="col-8">
+        <ngb-rating class="rating-call" [max]="5" [(rate)]="mappedCall.rate" [readonly]="true"></ngb-rating>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-4">
+        <label>
             <b>Images</b>
         </label>
     </div>
@@ -129,7 +140,8 @@
     </div>
     <div class="appointemt-last-checkin">
         <span>
-            <b>last check-in:</b> {{call.checkInDetails ? (call.checkInDetails.date | date:'MMM dd yyyy HH:mm a') : 'No one checked-in'}}
+            <b>last check-in:</b> {{call.checkInDetails ? (call.checkInDetails.date | date:'MMM dd yyyy HH:mm a') : 'No one
+            checked-in'}}
         </span>
     </div>
 </div>

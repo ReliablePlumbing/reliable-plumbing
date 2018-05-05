@@ -18,8 +18,7 @@ export class CallsHistoryComponent implements OnInit {
   modes = {
     history: 1,
     addCall: 2,
-    msg: 3,
-
+    msg: 3
   }
   mode = this.modes.history;
   pills = [];
@@ -90,7 +89,7 @@ export class CallsHistoryComponent implements OnInit {
       if (typeIndex != -1)
         call.typeObj = this.lookups.types[typeIndex];
       call.quoteTotalEstimate = this.calculateTotalQuoteEstimate(call);
-
+      call.actions = this.getAllowedCallActions(call);
       if (call.status == AppointmentStatus.Confirmed) {
         mappedCalls[call.status].length++;
         if (new Date(call.date) < new Date())
@@ -103,6 +102,21 @@ export class CallsHistoryComponent implements OnInit {
     }
 
     return mappedCalls;
+  }
+
+  getAllowedCallActions(call) {
+    let actions = [];
+    switch (call.status) {
+      case AppointmentStatus.Pending:
+        actions.push({ status: AppointmentStatus.Canceled, label: 'Cancel', cssClass: 'btn-danger' });
+        break;
+      case AppointmentStatus.Confirmed:
+        if (new Date(call.date) < new Date())
+          actions.push({ status: AppointmentStatus.Completed, label: 'Done', cssClass: 'btn-success' });
+        actions.push({ status: AppointmentStatus.Canceled, label: 'Cancel', cssClass: 'btn-danger' });
+        break;
+    }
+    return actions;
   }
 
   calculateTotalQuoteEstimate(appointment) {
@@ -150,13 +164,15 @@ export class CallsHistoryComponent implements OnInit {
     }
   }
 
-  updateCall(call, newStatus) {
-    this.loading = true;
-    call.status = newStatus;
-    call.statusHistory.push({
-      status: newStatus,
-      createdByUserId: this.environmentService.currentUser.id
-    })
+  updateCall(call, newStatus = null) {
+    if (newStatus != null) {
+      this.loading = true;
+      call.status = newStatus;
+      call.statusHistory.push({
+        status: newStatus,
+        createdByUserId: this.environmentService.currentUser.id
+      });
+    }
     this.appointmentService.updateAppointmentStatusAndAssignees(call).subscribe(result => {
       if (result) {
         this.loading = false;

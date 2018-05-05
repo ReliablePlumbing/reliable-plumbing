@@ -40,11 +40,12 @@ export class CallDetailsComponent implements OnInit, OnChanges {
   }
 
   initPermissions() {
+    let isCallOpen = isCallOpened(this.call)
     this.permissions = {
-      attachQuote: this.environmentService.hasPermission(Permission.AttachQuote),
-      updateAssignees: this.environmentService.hasPermission(Permission.UpdateAssignees),
+      attachQuote: this.environmentService.hasPermission(Permission.AttachQuote) && isCallOpen,
+      updateAssignees: this.environmentService.hasPermission(Permission.UpdateAssignees) && isCallOpen,
       collaborate: this.environmentService.hasPermission(Permission.Collaborate),
-      checkIn: this.environmentService.hasPermission(Permission.CheckIn) && isCallOpened(this.call)
+      checkIn: this.environmentService.hasPermission(Permission.CheckIn) && isCallOpen
     }
   }
 
@@ -106,6 +107,7 @@ export class CallDetailsComponent implements OnInit, OnChanges {
       mobile: user.mobile,
       status: { id: call.status, text: AppointmentStatus[call.status] },
       images: buildImagesObjectsForLightBox(call.id, call.relatedFileNames),
+      rate: call.rate,
       // assignees: !this.permissions.updateAssignees ? [] : this.mapTechnicians(call.assignees),
       message: call.message,
       quotes: !call.quotes ? null : call.quotes.map(q => this.mapCallQuote(q))

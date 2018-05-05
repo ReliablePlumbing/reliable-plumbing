@@ -54,7 +54,7 @@
                   </div>
                   <div>
                     <ngb-rating class="rating-call" [max]="5" [(rate)]="call.rate"></ngb-rating>
-                    <button class="pull-right btn btn-success btn-sm" (click)="changeCallStatus(call, statusEnum.Completed)">Complete</button>
+                    <button *ngFor="let action of call.actions" class="pull-right btn btn-sm" [ngClass]="action.cssClass" (click)="changeCallStatus(call, action.status)">{{action.label}}</button>
                   </div>
                 </div>
               </div>
@@ -86,7 +86,7 @@
                     <b>{{call.date | date:'EEE, MMM dd yyyy, hh:mm a'}}</b>
                   </div>
                   <div>
-                    <button *ngIf="call.status == statusEnum.Pending" class="pull-right btn btn-danger btn-sm"  (click)="changeCallStatus(call, statusEnum.Canceled)">Cancel</button>
+                    <button *ngFor="let action of call.actions" class="pull-right btn btn-sm" [ngClass]="action.cssClass" (click)="changeCallStatus(call, action.status)">{{action.label}}</button>
                   </div>
                 </div>
               </div>
@@ -119,7 +119,8 @@
                     <b>{{call.date | date:'EEE, MMM dd yyyy, hh:mm a'}}</b>
                   </div>
                   <div>
-                    <button class="pull-right btn btn-danger btn-sm">Cancel</button>
+                    <ngb-rating *ngIf="call.status == statusEnum.Completed" class="rating-call" [max]="5" [(rate)]="call.rate" (rateChange)="updateCall(call)"></ngb-rating>
+                    <button *ngFor="let action of call.actions" class="pull-right btn btn-sm" [ngClass]="action.cssClass" (click)="changeCallStatus(call, action.status)">{{action.label}}</button>
                   </div>
                 </div>
               </div>
