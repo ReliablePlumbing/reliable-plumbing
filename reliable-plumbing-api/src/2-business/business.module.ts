@@ -7,6 +7,7 @@ export * from './managers/notification-manager';
 export * from './managers/files-manager';
 export * from './managers/dashboard-manager';
 export * from './managers/security-manager';
+export * from './managers/collaboration-manager';
 
 // notifiers
 export * from './notifiers/notification-broadcasting-service';

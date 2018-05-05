@@ -146,6 +146,13 @@
     </div>
 </div>
 
+<div class="row">
+    <div class="col-12">
+        <comments [objectId]="call.id" [objectType]="objectType"></comments>
+    </div>
+
+</div>
+
 <p-overlayPanel [appendTo]="'body'" #technicianCalls>
     <div *ngIf="selectedtech">
         <span *ngFor="let techCall of selectedtech.calls">{{techCall?.time}}</span>

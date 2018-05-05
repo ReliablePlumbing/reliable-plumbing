@@ -1,21 +1,20 @@
 import { Schema } from "mongoose";
 import { genericSchema, toObjectOptions } from './generic-schema';
 
-export var appointmentTypeSchema: genericSchema = {
+export var CommentSchema: genericSchema = {
     schema: new Schema(
         {
-            name: { type: String, required: true },
-            description: { type: String, required: false },
-            priority: { type: Number, required: true },
-            createdBy: { type: String, required: true, ref: 'users' },
+            objectType: { type: Number, required: false },
+            objectId: { type: String, required: false },
+            userId: { type: String, required: true, ref: 'users' },
             creationDate: { type: Date, required: true },
             lastModifiedDate: { type: Date, required: false },
-            lastModifiedBy: { type: String, required: false, ref: 'users' },
             isDeleted: { type: Boolean, required: true, default: false },
+            text: { type: String, required: false },
         },
         {
             toObject: toObjectOptions
         }
     ),
-    collectionName: 'appointmentTypes'
+    collectionName: 'comments'
 };

@@ -9,6 +9,7 @@ export * from './entities/appointment-type';
 export * from './entities/notification';
 export * from './entities/settings';
 export * from './entities/role-permission';
+export * from './entities/comment';
 
 /*** Helpers ***/
 export * from './entities/helpers/status-history';

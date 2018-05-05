@@ -9,6 +9,7 @@ export const dependencies = {
     FilesManager: 'business.FilesManager',
     DashboardManager: 'business.DashboardManager',
     SecurityManager: 'business.SecurityManager',
+    CollaborationManager: 'business.CollaborationManager',
     
     // business notifiers
     NotificationBroadcastingService: 'business.notifier.NotificationBroadcastingService',
@@ -27,4 +28,5 @@ export const dependencies = {
     NotificationRepo: 'data.NotificationRepo',
     SettingsRepo: 'data.SettingsRepo',
     RolePermissionRepo: 'data.RolePermissionRepo',
+    CommentRepo: 'data.CommentRepo',
 }

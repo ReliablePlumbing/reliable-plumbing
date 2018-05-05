@@ -15,6 +15,7 @@ import { UserManagementService } from './user-management.service';
 import { QuoteService } from './quote.service';
 import { EventsService } from './events.service';
 import { DashboardService } from './dashboard.service';
+import { CollaborationService } from './collaboration.service';
 
 @NgModule({
   imports: [
@@ -24,7 +25,7 @@ import { DashboardService } from './dashboard.service';
   providers: [
     HttpExtensionService, UserManagementService, EnvironmentService, ExceptionHandlingService, AlertifyService, RouteHandlerService,
     AuthGuard, LoginAuthGuard, LookupsService, AppointmentService, NotificationService, SocketsService, AuthService, QuoteService,
-    EventsService, DashboardService
+    EventsService, DashboardService, CollaborationService
   ]
 })
 export class ServicesModule { }

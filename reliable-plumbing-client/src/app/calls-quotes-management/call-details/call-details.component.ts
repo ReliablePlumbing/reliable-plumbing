@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, OnChanges } from '@angular/core';
 import { getCustomerFullName, isCallOpened } from '../../utils/call-helpers';
-import { AppointmentStatus, Role, Permission } from '../../models/enums';
+import { AppointmentStatus, Role, Permission, ObjectType } from '../../models/enums';
 import { buildImagesObjectsForLightBox } from '../../utils/files-helpers';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { QuoteService, AlertifyService, AppointmentService, EnvironmentService, EventsService } from '../../services/services.exports';
@@ -17,6 +17,7 @@ import * as moment from 'moment';
 export class CallDetailsComponent implements OnInit, OnChanges {
 
   @Input() call;
+  objectType = ObjectType.Appointment;
   mappedCall;
   technicians;
   mappedTechnicians;

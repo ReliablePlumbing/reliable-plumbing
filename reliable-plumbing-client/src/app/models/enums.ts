@@ -80,3 +80,8 @@ export enum Permission {
     AttachQuote,
     Collaborate
 }
+
+export enum ObjectType {
+    Appointment,
+    Quote
+}

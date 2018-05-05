@@ -13,3 +13,4 @@ export * from './auth.service';
 export * from './user-management.service';
 export * from './events.service';
 export * from './dashboard.service';
+export * from './collaboration.service';
