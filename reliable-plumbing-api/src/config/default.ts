@@ -9,7 +9,7 @@ export const config: Config = {
     },
     db: {
         mongoConnectionString: "mongodb://localhost:27017/developmentDb",
-        showMongoLogs: true
+        showMongoLogs: false
     },
     mailSettings: {
         service: "gmail",
@@ -68,6 +68,11 @@ export const config: Config = {
     },
     filesSettings: {
         basePath: path.join(__dirname, '..\\files'),
-        enableGetFiles: true
+        enableGetFiles: true,
+        imageMaxHeight: null,
+        imageMaxWidth: 750,
+        thumbnailWidth:null,
+        thumbnailHeight:50,
+        thumbnailExtension: '_thumbnail'
     }
 }

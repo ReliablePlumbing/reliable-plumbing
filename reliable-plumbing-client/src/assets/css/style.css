@@ -911,11 +911,11 @@ body.mobile-nav-active {
     font-size: 16px; }
   .call-details span {
     font-size: 16px; }
-  .call-details .call-details-lightbox a img {
+  /* .call-details .call-details-lightbox a img {
     width: 150px;
     height: 150px;
     max-width: 300px;
-    margin-bottom: 10px; }
+    margin-bottom: 10px; } */
 
 .register {
   width: 100%; }
