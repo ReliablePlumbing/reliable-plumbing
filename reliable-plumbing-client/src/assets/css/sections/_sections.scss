@@ -415,3 +415,15 @@
         }
     }
 }
+
+// assigne-sec
+.assigne-sec {
+    .ui-scrollpanel {
+        border: 0 !important;
+        .ui-scrollpanel-content {
+            .ml-auto {
+                margin-right: 30px
+            }
+        }
+    }
+}

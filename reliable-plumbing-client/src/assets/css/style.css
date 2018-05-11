@@ -8,6 +8,9 @@
 .fullWidth {
   width: 100%; }
 
+.flex {
+  display: flex; }
+
 /*--------------------------------------------------------------
 # General
 --------------------------------------------------------------*/
@@ -916,6 +919,11 @@ body.mobile-nav-active {
     height: 150px;
     max-width: 300px;
     margin-bottom: 10px; }
+
+.assigne-sec .ui-scrollpanel {
+  border: 0 !important; }
+  .assigne-sec .ui-scrollpanel .ui-scrollpanel-content .ml-auto {
+    margin-right: 30px; }
 
 .register {
   width: 100%; }
