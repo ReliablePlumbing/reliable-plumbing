@@ -116,41 +116,46 @@
         </ul>
     </div>
 </div>
-
-<div class="row" *ngIf="permissions.updateAssignees">
-    <p-scrollPanel [style]="{width: '100%', height: '100px'}">
-        <div *ngFor="let tech of mappedTechnicians">
-            <div [pTooltip]="tech?.status | technicianStatusTxt" tooltipPosition="top">
-                <span class="appointemt-status" [ngClass]="tech?.status | technicianStatusColor"></span>
-                <span>{{tech?.technician.name}}</span>
+<hr>
+<div class="row assigne-sec" *ngIf="permissions.updateAssignees">
+    <div class="col-sm-12">
+        <p-scrollPanel [style]="{width: '100%', height: '100px'}">
+            <div class="flex" *ngFor="let tech of mappedTechnicians">
+                <div [pTooltip]="tech?.status | technicianStatusTxt" tooltipPosition="top">
+                    <span class="appointemt-status" [ngClass]="tech?.status | technicianStatusColor"></span>
+                    <span>{{tech?.technician.name}}</span>
+                </div>
+                <div class="ml-auto">
+                    <span pTooltip="Calls Details" tooltipPosition="top" class="fa fa-info-circle pointer" (click)="openTechCallsDetails(tech, technicianCalls, $event)"></span>
+                    <span pTooltip="Assign" tooltipPosition="top" class="fa fa-plus pointer" (click)="assign(tech)"></span>
+                </div>
             </div>
-            <div>
-                <span pTooltip="Calls Details" tooltipPosition="top" class="fa fa-info-circle pointer" (click)="openTechCallsDetails(tech, technicianCalls, $event)"></span>
-                <span pTooltip="Assign" tooltipPosition="top" class="fa fa-plus pointer" (click)="assign(tech)"></span>
-            </div>
-        </div>
-    </p-scrollPanel>
-</div>
-
-<div class="row">
-    <div *ngIf="permissions.checkIn" class="check-in">
-        <button (click)="openCheckInMap(call, checkInMap)" class="btn btn-primary filters-toggle-btn ">
-            <i class="fa fa-sign-in" aria-hidden="true"></i> check in
-        </button>
+        </p-scrollPanel>
     </div>
-    <div class="appointemt-last-checkin">
-        <span>
+</div>
+<hr>
+<div class="row">
+    <div class="col-sm-6">
+        <div *ngIf="permissions.checkIn" class="check-in">
+            <button (click)="openCheckInMap(call, checkInMap)" class="btn btn-primary filters-toggle-btn ">
+                <i class="fa fa-sign-in" aria-hidden="true"></i> check in
+            </button>
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <div class="appointemt-last-checkin">
+            <span>
             <b>last check-in:</b> {{call.checkInDetails ? (call.checkInDetails.date | date:'MMM dd yyyy HH:mm a') : 'No one
             checked-in'}}
         </span>
+        </div>
     </div>
 </div>
-
+<hr>
 <div class="row">
     <div class="col-12">
         <comments [objectId]="call.id" [objectType]="objectType"></comments>
     </div>
-
 </div>
 
 <p-overlayPanel [appendTo]="'body'" #technicianCalls>
@@ -217,8 +222,7 @@
     <div class="modal-body">
         <div class="map-container">
             <agm-map [latitude]="mapMarker.lat" [longitude]="mapMarker.lng" [zoom]="15" [disableDefaultUI]="false" [zoomControl]="true">
-                <agm-marker [latitude]="mapMarker.lat" [longitude]="mapMarker.lng" [label]="mapMarker.label" [markerDraggable]="mapMarker.draggable"
-                    (dragEnd)="markerDragEnd(m, $event)">
+                <agm-marker [latitude]="mapMarker.lat" [longitude]="mapMarker.lng" [label]="mapMarker.label" [markerDraggable]="mapMarker.draggable" (dragEnd)="markerDragEnd(m, $event)">
                     <agm-info-window>
                         <strong>Your Location</strong>
                     </agm-info-window>

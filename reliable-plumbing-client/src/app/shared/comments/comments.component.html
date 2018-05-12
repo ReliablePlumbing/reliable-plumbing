@@ -4,8 +4,8 @@
 </div>
 
 <div class="row" *ngFor="let comment of comments">
-  <span class="col-4">{{comment.userFullName}}</span>
-  <p>{{comment.text}}</p>
+    <span class="col-4">{{comment.userFullName}}:</span>
+    <p>{{comment.text}}</p>
 </div>
 
 <a *ngIf="totalCount > comments.length" class="btn btn-link" (click)="loadMore()">load more...</a>
