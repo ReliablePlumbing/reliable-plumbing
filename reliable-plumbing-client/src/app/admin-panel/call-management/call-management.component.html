@@ -2,7 +2,7 @@
     <section class="row header">
         <div class="col-sm-12">
             <label>New Call</label>
-            <button class="btn btn-success float-right" (click)="setMode(modes.listing)">Back</button>
+            <button class="btn btn-primary float-right" (click)="setMode(modes.listing)"><i class="fa fa-angle-double-left mrgr5"></i>Back</button>
         </div>
     </section>
     <section class="schedule-content">
@@ -13,7 +13,7 @@
 <ng-container *ngIf="mode==modes.msg">
     <section class="row msg">
         <div class="col-sm-12">
-            <button class="btn btn-success float-right" (click)="setMode(modes.listing)">Back</button>
+            <button class="btn btn-primary float-right" (click)="setMode(modes.listing)"><i class="fa fa-angle-double-left mrgr5"></i>Back</button>
         </div>
     </section>
     <message [text]="'Saved Successfully'"></message>
@@ -39,7 +39,7 @@
                 </div>
             </div>
             <div class="col-sm-2">
-                <button class="btn btn-primary filters-toggle-btn pull-right" (click)="setMode(modes.addCall)">Add New Call</button>
+                <button class="btn btn-primary filters-toggle-btn pull-right" (click)="setMode(modes.addCall)"><i class="fa fa-plus mrgr5"></i>Add New Call</button>
             </div>
         </div>
     </div>

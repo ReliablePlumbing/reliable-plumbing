@@ -404,14 +404,53 @@
     span {
         font-size: 16px;
     }
-    // .call-details-lightbox {
-    //     a {
-    //         img {
-    //             width: 150px;
-    //             height: 150px;
-    //             max-width: 300px;
-    //             margin-bottom: 10px;
-    //         }
-    //     }
-    // }
+    .call-details-lightbox {
+        a {
+            img {
+                width: 150px;
+                height: 150px;
+                max-width: 300px;
+                margin-bottom: 10px;
+            }
+        }
+    }
+}
+
+// assigne-sec
+.assigne-sec {
+    .ui-scrollpanel {
+        border: 0 !important;
+        .ui-scrollpanel-content {
+            .ml-auto {
+                margin-right: 30px
+            }
+        }
+    }
+}
+
+// schedule-content
+.schedule-content {
+    p-inputswitch {
+        .ui-inputswitch {
+            width: 53px;
+            height: 29px;
+            .ui-inputswitch-off {
+                width: 47px;
+                .ui-inputswitch-offlabel {
+                    width: 43px !important;
+                    padding: 5px;
+                }
+            }
+            .ui-inputswitch-on {
+                width: 52px !important;
+                .ui-inputswitch-onlabel {
+                    width: 43px !important;
+                    padding: 5px;
+                }
+            }
+            .ui-state-default {
+                width: 52px;
+            }
+        }
+    }
 }
