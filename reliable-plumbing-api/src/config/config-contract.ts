@@ -73,12 +73,17 @@ export interface Config {
 
     filesSettings: {
         basePath: string,
-        enableGetFiles: boolean
+        enableGetFiles: boolean,
+        imageMaxHeight: number,
+        imageMaxWidth: number,
+        thumbnailWidth: number,
+        thumbnailHeight: number,
+        thumbnailExtension: string
     }
 }
 
 
-export interface ProductionConfig { 
+export interface ProductionConfig {
     production: boolean,
     authorization: {
         tokenKey: string,

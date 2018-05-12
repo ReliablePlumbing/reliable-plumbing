@@ -52,8 +52,19 @@ export function buildImagesObjectsForLightBox(objectId, filesNames) {
     for (let i = 0; i < filesNames.length; i++) {
         let fileName = filesNames[i];
         let url = baseFilesUrl + fileName
-        images.push({ source: url, thumbnail: url, index: i });
+        images.push({ source: url, thumbnail: getImageThumbnail(objectId, fileName), index: i });
     }
 
     return images;
+}
+
+
+function getImageThumbnail(objectId, fileName){
+    let indexOfFormat = fileName.lastIndexOf('.');
+    let format = fileName.substring(indexOfFormat, fileName.length);
+    let fileNameWithoutExt = fileName.substring(0, indexOfFormat);
+
+    let thmbnailName = environment.filesUrl + objectId + '/' + fileNameWithoutExt + '_thumbnail' + format;
+
+    return thmbnailName;
 }

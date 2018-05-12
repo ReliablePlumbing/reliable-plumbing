@@ -32,6 +32,7 @@
     "reflect-metadata": "^0.1.10",
     "request": "^2.83.0",
     "routing-controllers": "^0.7.6",
+    "sharp": "^0.20.2",
     "socket.io": "^2.0.3",
     "typedi": "^0.5.2",
     "uuid": "^3.1.0"
@@ -53,6 +54,7 @@
     "@types/node": "^8.0.32",
     "@types/nodemailer": "^4.3.1",
     "@types/request": "^2.0.7",
+    "@types/sharp": "^0.17.8",
     "@types/socket.io": "^1.4.31",
     "chai": "^4.1.2",
     "chai-http": "^3.0.0",

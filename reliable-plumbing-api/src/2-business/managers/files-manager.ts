@@ -2,6 +2,8 @@ import { Service } from 'typedi'
 import config from '../../config';
 import * as fs from 'fs';
 import * as uuid from 'uuid';
+import * as sharp from 'sharp';
+import * as path from 'path';
 @Service()
 export class FilesManager {
 
@@ -22,12 +24,41 @@ export class FilesManager {
         for (let file of files) {
             let oldPath = file.path;
             let newPath = objectPath + '/' + file.filename;
-            fs.rename(oldPath, newPath, err => {
-                if (err)
-                    console.log(err);
-            })
+
+            sharp(oldPath)
+                .resize(config.filesSettings.imageMaxWidth, config.filesSettings.imageMaxHeight)
+                .withoutEnlargement(true)
+                .background('#ffffff00')
+                .embed()
+                .toFile(newPath)
+                .then((a) => {
+                    this.createThumbnail(oldPath, file.filename, objectPath);
+                });
 
         }
+    }
+
+    createThumbnail(oldPath: string, fileName, objectPath) {
+        let indexOfFormat = fileName.lastIndexOf('.');
+        let format = fileName.substring(indexOfFormat, oldPath.length);
+        let fileNameWithoutExt = fileName.substring(0, indexOfFormat);
+
+        let thmbnailName = fileNameWithoutExt + config.filesSettings.thumbnailExtension + format;
+        let thmbnailNewPath = objectPath + '/' + thmbnailName;
+        sharp(oldPath)
+            .resize(config.filesSettings.thumbnailWidth, config.filesSettings.thumbnailHeight)
+            .withoutEnlargement(true)
+            .background('#ffffff00')
+            .embed()
+            .toFile(thmbnailNewPath)
+            .then((a) => {
+
+                sharp.cache(false);
+                fs.unlink(oldPath, err => {
+                    if (err)
+                        console.log(err);
+                })
+            });
     }
 
     getFilesUrls(filesDic) {
