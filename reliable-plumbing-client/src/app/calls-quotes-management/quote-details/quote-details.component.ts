@@ -18,13 +18,15 @@ export class QuoteDetailsComponent implements OnInit {
   loading = true;
   overlayLoading = false;
   estimates = {
-    fields: [{ desc: null, cost: '0' }],
-    total: 0
+    fields: [],
+    total: 0,
+    isEdit: false
   };
   statusEnum = QuoteStatus;
-  @Output() quoteUpdated: EventEmitter<any> = new EventEmitter<any>();
-  @Output() close: EventEmitter<any> = new EventEmitter<any>();
-  permissions;
+  permissions: {
+    collaborate: boolean,
+    updateQuoteEstimate: boolean
+  };
 
   constructor(private QuoteService: QuoteService, private alertifyService: AlertifyService, private environmentService: EnvironmentService,
     private eventsService: EventsService) { }
@@ -32,7 +34,7 @@ export class QuoteDetailsComponent implements OnInit {
   ngOnInit() {
     this.eventsService.callUpdated.subscribe(call => this.quoteChanged());
   }
-  
+
   initPermissions() {
     let isQuoteOpened = isQuoteOpen(this.quote)
     this.permissions = {
@@ -54,18 +56,25 @@ export class QuoteDetailsComponent implements OnInit {
   }
 
   mapQuote(quote) {
-    if (quote.estimateFields && quote.estimateFields.length > 0) {
-      this.estimates.fields = quote.estimateFields;
-      this.sumFields();
-    }
+    this.mapEstimateFields();
     return {
       fullName: quote.fullName,
       address: this.getAddress(quote),
       contact: this.getCustomerContact(quote),
       images: buildImagesObjectsForLightBox(quote.id, quote.relatedFileNames),
       message: quote.message,
-      actions: this.getQuoteActions(quote)
+      actions: this.getQuoteActions(quote),
+      estimateTotal: this.sumFields(quote.estimateFields),
+      estimateFields: quote.estimateFields
     }
+  }
+
+  mapEstimateFields() {
+    this.estimates.fields = this.quote.estimateFields.map(f => {
+      return { desc: f.desc, cost: f.cost };
+    });
+    this.estimates.fields.push({ desc: null, cost: '0' });
+    this.estimates.total = this.sumFields(this.estimates.fields);
   }
 
   getQuoteActions(quote) {
@@ -100,7 +109,7 @@ export class QuoteDetailsComponent implements OnInit {
 
   addAnotherField() {
     this.estimates.fields.push({ desc: null, cost: '0' });
-    this.sumFields();
+    this.estimates.total = this.sumFields(this.estimates.fields);
   }
 
   removeField(index) {
@@ -110,36 +119,54 @@ export class QuoteDetailsComponent implements OnInit {
         filteredFields.push(this.estimates.fields[i]);
 
     this.estimates.fields = filteredFields;
-    this.sumFields();
+    this.estimates.total = this.sumFields(this.estimates.fields);
   }
 
-  sumFields() {
-    this.estimates.total = 0;
-    this.estimates.fields.forEach(f => this.estimates.total += parseFloat(f.cost));
+  sumFields(fields) {
+    let total = 0;
+    this.estimates.fields.forEach(f => total += parseFloat(f.cost));
 
+    return total;
   }
 
-  save(nextStatus) {
-    if (this.quote.status == QuoteStatus.Open) {
-      this.quote.estimateFields = this.estimates.fields
-        .filter(f => f.desc != null || parseFloat(f.cost) > 0)
-        .map(f => {
-          return {
-            desc: f.desc,
-            cost: (f.cost == null || parseFloat(f.cost) < 0) ? 0 : parseFloat(f.cost)
-          }
-        });
-    }
-    this.quote.status = nextStatus;
-    this.QuoteService.updateQuote(this.quote).subscribe(result => {
-      if (result) {
-        this.alertifyService.success('Quote has been updated successfully');
-        this.quoteUpdated.emit(this.quote);
-      }
-    })
+  fieldChanged() {
+    this.estimates.total = this.sumFields(this.estimates.fields);
   }
 
-  closeModal() {
-    this.close.emit();
+  updateQuoteEstimates() {
+    if (!this.permissions.updateQuoteEstimate)
+      return;
+    this.overlayLoading = true;
+    this.quote.estimateFields = this.estimates.fields
+      .filter(f => f.desc != null || parseFloat(f.cost) > 0)
+      .map(f => {
+        return {
+          desc: f.desc,
+          cost: (f.cost == null || parseFloat(f.cost) < 0) ? 0 : parseFloat(f.cost)
+        }
+      });
+    this.save().then(updatedQuote => {
+      this.mappedQuote = this.mapQuote(this.quote);
+      this.estimates.isEdit = false;
+    setTimeout(_ => {this.overlayLoading = false;}, 2000)  
+    });
+  }
+
+  cancelEstimatesChanges() {
+    this.estimates.isEdit = false;
+    this.mapEstimateFields();
+  }
+
+  save() {
+
+    return new Promise<boolean>((resolve, reject) => {
+      // quote service
+      this.QuoteService.updateQuote(this.quote).subscribe(result => {
+        if (result) {
+          this.alertifyService.success('Quote has been updated successfully');
+          resolve(result);
+        }
+      })
+    });
   }
 }

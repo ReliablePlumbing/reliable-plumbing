@@ -56,32 +56,62 @@
 
   <div class="row estimates-wrapper container table-responsive">
 
-    <table class="table table-bordered table-scrollable">
+    <ng-container *ngIf="permissions.updateQuoteEstimate">
+      <button class="btn btn-default pull-right" *ngIf="!estimates.isEdit" (click)="estimates.isEdit = true">
+        <span class="fa fa-edit ">Edit Estimates</span>
+      </button>
+      <ng-container *ngIf="estimates.isEdit">
+        <button class="btn btn-success pull-right" (click)="updateQuoteEstimates()">
+          <span class="fa fa-check ">Done</span>
+        </button>
+        <button class="btn btn-danger pull-right" (click)="cancelEstimatesChanges()">
+          <span class="fa fa-close ">Cancel</span>
+        </button>
+      </ng-container>
+    </ng-container>
+    <table class="table table-bordered table-scrollable" *ngIf="!estimates.isEdit">
       <thead>
         <th>#</th>
         <th>Description</th>
         <th>Estimate</th>
-        <th *ngIf="permissions.updateQuoteEstimate"></th>
+      </thead>
+      <tbody>
+        <tr *ngFor="let field of mappedQuote.estimateFields; let i = index">
+          <td>{{i+1}}</td>
+          <td class="text-center">{{field.desc}}</td>
+          <td class="text-center">{{field.cost}}</td>
+        </tr>
+        <tr>
+          <td colspan="2" class="text-center">
+            <b>Total</b>
+          </td>
+          <td colspan="2" class="text-center">
+            <b>{{mappedQuote.estimateTotal}}</b>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <table class="table table-bordered table-scrollable" *ngIf="estimates.isEdit">
+      <thead>
+        <th>#</th>
+        <th>Description</th>
+        <th>Estimate</th>
+        <th></th>
       </thead>
       <tbody>
         <tr *ngFor="let field of estimates.fields; let i = index">
           <td>{{i+1}}</td>
-          <ng-container *ngIf="permissions.updateQuoteEstimate">
-            <td>
-              <textarea class="form-control" [(ngModel)]="field.desc"></textarea>
-            </td>
-            <td>
-              <input type="text" number class="form-control" [(ngModel)]="field.cost" (change)="sumFields()" />
-            </td>
-            <td *ngIf="permissions.updateQuoteEstimate" class="fields-btns">
-              <span *ngIf="i<estimates.fields.length-1" (click)="removeField(i)" class="fa fa-times fa-2" aria-hidden="true" title="Remove Field"></span>
-              <span *ngIf="i==estimates.fields.length-1" (click)="addAnotherField()" class="fa fa-plus fa-2" aria-hidden="true" title="Add Another field"></span>
-            </td>
-          </ng-container>
-          <ng-container *ngIf="!permissions.updateQuoteEstimate">
-            <td class="text-center">{{field.desc}}</td>
-            <td class="text-center">{{field.cost}}</td>
-          </ng-container>
+          <td>
+            <textarea class="form-control" [(ngModel)]="field.desc"></textarea>
+          </td>
+          <td>
+            <input type="text" number class="form-control" [(ngModel)]="field.cost" (change)="fieldChanged()" />
+          </td>
+          <td class="fields-btns">
+            <span *ngIf="i<estimates.fields.length-1" (click)="removeField(i)" class="fa fa-times fa-2" aria-hidden="true" title="Remove Field"></span>
+            <span *ngIf="i==estimates.fields.length-1" (click)="addAnotherField()" class="fa fa-plus fa-2" aria-hidden="true" title="Add Another field"></span>
+          </td>
         </tr>
         <tr>
           <td colspan="2" class="text-center">
@@ -101,10 +131,6 @@
       <comments [objectId]="quote.id" [objectType]="objectType"></comments>
     </div>
   </div>
-
-  <ng-container *ngIf="mappedQuote.actions && mappedQuote.actions.length > 0">
-    <button *ngFor="let action of mappedQuote.actions" class="btn" [ngClass]="action.cssClass" [disabled]="action.status == statusEnum.Open && estimates.fields.length<=1"
-      (click)="save(action.status)">{{action.label}}</button>
-  </ng-container>
-  <button class="btn" (click)="closeModal()">Cancel</button>
 </ng-container>
+
+<overlay-loader *ngIf="overlayLoading"></overlay-loader>
