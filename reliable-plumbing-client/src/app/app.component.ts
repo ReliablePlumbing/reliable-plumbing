@@ -47,6 +47,11 @@ export class AppComponent {
         $(".navbar-collapse").collapse('hide');
       });
     });
+    this.environmentService.userLoggedout.subscribe(_ => {
+      this.isUserLoggedIn = this.environmentService.isUserLoggedIn;
+      this.currentUser = this.environmentService.currentUser;
+      this.isSystemUser = this.isUserLoggedIn && this.environmentService.currentUser.roles.findIndex(x => x == Role.Customer) == -1;
+    });
   }
 
 
