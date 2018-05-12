@@ -3,6 +3,7 @@ import { buildImagesObjects, buildImagesObjectsForLightBox } from '../../utils/f
 import { QuoteService, AlertifyService, EnvironmentService, EventsService } from '../../services/services.exports';
 import { QuoteStatus, ObjectType, Permission } from '../../models/enums';
 import { isSystemUser } from '../../utils/user-helpers';
+import { isQuoteOpen } from '../../utils/call-helpers';
 
 @Component({
   selector: 'quote-details',
@@ -23,26 +24,21 @@ export class QuoteDetailsComponent implements OnInit {
   statusEnum = QuoteStatus;
   @Output() quoteUpdated: EventEmitter<any> = new EventEmitter<any>();
   @Output() close: EventEmitter<any> = new EventEmitter<any>();
+  permissions;
 
-  constructor(private QuoteService: QuoteService, private alertifyService: AlertifyService, private environemntService: EnvironmentService,
+  constructor(private QuoteService: QuoteService, private alertifyService: AlertifyService, private environmentService: EnvironmentService,
     private eventsService: EventsService) { }
 
   ngOnInit() {
     this.eventsService.callUpdated.subscribe(call => this.quoteChanged());
-
-    // this.isCustomer = !isSystemUser(this.environemntService.currentUser);
-    // this.mappedQuote = this.mapQuote(this.quote);
-    // console.log(this.quote);
   }
   
   initPermissions() {
-    // let isCallOpen = isCallOpened(this.call)
-    // this.permissions = {
-    //   attachQuote: this.environmentService.hasPermission(Permission.) ,
-    //   updateAssignees: this.environmentService.hasPermission(Permission.UpdateAssignees),
-    //   collaborate: this.environmentService.hasPermission(Permission.Collaborate),
-    //   checkIn: this.environmentService.hasPermission(Permission.CheckIn) 
-    // }
+    let isQuoteOpened = isQuoteOpen(this.quote)
+    this.permissions = {
+      collaborate: this.environmentService.hasPermission(Permission.Collaborate),
+      updateQuoteEstimate: this.environmentService.hasPermission(Permission.UpdateQuoteEstimate) && isQuoteOpened
+    }
   }
 
   ngOnChanges() {

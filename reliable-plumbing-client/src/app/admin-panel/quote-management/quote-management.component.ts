@@ -27,6 +27,8 @@ export class QuoteManagementComponent implements OnInit {
       .subscribe(results => {
         this.quotes = results;
         this.loading = false;
+        if (this.quotes && this.quotes.length > 0)
+          this.selectedQuote = this.quotes[0];
       })
   }
 

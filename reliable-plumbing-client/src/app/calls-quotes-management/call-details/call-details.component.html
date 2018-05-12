@@ -152,7 +152,7 @@
     </div>
 </div>
 <hr>
-<div class="row">
+<div class="row" *ngIf="permissions.collaborate">
     <div class="col-12">
         <comments [objectId]="call.id" [objectType]="objectType"></comments>
     </div>

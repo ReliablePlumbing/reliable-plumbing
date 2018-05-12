@@ -78,7 +78,8 @@ export enum Permission {
     CheckIn,
     UpdateAssignees,
     AttachQuote,
-    Collaborate
+    Collaborate,
+    UpdateQuoteEstimate
 }
 
 export enum ObjectType {

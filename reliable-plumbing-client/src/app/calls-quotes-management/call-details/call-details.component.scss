@@ -58,3 +58,9 @@
 .orange {
     background-color: orange;
 }
+
+:host ::ng-deep {
+    .call-details-lightbox img{
+        padding-bottom: 3px;
+    }
+}

@@ -42,17 +42,17 @@
       <p>{{mappedQuote.message}}</p>
     </div>
   </div>
-<!-- 
-  <div class="row justify-content-center" *ngIf="mappedQuote.images && mappedQuote.images.length>0">
-    <div class="call-gallery">
-      <p-carousel [value]="mappedQuote.images">
-        <ng-template let-item pTemplate="item">
 
-          <img [src]="item.src" (click)="openLightBox(item.index)" />
-        </ng-template>
-      </p-carousel>
+  <div class="row">
+    <div class="col-4">
+      <label>
+        <b>Images</b>
+      </label>
     </div>
-  </div> -->
+    <div class="col-8">
+      <p-lightbox [images]="mappedQuote.images" styleClass="quote-details-lightbox" appendTo="body" effectDuration="500ms"></p-lightbox>
+    </div>
+  </div>
 
   <div class="row estimates-wrapper container table-responsive">
 
@@ -61,24 +61,24 @@
         <th>#</th>
         <th>Description</th>
         <th>Estimate</th>
-        <th *ngIf="quote.status == statusEnum.Open"></th>
+        <th *ngIf="permissions.updateQuoteEstimate"></th>
       </thead>
       <tbody>
         <tr *ngFor="let field of estimates.fields; let i = index">
           <td>{{i+1}}</td>
-          <ng-container *ngIf="quote.status == statusEnum.Open">
+          <ng-container *ngIf="permissions.updateQuoteEstimate">
             <td>
               <textarea class="form-control" [(ngModel)]="field.desc"></textarea>
             </td>
             <td>
               <input type="text" number class="form-control" [(ngModel)]="field.cost" (change)="sumFields()" />
             </td>
-            <td *ngIf="quote.status == statusEnum.Open" class="fields-btns">
+            <td *ngIf="permissions.updateQuoteEstimate" class="fields-btns">
               <span *ngIf="i<estimates.fields.length-1" (click)="removeField(i)" class="fa fa-times fa-2" aria-hidden="true" title="Remove Field"></span>
               <span *ngIf="i==estimates.fields.length-1" (click)="addAnotherField()" class="fa fa-plus fa-2" aria-hidden="true" title="Add Another field"></span>
             </td>
           </ng-container>
-          <ng-container *ngIf="quote.status != statusEnum.Open">
+          <ng-container *ngIf="!permissions.updateQuoteEstimate">
             <td class="text-center">{{field.desc}}</td>
             <td class="text-center">{{field.cost}}</td>
           </ng-container>
@@ -96,14 +96,15 @@
 
   </div>
 
-  <!-- <button *ngIf="quote.status == statusEnum.Open" class="btn btn-primary filters-toggle-btn" [disabled]="estimates.fields.length<=1"
-    (click)="save(statusEnum.Pending)">Send</button>
-  <ng-container *ngIf="quote.status == statusEnum.Pending && isCustomer">
-    <button class="btn btn-success filters-toggle-btn" (click)="save(statusEnum.Approved)">Approve</button>
-    <button class="btn btn-danger filters-toggle-btn" (click)="save(statusEnum.Rejected)">Reject</button>
-  </ng-container> -->
+  <div class="row" *ngIf="permissions.collaborate">
+    <div class="col-12">
+      <comments [objectId]="quote.id" [objectType]="objectType"></comments>
+    </div>
+  </div>
+
   <ng-container *ngIf="mappedQuote.actions && mappedQuote.actions.length > 0">
-    <button *ngFor="let action of mappedQuote.actions" class="btn" [ngClass]="action.cssClass"  [disabled]="action.status == statusEnum.Open && estimates.fields.length<=1" (click)="save(action.status)">{{action.label}}</button>
+    <button *ngFor="let action of mappedQuote.actions" class="btn" [ngClass]="action.cssClass" [disabled]="action.status == statusEnum.Open && estimates.fields.length<=1"
+      (click)="save(action.status)">{{action.label}}</button>
   </ng-container>
   <button class="btn" (click)="closeModal()">Cancel</button>
 </ng-container>
