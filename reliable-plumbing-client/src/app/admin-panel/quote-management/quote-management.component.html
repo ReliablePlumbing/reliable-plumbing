@@ -2,75 +2,75 @@
 
 <ng-container *ngIf="!loading">
 
-  <ng-container *ngIf="mode==modes.addQuote">
-    <section class="row header">
-      <div class="col-sm-12">
-        <label>New Quote</label>
-        <button class="btn btn-success float-right" (click)="setMode(modes.listing)">Back</button>
-      </div>
-    </section>
-    <section class="schedule-content">
-      <rb-calls-quotes-form [mode]="callsQuotesMode" [adminMode]="true" (submitted)="quoteSubmitted($event)"></rb-calls-quotes-form>
-    </section>
-  </ng-container>
-
-  <ng-container *ngIf="mode==modes.msg">
-    <section class="row msg">
-      <div class="col-sm-12">
-        <button class="btn btn-success float-right" (click)="setMode(modes.listing)">Back</button>
-      </div>
-    </section>
-    <message [text]="'Saved Successfully'"></message>
-  </ng-container>
-
-  <ng-container *ngIf="mode==modes.listing">
-    <button class="btn btn-success add-call" (click)="setMode(modes.addQuote)">Add New Quote</button>
-
-    <section class="listing-content">
-
-      <ngb-tabset type="pills">
-        <ngb-tab *ngFor="let tab of tabs" [title]="tab.text + ' (' + mappedQuotes[tab.id].length + ')'" [id]="tab.id">
-          <ng-template ngbTabContent>
-
-            <div class="quotes-list">
-
-              <div class="quotes-cards-list">
-                <div class="quote-card pointer" *ngFor="let quote of mappedQuotes[tab.id]" (click)="openQuoteDetailsModal(quote)">
-                  <h6>
-                    <b>{{quote.fullName}}</b>
-                  </h6>
-                  <div>
-                    <b>{{quote.type.name}}</b>
-                  </div>
-                  <div *ngIf="quote.totalEstimate != null">
-                    <label>Total Estimation (</label>
-                    <b>{{quote.totalEstimate}})</b>
-                  </div>
-                </div>
-              </div>
-
+    <ng-container *ngIf="mode==modes.addQuote">
+        <section class="row header">
+            <div class="col-sm-12">
+                <label>New Quote</label>
+                <button class="btn btn-success float-right" (click)="setMode(modes.listing)">Back</button>
             </div>
+        </section>
+        <section class="schedule-content">
+            <rb-calls-quotes-form [mode]="callsQuotesMode" [adminMode]="true" (submitted)="quoteSubmitted($event)"></rb-calls-quotes-form>
+        </section>
+    </ng-container>
 
-          </ng-template>
-        </ngb-tab>
+    <ng-container *ngIf="mode==modes.msg">
+        <section class="row msg">
+            <div class="col-sm-12">
+                <button class="btn btn-success float-right" (click)="setMode(modes.listing)"><i class="fa fa-angle-double-left mrgr5"></i>Back</button>
+            </div>
+        </section>
+        <message [text]="'Saved Successfully'"></message>
+    </ng-container>
 
-      </ngb-tabset>
-    </section>
-  </ng-container>
+    <ng-container *ngIf="mode==modes.listing">
+        <button class="btn btn-primary add-call" (click)="setMode(modes.addQuote)"><i class="fa fa-plus mrgr5"></i>Add New Quote</button>
+
+        <section class="listing-content">
+
+            <ngb-tabset type="pills">
+                <ngb-tab *ngFor="let tab of tabs" [title]="tab.text + ' (' + mappedQuotes[tab.id].length + ')'" [id]="tab.id">
+                    <ng-template ngbTabContent>
+
+                        <div class="quotes-list">
+
+                            <div class="quotes-cards-list">
+                                <div class="quote-card pointer" *ngFor="let quote of mappedQuotes[tab.id]" (click)="openQuoteDetailsModal(quote)">
+                                    <h6>
+                                        <b>{{quote.fullName}}</b>
+                                    </h6>
+                                    <div>
+                                        <b>{{quote.type.name}}</b>
+                                    </div>
+                                    <div *ngIf="quote.totalEstimate != null">
+                                        <label>Total Estimation (</label>
+                                        <b>{{quote.totalEstimate}})</b>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </ng-template>
+                </ngb-tab>
+
+            </ngb-tabset>
+        </section>
+    </ng-container>
 </ng-container>
 
 
 
 
 <ng-template #quoteDetails let-c="close" let-d="dismiss">
-  <div class="modal-header">
-    <h5 class="modal-title">Quote Details</h5>
-    <button type="button" class="close" aria-label="Close" (click)="closeQuoteDetailsModal()">
+    <div class="modal-header">
+        <h5 class="modal-title">Quote Details</h5>
+        <button type="button" class="close" aria-label="Close" (click)="closeQuoteDetailsModal()">
       <span aria-hidden="true">&times;</span>
     </button>
-  </div>
-  <div class="modal-body">
-    <rb-quote-details [quote]="selectedQuote" (quoteUpdated)="quoteUpdated($event)" (close)="closeQuoteDetailsModal()"></rb-quote-details>
-  </div>
+    </div>
+    <div class="modal-body">
+        <rb-quote-details [quote]="selectedQuote" (quoteUpdated)="quoteUpdated($event)" (close)="closeQuoteDetailsModal()"></rb-quote-details>
+    </div>
 
 </ng-template>

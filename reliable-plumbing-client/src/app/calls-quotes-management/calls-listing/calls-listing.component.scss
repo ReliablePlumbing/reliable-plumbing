@@ -45,6 +45,8 @@ $group-date-calls-indentation: 10px;
         .call {
             padding: $call-padding;
             position: relative;
+            width: calc(100% + 44px);
+            margin-left: 0 !important;
             &:before,
             &:after {
                 position: absolute;
@@ -58,6 +60,7 @@ $group-date-calls-indentation: 10px;
                 width: $dot;
                 content: "";
                 top: $call-padding + 7px;
+                left: -28.85px !important;
             }
         }
         .group-date {

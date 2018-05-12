@@ -11,6 +11,9 @@
 .flex {
   display: flex; }
 
+.mrgr5 {
+  margin-right: 5px; }
+
 /*--------------------------------------------------------------
 # General
 --------------------------------------------------------------*/
@@ -924,6 +927,22 @@ body.mobile-nav-active {
   border: 0 !important; }
   .assigne-sec .ui-scrollpanel .ui-scrollpanel-content .ml-auto {
     margin-right: 30px; }
+
+.schedule-content p-inputswitch .ui-inputswitch {
+  width: 53px;
+  height: 29px; }
+  .schedule-content p-inputswitch .ui-inputswitch .ui-inputswitch-off {
+    width: 47px; }
+    .schedule-content p-inputswitch .ui-inputswitch .ui-inputswitch-off .ui-inputswitch-offlabel {
+      width: 43px !important;
+      padding: 5px; }
+  .schedule-content p-inputswitch .ui-inputswitch .ui-inputswitch-on {
+    width: 52px !important; }
+    .schedule-content p-inputswitch .ui-inputswitch .ui-inputswitch-on .ui-inputswitch-onlabel {
+      width: 43px !important;
+      padding: 5px; }
+  .schedule-content p-inputswitch .ui-inputswitch .ui-state-default {
+    width: 52px; }
 
 .register {
   width: 100%; }

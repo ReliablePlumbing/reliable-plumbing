@@ -427,3 +427,30 @@
         }
     }
 }
+
+// schedule-content
+.schedule-content {
+    p-inputswitch {
+        .ui-inputswitch {
+            width: 53px;
+            height: 29px;
+            .ui-inputswitch-off {
+                width: 47px;
+                .ui-inputswitch-offlabel {
+                    width: 43px !important;
+                    padding: 5px;
+                }
+            }
+            .ui-inputswitch-on {
+                width: 52px !important;
+                .ui-inputswitch-onlabel {
+                    width: 43px !important;
+                    padding: 5px;
+                }
+            }
+            .ui-state-default {
+                width: 52px;
+            }
+        }
+    }
+}
