@@ -25,6 +25,9 @@ export class CallManagementComponent implements OnInit {
   customerName;
   selectedCall;
   isMyCalls;
+  responsiveModes = { split: 1, listing: 2, details: 3 }
+  responsiveMode;
+  screenWidth;
 
   constructor(private lookupsService: LookupsService, private callService: AppointmentService, private activatedRoute: ActivatedRoute,
     private alertifyService: AlertifyService, private enviromentService: EnvironmentService) { }
@@ -39,11 +42,13 @@ export class CallManagementComponent implements OnInit {
       this.services = results.types.map(t => { return { label: t.name, value: t } });
       this.filter();
     });
+    this.screenWidth = screen.width;
+    this.responsiveMode = screen.width >= 800 ? this.responsiveModes.split : this.responsiveModes.listing;
   }
 
   filter() {
     this.loading = true;
-    let requestFilters:any = {
+    let requestFilters: any = {
       date: {
         from: this.rangeDates[0],
         to: this.rangeDates[1],
@@ -55,9 +60,9 @@ export class CallManagementComponent implements OnInit {
     }
     for (let type of this.selectedServices)
       requestFilters.typeIds.push(type.id);
-    if(this.isMyCalls)
+    if (this.isMyCalls)
       requestFilters.assigneeIds = [this.enviromentService.currentUser.id];
-    
+
     this.callService.getAppointmentsFiltered(requestFilters).subscribe(results => {
       this.calls = results;
       if (this.calls && this.calls.length > 0)
@@ -66,7 +71,15 @@ export class CallManagementComponent implements OnInit {
     });
   }
 
-  callSelected = call => this.selectedCall = call;
+  callSelected(call) {
+    if (screen.width < 800)
+      this.responsiveMode = this.responsiveModes.details;
+    this.selectedCall = call;
+  }
+
+  backFromDetails() {
+    this.responsiveMode = this.responsiveModes.listing;
+  }
 
   callSubmitted(call) {
     this.callService.addAppointment(call.obj, call.images).subscribe(result => {
@@ -85,4 +98,10 @@ export class CallManagementComponent implements OnInit {
     this.mode = currentMode;
   }
 
+  ngAfterContentChecked() {
+    if (this.screenWidth == screen.width)
+      return;
+    this.responsiveMode = screen.width >= 800 ? this.responsiveModes.split : this.responsiveModes.listing;
+    this.screenWidth = screen.width;
+  }
 }

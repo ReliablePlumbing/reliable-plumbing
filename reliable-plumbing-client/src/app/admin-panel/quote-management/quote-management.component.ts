@@ -14,11 +14,16 @@ export class QuoteManagementComponent implements OnInit {
   quotes;
   loading = true;
   selectedQuote = null;
+  responsiveModes = { split: 1, listing: 2, details: 3 }
+  responsiveMode;
+  screenWidth;
 
   constructor(private quoteService: QuoteService, private alertifyService: AlertifyService) { }
 
   ngOnInit() {
     this.getQuotes();
+    this.screenWidth = screen.width;
+    this.responsiveMode = screen.width >= 800 ? this.responsiveModes.split : this.responsiveModes.listing;
   }
 
   getQuotes() {
@@ -32,7 +37,17 @@ export class QuoteManagementComponent implements OnInit {
       })
   }
 
-  quoteSelected = quote => this.selectedQuote = quote;
+  quoteSelected(quote) {
+    if (screen.width < 800)
+      this.responsiveMode = this.responsiveModes.details;
+
+    this.selectedQuote = quote;
+  }
+
+
+  backFromDetails() {
+    this.responsiveMode = this.responsiveModes.listing;
+  }
 
   quoteSubmitted(quote) {
     this.quoteService.addQuote(quote.obj, quote.images).subscribe(result => {
@@ -48,4 +63,12 @@ export class QuoteManagementComponent implements OnInit {
   }
 
   setMode = (currentMode) => this.mode = currentMode;
+
+
+  ngAfterContentChecked() {
+    if (this.screenWidth == screen.width)
+      return;
+    this.responsiveMode = screen.width >= 800 ? this.responsiveModes.split : this.responsiveModes.listing;
+    this.screenWidth = screen.width;
+  }
 }
