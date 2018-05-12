@@ -1,34 +1,60 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { buildImagesObjects, buildImagesObjectsForLightBox } from '../../utils/files-helpers';
-import { QuoteService, AlertifyService, EnvironmentService } from '../../services/services.exports';
-import { QuoteStatus } from '../../models/enums';
+import { QuoteService, AlertifyService, EnvironmentService, EventsService } from '../../services/services.exports';
+import { QuoteStatus, ObjectType, Permission } from '../../models/enums';
 import { isSystemUser } from '../../utils/user-helpers';
 
 @Component({
-  selector: 'rb-quote-details',
+  selector: 'quote-details',
   templateUrl: './quote-details.component.html',
   styleUrls: ['./quote-details.component.scss']
 })
 export class QuoteDetailsComponent implements OnInit {
 
   @Input() quote;
-  isCustomer = false;
+  objectType = ObjectType.Quote;
   mappedQuote;
+  loading = true;
+  overlayLoading = false;
   estimates = {
     fields: [{ desc: null, cost: '0' }],
     total: 0
   };
   statusEnum = QuoteStatus;
-  loading = false;
   @Output() quoteUpdated: EventEmitter<any> = new EventEmitter<any>();
   @Output() close: EventEmitter<any> = new EventEmitter<any>();
 
-  constructor(private QuoteService: QuoteService, private alertifyService: AlertifyService, private environemntService: EnvironmentService) { }
+  constructor(private QuoteService: QuoteService, private alertifyService: AlertifyService, private environemntService: EnvironmentService,
+    private eventsService: EventsService) { }
 
   ngOnInit() {
-    this.isCustomer = !isSystemUser(this.environemntService.currentUser);
-    this.mappedQuote = this.mapQuote(this.quote);
-    console.log(this.quote);
+    this.eventsService.callUpdated.subscribe(call => this.quoteChanged());
+
+    // this.isCustomer = !isSystemUser(this.environemntService.currentUser);
+    // this.mappedQuote = this.mapQuote(this.quote);
+    // console.log(this.quote);
+  }
+  
+  initPermissions() {
+    // let isCallOpen = isCallOpened(this.call)
+    // this.permissions = {
+    //   attachQuote: this.environmentService.hasPermission(Permission.) ,
+    //   updateAssignees: this.environmentService.hasPermission(Permission.UpdateAssignees),
+    //   collaborate: this.environmentService.hasPermission(Permission.Collaborate),
+    //   checkIn: this.environmentService.hasPermission(Permission.CheckIn) 
+    // }
+  }
+
+  ngOnChanges() {
+    this.quoteChanged();
+  }
+
+  quoteChanged() {
+    if (this.quote) {
+      this.initPermissions();
+      this.mappedQuote = this.mapQuote(this.quote);
+      this.loading = false;
+    }
   }
 
   mapQuote(quote) {
@@ -120,10 +146,4 @@ export class QuoteDetailsComponent implements OnInit {
   closeModal() {
     this.close.emit();
   }
-
-  // openLightBox(index: number): void {
-  //   // open lightbox
-  //   this.lightBox.open(this.mappedQuote.images, index);
-  // }
-
 }

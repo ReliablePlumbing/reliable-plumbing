@@ -1,0 +1,29 @@
+:host::ng-deep {
+    .status-tabs {
+        .nav-link {
+            border: 1px solid #b1b1b1;
+            background: #f6f7f9;
+            color: black;
+            &.active {
+                box-shadow: 0 -3px 0 0;
+                border-bottom-color: #fff;
+                background: #fff;
+                font-weight: bold;
+            }
+        }
+        .green {
+            color: green;
+        }
+        .red {
+            color: red;
+        }
+    }
+}
+
+.status-border {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 5px;
+    height: 100%;
+}
