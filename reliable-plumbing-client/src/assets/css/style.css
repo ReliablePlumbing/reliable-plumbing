@@ -911,17 +911,21 @@ body.mobile-nav-active {
     #contact .form button[type="submit"]:hover {
       background: #6cb9e6; }
 
-.call-details {
+.call-details,
+.quote-details {
   font-size: 14px; }
-  .call-details label {
+  .call-details label,
+  .quote-details label {
     font-size: 16px; }
-  .call-details span {
+  .call-details span,
+  .quote-details span {
     font-size: 16px; }
-  /* .call-details .call-details-lightbox a img {
+  .call-details .call-details-lightbox a img,
+  .quote-details .call-details-lightbox a img {
     width: 150px;
     height: 150px;
     max-width: 300px;
-    margin-bottom: 10px; } */
+    margin-bottom: 10px; }
 
 .assigne-sec .ui-scrollpanel {
   border: 0 !important; }
@@ -943,6 +947,32 @@ body.mobile-nav-active {
       padding: 5px; }
   .schedule-content p-inputswitch .ui-inputswitch .ui-state-default {
     width: 52px; }
+
+.quote-management-listing .quote-listing {
+  padding: 0; }
+  .quote-management-listing .quote-listing li {
+    margin-left: 10px;
+    border-bottom: 1px dashed rgba(3, 2, 2, 0.21);
+    background-color: antiquewhite;
+    cursor: pointer;
+    margin: 0;
+    list-style: none;
+    padding: 10px;
+    letter-spacing: 1.5px;
+    font-weight: 100;
+    font-size: 1.2em;
+    font-family: "Roboto";
+    font-weight: 100; }
+  .quote-management-listing .quote-listing li.selected {
+    background-color: #D3E6F8; }
+
+.estimates-wrapper .btn {
+  margin-bottom: 10px; }
+.estimates-wrapper .table-scrollable {
+  background: #fff;
+  text-align: center; }
+  .estimates-wrapper .table-scrollable input {
+    text-align: center; }
 
 .register {
   width: 100%; }

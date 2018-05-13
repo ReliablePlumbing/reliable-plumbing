@@ -1,20 +1,23 @@
-<div class="status-tabs">
-  <ngb-tabset>
-    <ngb-tab *ngFor="let tab of statusTabs">
-      <ng-template ngbTabTitle>
-        <div class="status-tab-header" [pTooltip]="tab.text" tooltipPosition="bottom" showDelay="100" hideDelay="300">
-          <i [ngClass]="tab.icon"></i>
-          <span>{{tab.id == '0' ? 'All ' : ''}}({{mappedQuotes[tab.id].length}})</span>
-        </div>
-      </ng-template>
-      <ng-template ngbTabContent>
-        <p-scrollPanel [style]="{width: '100%', height: '100vh'}" styleClass="custom-left-scrollbar">
-         <div *ngFor="let quote of mappedQuotes[tab.id]" [class.selected]="quote.id == selectedQuote.id" (click)="selectQuote(quote)">
-          <span>{{quote.fullName}}</span>
-          
-         </div>
-        </p-scrollPanel>
-      </ng-template>
-    </ngb-tab>
-  </ngb-tabset>
+<div class="status-tabs quote-management-listing">
+    <ngb-tabset>
+        <ngb-tab *ngFor="let tab of statusTabs">
+            <ng-template ngbTabTitle>
+                <div class="status-tab-header" [pTooltip]="tab.text" tooltipPosition="bottom" showDelay="100" hideDelay="300">
+                    <i [ngClass]="tab.icon"></i>
+                    <span>{{tab.id == '0' ? 'All ' : ''}}({{mappedQuotes[tab.id].length}})</span>
+                </div>
+            </ng-template>
+            <ng-template ngbTabContent>
+                <p-scrollPanel [style]="{width: '100%', height: '100vh'}" styleClass="custom-left-scrollbar">
+                    <ul class="quote-listing">
+                        <li *ngFor="let quote of mappedQuotes[tab.id]" [class.selected]="quote.id == selectedQuote.id" (click)="selectQuote(quote)">
+                            <span>{{quote.fullName}}</span>
+
+                        </li>
+                    </ul>
+
+                </p-scrollPanel>
+            </ng-template>
+        </ngb-tab>
+    </ngb-tabset>
 </div>

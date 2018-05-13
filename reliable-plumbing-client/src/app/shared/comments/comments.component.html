@@ -1,11 +1,19 @@
 <div class="ui-inputgroup">
     <textarea type="text" class="form-control" pInputText placeholder="Write Your Comment..." [(ngModel)]="newComment" (keyup.enter)="addComment()"></textarea>
-    <button pButton type="button" icon="fa fa-check" class="ui-button-secondary" [disabled]="!newComment" (click)="addComment()"></button>
+    <button pButton type="button" icon="fa fa-comment" class="ui-button-secondary" [disabled]="!newComment" (click)="addComment()">
+
+    </button>
 </div>
 
-<div class="row" *ngFor="let comment of comments">
-    <span class="col-4">{{comment.userFullName}}:</span>
-    <p>{{comment.text}}</p>
+<div class="panel panel-default" *ngFor="let comment of comments">
+    <div class="panel-heading">
+        <span class="comment-user"><i class="fa fa-user mrgr5"></i>{{comment.userFullName}}</span>
+        <span class="text-muted">commented.</span>
+    </div>
+    <div class="panel-body">
+        {{comment.text}}
+    </div>
+    <!-- /panel-body -->
 </div>
 
-<a *ngIf="totalCount > comments.length" class="btn btn-link" (click)="loadMore()">load more...</a>
+<a *ngIf="totalCount > comments.length" class="btn btn-link load-more" (click)="loadMore()">Load More...</a>

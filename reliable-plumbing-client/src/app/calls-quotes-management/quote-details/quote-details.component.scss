@@ -9,7 +9,7 @@
     & .fa-plus {
         color: green;
     }
-    & .fa-times {
+    & .fa-trash {
         color: red;
     }
 }
@@ -21,7 +21,7 @@
 }
 
 :host ::ng-deep {
-    .quote-details-lightbox img{
+    .quote-details-lightbox img {
         padding-bottom: 3px;
     }
 }

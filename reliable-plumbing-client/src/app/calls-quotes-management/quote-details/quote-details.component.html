@@ -1,136 +1,136 @@
 <loader *ngIf="loading"></loader>
 
 <ng-container *ngIf="!loading">
-  <div class="row">
-    <div class="col-md-3">
-      <label>
+    <div class="row">
+        <div class="col-md-3">
+            <label>
         <b>Name</b>
       </label>
+        </div>
+        <div class="col-md-8">
+            <span>{{mappedQuote?.fullName}}</span>
+        </div>
     </div>
-    <div class="col-md-8">
-      <span>{{mappedQuote?.fullName}}</span>
-    </div>
-  </div>
 
-  <div class="row">
-    <div class="col-md-3">
-      <label>
+    <div class="row">
+        <div class="col-md-3">
+            <label>
         <b>Address</b>
       </label>
+        </div>
+        <div class="col-md-8">
+            <span>{{mappedQuote?.address}}</span>
+        </div>
     </div>
-    <div class="col-md-8">
-      <span>{{mappedQuote?.address}}</span>
-    </div>
-  </div>
 
-  <div class="row">
-    <div class="col-md-3">
-      <label>
+    <div class="row">
+        <div class="col-md-3">
+            <label>
         <b>Contact</b>
       </label>
+        </div>
+        <div class="col-md-8">
+            <span>{{mappedQuote?.contact}}</span>
+        </div>
     </div>
-    <div class="col-md-8">
-      <span>{{mappedQuote?.contact}}</span>
-    </div>
-  </div>
 
-  <div class="row">
-    <label class="col-md-3">
+    <div class="row">
+        <label class="col-md-3">
       <b>Description</b>
     </label>
-    <div class="col-md-8">
-      <p>{{mappedQuote.message}}</p>
+        <div class="col-md-8">
+            <p>{{mappedQuote.message}}</p>
+        </div>
     </div>
-  </div>
 
-  <div class="row">
-    <div class="col-4">
-      <label>
+    <div class="row">
+        <div class="col-4">
+            <label>
         <b>Images</b>
       </label>
+        </div>
+        <div class="col-8">
+            <p-lightbox [images]="mappedQuote.images" styleClass="quote-details-lightbox" appendTo="body" effectDuration="500ms"></p-lightbox>
+        </div>
     </div>
-    <div class="col-8">
-      <p-lightbox [images]="mappedQuote.images" styleClass="quote-details-lightbox" appendTo="body" effectDuration="500ms"></p-lightbox>
-    </div>
-  </div>
+    <hr>
+    <div class="row estimates-wrapper container table-responsive">
 
-  <div class="row estimates-wrapper container table-responsive">
-
-    <ng-container *ngIf="permissions.updateQuoteEstimate">
-      <button class="btn btn-default pull-right" *ngIf="!estimates.isEdit" (click)="estimates.isEdit = true">
-        <span class="fa fa-edit ">Edit Estimates</span>
+        <ng-container *ngIf="permissions.updateQuoteEstimate">
+            <button class="btn btn-primary filters-toggle-btn pull-right" *ngIf="!estimates.isEdit" (click)="estimates.isEdit = true">
+        <i class="fa fa-edit mrgr5"></i>Edit Estimates
       </button>
-      <ng-container *ngIf="estimates.isEdit">
-        <button class="btn btn-success pull-right" (click)="updateQuoteEstimates()">
-          <span class="fa fa-check ">Done</span>
+            <ng-container *ngIf="estimates.isEdit">
+                <button class="btn btn-success pull-right" (click)="updateQuoteEstimates()">
+          <i class="fa fa-check mrgr5"></i>Done
         </button>
-        <button class="btn btn-danger pull-right" (click)="cancelEstimatesChanges()">
-          <span class="fa fa-close ">Cancel</span>
+                <button class="btn btn-danger pull-right" (click)="cancelEstimatesChanges()">
+          <i class="fa fa-close mrgr5"></i>Cancel
         </button>
-      </ng-container>
-    </ng-container>
-    <table class="table table-bordered table-scrollable" *ngIf="!estimates.isEdit">
-      <thead>
-        <th>#</th>
-        <th>Description</th>
-        <th>Estimate</th>
-      </thead>
-      <tbody>
-        <tr *ngFor="let field of mappedQuote.estimateFields; let i = index">
-          <td>{{i+1}}</td>
-          <td class="text-center">{{field.desc}}</td>
-          <td class="text-center">{{field.cost}}</td>
-        </tr>
-        <tr>
-          <td colspan="2" class="text-center">
-            <b>Total</b>
-          </td>
-          <td colspan="2" class="text-center">
-            <b>{{mappedQuote.estimateTotal}}</b>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+            </ng-container>
+        </ng-container>
+        <table class="table table-bordered table-scrollable" *ngIf="!estimates.isEdit">
+            <thead>
+                <th>#</th>
+                <th>Description</th>
+                <th>Estimate</th>
+            </thead>
+            <tbody>
+                <tr *ngFor="let field of mappedQuote.estimateFields; let i = index">
+                    <td>{{i+1}}</td>
+                    <td class="text-center">{{field.desc}}</td>
+                    <td class="text-center">{{field.cost}}</td>
+                </tr>
+                <tr>
+                    <td colspan="2" class="text-center">
+                        <b>Total</b>
+                    </td>
+                    <td colspan="2" class="text-center">
+                        <b>{{mappedQuote.estimateTotal}}</b>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
 
-    <table class="table table-bordered table-scrollable" *ngIf="estimates.isEdit">
-      <thead>
-        <th>#</th>
-        <th>Description</th>
-        <th>Estimate</th>
-        <th></th>
-      </thead>
-      <tbody>
-        <tr *ngFor="let field of estimates.fields; let i = index">
-          <td>{{i+1}}</td>
-          <td>
-            <textarea class="form-control" [(ngModel)]="field.desc"></textarea>
-          </td>
-          <td>
-            <input type="text" number class="form-control" [(ngModel)]="field.cost" (change)="fieldChanged()" />
-          </td>
-          <td class="fields-btns">
-            <span *ngIf="i<estimates.fields.length-1" (click)="removeField(i)" class="fa fa-times fa-2" aria-hidden="true" title="Remove Field"></span>
-            <span *ngIf="i==estimates.fields.length-1" (click)="addAnotherField()" class="fa fa-plus fa-2" aria-hidden="true" title="Add Another field"></span>
-          </td>
-        </tr>
-        <tr>
-          <td colspan="2" class="text-center">
-            <b>Total</b>
-          </td>
-          <td colspan="2" class="text-center">
-            <b>{{estimates.total}}</b>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+        <table class="table table-bordered table-scrollable" *ngIf="estimates.isEdit">
+            <thead>
+                <th>#</th>
+                <th>Description</th>
+                <th>Estimate</th>
+                <th></th>
+            </thead>
+            <tbody>
+                <tr *ngFor="let field of estimates.fields; let i = index">
+                    <td>{{i+1}}</td>
+                    <td>
+                        <textarea class="form-control" [(ngModel)]="field.desc"></textarea>
+                    </td>
+                    <td>
+                        <input type="text" number class="form-control" [(ngModel)]="field.cost" (change)="fieldChanged()" />
+                    </td>
+                    <td class="fields-btns">
+                        <span *ngIf="i<estimates.fields.length-1" (click)="removeField(i)" class="fa fa-trash fa-2" aria-hidden="true" title="Remove Field"></span>
+                        <span *ngIf="i==estimates.fields.length-1" (click)="addAnotherField()" class="fa fa-plus fa-2" aria-hidden="true" title="Add Another field"></span>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2" class="text-center">
+                        <b>Total</b>
+                    </td>
+                    <td colspan="2" class="text-center">
+                        <b>{{estimates.total}}</b>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
 
-  </div>
-
-  <div class="row" *ngIf="permissions.collaborate">
-    <div class="col-12">
-      <comments [objectId]="quote.id" [objectType]="objectType"></comments>
     </div>
-  </div>
+    <hr>
+    <div class="row" *ngIf="permissions.collaborate">
+        <div class="col-12">
+            <comments [objectId]="quote.id" [objectType]="objectType"></comments>
+        </div>
+    </div>
 </ng-container>
 
 <overlay-loader *ngIf="overlayLoading"></overlay-loader>

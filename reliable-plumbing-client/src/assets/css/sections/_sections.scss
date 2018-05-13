@@ -396,7 +396,8 @@
     }
 }
 
-.call-details {
+.call-details,
+.quote-details {
     font-size: 14px;
     label {
         font-size: 16px;
@@ -451,6 +452,42 @@
             .ui-state-default {
                 width: 52px;
             }
+        }
+    }
+}
+
+.quote-management-listing {
+    .quote-listing {
+        padding: 0;
+        li {
+            margin-left: 10px;
+            border-bottom: 1px dashed rgba(3, 2, 2, 0.21);
+            background-color: antiquewhite;
+            cursor: pointer;
+            margin: 0;
+            list-style: none;
+            padding: 10px;
+            letter-spacing: 1.5px;
+            font-weight: 100;
+            font-size: 1.2em;
+            font-family: "Roboto";
+            font-weight: 100;
+        }
+        li.selected {
+            background-color: #D3E6F8;
+        }
+    }
+}
+
+.estimates-wrapper {
+    .btn {
+        margin-bottom: 10px;
+    }
+    .table-scrollable {
+        background: #fff;
+        text-align: center;
+        input {
+            text-align: center;
         }
     }
 }
