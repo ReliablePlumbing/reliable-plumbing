@@ -405,16 +405,16 @@
     span {
         font-size: 16px;
     }
-    .call-details-lightbox {
-        a {
-            img {
-                width: 150px;
-                height: 150px;
-                max-width: 300px;
-                margin-bottom: 10px;
-            }
-        }
-    }
+    // .call-details-lightbox {
+    //     a {
+    //         img {
+    //             width: 150px;
+    //             height: 150px;
+    //             max-width: 300px;
+    //             margin-bottom: 10px;
+    //         }
+    //     }
+    // }
 }
 
 // assigne-sec
@@ -488,6 +488,14 @@
         text-align: center;
         input {
             text-align: center;
+        }
+    }
+}
+
+.filters {
+    >.row {
+        >div {
+            margin-bottom: 5px;
         }
     }
 }

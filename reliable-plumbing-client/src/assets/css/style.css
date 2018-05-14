@@ -920,12 +920,6 @@ body.mobile-nav-active {
   .call-details span,
   .quote-details span {
     font-size: 16px; }
-  .call-details .call-details-lightbox a img,
-  .quote-details .call-details-lightbox a img {
-    width: 150px;
-    height: 150px;
-    max-width: 300px;
-    margin-bottom: 10px; }
 
 .assigne-sec .ui-scrollpanel {
   border: 0 !important; }
@@ -973,6 +967,9 @@ body.mobile-nav-active {
   text-align: center; }
   .estimates-wrapper .table-scrollable input {
     text-align: center; }
+
+.filters > .row > div {
+  margin-bottom: 5px; }
 
 .register {
   width: 100%; }

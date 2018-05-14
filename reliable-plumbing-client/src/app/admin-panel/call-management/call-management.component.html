@@ -22,23 +22,23 @@
 <ng-container *ngIf="mode==modes.listing">
     <div class="filters">
         <div class="row">
-            <div class="col-sm-3">
+            <div class="col-lg-3 col-md-6 col-sm-6">
                 <p-multiSelect [options]="services" [(ngModel)]="selectedServices" [panelStyle]="{minWidth:'100%'}" (onPanelHide)="filter($event)">
                     <ng-template let-service pTemplate="item">
                         <span>{{service.value.name}}</span>
                     </ng-template>
                 </p-multiSelect>
             </div>
-            <div class="col-sm-4">
+            <div class="col-lg-4 col-md-6 col-sm-6">
                 <p-calendar [(ngModel)]="rangeDates" [showIcon]="true" selectionMode="range" readonlyInput="true" (onClose)="filter($event)"></p-calendar>
             </div>
-            <div class="col-sm-3">
+            <div class="col-lg-3 col-sm-6 col-sm-6">
                 <div class="ui-inputgroup">
                     <input type="text" class="form-control customer-name" pInputText placeholder="Customer Name" [(ngModel)]="customerName" (keyup.enter)="filter()">
                     <button pButton type="button" icon="fa fa-search" class="ui-button-secondary" (click)="filter()"></button>
                 </div>
             </div>
-            <div class="col-sm-2">
+            <div class="col-lg-2 col-md-6 col-sm-6">
                 <button class="btn btn-primary filters-toggle-btn pull-right" (click)="setMode(modes.addCall)"><i class="fa fa-plus mrgr5"></i>Add New Call</button>
             </div>
         </div>
