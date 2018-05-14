@@ -50,7 +50,8 @@ export class QuotesHistoryComponent implements OnInit {
     for (let quote of quotes) {
       let customer = quote.user ? quote.user : quote.customerInfo;
       quote.fullName = customer.firstName + ' ' + (customer.lastName ? customer.lastName : '');
-      quote.totalEstimate = quote.status == QuoteStatus.Open ? null : this.sumEstimateFields(quote)
+      quote.totalEstimate = quote.status == QuoteStatus.Open ? null : this.sumEstimateFields(quote);
+      quote.actions = this.getQuoteActions(quote);
       mappedQuotes[quote.status].push(quote);
     }
 
@@ -62,6 +63,20 @@ export class QuotesHistoryComponent implements OnInit {
     quote.estimateFields.forEach(f => total += f.cost);
 
     return total;
+  }
+
+  getQuoteActions(quote) {
+    let actions = [];
+    switch (quote.status) {
+      case QuoteStatus.Pending:
+        actions.push({ status: QuoteStatus.Approved, label: 'Approve', cssClass: 'btn-success' });
+        actions.push({ status: QuoteStatus.Rejected, label: 'Reject', cssClass: 'btn-danger' });
+        break;
+      case QuoteStatus.Approved:
+        actions.push({ status: QuoteStatus.Closed, label: 'Close Quote', cssClass: 'btn-info' });
+        break;
+    }
+    return actions;
   }
 
   openQuoteDetailsModal(quote) {
@@ -80,13 +95,18 @@ export class QuotesHistoryComponent implements OnInit {
     this.quoteDetailsModalRef.close();
   }
 
-  quoteUpdated(quote) {
-    let index = this.quotes.filter(q => q.id == quote.id);
+  updateQuote(quote, nextStatus) {
+    quote.status = nextStatus;
+    this.quoteService.updateQuote(quote).subscribe(result => {
+      if (result) {
 
-    this.quotes[index] = quote;
-    this.mappedQuotes = this.mapAndGroupQuotes(this.quotes);
+        this.mappedQuotes = this.mapAndGroupQuotes(this.quotes);
+    
+        this.closeQuoteDetailsModal();
+        this.alertifyService.success('Quote updated Successfully.')
+      }
+    })
 
-    this.closeQuoteDetailsModal();
   }
 
   setMode = (currentMode, selectedQuote = null) => {
@@ -107,7 +127,7 @@ export class QuotesHistoryComponent implements OnInit {
       if (result.id != null) {
         this.mode = this.modes.msg;
         this.alertifyService.success('Your quote has been submitted');
-        setTimeout(() => this.mode = this.modes.history, 5000);
+        setTimeout(() => this.mode = this.modes.history, 2000);
       }
     });
   }
@@ -123,7 +143,7 @@ export class QuotesHistoryComponent implements OnInit {
         this.selectedQuote = null;
         this.mode = this.modes.msg;
         this.alertifyService.success('Your call has been submitted');
-        setTimeout(() => this.mode = this.modes.history, 5000);
+        setTimeout(() => this.mode = this.modes.history, 2000);
       }
     });
   }

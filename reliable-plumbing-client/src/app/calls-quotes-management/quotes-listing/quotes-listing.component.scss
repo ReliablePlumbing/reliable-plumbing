@@ -27,3 +27,23 @@
     width: 5px;
     height: 100%;
 }
+
+li {
+    &:before {
+        right: 17px;
+        left: inherit;
+    }
+    .dropdown {
+        display: inline-block;
+        button {
+            padding: 0 2px;
+            height: 18px;
+            margin-left: 5px;
+        }
+    }
+}
+
+.no-data-tab {
+    width: 95%;
+    margin-top: 100px;
+}

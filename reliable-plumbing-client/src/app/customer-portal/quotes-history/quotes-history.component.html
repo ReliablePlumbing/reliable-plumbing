@@ -52,7 +52,8 @@
                 <div *ngIf="quote.totalEstimate != null">
                   <label>Total Estimation </label>
                   <b>({{quote.totalEstimate}})</b>
-                  <button *ngIf="quote.status == statusEnum.Approved && !quote.appointmentId" (click)="$event.stopPropagation(); setMode(modes.addCall, quote)" class="btn btn-success btn-sm pull-right">Schedule Call</button>
+                  <button *ngIf="quote.status == statusEnum.Approved && !quote.appointmentId" (click)="$event.stopPropagation(); setMode(modes.addCall, quote)"
+                    class="btn btn-success btn-sm pull-right">Schedule Call</button>
                 </div>
               </div>
             </div>
@@ -78,6 +79,11 @@
   </div>
   <div class="modal-body">
     <quote-details [quote]="selectedQuote" (quoteUpdated)="quoteUpdated($event)" (close)="closeQuoteDetailsModal()"></quote-details>
+    <ng-container *ngIf="selectedQuote.actions && selectedQuote.actions.length > 0">
+      <button *ngFor="let action of selectedQuote.actions" class="btn" [ngClass]="action.cssClass"
+        (click)="updateQuote(selectedQuote, action.status)">{{action.label}}</button>
+    </ng-container>
+    <button class="btn" (click)="closeQuoteDetailsModal()">Cancel</button>
   </div>
 
 </ng-template>

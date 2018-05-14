@@ -99,7 +99,6 @@ export class CallsQuotesFormComponent implements OnInit {
       this.appointmentForm.addControl('time', new FormControl(null, this.validateDropdownRequired));
     }
 
-    if (!this.isLoggedIn || (this.adminMode && !this.existingCustomer)) {
       this.appointment.customerInfo = {
         state: 'California'
       },
@@ -115,8 +114,8 @@ export class CallsQuotesFormComponent implements OnInit {
         });
       //California
       this.customerInfoForm.controls['state'].disable();
-    }
-    else if (!this.forQuote) {
+
+      if (!this.forQuote) {
       this.appointment.siteId = '-1';
       this.appointmentForm.addControl('site', new FormControl(null, this.validateDropdownRequired));
     }

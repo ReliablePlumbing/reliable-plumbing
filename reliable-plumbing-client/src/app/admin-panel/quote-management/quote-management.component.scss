@@ -35,10 +35,6 @@
     }
 }
 
-:host ::ng-deep .dropdown-menu {
-    display: inherit !important;
-}
-
 @media (max-width: 1024px) {
     .quotes-cards-list {
         -ms-grid-columns: 1fr 1fr;
