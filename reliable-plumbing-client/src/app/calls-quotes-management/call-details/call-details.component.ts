@@ -8,6 +8,7 @@ import { isAnyEligible } from '../../utils/user-helpers';
 import { OverlayPanel } from 'primeng/primeng';
 import { convertTimeTo12String } from '../../utils/date-helpers';
 import * as moment from 'moment';
+import { Subscription } from 'rxjs/Subscription';
 
 @Component({
   selector: 'call-details',
@@ -32,12 +33,13 @@ export class CallDetailsComponent implements OnInit, OnChanges {
     checkIn: boolean,
   };
   mapMarker: any = { lat: 36.778259, lng: -119.417931 }; // california coordinates
+  supscription: Subscription;
 
   constructor(private modalService: NgbModal, private quoteService: QuoteService, private alertifyService: AlertifyService,
     private callService: AppointmentService, private environmentService: EnvironmentService, private eventsService: EventsService) { }
 
   ngOnInit() {
-    this.eventsService.callUpdated.subscribe(call => this.callChanged());
+    this.supscription = this.eventsService.callUpdated.subscribe(call => this.callChanged());
   }
 
   initPermissions() {
@@ -264,4 +266,8 @@ export class CallDetailsComponent implements OnInit, OnChanges {
     });
   }
   //#endregion
+
+  ngOnDestroy() {
+    this.supscription.unsubscribe();
+  }
 }

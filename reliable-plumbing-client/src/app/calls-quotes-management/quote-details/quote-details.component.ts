@@ -4,6 +4,7 @@ import { QuoteService, AlertifyService, EnvironmentService, EventsService } from
 import { QuoteStatus, ObjectType, Permission } from '../../models/enums';
 import { isSystemUser } from '../../utils/user-helpers';
 import { isQuoteOpen } from '../../utils/call-helpers';
+import { Subscription } from 'rxjs/Subscription';
 
 @Component({
   selector: 'quote-details',
@@ -27,12 +28,13 @@ export class QuoteDetailsComponent implements OnInit {
     collaborate: boolean,
     updateQuoteEstimate: boolean
   };
+  subscription: Subscription
 
   constructor(private QuoteService: QuoteService, private alertifyService: AlertifyService, private environmentService: EnvironmentService,
     private eventsService: EventsService) { }
 
   ngOnInit() {
-    this.eventsService.callUpdated.subscribe(call => this.quoteChanged());
+    this.subscription = this.eventsService.quoteUpdated.subscribe(call => this.quoteChanged());
   }
 
   initPermissions() {
@@ -76,7 +78,7 @@ export class QuoteDetailsComponent implements OnInit {
     this.estimates.total = this.sumFields(this.estimates.fields);
   }
 
-   getCustomerContact(quote) {
+  getCustomerContact(quote) {
     let user = quote.user ? quote.user : quote.customerInfo;
 
     return user.email + ' - ' + user.mobile;
@@ -149,5 +151,9 @@ export class QuoteDetailsComponent implements OnInit {
         }
       })
     });
+  }
+
+  ngOnDestroy(){
+    this.subscription.unsubscribe();
   }
 }
