@@ -68,7 +68,7 @@ export class UsersManagementComponent implements OnInit {
   }
 
   deleteUser(user) {
-    let message = 'Are you sure you want delete ' + user.firstName + ' ' + user.lastName;
+    let message = 'Are you sure you want to delete ' + user.firstName + ' ' + user.lastName;
     this.alertifyService.confirmDialog(message, () => {
       this.userManagementService.deleteUserById(user.id).subscribe(success => {
         if (success) {
