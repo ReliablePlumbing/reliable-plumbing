@@ -100,13 +100,13 @@
 
 <ng-template #login let-c="close" let-d="dismiss">
     <div class="modal-header">
-        <h4 class="modal-title">Login</h4>
+        <h4 class="modal-title">{{loginTitle}}</h4>
         <button type="button" class="close" aria-label="Close" (click)="d()">
             <span aria-hidden="true">&times;</span>
         </button>
     </div>
     <div class="modal-body">
-        <rb-login [userEmail]="registeredUserEmail" (userLoggedIn)="userLoggedIn()"></rb-login>
+        <rb-login [userEmail]="registeredUserEmail" (userLoggedIn)="userLoggedIn()" (modalTitle)="loginTitle = $event"></rb-login>
     </div>
 
 </ng-template>

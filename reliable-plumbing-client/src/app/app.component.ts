@@ -24,6 +24,7 @@ export class AppComponent {
   systemRoutes = systemRoutes;
   isControlPanel = false;
   isCustomerPortal = false;
+  loginTitle = 'Login';
 
   constructor(private socketsSerivce: SocketsService, private notificationService: NotificationService, private router: Router,
     private modalService: NgbModal, private environmentService: EnvironmentService, private routeHandlerService: RouteHandlerService,

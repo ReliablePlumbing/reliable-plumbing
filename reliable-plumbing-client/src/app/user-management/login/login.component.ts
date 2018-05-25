@@ -17,6 +17,7 @@ export class LoginComponent {
   userPassword: string;
   rememberMe: boolean = false;
   @Output() userLoggedIn: EventEmitter<any> = new EventEmitter<any>();
+  @Output() modalTitle: EventEmitter<any> = new EventEmitter<any>();
   SocialMediaProvider = SocialMediaProvider;
   showErrorMsg = false;
   errorMsg = 'Invalid email and/or password';
@@ -24,6 +25,7 @@ export class LoginComponent {
   showInfoMsg = false;
   infoMsg;
   email;
+  loading = false;
 
   constructor(
     private userManagementService: UserManagementService, private alertifyService: AlertifyService,
@@ -31,9 +33,14 @@ export class LoginComponent {
     private notificationService: NotificationService, private authService: AuthService
   ) { }
 
+  ngOnInit() {
+    this.modalTitle.emit('Login');
+  }
+
   userLogin(loginForm: any) {
     this.trySubmit = true;
     if (loginForm.valid) {
+      this.loading = true;
       this.userManagementService.login(this.userEmail, this.userPassword, this.rememberMe)
         .subscribe(result => {
           if (result) {
@@ -46,11 +53,13 @@ export class LoginComponent {
           else {
             this.alertifyService.error(this.errorMsg);
           }
+          this.loading = false;
         },
-        error => {
-          this.showErrorMsg = true;
-          this.alertifyService.error(this.errorMsg);
-        });
+          error => {
+            this.showErrorMsg = true;
+            this.alertifyService.error(this.errorMsg);
+            this.loading = false;
+          });
     }
   }
 
@@ -59,18 +68,34 @@ export class LoginComponent {
 
   }
 
+  openForgotPassword() {
+    this.forgotPassword = true;
+    this.trySubmit = false;
+    this.modalTitle.emit('Forgot Your Password?');
+  }
+  
+  backToLogin() {
+    this.trySubmit = false;
+    this.forgotPassword = false;
+    this.modalTitle.emit('Login');
+
+  }
+
   resetPassword() {
     this.trySubmit = true;
-    if (this.email)
+    if (this.email) {
+      this.loading = true;
       this.userManagementService.forgotPassword(this.email).subscribe(result => {
         if (result) {
-          this.infoMsg = 'A link has been sent to your email, please follow the link to reset your password';
+          this.infoMsg = 'Please check your email to reset your password.';
           this.showInfoMsg = true;
           this.trySubmit = false;
+          this.loading = false;
         }
         else
           this.alertifyService.error('Email doesn\'t exist');
 
       })
+    }
   }
 }

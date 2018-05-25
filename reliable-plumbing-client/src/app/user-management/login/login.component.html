@@ -1,88 +1,95 @@
-<ng-container *ngIf="!forgotPassword && !showInfoMsg">
-    <section class="register">
-        <div class="register-container">
-            <div class="container">
-                <form #loginForm="ngForm" (ngSubmit)="userLogin(loginForm)" novalidate>
-                    <div class="row">
-                        <!-- <div class="col-md-12">
-                        <h3>Login</h3>
-                    </div> -->
-                        <div class="col-md-12">
-                            <div class="form-group">
-                                <label>Username / Email:</label>
-                                <input class="form-control" type="text" name="userEmail" #userEmailControl="ngModel" [(ngModel)]="userEmail" placeholder="Enter Your Email" required/>
-                                <span class="error-message" *ngIf="!userEmailControl.valid && (userEmailControl.dirty || trySubmit)">* required</span>
+<ng-container *ngIf="!loading">
+    <ng-container *ngIf="!forgotPassword && !showInfoMsg">
+        <section class="register">
+            <div class="register-container">
+                <div class="container">
+                    <form #loginForm="ngForm" (ngSubmit)="userLogin(loginForm)" novalidate>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label>Username / Email:</label>
+                                    <input class="form-control" type="text" name="userEmail" #userEmailControl="ngModel" [(ngModel)]="userEmail" placeholder="Enter Your Email"
+                                        required/>
+                                    <span class="error-message" *ngIf="!userEmailControl.valid && (userEmailControl.dirty || trySubmit)">* required</span>
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-md-12">
-                            <div class="form-group">
-                                <label>Password:</label>
-                                <input class="form-control" type="password" name="userPassword" #userPasswordControl="ngModel" [(ngModel)]="userPassword" placeholder="Enter Your Password" required/>
-                                <span class="error-message" *ngIf="!userPasswordControl.valid && (userPasswordControl.dirty || trySubmit)">* required</span>
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label>Password:</label>
+                                    <input class="form-control" type="password" name="userPassword" #userPasswordControl="ngModel" [(ngModel)]="userPassword"
+                                        placeholder="Enter Your Password" required/>
+                                    <span class="error-message" *ngIf="!userPasswordControl.valid && (userPasswordControl.dirty || trySubmit)">* required</span>
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-sm-12">
-                            <span class="error-message" *ngIf="showErrorMsg">
-                                {{errorMsg}}
-                            </span>
-                        </div>
-                        <!-- <div class="col-md-6">
+                            <div class="col-sm-12">
+                                <span class="error-message" *ngIf="showErrorMsg">
+                                    {{errorMsg}}
+                                </span>
+                            </div>
+                            <!-- <div class="col-md-6">
                             <label for="rememberMe">
                                 <input type="checkbox" id="rememberMe" [checked]="rememberMe" (change)="rememberMe = !rememberMe" /> Remember Me
                             </label>
                         </div> -->
-                        <div class="col-md-12">
-                            <button type="submit" class="btn btn-success fullWidth">Sign In</button>
-                            <a (click)="forgotPassword=true;trySubmit=false;" class="login-form__forgot-password forget-password">Forgot Password</a>
-                        </div>
-                        <div class="col-md-12 text-center">
-                            <a class="btn google-btn" (click)="socialLogin(SocialMediaProvider.Google)">
-                                <i class="fa fa-google"></i>Login with google
-                            </a>
-                            <a class="btn facebook-btn" (click)="socialLogin(SocialMediaProvider.Facebook)">
-                                <i class="fa fa-facebook"></i>Login with facebook
-                            </a>
-                        </div>
-                        <div class="col-md-12">
-                            <div class="new-user">New User ?
-                                <a href="#">Sign Up</a>
+                            <div class="col-md-12">
+                                <button type="submit" class="btn btn-success fullWidth">Sign In</button>
+                                <a (click)="openForgotPassword()" class="login-form__forgot-password forget-password">Forgot Password</a>
                             </div>
-                            <!-- open sign up popup -->
+                            <div class="col-md-12 text-center">
+                                <a class="btn google-btn" (click)="socialLogin(SocialMediaProvider.Google)">
+                                    <i class="fa fa-google"></i>Login with google
+                                </a>
+                                <a class="btn facebook-btn" (click)="socialLogin(SocialMediaProvider.Facebook)">
+                                    <i class="fa fa-facebook"></i>Login with facebook
+                                </a>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="new-user">New User ?
+                                    <a href="#">Sign Up</a>
+                                </div>
+                                <!-- open sign up popup -->
+                            </div>
                         </div>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </section>
-
-</ng-container>
-
-<ng-container *ngIf="forgotPassword && !showInfoMsg">
-    <section class="register">
-        <div class="register-container">
-            <div class="container">
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="form-group">
-                            <label>Enter your email address and we will send you a link to reset your password.</label>
-                            <input class="form-control" type="text" name="email" [(ngModel)]="email" placeholder="Enter Your Email" required/>
-                            <span class="error-message" *ngIf="!email && trySubmit">* required</span>
-                        </div>
-                    </div>
-
-                    <div class="col-md-12">
-                        <button (click)="resetPassword()" class="btn btn-success">Send Password Reset Email</button> Or
-                        <a (click)="trySubmit=false;forgotPassword=false" class="btn btn-link btn-reset">Back To Login Form</a>
-                    </div>
-
+                    </form>
                 </div>
             </div>
-        </div>
-    </section>
-</ng-container>
+        </section>
 
-<ng-container *ngIf="showInfoMsg">
-    <div>
-        {{infoMsg}}
-    </div>
+    </ng-container>
+
+    <ng-container *ngIf="forgotPassword && !showInfoMsg">
+        <section class="register">
+            <div class="register-container">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label>Enter your Email Address</label>
+                                <input class="form-control" type="text" name="email" [(ngModel)]="email" placeholder="Enter Your Email" required/>
+                                <span class="error-message" *ngIf="!email && trySubmit">* required</span>
+                            </div>
+                        </div>
+
+                        <div class="col-md-12">
+                            <button (click)="resetPassword()" class="btn btn-primary">Submit</button>
+                            <a (click)="backToLogin()" class="btn btn-link btn-reset  pull-right">Back To Login</a>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </section>
+    </ng-container>
+
+    <ng-container *ngIf="showInfoMsg">
+
+        <h3>
+            <b>Thank You</b>
+        </h3>
+        <div>
+            {{infoMsg}}
+        </div>
+    </ng-container>
+
 </ng-container>
+<loader *ngIf="loading"></loader>
