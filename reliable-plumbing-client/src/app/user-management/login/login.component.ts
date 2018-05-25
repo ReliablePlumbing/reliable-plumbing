@@ -5,6 +5,7 @@ import {
   NotificationService, AuthService, UserManagementService, EventsService
 } from '../../services/services.exports';
 import { SocialMediaProvider } from '../../models/enums';
+import { systemRoutes } from '../../models/constants';
 
 @Component({
   selector: 'rb-login',
@@ -17,6 +18,7 @@ export class LoginComponent {
   userPassword: string;
   rememberMe: boolean = false;
   @Output() modalTitle: EventEmitter<any> = new EventEmitter<any>();
+  @Output() close: EventEmitter<any> = new EventEmitter<any>();
   SocialMediaProvider = SocialMediaProvider;
   showErrorMsg = false;
   errorMsg = 'Invalid email and/or password';
@@ -25,10 +27,11 @@ export class LoginComponent {
   infoMsg;
   email;
   loading = false;
+  systemRoutes = systemRoutes;
 
   constructor(
     private userManagementService: UserManagementService, private alertifyService: AlertifyService,
-    private environmentService: EnvironmentService, private routeHandler: RouteHandlerService,
+    private environmentService: EnvironmentService, private routeHandler: RouteHandlerService, private router: Router,
     private notificationService: NotificationService, private authService: AuthService, private eventsService: EventsService
   ) { }
 
@@ -96,5 +99,10 @@ export class LoginComponent {
 
       })
     }
+  }
+
+  goToRegister(){
+    this.router.navigate([systemRoutes.register]);
+    this.close.emit();
   }
 }

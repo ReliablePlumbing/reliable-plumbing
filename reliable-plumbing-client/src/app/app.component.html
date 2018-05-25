@@ -106,7 +106,7 @@
         </button>
     </div>
     <div class="modal-body">
-        <rb-login [userEmail]="registeredUserEmail" (modalTitle)="loginTitle = $event"></rb-login>
+        <rb-login [userEmail]="registeredUserEmail" (close)="closeLoginModal()" (modalTitle)="loginTitle = $event"></rb-login>
     </div>
 
 </ng-template>

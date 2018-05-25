@@ -88,4 +88,8 @@ export class AppComponent {
   toggleNavigations() {
     this.eventsSevice.navCicked();
   }
+
+  closeLoginModal() {
+    this.loginModalRef.close();
+  }
 }
