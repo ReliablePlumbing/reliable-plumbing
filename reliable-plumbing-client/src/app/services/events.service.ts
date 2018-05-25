@@ -9,6 +9,11 @@ export class EventsService {
   private navSource: Subject<any> = new Subject<any>()
   nav: Observable<any> = this.navSource.asObservable();
   navCicked = () => this.navSource.next();
+
+  // Loggin Event
+  private loginSource: Subject<any> = new Subject<any>()
+  loggedIn: Observable<any> = this.loginSource.asObservable();
+  login = () => this.loginSource.next();
   
   // Call Events
   private callSource: Subject<any> = new Subject<any>()

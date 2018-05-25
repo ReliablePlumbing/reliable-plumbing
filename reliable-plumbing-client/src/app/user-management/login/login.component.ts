@@ -2,7 +2,7 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { Router } from '@angular/router';
 import {
   AlertifyService, EnvironmentService, RouteHandlerService,
-  NotificationService, AuthService, UserManagementService
+  NotificationService, AuthService, UserManagementService, EventsService
 } from '../../services/services.exports';
 import { SocialMediaProvider } from '../../models/enums';
 
@@ -16,7 +16,6 @@ export class LoginComponent {
   @Input() userEmail: string = null;
   userPassword: string;
   rememberMe: boolean = false;
-  @Output() userLoggedIn: EventEmitter<any> = new EventEmitter<any>();
   @Output() modalTitle: EventEmitter<any> = new EventEmitter<any>();
   SocialMediaProvider = SocialMediaProvider;
   showErrorMsg = false;
@@ -30,7 +29,7 @@ export class LoginComponent {
   constructor(
     private userManagementService: UserManagementService, private alertifyService: AlertifyService,
     private environmentService: EnvironmentService, private routeHandler: RouteHandlerService,
-    private notificationService: NotificationService, private authService: AuthService
+    private notificationService: NotificationService, private authService: AuthService, private eventsService: EventsService
   ) { }
 
   ngOnInit() {
@@ -45,7 +44,7 @@ export class LoginComponent {
         .subscribe(result => {
           if (result) {
             this.notificationService.connectSockets();
-            this.userLoggedIn.emit();
+            this.eventsService.login();
             this.alertifyService.success('login completed successfully');
             this.routeHandler.routeToDefault();
             this.showErrorMsg = false;

@@ -4,7 +4,7 @@ import { sessionStrg } from '../../models/constants';
 import { Location } from '@angular/common';
 import { Http, Response, Headers } from '@angular/http';
 import { ActivatedRoute, Router } from '@angular/router';
-import { AuthService, AlertifyService, RouteHandlerService } from '../../services/services.exports';
+import { AuthService, AlertifyService, RouteHandlerService, EventsService } from '../../services/services.exports';
 
 @Component({
   selector: 'rb-social-media-redirect',
@@ -14,7 +14,7 @@ import { AuthService, AlertifyService, RouteHandlerService } from '../../service
 export class SocialMediaRedirectComponent implements OnInit {
 
   constructor(private activatedRoute: ActivatedRoute, private router: Router, private authService: AuthService,
-    private alertifyService: AlertifyService, private routeHandlerService: RouteHandlerService) { }
+    private alertifyService: AlertifyService, private routeHandlerService: RouteHandlerService, private eventsService: EventsService) { }
 
   ngOnInit() {
     let code = this.activatedRoute.snapshot.queryParams['code'];
@@ -26,10 +26,11 @@ export class SocialMediaRedirectComponent implements OnInit {
     let provider: SocialMediaProvider = parseInt(sessionStorage.getItem(sessionStrg.socialMediaLoginProvider));
 
     sessionStorage.removeItem(sessionStrg.socialMediaLoginProvider);
-    
+
     this.authService.getSocialUserDataAndToken(provider, code).subscribe(success => {
       if (success) {
         this.routeHandlerService.routeToDefault();
+        this.eventsService.login();
         this.alertifyService.success('login completed successfully');
       }
       else {
@@ -38,13 +39,5 @@ export class SocialMediaRedirectComponent implements OnInit {
       }
 
     });
-
   }
-
 }
-
-  // if (window.opener != null && !window.opener.closed) {
-
-  //   (<any>window).accessToken = res;
-  //   window.close();
-  // }

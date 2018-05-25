@@ -254,15 +254,16 @@ export class UserManager {
         });
     }
 
-    saveSocialMediaLogin(user: User) {
+    async saveSocialMediaLogin(user: User) {
         return new Promise<User>((resolve, reject) => {
             user.email = user.email.toLowerCase();
-            this.userRepo.findByEmail(user.email).then(result => {
+            this.userRepo.findByEmail(user.email).then(async result => {
                 let promise: Promise<User | boolean> = null;
                 if (result == null) {
                     user.activationDate = user.emailActivationDate = user.creationDate = new Date();
                     user.isActivated = user.isEmailVerfied = true;
                     user.roles = [Role.Customer];
+                    user.permissions = await this.securityManager.getPermissionsByRoles(user.roles);
                     promise = this.userRepo.add(user);
                 }
                 else {
@@ -270,6 +271,7 @@ export class UserManager {
                     result.lastName = user.lastName;
                     result.socialMediaId = user.socialMediaId;
                     result.SocialMediaProvider = user.SocialMediaProvider;
+                    result.permissions = await this.securityManager.getPermissionsByRoles(result.roles);
                     promise = this.userRepo.update(result);
                 }
 
