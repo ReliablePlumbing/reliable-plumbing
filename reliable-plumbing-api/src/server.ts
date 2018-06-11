@@ -20,6 +20,7 @@ if (config.filesSettings.enableGetFiles) {
   app.use('/files', express.static(__dirname + "/files"));
 }
 
+app.use('/api/assets', express.static(__dirname + "/assets"));
 if (config.production) {
   app.use(express.static(__dirname + "/dist-client"));
   app.use(/^(\/\/.+|(?!\/api).*)$/, function (req, res, next) {

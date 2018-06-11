@@ -7,7 +7,6 @@ export class MailLog extends BaseEntity {
     from: string;
     to: string;
     subject: string;
-    content: string;
     status: MailStatus;
     errorMessage?: string
 
@@ -17,7 +16,6 @@ export class MailLog extends BaseEntity {
             from: this.from,
             to: this.to,
             subject: this.subject,
-            content: this.content,
             status: this.status,
             errorMessage: this.errorMessage
         }

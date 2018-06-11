@@ -4,18 +4,24 @@ import { SocialMediaProvider } from '../models/enums';
 import { HttpExtensionService } from './http-extension.service';
 import { EnvironmentService } from './environment.service';
 import { Http, Response, URLSearchParams } from '@angular/http';
+import { Router, ActivatedRoute } from '@angular/router';
 
 @Injectable()
 export class AuthService {
 
   protected basePath = environment.apiUrl + 'users/';
 
-  constructor(private httpService: HttpExtensionService, private environmentService: EnvironmentService) { }
+  constructor(private httpService: HttpExtensionService, private environmentService: EnvironmentService, private router: Router, 
+  private activatedRoute: ActivatedRoute) { }
 
   redirectToSocialLogin(provider: SocialMediaProvider) {
     let url = this.getSocialMediaProviderUrl(provider);
 
     sessionStorage.setItem('socialMediaLoginProvider', provider.toString());
+    let returnUrl = this.activatedRoute.snapshot.queryParams['returnUrl'];
+    if(!returnUrl)
+      returnUrl = this.router.url;
+    sessionStorage.setItem('returnUrl', returnUrl);
     window.location.href = url;
   }
 

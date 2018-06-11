@@ -3,6 +3,7 @@ import * as path from 'path';
 
 export const config: Config = {
     production: false,
+    host: 'http://localhost:3000',
     authorization: {
         tokenKey: "nodeStarterTokenKeyShouldBeUniqueAndLongString",
         tokenExpiration: "1 day"
@@ -16,6 +17,15 @@ export const config: Config = {
         auth: {
             user: "beartoenodemailer@gmail.com",
             pass: "asdasd123123"
+        },
+        templates: {
+            callCreated: 'generic-blue-bg',
+            callStatusChanged: 'generic-blue-bg',
+            assigneeAdded: 'generic-blue-bg',
+            assigneeRemoved: 'generic-red-bg',
+            verficationMail: 'generic-blue-bg',
+            quoteCreated: 'generic-blue-bg',
+            quoteStatusChanged: 'generic-blue-bg',
         }
     },
     activationMailUrl: "http://localhost:4200/activate-mail?token=",
@@ -71,8 +81,8 @@ export const config: Config = {
         enableGetFiles: true,
         imageMaxHeight: null,
         imageMaxWidth: 750,
-        thumbnailWidth:null,
-        thumbnailHeight:50,
+        thumbnailWidth: null,
+        thumbnailHeight: 50,
         thumbnailExtension: '_thumbnail'
     }
 }

@@ -1,7 +1,7 @@
 import { Injectable, Injector } from '@angular/core'
 import { Response, Http } from '@angular/http'
 import { Observable } from 'rxjs/Observable'
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { EnvironmentService } from './environment.service';
 import { AlertifyService } from './alertify.service';
 import { environment } from '../../environments/environment';
@@ -10,7 +10,7 @@ import { environment } from '../../environments/environment';
 export class ExceptionHandlingService {
 
     constructor(private injector: Injector, private environmentService: EnvironmentService, private http: Http,
-        private alertifyService: AlertifyService) {
+        private alertifyService: AlertifyService, private activatedRoute: ActivatedRoute) {
     }
 
     public get router(): Router {
@@ -23,7 +23,7 @@ export class ExceptionHandlingService {
             invalidProperties: null,
             message: ''
         };
-        if (error != null && error.status == 401) {
+        if (error != null && error.status == 401 || error.status == 403) {
             let persistentLogin = this.environmentService.persistentLogin;
             if (persistentLogin == null || persistentLogin == undefined || persistentLogin.selector == null || persistentLogin.selector == undefined)
                 this.unauthorize(errorObj);
@@ -55,21 +55,25 @@ export class ExceptionHandlingService {
         this.environmentService.destroyLoginInfo();
         if (this.router.url.indexOf('/') > 0)
             return;
-        this.router.navigate(['/']);//, { queryParams: { returnUrl: this.router.url } });
+        let returnUrl = this.activatedRoute.snapshot.queryParams['returnUrl'];
+        if (!returnUrl)
+            returnUrl = this.router.url;
+            
+        this.router.navigate(['/'], { queryParams: { returnUrl: returnUrl } });
     }
 
     persistentLogin(): Observable<any> {
         return this.http.post(environment.apiUrl + 'users/persistentLogin', this.environmentService.persistentLogin)
-          .map((response: Response) => {
-            if (response.status == 401)
-              return false;
-            let resData = response.json();
-            if (resData == null || resData.token == null || resData.user == null)
-              return false;
-            this.environmentService.setUserLoginInfo(resData);
-            return true;
-          })
-          .catch((error: any) => this.handleError(error));
-      }
+            .map((response: Response) => {
+                if (response.status == 401)
+                    return false;
+                let resData = response.json();
+                if (resData == null || resData.token == null || resData.user == null)
+                    return false;
+                this.environmentService.setUserLoginInfo(resData);
+                return true;
+            })
+            .catch((error: any) => this.handleError(error));
+    }
 
 }

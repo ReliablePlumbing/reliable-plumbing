@@ -15,28 +15,28 @@ export class OutlookNotifier {
   }
 
   handleBroadcast(notification: Notification) {
-    if (notification.type != NotificationType.AssigneeAdded)
-      return;
+    // if (notification.type != NotificationType.AssigneeAdded)
+    //   return;
 
-    let clientId = config.outlookIntegration.clientId,
-      thumbprint = config.outlookIntegration.thumbprint,
-      certFilePath = config.outlookIntegration.certFilePath,
-      authorityUrl = config.outlookIntegration.authorityUrl,
-      resource = config.outlookIntegration.resource,
-      privateKey = fs.readFileSync(certFilePath, { encoding: 'utf8' });
+    // let clientId = config.outlookIntegration.clientId,
+    //   thumbprint = config.outlookIntegration.thumbprint,
+    //   certFilePath = config.outlookIntegration.certFilePath,
+    //   authorityUrl = config.outlookIntegration.authorityUrl,
+    //   resource = config.outlookIntegration.resource,
+    //   privateKey = fs.readFileSync(certFilePath, { encoding: 'utf8' });
 
-    let AuthenticationContext = adal.AuthenticationContext;
-    let context = new AuthenticationContext(authorityUrl);
+    // let AuthenticationContext = adal.AuthenticationContext;
+    // let context = new AuthenticationContext(authorityUrl);
 
-    context.acquireTokenWithClientCertificate(resource, clientId, privateKey, thumbprint,
-      (error, tokenResponse: any) => {
-        if (error)
-          console.log('ERROR acquiring token: ' + error.stack);
-        else {
-          // switch for notification type, if creating, removing or updating event 
-          this.createCalendarEvent(tokenResponse.accessToken);
-        }
-      });
+    // context.acquireTokenWithClientCertificate(resource, clientId, privateKey, thumbprint,
+    //   (error, tokenResponse: any) => {
+    //     if (error)
+    //       console.log('ERROR acquiring token: ' + error.stack);
+    //     else {
+    //       // switch for notification type, if creating, removing or updating event 
+    //       this.createCalendarEvent(tokenResponse.accessToken);
+    //     }
+    //   });
   }
 
   createCalendarEvent(token) {

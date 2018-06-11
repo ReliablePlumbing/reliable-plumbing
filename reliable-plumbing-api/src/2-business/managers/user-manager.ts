@@ -44,8 +44,8 @@ export class UserManager {
                     return reject(new AppError('user already exists', ErrorType.validation));
 
                 this.userRepo.add(user).then(result => {
-                    let emailContent = this.constructVerificationMail(user);
-                    this.mailNotifier.sendMail(user.email, emailContent.subject, emailContent.content);
+                    let mail = this.constructVerificationMail(user);
+                    this.mailNotifier.sendMail(mail);
                     return resolve(result);
                 }).catch((error: Error) => reject(error));
             }).catch((error: Error) => reject(error));
@@ -297,8 +297,8 @@ export class UserManager {
                 if (result.isActivated)
                     throw new AppError('email already active', ErrorType.validation);
 
-                let mailContent = this.constructVerificationMail(result);
-                this.mailNotifier.sendMail(result.email, mailContent.subject, mailContent.content);
+                let mail = this.constructVerificationMail(result);
+                this.mailNotifier.sendMail(mail);
                 return resolve(true);
             }).catch((error: Error) => reject(error));
         });
@@ -331,8 +331,8 @@ export class UserManager {
 
             this.userRepo.findByEmail(email).then(user => {
                 if (user && user.email.toLowerCase() == email.toLowerCase()) {
-                    let emailContent = this.constructForgotPasswordMail(user);
-                    this.mailNotifier.sendMail(user.email, emailContent.subject, emailContent.content);
+                    let mail = this.constructForgotPasswordMail(user);
+                    this.mailNotifier.sendMail(mail);
                     return resolve(true);
                 }
                 else
@@ -449,17 +449,17 @@ export class UserManager {
             email: user.email
         });
         let url = config.activationMailUrl + token;
-        let isSystemUser = user.roles.findIndex(role => role == Role.Customer) == -1;
-        let subject = isSystemUser ? 'Account & Email ' : 'Email ' + 'Activation';
-
-        let contentMessage = isSystemUser ? 'Account & Email Activation' : 'Email Activation';
-        // todo: get template
-        let content = `<h3>please follow the link bellow to activate your ${subject}<h3>\n
-                        <a href="${url}">${subject}<a>`;
-
         return {
-            subject: subject,
-            content: content
+            to: user.email,
+            subject: 'Reliable Plumbing - Email Verfication',
+            template: config.mailSettings.templates.verficationMail,
+            context: {
+                notifeeName: user.firstName + ' ' + (user.lastName ? user.lastName : ''),
+                firstLine: 'Welcome to Reliable Plumbing community',
+                secondLine: `please click on the button bellow to verify your Email`,
+                link: url,
+                btnLbl: 'Verify Email'
+            }
         }
     }
 
@@ -468,15 +468,18 @@ export class UserManager {
             email: user.email
         });
         let url = config.forgotPasswordUrl + token;
-        let subject = 'Reliable Plumbing account password reset';
-
-        // todo: get template
-        let content = `<h3>please follow the link bellow to activate your account password<h3>\n
-                        <a href="${url}">ResetPassword<a>`;
 
         return {
-            subject: subject,
-            content: content
+            to: user.email,
+            subject: 'Reliable Plumbing - Password Reset',
+            template: config.mailSettings.templates.verficationMail,
+            context: {
+                notifeeName: user.firstName + ' ' + (user.lastName ? user.lastName : ''),
+                firstLine: 'we are Sorry you forgot your password, but we are here to help',
+                secondLine: `Please follow the link bellow to reset your account's password`,
+                link: url,
+                btnLbl: 'Reset Password'
+            }
         }
     }
 

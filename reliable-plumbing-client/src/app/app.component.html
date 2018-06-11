@@ -38,7 +38,7 @@
                 <ul class="navbar-nav ml-auto">
                     <ng-container *ngIf="!isUserLoggedIn">
                         <li class="nav-item">
-                            <a class="nav-link pointer" (click)="openLoginPopup()">Login</a>
+                            <a class="nav-link pointer" (click)="openLoginPopup()">Sign In</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link pointer" [routerLink]="[systemRoutes.register]">Register</a>
@@ -57,7 +57,7 @@
                             </div>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link pointer" (click)="logout()">Log out</a>
+                            <a class="nav-link pointer" (click)="logout()">Sign out</a>
                         </li>
                         <li class="nav-item panel-link">
                             <ng-container *ngIf="isSystemUser">

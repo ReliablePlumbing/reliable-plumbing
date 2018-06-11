@@ -2,6 +2,7 @@ import { ProductionConfig } from './config-contract';
 
 export const config: ProductionConfig = {
     production: true,
+    host: process.env.host,
     authorization: {
         tokenKey: process.env.TOKEN_KEY,
         tokenExpiration: "1 day"
@@ -17,8 +18,8 @@ export const config: ProductionConfig = {
             pass: process.env.MAIL_PASSWORD
         }
     },
-    activationMailUrl: "http://ec2-18-217-44-139.us-east-2.compute.amazonaws.com/activate-mail?token=",
-    forgotPasswordUrl: "http://ec2-18-217-44-139.us-east-2.compute.amazonaws.com/forgot-password?token=",
+    activationMailUrl: process.env.host + "/activate-mail?token=",
+    forgotPasswordUrl: process.env.host + "/forgot-password?token=",
     socialMedia: {
         facebook: {
             clientSecret: process.env.FACEBOOK_CLIENT_SECRET,

@@ -1,10 +1,13 @@
 import * as nodemailer from 'nodemailer';
 import { Inject, Container, Service } from 'typedi';
-import { MailLog, MailStatus, Notification, User, ObjectType, NotificationType, Appointment, Quote } from '../../3-domain/domain-module';
+import { MailLog, MailStatus, Notification, User, ObjectType, NotificationType, Appointment, Quote, AppointmentStatus, QuoteStatus } from '../../3-domain/domain-module';
 import { dependencies } from '../../5-cross-cutting/cross-cutting.module';
 import { MailLogRepo, UserRepo } from '../../4-data-access/data-access.module';
 import { NotificationBroadcastingService } from './notification-broadcasting-service';
 import config from '../../config';
+import * as path from 'path';
+import * as dns from 'dns';
+const hbs = require('nodemailer-express-handlebars');
 
 @Service()
 export class MailNotifier {
@@ -30,22 +33,143 @@ export class MailNotifier {
             let notifiers: User[] = [];
             let notifees: User[] = [];
 
-            for (let user of users) {
+            users.forEach(user => {
                 if (~notification.notifierIds.indexOf(user.id))
                     notifiers.push(user);
                 else if (~notifeeIds.indexOf(user.id))
                     notifees.push(user);
-            }
+            });
 
-            let mailContent = this.buildEmail(notification, notifiers, notifees);
-            this.bulkSendEmails(notifees.map(n => n.email), mailContent.subject, mailContent.content);
+            let mailsDetails = this.buildEmails(notification, notifees, notifiers);
+            this.bulkSendEmails(mailsDetails);
 
         }).catch((error: Error) => console.log(error));
 
 
     }
 
-    sendMail(to: string, subject: string, content: string) {
+    private buildEmails(notification: Notification, notifees: User[], notifiers: User[]) {
+        let objectType = notification.objectType;
+        let mailsDetails = [];
+        switch (objectType) {
+            case ObjectType.Appointment:
+                notifees.forEach(notifee => mailsDetails.push(this.buildCallMailContent(notification, notifee, notifiers)));
+                break;
+            case ObjectType.Quote:
+                notifees.forEach(notifee => mailsDetails.push(this.buildQuoteMailContent(notification, notifee, notifiers)));
+                break;
+
+            default:
+                break;
+        }
+
+        return mailsDetails;
+    }
+
+    private buildCallMailContent(notification: Notification, notifee: User, notifiers: User[]) {
+        let call = <Appointment>notification.object;
+        let mailContent: any = {
+            to: notifee.email,
+            subject: '',
+            template: '',
+            context: {
+            }
+        }
+        switch (notification.type) {
+            case NotificationType.CallCreated:
+                mailContent.subject = 'Reliable Plumbing - New Work Order';
+                mailContent.template = config.mailSettings.templates.callCreated;
+                mailContent.context.notifeeName = notifee.firstName + ' ' + (notifee.lastName ? notifee.lastName : '');
+                mailContent.context.firstLine = 'A new work order has been added to your portal.';
+                mailContent.context.secondLine = 'Please login your admin portal now to view your work order.';
+                mailContent.context.btnLbl = 'View Work Order';
+                mailContent.context.link = '';
+                break;
+            case NotificationType.CallStatusChanged:
+                mailContent.subject = 'Reliable Plumbing - Call ' + AppointmentStatus[call.status];
+                mailContent.template = config.mailSettings.templates.callStatusChanged;
+                mailContent.context.notifeeName = notifee.firstName + ' ' + (notifee.lastName ? notifee.lastName : '');
+                mailContent.context.firstLine = 'Your call has been ' + AppointmentStatus[call.status];
+                mailContent.context.secondLine = 'Please login to view your upcoming calls.';
+                mailContent.context.btnLbl = 'View Call';
+                mailContent.context.link = '';
+                break;
+            case NotificationType.AssigneeAdded:
+                mailContent.subject = 'Reliable Plumbing - Call Assigned';
+                mailContent.template = config.mailSettings.templates.assigneeAdded;
+                mailContent.context.notifeeName = notifee.firstName + ' ' + (notifee.lastName ? notifee.lastName : '');
+                mailContent.context.firstLine = 'A new call has been assigned to you';
+                mailContent.context.secondLine = 'Please login to view your assigned calls.';
+                mailContent.context.btnLbl = 'View Call';
+                mailContent.context.link = '';
+                break;
+            case NotificationType.AssigneeRemoved:
+                mailContent.subject = 'Reliable Plumbing - Unassigned Call';
+                mailContent.template = config.mailSettings.templates.assigneeRemoved;
+                mailContent.context.notifeeName = notifee.firstName + ' ' + (notifee.lastName ? notifee.lastName : '');
+                mailContent.context.firstLine = 'You have been unassigned from call';
+                mailContent.context.secondLine = 'Please login to view your assigned calls.';
+                mailContent.context.btnLbl = 'View My Calls';
+                mailContent.context.link = '';
+                break;
+            default:
+                break;
+        }
+
+        return mailContent;
+    }
+
+    private buildQuoteMailContent(notification: Notification, notifee: User, notifiers: User[]) {
+        let quote = <Quote>notification.object;
+        let mailContent: any = {
+            to: notifee.email,
+            subject: '',
+            template: '',
+            context: {
+            }
+        }
+        switch (notification.type) {
+            case NotificationType.QuoteCreated:
+                mailContent.subject = 'Reliable Plumbing - New Quote';
+                mailContent.template = config.mailSettings.templates.quoteCreated;
+                mailContent.context.notifeeName = notifee.firstName + ' ' + (notifee.lastName ? notifee.lastName : '');
+                mailContent.context.firstLine = 'A new Quote has been requested and added to your portal.';
+                mailContent.context.secondLine = 'Please login your admin portal now to view the new Quote.';
+                mailContent.context.btnLbl = 'View Quote';
+                mailContent.context.link = '';
+                break;
+            case NotificationType.QuoteStatusChanged:
+                mailContent.subject = 'Reliable Plumbing - Quote ' + QuoteStatus[quote.status];
+                mailContent.template = config.mailSettings.templates.quoteStatusChanged;
+                mailContent.context.notifeeName = notifee.firstName + ' ' + (notifee.lastName ? notifee.lastName : '');
+                let promise: Promise<any> = null;
+                switch (quote.status) {
+                    case QuoteStatus.Pending:
+                        mailContent.context.firstLine = 'Your quote has been estimated and needs your approval.';
+                        mailContent.context.secondLine = 'Please login to your portal to approve the Quote.';
+                        break;
+                    case QuoteStatus.Approved:
+                        mailContent.context.firstLine = 'A quote has been approved.';
+                        mailContent.context.secondLine = 'Please login your admin portal now to view the new Quote.';
+                        break;
+                    case QuoteStatus.Rejected:
+                        mailContent.context.firstLine = 'A quote has been rejected.';
+                        mailContent.context.secondLine = 'Please login your admin portal now to view the new Quote.';
+                        break;
+                }
+                mailContent.context.btnLbl = 'View Quote';
+                mailContent.context.link = '';
+                break;
+
+            default:
+                break;
+        }
+
+        return mailContent;
+    }
+
+
+    sendMail(mail) {
         let mailSettings = config.mailSettings;
         let transporter = nodemailer.createTransport({
             service: mailSettings.service,
@@ -53,22 +177,39 @@ export class MailNotifier {
                 user: mailSettings.auth.user,
                 pass: mailSettings.auth.pass
             }
+            // debug: true,
+            // host: 'remote.sdreliableplumbing.com',
+            // port: 25,
+            // secure: false,
+            // auth: {
+            //     user: 'SDRP\\NoReply',//mailSettings.auth.user,
+            //     pass: '##Welcome2018!!', //mailSettings.auth.pass
+            // }
         });
+
+        transporter.use('compile', hbs({
+            viewEngine: { extname: '.hbs' },
+            viewPath: path.join(__dirname, '../../assets', 'mail-templates'),
+            extName: '.hbs'
+        }));
+        // let from = 'NoReply@SDReliablePlumbing.com'; //mailSettings.auth.user;
         let from = mailSettings.auth.user;
         let mailOptions = {
             from: from,
-            to: to,
-            subject: subject,
-            html: content
+            // to: 'NoReply@SDReliablePlumbing.com',// to,
+            to: mail.to,
+            subject: mail.subject,
+            template: mail.template,
+            context: mail.context
         };
+        mailOptions.context.host = config.host;
 
         transporter.sendMail(mailOptions, (error, info) => {
             let mailLog: MailLog = new MailLog();
             mailLog.sendingDate = new Date(),
                 mailLog.from = from,
-                mailLog.to = to,
-                mailLog.subject = subject,
-                mailLog.content = content,
+                mailLog.to = mail.to,//to,
+                mailLog.subject = mail.subject,
                 mailLog.status = MailStatus.success
 
             if (error) {
@@ -83,91 +224,9 @@ export class MailNotifier {
         });
     }
 
-    bulkSendEmails(emails: string[], subject: string, content: string) {
-        for (let email of emails)
-            this.sendMail(email, subject, content);
+    bulkSendEmails(mailsDetails: any[]) {
+        for (let mail of mailsDetails)
+            this.sendMail(mail);
     }
 
-
-    private buildEmail(notification: Notification, notifiers: User[], notifees: User[]) {
-        let objectType = notification.objectType;
-        let mailContent = { subject: '', content: '' };
-        switch (objectType) {
-            case ObjectType.Appointment:
-                mailContent = this.buildAppointmentMailContent(notification, notifiers);
-                break;
-            case ObjectType.Quote:
-                mailContent = this.buildQuoteMailContent(notification, notifiers);
-                break;
-
-            default:
-                break;
-        }
-
-        return mailContent;
-    }
-
-    private buildAppointmentMailContent(notification: Notification, notifiers: User[]) {
-        let quote = <Appointment>notification.object;
-        let mailContent = {
-            subject: '',
-            content: ''
-        }
-        switch (notification.type) {
-            case NotificationType.AppointmentCreated:
-                mailContent.subject = 'New Call';
-                if (quote.userId == null)
-                    mailContent.content += quote.customerInfo.firstName + ' ' + quote.customerInfo.lastName + '(anonymus) ';
-                else if (notifiers.length > 0)
-                    mailContent.content += notifiers[0].firstName + ' ' + notifiers[0].lastName + ' ';
-
-                mailContent.content += 'has scheduled a new call at ' + quote.date.toLocaleDateString() + ' \n'
-                mailContent.content += 'you will find the appointment in schedule management in control panel'
-                break;
-            case NotificationType.AppointmentChanged:
-                mailContent.subject = 'Call changed';
-                mailContent.content = 'appointment changed'
-                break;
-            case NotificationType.AssigneeAdded:
-                mailContent.subject = 'you have been assigned';
-                mailContent.content = 'you have been assigned'
-                break;
-            default:
-                break;
-        }
-
-        return mailContent;
-    }
-
-    private buildQuoteMailContent(notification: Notification, notifiers: User[]){
-        let quote = <Quote>notification.object;
-        let mailContent = {
-            subject: '',
-            content: ''
-        }
-        switch (notification.type) {
-            case NotificationType.QuoteCreated:
-                mailContent.subject = 'New Quote';
-                if (quote.userId == null)
-                    mailContent.content += quote.customerInfo.firstName + ' ' + quote.customerInfo.lastName + '(anonymus) ';
-                else if (notifiers.length > 0)
-                    mailContent.content += notifiers[0].firstName + ' ' + notifiers[0].lastName + ' ';
-
-                mailContent.content += 'has requested a new quote \n'
-                mailContent.content += 'you will find the quote in quotes management in control panel'
-                break;
-            case NotificationType.QuoteChanged:
-                mailContent.subject = config.notification.messages.quoteChanged;
-                mailContent.content = config.notification.messages.quoteChanged;
-                break;
-            // case NotificationType.AssigneeAdded:
-            //     mailContent.subject = 'you have been assigned';
-            //     mailContent.content = 'you have been assigned'
-            //     break;
-            // default:
-            //     break;
-        }
-
-        return mailContent;
-    }
 }

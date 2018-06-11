@@ -282,7 +282,7 @@ export class AppointmentManager {
         newNotification.notifierIds = notifierIds;
         newNotification.objectId = objectId;
         newNotification.objectType = ObjectType.Appointment;
-        newNotification.type = NotificationType.AppointmentCreated;
+        newNotification.type = NotificationType.CallCreated;
 
         return new Promise<Notification>((resolve, reject) => {
             this.userRepo.getUsersByRoles([Role.Supervisor, Role.Admin, Role.SystemAdmin]).then(users => {
@@ -357,7 +357,7 @@ export class AppointmentManager {
                 notifees: sameAssignees.map(a => { return { userId: a, seen: false } }),
                 objectId: appointment.id,
                 objectType: ObjectType.Appointment,
-                type: NotificationType.AssigneeRemoved
+                type: NotificationType.CallStatusChanged
             });
             appointment.userId != null ? changedNotification.notifees.push({ userId: appointment.userId, seen: false }) :
                 changedNotification.unregisterdEmail = appointment.customerInfo.email;

@@ -84,46 +84,6 @@ export class QuoteManager {
             console.log('saved ');
         }).catch((error: Error) => console.log(error));
     }
-    // getAppointmentFiltered(filters) {
-
-    //     let fromDate = this.constructAppointmentDate(filters.date.from, filters.time.from);
-    //     let toDate = filters.date.to == null ? null : this.constructAppointmentDate(filters.date.to, filters.time.to);
-    //     return new Promise<Appointment[]>((resolve, reject) => {
-    //         this.appointmentRepo.getAppointmentsFilteredByDatesAndStatusAndType(fromDate, toDate, filters.status, filters.typeIds)
-    //             .then(results => {
-    //                 let filteredAppointments = this.filterAppointmentsByTime(filters.time.from, filters.time.to, results);
-    //                 return resolve(filteredAppointments);
-    //             }).catch((error: Error) => reject(error));
-    //     })
-    // }
-
-
-
-    // updateAppointmentStatusAndAssignees(appointment: Appointment) {
-    //     return new Promise<Appointment>((resolve, reject) => {
-    //         this.appointmentRepo.findById(appointment.id).then(oldAppointment => {
-    //             let oldStatus = oldAppointment.status;
-    //             let newStatus = appointment.status;
-    //             if (oldAppointment.statusHistory.length != appointment.statusHistory.length) {
-    //                 for (let status of appointment.statusHistory) {
-    //                     if (status.id == null)
-    //                         status.creationDate = new Date();
-    //                 }
-    //                 oldAppointment.statusHistory = appointment.statusHistory;
-    //                 oldAppointment.status = this.getAppointmentCurrentStatus(oldAppointment.statusHistory);
-    //             }
-    //             let oldAssignees = oldAppointment.assigneeIds;
-    //             let newAssignees = appointment.assigneeIds;
-    //             oldAppointment.assigneeIds = appointment.assigneeIds;
-
-    //             this.appointmentRepo.updateAppointment(oldAppointment).then(result => {
-    //                 this.sendAppointmentUpdatedNotification(oldStatus, newStatus, oldAssignees, newAssignees, appointment);
-    //                 resolve(result);
-    //             }).catch((error: Error) => reject(error));
-    //         }).catch((error: Error) => reject(error));
-    //     });
-    // }
-
 
     // region Private Methods
 
@@ -181,7 +141,7 @@ export class QuoteManager {
             notifees: [],
             objectId: quote.id,
             objectType: ObjectType.Quote,
-            type: NotificationType.QuoteChanged
+            type: NotificationType.QuoteStatusChanged
         });
 
         let promise: Promise<any> = null;

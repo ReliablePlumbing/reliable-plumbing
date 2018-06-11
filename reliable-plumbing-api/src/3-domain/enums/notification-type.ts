@@ -1,11 +1,11 @@
 export enum NotificationType {
     ActivateMail = 1,
-    AppointmentCreated,
-    AppointmentChanged,
+    CallCreated,
+    CallStatusChanged,
     AppointmentCheckedIn,
     MailActivated,
     AssigneeAdded,
     AssigneeRemoved,
     QuoteCreated,
-    QuoteChanged
+    QuoteStatusChanged
 }

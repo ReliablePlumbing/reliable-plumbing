@@ -1,5 +1,6 @@
 export interface Config {
     production: boolean,
+    host: string,
     authorization: {
         tokenKey: string,
         tokenExpiration: string
@@ -15,6 +16,15 @@ export interface Config {
         auth: {
             user: string,
             pass: string
+        },
+        templates: {
+            callCreated: string,
+            callStatusChanged: string,
+            assigneeAdded: string,
+            assigneeRemoved: string,
+            verficationMail: string,
+            quoteCreated: string,
+            quoteStatusChanged: string
         }
     };
 
@@ -85,6 +95,7 @@ export interface Config {
 
 export interface ProductionConfig {
     production: boolean,
+    host: string,
     authorization: {
         tokenKey: string,
         tokenExpiration: string
@@ -100,7 +111,7 @@ export interface ProductionConfig {
         auth: {
             user: string,
             pass: string
-        }
+        },
     };
 
     activationMailUrl: string;

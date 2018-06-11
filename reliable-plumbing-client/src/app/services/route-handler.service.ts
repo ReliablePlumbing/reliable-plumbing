@@ -15,6 +15,15 @@ export class RouteHandlerService {
   }
 
   routeToDefault() {
+    let returnUrl = this.activatedRoute.snapshot.queryParams['returnUrl'];
+    if (!returnUrl) {
+      returnUrl = sessionStorage.getItem('returnUrl');
+      sessionStorage.removeItem('returnUrl')
+    }
+    if (returnUrl && returnUrl.length > 0 && returnUrl != '/') {
+      this.router.navigate([returnUrl]);
+      return;
+    }
     let route = this.getDefaultRoute();
     this.router.navigate([route])
   }
@@ -32,8 +41,8 @@ export class RouteHandlerService {
           route = 'control-panel/dashboard';
           break;
         }
-        else if(role == Role.Customer)
-        route = 'customer-portal/calls-history';
+        else if (role == Role.Customer)
+          route = 'customer-portal/calls-history';
         break;
       }
     return route;

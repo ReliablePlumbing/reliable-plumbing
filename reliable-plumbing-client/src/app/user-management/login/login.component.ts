@@ -1,5 +1,5 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import {
   AlertifyService, EnvironmentService, RouteHandlerService,
   NotificationService, AuthService, UserManagementService, EventsService
@@ -30,7 +30,7 @@ export class LoginComponent {
   systemRoutes = systemRoutes;
 
   constructor(
-    private userManagementService: UserManagementService, private alertifyService: AlertifyService,
+    private userManagementService: UserManagementService, private alertifyService: AlertifyService, private activatedRoute: ActivatedRoute,
     private environmentService: EnvironmentService, private routeHandler: RouteHandlerService, private router: Router,
     private notificationService: NotificationService, private authService: AuthService, private eventsService: EventsService
   ) { }
@@ -75,7 +75,7 @@ export class LoginComponent {
     this.trySubmit = false;
     this.modalTitle.emit('Forgot Your Password?');
   }
-  
+
   backToLogin() {
     this.trySubmit = false;
     this.forgotPassword = false;
@@ -101,7 +101,7 @@ export class LoginComponent {
     }
   }
 
-  goToRegister(){
+  goToRegister() {
     this.router.navigate([systemRoutes.register]);
     this.close.emit();
   }
