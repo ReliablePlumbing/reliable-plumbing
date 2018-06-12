@@ -1,6 +1,6 @@
 import * as nodemailer from 'nodemailer';
 import { Inject, Container, Service } from 'typedi';
-import { MailLog, MailStatus, Notification, User, ObjectType, NotificationType, Appointment, Quote, AppointmentStatus, QuoteStatus } from '../../3-domain/domain-module';
+import { MailLog, MailStatus, Notification, User, ObjectType, NotificationType, Appointment, Quote, AppointmentStatus, QuoteStatus, Role } from '../../3-domain/domain-module';
 import { dependencies } from '../../5-cross-cutting/cross-cutting.module';
 import { MailLogRepo, UserRepo } from '../../4-data-access/data-access.module';
 import { NotificationBroadcastingService } from './notification-broadcasting-service';
@@ -83,7 +83,7 @@ export class MailNotifier {
                 mailContent.context.firstLine = 'A new work order has been added to your portal.';
                 mailContent.context.secondLine = 'Please login your admin portal now to view your work order.';
                 mailContent.context.btnLbl = 'View Work Order';
-                mailContent.context.link = '';
+                mailContent.context.link = config.mailSettings.links.scheduleManagement;
                 break;
             case NotificationType.CallStatusChanged:
                 mailContent.subject = 'Reliable Plumbing - Call ' + AppointmentStatus[call.status];
@@ -92,7 +92,22 @@ export class MailNotifier {
                 mailContent.context.firstLine = 'Your call has been ' + AppointmentStatus[call.status];
                 mailContent.context.secondLine = 'Please login to view your upcoming calls.';
                 mailContent.context.btnLbl = 'View Call';
-                mailContent.context.link = '';
+                notifee.roles.forEach(role => {
+                    switch (role) {
+                        case Role.Admin:
+                        case Role.SystemAdmin:
+                        case Role.Supervisor:
+                            mailContent.context.link = config.mailSettings.links.scheduleManagement;
+                            break;
+                        case Role.Technician:
+                            mailContent.context.link = config.mailSettings.links.myCalls;
+                            break;
+                        case Role.Customer:
+                            mailContent.context.link = config.mailSettings.links.callsHistory;
+                            break;
+                    }
+                })
+                mailContent.context.link = config.mailSettings.links.myCalls;
                 break;
             case NotificationType.AssigneeAdded:
                 mailContent.subject = 'Reliable Plumbing - Call Assigned';
@@ -101,7 +116,7 @@ export class MailNotifier {
                 mailContent.context.firstLine = 'A new call has been assigned to you';
                 mailContent.context.secondLine = 'Please login to view your assigned calls.';
                 mailContent.context.btnLbl = 'View Call';
-                mailContent.context.link = '';
+                mailContent.context.link = config.mailSettings.links.myCalls;
                 break;
             case NotificationType.AssigneeRemoved:
                 mailContent.subject = 'Reliable Plumbing - Unassigned Call';
@@ -110,7 +125,7 @@ export class MailNotifier {
                 mailContent.context.firstLine = 'You have been unassigned from call';
                 mailContent.context.secondLine = 'Please login to view your assigned calls.';
                 mailContent.context.btnLbl = 'View My Calls';
-                mailContent.context.link = '';
+                mailContent.context.link = config.mailSettings.links.myCalls;
                 break;
             default:
                 break;

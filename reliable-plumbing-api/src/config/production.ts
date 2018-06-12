@@ -14,12 +14,12 @@ export const config: ProductionConfig = {
     mailSettings: {
         service: "gmail",
         auth: {
-            user: "beartoenodemailer@gmail.com",
+            user: "sd.reliable.plumbing@gmail.com",
             pass: process.env.MAIL_PASSWORD
         }
     },
-    activationMailUrl: process.env.host + "/activate-mail?token=",
-    forgotPasswordUrl: process.env.host + "/forgot-password?token=",
+    activationMailUrl: process.env.clientUrl + "/activate-mail?token=",
+    forgotPasswordUrl: process.env.clientUrl + "/forgot-password?token=",
     socialMedia: {
         facebook: {
             clientSecret: process.env.FACEBOOK_CLIENT_SECRET,

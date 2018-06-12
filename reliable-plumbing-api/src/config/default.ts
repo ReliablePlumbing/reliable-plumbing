@@ -26,6 +26,12 @@ export const config: Config = {
             verficationMail: 'generic-blue-bg',
             quoteCreated: 'generic-blue-bg',
             quoteStatusChanged: 'generic-blue-bg',
+        },
+        links: {
+            scheduleManagement: process.env.clientUrl + 'control-panel/schedule-management',
+            quoteManagement: process.env.clientUrl + 'control-panel/quote-management',
+            myCalls: process.env.clientUrl + 'control-panel/my-appointments',
+            callsHistory: process.env.clientUrl + 'customer-portal/calls-history'
         }
     },
     activationMailUrl: "http://localhost:4200/activate-mail?token=",

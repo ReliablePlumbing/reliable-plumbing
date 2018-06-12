@@ -31,6 +31,7 @@ export class RegisterationComponent implements OnInit {
   showSteps = false;
   loading = false;
   showMsg = false;
+  showBg = false;
 
   constructor(private fb: FormBuilder, private userManagementService: UserManagementService, private alertifyService: AlertifyService,
     private environmentService: EnvironmentService, private routeHandler: RouteHandlerService, private activatedRoute: ActivatedRoute,
@@ -41,6 +42,7 @@ export class RegisterationComponent implements OnInit {
     this.userId = this.activatedRoute.snapshot.params['userId'];
     if (this.mode == null)
       this.mode = this.activatedRoute.snapshot.data.mode;
+    this.showBg = this.mode == RegistrationMode.signup;
 
     this.initUser();
   }

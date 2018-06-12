@@ -25,6 +25,12 @@ export interface Config {
             verficationMail: string,
             quoteCreated: string,
             quoteStatusChanged: string
+        },
+        links: {
+            scheduleManagement: string,
+            quoteManagement: string,
+            myCalls: string,
+            callsHistory: string
         }
     };
 
