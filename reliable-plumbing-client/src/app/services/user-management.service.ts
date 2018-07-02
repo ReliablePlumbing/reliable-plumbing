@@ -143,6 +143,11 @@ export class UserManagementService {
       .map((response: Response) => response.json());
   }
 
+  adminChangePassword(args) {
+    return this.httpExtensionService.post(this.basePath + 'adminChangePassword', args)
+      .map((response: Response) => response.json());
+  }
+
   resetPassword(data) {
     return this.httpExtensionService.post(this.basePath + 'resetPassword', data, false)
       .map((response: Response) => response.json());

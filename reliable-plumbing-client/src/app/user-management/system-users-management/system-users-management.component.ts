@@ -12,6 +12,7 @@ export class SystemUsersManagementComponent implements OnInit {
 
   users = [];
   registerModelRef: NgbModalRef;
+  changePasswordRef: NgbModalRef;
   registrationMode: RegistrationMode;
   loading = true;
   clonedEditedUser = null;
@@ -100,5 +101,11 @@ export class SystemUsersManagementComponent implements OnInit {
     this.selectedIndex = index;
     this.registerModelRef = this.modalService.open(template, { size: 'lg' })
 
+  }
+
+  changeUserPassword(user, template) {
+    this.clonedEditedUser = Object.assign({}, user);
+    this.clonedEditedUser.roles = [].concat(this.clonedEditedUser.roles);
+    this.changePasswordRef = this.modalService.open(template, { size: 'sm' });
   }
 }

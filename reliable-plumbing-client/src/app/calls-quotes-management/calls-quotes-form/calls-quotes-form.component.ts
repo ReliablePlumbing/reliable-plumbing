@@ -115,10 +115,10 @@ export class CallsQuotesFormComponent implements OnInit {
       //California
       this.customerInfoForm.controls['state'].disable();
 
-      if (!this.forQuote) {
-      this.appointment.siteId = '-1';
-      this.appointmentForm.addControl('site', new FormControl(null, this.validateDropdownRequired));
-    }
+      // if (!this.forQuote) {
+      // this.appointment.siteId = '-1';
+      // this.appointmentForm.addControl('site', new FormControl(null, this.validateDropdownRequired));
+    // }
   }
 
   validateDropdownRequired(control: AbstractControl) {

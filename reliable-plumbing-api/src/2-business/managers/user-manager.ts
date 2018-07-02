@@ -324,6 +324,26 @@ export class UserManager {
         });
     }
 
+    adminChangePassword(args) {
+        return new Promise<boolean>((resolve, reject) => {
+            this.userRepo.findByEmail(args.email).then((user: any) => {
+                let errors = [];
+                if (args.newPassword == null || args.newPassword.length == 0)
+                    errors.push('password cann\'t be empty');
+                errors = errors.concat(this.validatePasswordFormat(args.newPassword));
+
+                user.salt = AccountSecurity.generateSalt();
+                user.hashedPassword = AccountSecurity.hashPassword(args.newPassword, user.salt);
+                if (errors.length > 0) {
+                    throw new AppError(errors, ErrorType.validation);
+                }
+                this.userRepo.update(user)
+                    .then((result: boolean) => resolve(result))
+                    .catch((error: Error) => reject(error));
+            }).catch((error: Error) => reject(error));
+        });
+    }
+
     forgotPassword(email) {
         return new Promise<boolean>((resolve, reject) => {
             if (!email)

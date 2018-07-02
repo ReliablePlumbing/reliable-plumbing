@@ -215,6 +215,16 @@ export class UserController {
                 .catch((error: Error) => reject(error));
         });
     }
+    
+    @Post('/adminChangePassword')
+    @Authorized([Role.Admin, Role.SystemAdmin])
+    adminChangePassword( @Body() changePasswordArgs) {
+        return new Promise<boolean>((resolve, reject) => {
+            this.userManager.adminChangePassword(changePasswordArgs)
+                .then((result: any) => resolve(result))
+                .catch((error: Error) => reject(error));
+        });
+    }
 
     @Get('/forgotPassword')
     forgotPassword( @QueryParam('email') email: string) {

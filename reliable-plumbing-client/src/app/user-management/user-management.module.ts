@@ -22,6 +22,7 @@ import { ChangePasswordComponent } from './change-password/change-password.compo
 import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
 import { DynamicFormComponent } from './registeration/dynamic-form/dynamic-form.component';
 import { UsersManagementComponent } from './users-management/users-management.component';
+import { AdminChangePasswordComponent } from './admin-change-password/admin-change-password.component';
 
 @NgModule({
   imports: [
@@ -29,11 +30,11 @@ import { UsersManagementComponent } from './users-management/users-management.co
     UserManagementRoutingModule, NgbModule.forRoot(), SharedModule
   ],
   declarations: [LoginComponent, RegisterationComponent, ActivateMailComponent, SystemUsersManagementComponent, SocialMediaRedirectComponent, 
-    ChangePasswordComponent, ForgotPasswordComponent, DynamicFormComponent, UsersManagementComponent],
+    ChangePasswordComponent, ForgotPasswordComponent, DynamicFormComponent, UsersManagementComponent, AdminChangePasswordComponent],
 
   providers: [ProfileEventsService],
   
-  exports: [LoginComponent, RegisterationComponent, ChangePasswordComponent]
+  exports: [LoginComponent, RegisterationComponent, ChangePasswordComponent, AdminChangePasswordComponent]
 })
 
 export class UserManagementModule { }

@@ -81,68 +81,67 @@ export class DynamicFormComponent implements OnInit {
   }
 
   createForm() {
-    this.registerForm = this.fb.group({});
+      this.registerForm = this.fb.group({});
 
     for (let control of this.controlsCofig) {
       switch (control.type) {
         case regControls.email:
-          this.registerForm.addControl('email', new FormControl(null, [Validators.required, Validators.email]));
-          if (control.editable)
-            this.registerForm.controls['email'].valueChanges.subscribe(x => {
-              let control = this.registerForm.controls['email']
-              let emailErrors = control.hasError('email') || control.hasError('required');
-              if (emailErrors) return null;
+            this.registerForm.addControl('email', new FormControl(null, [Validators.required, Validators.email]));
+            if (control.editable)
+              this.registerForm.controls['email'].valueChanges.subscribe(x => {
+                let control = this.registerForm.controls['email']
+                let emailErrors = control.hasError('email') || control.hasError('required');
+                if (emailErrors) return null;
 
-              this.userManagementService.checkEmailExistence(this.user.email)
-                .subscribe(exists => {
-                  if (!exists) return null;
-                  else
-                    control.setErrors({ emailExists: exists })
-                });
-            });
-          else
-            setTimeout(() => this.registerForm.controls['email'].disable(), 0);
+                this.userManagementService.checkEmailExistence(this.user.email)
+                  .subscribe(exists => {
+                    if (!exists) return null;
+                    else
+                      control.setErrors({ emailExists: exists })
+                  });
+              });
+            else
+              setTimeout(() => this.registerForm.controls['email'].disable(), 0);
           break;
         case regControls.firstName:
-          this.registerForm.addControl('firstName', new FormControl(null, [Validators.required]));
+            this.registerForm.addControl('firstName', new FormControl(null, [Validators.required]));
           break;
         case regControls.lastName:
-          this.registerForm.addControl('lastName', new FormControl(null));
+            this.registerForm.addControl('lastName', new FormControl(null));
           break;
         case regControls.mobile:
-          this.registerForm.addControl('mobile', new FormControl(null, [Validators.required, Validators.pattern(/^(\([0-9]{3}\) |[0-9]{3}-)[0-9]{3}-[0-9]{4}$/)]));
+            this.registerForm.addControl('mobile', new FormControl(null, [Validators.required, Validators.pattern(/^(\([0-9]{3}\) |[0-9]{3}-)[0-9]{3}-[0-9]{4}$/)]));
           break;
         case regControls.password:
-          this.registerForm.addControl('password', new FormControl(null, [Validators.required, Validators.pattern(/^(?=.*?[A-Z])(?=.*?[a-z])((?=.*?[0-9])|(?=.*?[#?!@$%^&*-])).{6,32}$/)]))
-          this.registerForm.addControl('confirmPassword', new FormControl(null, [Validators.required, this.matchOtherValidator('password')]));
+            this.registerForm.addControl('password', new FormControl(null, [Validators.required, Validators.pattern(/^(?=.*?[A-Z])(?=.*?[a-z])((?=.*?[0-9])|(?=.*?[#?!@$%^&*-])).{6,32}$/)]))
+            this.registerForm.addControl('confirmPassword', new FormControl(null, [Validators.required, this.matchOtherValidator('password')]));
           break;
         case regControls.address:
-          this.registerForm.addControl('street', new FormControl(null, [Validators.required]));
-          this.registerForm.addControl('city', new FormControl(null, [Validators.required]));
-          this.registerForm.addControl('state', new FormControl(null, [Validators.required]));
-          this.registerForm.addControl('zipCode', new FormControl(null, [Validators.required]));
+            this.registerForm.addControl('street', new FormControl(null, [Validators.required]));
+            this.registerForm.addControl('city', new FormControl(null, [Validators.required]));
+            this.registerForm.addControl('state', new FormControl(null, [Validators.required]));
+            this.registerForm.addControl('zipCode', new FormControl(null, [Validators.required]));
 
-          this.registerForm.controls['state'].disable();
+            this.registerForm.controls['state'].disable();
           break;
         case regControls.roles:
-          let roles = control.roles;
 
-          let rolesControls: any = {};
-          for (let roleConfig of control.roles)
-            rolesControls[Role[roleConfig.role]] = [null];
+            let rolesControls: any = {};
+            for (let roleConfig of control.roles)
+              rolesControls[Role[roleConfig.role]] = [null];
 
-          let rolesFG = this.fb.group(rolesControls, {
-            validator: (group: FormGroup) => {
-              return this.user.roles && this.user.roles.length > 0 ? null : { noRole: true };
-            }
-          });
+            let rolesFG = this.fb.group(rolesControls, {
+              validator: (group: FormGroup) => {
+                return this.user.roles && this.user.roles.length > 0 ? null : { noRole: true };
+              }
+            });
 
-          this.registerForm.addControl('roles', rolesFG);
+            this.registerForm.addControl('roles', rolesFG);
           break;
         case regControls.accountType:
-          if (!this.user.accountType)
-            this.user.accountType = 'Residential';
-          this.registerForm.addControl('accountType', new FormControl(null, [Validators.required]));
+            if (!this.user.accountType)
+              this.user.accountType = 'Residential';
+            this.registerForm.addControl('accountType', new FormControl(null, [Validators.required]));
           break;
       }
     }

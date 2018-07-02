@@ -115,19 +115,20 @@ export class RegisterationComponent implements OnInit {
   }
 
   getModeControls() {
-    let controls: any = [];
+    let controls = [];
     switch (this.mode) {
       case RegistrationMode.addSystemUser:
         let editableEmail = true;
+        controls.push({ type: regControls.password });
       case RegistrationMode.editSystemUser:
         this.showSteps = false;
-        controls = [
+        controls.push(
           { type: regControls.firstName },
           { type: regControls.lastName },
           { type: regControls.email, editable: editableEmail },
           { type: regControls.mobile },
           { type: regControls.roles, roles: this.getAllowedRoles() },
-        ]
+        )
         break;
       case RegistrationMode.completeProfile:
         controls = [

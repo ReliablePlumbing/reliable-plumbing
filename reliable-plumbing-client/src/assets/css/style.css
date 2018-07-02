@@ -160,7 +160,7 @@ input[type=radio] {
   transition: all 0.3s;
   padding: 16px;
   width: calc(100% - 52px);
-  min-height: 80vh; }
+  min-height: 100vh; }
 
 #main.opened {
   transition: all 0.3s; }
