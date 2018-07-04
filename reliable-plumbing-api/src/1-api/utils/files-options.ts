@@ -24,6 +24,6 @@ export const fileUploadOptions = {
     },
     limits: {
         fieldNameSize: 255,
-        fileSize: 1024 * 1024 * 2
+        // fileSize: 1024 * 50
     }
 };

@@ -220,7 +220,7 @@
             <div class="col-md-12" *ngIf="!forQuote">
               <div class="form-group photos-sec">
                 <label for="preferedContactType" class="">Post photos</label>
-                <p-fileUpload mode="basic" name="demo[]" accept="image/*" maxFileSize="1000000" (onSelect)="onUploadFile($event)" multiple="multiple"
+                <p-fileUpload mode="basic" name="demo[]" accept="image/*" maxFileSize="10000000" (onSelect)="onUploadFile($event)" multiple="multiple"
                   auto="true"></p-fileUpload>
                 <button class="btn btn-danger" (click)="removeAllImages()">Clear</button>
               </div>
