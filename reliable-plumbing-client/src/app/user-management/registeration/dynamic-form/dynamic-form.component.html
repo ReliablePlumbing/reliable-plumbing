@@ -8,7 +8,7 @@
               <i *ngIf="getControlValidation('firstName','required')">*</i>
             </label>
             <input type="text" name="firstName" class="form-control" formControlName="firstName" [(ngModel)]="user.firstName" />
-            <label *ngIf="getControlValidation('firstName','required', false)" class="validation-text">* Required</label>                  
+            <label *ngIf="getControlValidation('firstName','required', false)" class="validation-text">* Required</label>
           </div>
         </div>
         <div *ngSwitchCase="regControls.lastName" class="col-md-6">
@@ -24,7 +24,7 @@
             </label>
             <input type="email" name="email" class="form-control" placeholder="ex: exmple@domain.com" formControlName="email" [(ngModel)]="user.email"
             />
-            <label *ngIf="getControlValidation('email','required', false)" class="validation-text">* Required</label>                  
+            <label *ngIf="getControlValidation('email','required', false)" class="validation-text">* Required</label>
             <span class="error-message" *ngIf="getControlValidation('email','email', false)">Please enter a valid email</span>
             <span class="error-message" *ngIf="getControlValidation('email','emailExists')">Email already exists
               <!-- <a *ngIf="mode != registrationModes.admin" class="btn-link pointer" (click)="openLogin()">Sign in</a> -->
@@ -41,7 +41,7 @@
             </label>
             <input type="tel" name="mobile" class="form-control" formControlName="mobile" [(ngModel)]="user.mobile" placeholder="ex: (123) 123-1234"
               [textMask]="mobileMaskOpts" />
-            <label *ngIf="getControlValidation('mobile','required', false)" class="validation-text">* Required</label>                  
+            <label *ngIf="getControlValidation('mobile','required', false)" class="validation-text">* Required</label>
             <span class="error-message" *ngIf="getControlValidation('mobile','pattern', false)">Please enter a valid mobile number</span>
           </div>
         </div>
@@ -58,18 +58,18 @@
                   <span class="fa fa-info-circle"></span>
                 </div>
               </div>
-            <label *ngIf="getControlValidation('password','required', false)" class="validation-text">* Required</label>                  
+              <label *ngIf="getControlValidation('password','required', false)" class="validation-text">* Required</label>
               <span class="error-message" *ngIf="getControlValidation('password','pattern', false)">Password invalid</span>
             </div>
           </div>
 
           <ng-template #passwordValidationTemplate>
             <div class="passwordInfoPopover">
-              <p>Password length must be between (6,32)</p>
               <ul>
+                <li>Between six 6 and 32 characters in length</li>
                 <li>one upper case English letter</li>
                 <li>one lower case English letter</li>
-                <li>one digit or one special character</li>
+                <li>Must contain at least one number and/or one special character (e.g. @,#,$,%, etc.) excluding spaces</li>
               </ul>
             </div>
           </ng-template>
@@ -82,7 +82,7 @@
               </label>
               <input type="password" name="confirmPassword" class="form-control" formControlName="confirmPassword" [(ngModel)]="user.confirmPassword"
               />
-            <label *ngIf="getControlValidation('confirmPassword','required', false)" class="validation-text">* Required</label>                  
+              <label *ngIf="getControlValidation('confirmPassword','required', false)" class="validation-text">* Required</label>
               <span class="error-message" *ngIf="getControlValidation('confirmPassword','matchOther', false)">Passwords are not the same</span>
             </div>
           </div>
@@ -111,9 +111,8 @@
               <label for="street" class="">Street Address
                 <i *ngIf="getControlValidation('street','required')">*</i>
               </label>
-              <input type="text" name="street" class="form-control" formControlName="street" [(ngModel)]="user.site.street"
-              />
-            <label *ngIf="getControlValidation('street','required', false)" class="validation-text">* Required</label>                  
+              <input type="text" name="street" class="form-control" formControlName="street" [(ngModel)]="user.site.street" />
+              <label *ngIf="getControlValidation('street','required', false)" class="validation-text">* Required</label>
             </div>
           </div>
           <div class="col-md-6">
@@ -122,7 +121,7 @@
                 <i *ngIf="getControlValidation('city','required')">*</i>
               </label>
               <input type="text" name="city" class="form-control" formControlName="city" [(ngModel)]="user.site.city" />
-            <label *ngIf="getControlValidation('city','required', false)" class="validation-text">* Required</label>                  
+              <label *ngIf="getControlValidation('city','required', false)" class="validation-text">* Required</label>
             </div>
           </div>
           <div class="col-md-6">
@@ -131,7 +130,7 @@
                 <i *ngIf="getControlValidation('state','required')">*</i>
               </label>
               <input type="text" name="state" class="form-control" formControlName="state" [(ngModel)]="user.site.state" />
-            <label *ngIf="getControlValidation('state','required', false)" class="validation-text">* Required</label>                  
+              <label *ngIf="getControlValidation('state','required', false)" class="validation-text">* Required</label>
             </div>
           </div>
           <div class="col-md-6">
@@ -140,7 +139,7 @@
                 <i *ngIf="getControlValidation('zipCode','required')">*</i>
               </label>
               <input type="text" name="zipCode" class="form-control" formControlName="zipCode" [(ngModel)]="user.site.zipCode" />
-              <label *ngIf="getControlValidation('zipCode','required', false)" class="validation-text">* Required</label>                  
+              <label *ngIf="getControlValidation('zipCode','required', false)" class="validation-text">* Required</label>
             </div>
           </div>
           <div class="col-md-12 map-container" *ngIf="mapMarker != null">

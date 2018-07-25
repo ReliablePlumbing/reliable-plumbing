@@ -10,16 +10,19 @@ import { Router, ActivatedRoute } from '@angular/router';
 export class AuthService {
 
   protected basePath = environment.apiUrl + 'users/';
+  private redirectUrl;
 
-  constructor(private httpService: HttpExtensionService, private environmentService: EnvironmentService, private router: Router, 
-  private activatedRoute: ActivatedRoute) { }
+  constructor(private httpService: HttpExtensionService, private environmentService: EnvironmentService, private router: Router,
+    private activatedRoute: ActivatedRoute) {
+      this.redirectUrl = window.location.protocol + '//' + location.hostname + environment.socialMedia.redirectUri;
+  }
 
   redirectToSocialLogin(provider: SocialMediaProvider) {
     let url = this.getSocialMediaProviderUrl(provider);
 
     sessionStorage.setItem('socialMediaLoginProvider', provider.toString());
     let returnUrl = this.activatedRoute.snapshot.queryParams['returnUrl'];
-    if(!returnUrl)
+    if (!returnUrl)
       returnUrl = this.router.url;
     sessionStorage.setItem('returnUrl', returnUrl);
     window.location.href = url;
@@ -32,7 +35,7 @@ export class AuthService {
       provider: provider,
       code: code,
       clientId: environment.socialMedia[providerStr].clientId,
-      redirectUri: environment.socialMedia.redirectUri
+      redirectUri: this.redirectUrl
     };
 
     return this.httpService.post(this.basePath + 'socialLogin', body, false)
@@ -50,11 +53,9 @@ export class AuthService {
 
   private getSocialMediaProviderUrl(provider: SocialMediaProvider) {
 
-    let redirectUri = environment.socialMedia.redirectUri;
-
     let providerStr = SocialMediaProvider[provider].toLowerCase();
 
-    return this.replaceUrlParams(environment.socialMedia[providerStr], redirectUri);
+    return this.replaceUrlParams(environment.socialMedia[providerStr], this.redirectUrl);
 
   }
 

@@ -18,6 +18,6 @@ export const environment = {
       clientId: '683536496260-v9qshpnrqn1t83m2mle5f449rap989e7.apps.googleusercontent.com',
       url: 'https://accounts.google.com/o/oauth2/v2/auth?response_type=code&client_id={clientId}&redirect_uri={redirectUri}&scope=email%20profile'
     },
-    redirectUri: 'http://localhost:4200/social-media-authenticate'
+    redirectUri: '/social-media-authenticate'
   }
 };

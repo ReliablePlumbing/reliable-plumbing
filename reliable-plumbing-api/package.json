@@ -5,7 +5,7 @@
   "main": "lib/index.js",
   "types": "lib/index",
   "scripts": {
-    "start": "cross-env NODE_ENV=production node dist/server.js",
+    "start": "cross-env NODE_ENV=production node -r dotenv/config dist/server.js",
     "dev": "cross-env NODE_ENV=development nodemon dist/server.js",
     "debug": "cross-env NODE_ENV=development node --inspect-brk=3001 dist/server.js",
     "test": "mocha --reporter spec --compilers ts:ts-node/register",

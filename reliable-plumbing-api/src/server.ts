@@ -6,12 +6,9 @@ import * as path from 'path';
 import { App } from './1-api/app';
 import { SocketContext } from './5-cross-cutting/cross-cutting.module';
 import { listenToSocketsEvents } from './1-api/socket-manager/socket-manager';
-import * as dotenv from 'dotenv';
 import config from './config';
 import * as bodyParser from 'body-parser';
 
-if (process.env.NODE_ENV == 'production')
-  dotenv.config();
 const port = normalizePort(process.env.PORT || 3000);
 
 var app = express();
