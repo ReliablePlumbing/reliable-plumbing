@@ -78,6 +78,9 @@ export class CallDetailsComponent implements OnInit, OnChanges {
   //#region API Services Calls
 
   getTechsStatuses() {
+    if (!this.permissions.updateAssignees)
+      return;
+
     return new Promise<boolean>((resolve, reject) => {
       this.callService.getTechniciansWithStatusInTime(this.call.id).subscribe(results => {
         this.technicians = results;

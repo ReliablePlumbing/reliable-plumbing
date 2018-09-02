@@ -1,11 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { AppointmentStatus, CallsQuotesMode } from '../../models/enums';
-import { getEnumEntries, convertDateParamToDateObj, convertTimeTo12String, getDatesArray } from '../../utils/date-helpers';
+import { CallsQuotesMode } from '../../models/enums';
 import { LookupsService } from '../../services/lookups.service';
 import * as moment from 'moment';
 import { AppointmentService, AlertifyService, EnvironmentService } from '../../services/services.exports';
-import { isCallOpened } from '../../utils/call-helpers';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { queryParams } from '../../models/constants'
 
 @Component({
   selector: 'rb-call-management',
@@ -30,13 +29,21 @@ export class CallManagementComponent implements OnInit {
   screenWidth;
 
   constructor(private lookupsService: LookupsService, private callService: AppointmentService, private activatedRoute: ActivatedRoute,
-    private alertifyService: AlertifyService, private enviromentService: EnvironmentService) { }
+    private alertifyService: AlertifyService, private enviromentService: EnvironmentService, private router: Router) { }
 
   ngOnInit() {
     this.loading = true;
     this.isMyCalls = this.activatedRoute.snapshot.data.myCalls;
-    let nowDate = moment().toDate();
+    let fromDateParam = this.activatedRoute.snapshot.params[queryParams.fromDate];
+    let toDateParam = this.activatedRoute.snapshot.params[queryParams.toDate];
+
+    let nowDate = fromDateParam ? moment(fromDateParam, queryParams.urlDateFormat).toDate() : moment().toDate();
     let afterWeekDate = moment().add(1, 'week').toDate();
+    if (toDateParam)
+      afterWeekDate = moment(toDateParam, queryParams.urlDateFormat).toDate();
+    else if (fromDateParam)
+      afterWeekDate = null;
+
     this.rangeDates = [nowDate, afterWeekDate];
     this.lookupsService.getAppointmentSettingsAndTypes().subscribe(results => {
       this.services = results.types.map(t => { return { label: t.name, value: t } });
@@ -48,6 +55,13 @@ export class CallManagementComponent implements OnInit {
 
   filter() {
     this.loading = true;
+    let params: any = {};
+    params[queryParams.fromDate] = moment(this.rangeDates[0]).format(queryParams.urlDateFormat);
+    if (this.rangeDates[1])
+      params[queryParams.toDate] = moment(this.rangeDates[1]).format(queryParams.urlDateFormat);
+    if (this.activatedRoute.snapshot.params[queryParams.callId])
+      params[queryParams.callId] = this.activatedRoute.snapshot.params[queryParams.callId];
+    this.router.navigate([this.router.url.split(';')[0], params])
     let requestFilters: any = {
       date: {
         from: this.rangeDates[0],
@@ -65,8 +79,13 @@ export class CallManagementComponent implements OnInit {
 
     this.callService.getAppointmentsFiltered(requestFilters).subscribe(results => {
       this.calls = results;
-      if (this.calls && this.calls.length > 0)
-        this.selectedCall = this.calls[0];
+      let callIdUrlParam = this.activatedRoute.snapshot.params[queryParams.callId];
+      if (this.calls && this.calls.length > 0) {
+        if (callIdUrlParam)
+          this.selectedCall = this.calls.find(call => call.id == callIdUrlParam);
+        else
+          this.selectedCall = this.calls[0];
+      }
       this.loading = false;
     });
   }
@@ -75,6 +94,12 @@ export class CallManagementComponent implements OnInit {
     if (screen.width < 800)
       this.responsiveMode = this.responsiveModes.details;
     this.selectedCall = call;
+    let url = this.router.url.split(';')[0];
+    let params = {};
+    Object.keys(this.activatedRoute.snapshot.params).forEach(key => params[key] = this.activatedRoute.snapshot.params[key]);
+    params[queryParams.callId] = this.selectedCall.id;
+
+    this.router.navigate([url, params]);
   }
 
   backFromDetails() {
@@ -103,5 +128,9 @@ export class CallManagementComponent implements OnInit {
       return;
     this.responsiveMode = screen.width >= 800 ? this.responsiveModes.split : this.responsiveModes.listing;
     this.screenWidth = screen.width;
+  }
+
+  private updateUrlParams(newParams){
+
   }
 }

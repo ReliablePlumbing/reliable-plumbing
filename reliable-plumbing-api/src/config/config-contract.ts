@@ -25,12 +25,6 @@ export interface Config {
             verficationMail: string,
             quoteCreated: string,
             quoteStatusChanged: string
-        },
-        links: {
-            scheduleManagement: string,
-            quoteManagement: string,
-            myCalls: string,
-            callsHistory: string
         }
     };
 
@@ -84,7 +78,8 @@ export interface Config {
         resource: string,
         authorityUrl: string,
         mail: string,
-        outlookApiEndPoint: string
+        outlookApiEndPoint: string,
+        mainCalendarEmail: string
     }
 
     filesSettings: {
@@ -95,47 +90,18 @@ export interface Config {
         thumbnailWidth: number,
         thumbnailHeight: number,
         thumbnailExtension: string
-    }
-}
-
-
-export interface ProductionConfig {
-    production: boolean,
-    host: string,
-    authorization: {
-        tokenKey: string,
-        tokenExpiration: string
-    };
-
-    db: {
-        mongoConnectionString: string,
-        showMongoLogs: boolean
-    };
-
-    mailSettings: {
-        service: string,
-        auth: {
-            user: string,
-            pass: string
+    },
+    portalLinks: {
+        paramsDelimiter: string,
+        dateParamFormat: string
+        scheduleManagement: {
+            url: string,
+            params: {
+                fromDate: string,
+                toDate?: string,
+                callId: string
+            }
         },
-    };
-
-    activationMailUrl: string;
-    forgotPasswordUrl: string;
-
-    socialMedia: {
-        facebook: {
-            clientSecret: string,
-        },
-        google: {
-            clientSecret: string,
-        }
-    }
-
-    outlookIntegration: {
-        clientId: string,
-        thumbprint: string,
-        authorityUrl: string,
-        mail: string
+        callsHistory: string
     }
 }

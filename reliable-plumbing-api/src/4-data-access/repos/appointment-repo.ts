@@ -42,12 +42,13 @@ export class AppointmentRepo extends Repo<Appointment> {
     findById(id) {
         let model = this.createSet();
         return new Promise<Appointment>((resolve, reject) => {
-            model.findById(id, (err, result) => {
-                if (err != null)
-                    return reject(err);
+            model.findOne({ _id: id }).populate('typeId').populate('userId').populate('assigneeIds').exec(
+                (err, result) => {
+                    if (err != null)
+                        return reject(err);
 
-                return resolve(this.mapModelToEntity(result));
-            });
+                    return resolve(this.mapModelToEntity(result));
+                });
         });
     }
 
@@ -136,7 +137,7 @@ export class AppointmentRepo extends Repo<Appointment> {
             let assignees = [], assigneeIds = [];
             for (let assigneeId of obj.assigneeIds) {
                 if (assigneeId != null && typeof assigneeId == 'object') {
-                    let assignee = new User(obj.userId);
+                    let assignee = new User(assigneeId);
                     assignees.push(assignee);
                     assigneeIds.push(assignee.id);
                 }

@@ -7,6 +7,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { isAnyEligible } from '../../utils/user-helpers';
 import { Role, AppointmentStatus, Permission } from '../../models/enums';
 import { isCallOpened } from '../../utils/call-helpers';
+import { queryParams } from '../../models/constants';
 
 @Component({
   selector: 'calls-listing',
@@ -39,8 +40,13 @@ export class CallsListingComponent implements OnInit {
     this.statusTabs = [{ id: '0', text: 'All' }];
     this.statusTabs = this.getStatusIcons(this.statusTabs.concat(getEnumEntries(AppointmentStatus)));
     this.mapAndGroupAppointmentsByDay();
-    if (this.calls && this.calls.length > 0)
-      this.selectedCall = this.calls[0];
+    let callIdUrlParam = this.activatedRoute.snapshot.params[queryParams.callId];
+    if (this.calls && this.calls.length > 0) {
+      if (callIdUrlParam)
+        this.selectedCall = this.calls.find(call => call.id == callIdUrlParam);
+      else
+        this.selectedCall = this.calls[0];
+    }
   }
 
   initPermissions() {

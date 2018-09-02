@@ -7,6 +7,7 @@ import { NotificationBroadcastingService } from './notification-broadcasting-ser
 import config from '../../config';
 import * as path from 'path';
 import * as dns from 'dns';
+import { buildCallPortalUrl } from './notifiers.helpers';
 const hbs = require('nodemailer-express-handlebars');
 
 @Service()
@@ -75,6 +76,7 @@ export class MailNotifier {
             context: {
             }
         }
+
         switch (notification.type) {
             case NotificationType.CallCreated:
                 mailContent.subject = 'Reliable Plumbing - New Work Order';
@@ -83,7 +85,7 @@ export class MailNotifier {
                 mailContent.context.firstLine = 'A new work order has been added to your portal.';
                 mailContent.context.secondLine = 'Please login your admin portal now to view your work order.';
                 mailContent.context.btnLbl = 'View Work Order';
-                mailContent.context.link = config.mailSettings.links.scheduleManagement;
+                mailContent.context.link = buildCallPortalUrl(notifee.roles, call);
                 break;
             case NotificationType.CallStatusChanged:
                 mailContent.subject = 'Reliable Plumbing - Call ' + AppointmentStatus[call.status];
@@ -92,22 +94,7 @@ export class MailNotifier {
                 mailContent.context.firstLine = 'Your call has been ' + AppointmentStatus[call.status];
                 mailContent.context.secondLine = 'Please login to view your upcoming calls.';
                 mailContent.context.btnLbl = 'View Call';
-                notifee.roles.forEach(role => {
-                    switch (role) {
-                        case Role.Admin:
-                        case Role.SystemAdmin:
-                        case Role.Supervisor:
-                            mailContent.context.link = config.mailSettings.links.scheduleManagement;
-                            break;
-                        case Role.Technician:
-                            mailContent.context.link = config.mailSettings.links.myCalls;
-                            break;
-                        case Role.Customer:
-                            mailContent.context.link = config.mailSettings.links.callsHistory;
-                            break;
-                    }
-                })
-                mailContent.context.link = config.mailSettings.links.myCalls;
+                mailContent.context.link = buildCallPortalUrl(notifee.roles, call);
                 break;
             case NotificationType.AssigneeAdded:
                 mailContent.subject = 'Reliable Plumbing - Call Assigned';
@@ -116,7 +103,7 @@ export class MailNotifier {
                 mailContent.context.firstLine = 'A new call has been assigned to you';
                 mailContent.context.secondLine = 'Please login to view your assigned calls.';
                 mailContent.context.btnLbl = 'View Call';
-                mailContent.context.link = config.mailSettings.links.myCalls;
+                mailContent.context.link = buildCallPortalUrl(notifee.roles, call);
                 break;
             case NotificationType.AssigneeRemoved:
                 mailContent.subject = 'Reliable Plumbing - Unassigned Call';
@@ -125,11 +112,12 @@ export class MailNotifier {
                 mailContent.context.firstLine = 'You have been unassigned from call';
                 mailContent.context.secondLine = 'Please login to view your assigned calls.';
                 mailContent.context.btnLbl = 'View My Calls';
-                mailContent.context.link = config.mailSettings.links.myCalls;
+                mailContent.context.link = config.portalLinks.scheduleManagement.url;
                 break;
             default:
                 break;
         }
+
 
         return mailContent;
     }

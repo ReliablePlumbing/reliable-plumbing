@@ -1,5 +1,8 @@
 export var queryParams = {
-
+    fromDate: 'from',
+    toDate: 'to',
+    urlDateFormat: 'MM-DD-YYYY',
+    callId: 'id'
 }
 
 
