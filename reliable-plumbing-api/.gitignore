@@ -3,3 +3,4 @@ dist-client
 maps
 node_modules
 .env
+.env.production
