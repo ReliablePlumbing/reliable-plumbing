@@ -3,7 +3,7 @@
 export const environment = {
   production: true,
   apiUrl: '/api/',
-  socketsUrl: '/',
+  socketsUrl: '/api/',
   filesUrl: '/files/',
   mapsApiKey: 'AIzaSyAmYRB--nxsm_OprcUO2RzrdlJTy6qLI4c',
   socialMedia: {

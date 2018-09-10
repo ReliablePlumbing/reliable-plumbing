@@ -5,7 +5,7 @@ const config: Config = {
     production: false,
     host: process.env.host,
     authorization: {
-        tokenKey: "nodeStarterTokenKeyShouldBeUniqueAndLongString",
+        tokenKey: process.env.TOKEN_KEY,
         tokenExpiration: "1 day"
     },
     db: {
@@ -72,10 +72,10 @@ const config: Config = {
         thumbprint: process.env.THUMBPRINT,
         authorityUrl: process.env.AUTHORITY_URL,
         resource: 'https://outlook.office.com',
-        certFilePath: path.join(__dirname, process.env.certFilePath),
+        certFilePath: path.resolve(__dirname, process.env.certFilePath),
         mail: process.env.OUTLOOK_MAIL,
         outlookApiEndPoint: 'https://outlook.office.com/api/v2.0',
-        mainCalendarEmail: process.env.OUTLOOK_MAIN_CALEMDAR_MAIL
+        mainCalendarEmail: process.env.OUTLOOK_MAIN_CALENDAR_MAIL
     },
     filesSettings: {
         basePath: path.join(__dirname, '..\\files'),

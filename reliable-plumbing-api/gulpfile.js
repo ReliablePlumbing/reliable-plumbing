@@ -36,8 +36,10 @@ gulp.task('assets', () => {
     .pipe(gulp.dest('dist/assets'));
 });
 
-gulp.task('watch', ['scripts', 'json_files', 'assets'], () => {
+gulp.task('run-all', ['scripts', 'json_files', 'assets', 'certificates']);
+
+gulp.task('watch', ['run-all'], () => {
   gulp.watch('src/**/*.*', ['scripts', 'json_files', 'assets']);
 });
 
-gulp.task('default', ['watch', 'json_files', 'assets', 'certificates']);
+gulp.task('default', ['run-all']);

@@ -10,7 +10,7 @@ import config from './config';
 import * as bodyParser from 'body-parser';
 
 const port = normalizePort(process.env.PORT || 3000);
-
+console.log('port: ', process.env.PORT)
 var app = express();
 
 if (config.filesSettings.enableGetFiles) {
