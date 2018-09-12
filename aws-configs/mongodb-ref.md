@@ -11,4 +11,4 @@ source ~/.bashrc
 mongodump --out <dir> -d <database>
 
 # restore db
-mongorestore <dir> to db
+mongorestore -d <db> <dir>

@@ -14,7 +14,7 @@ export class TokenManager {
 
                 return resolve(decoded);
             });
-        });
+        }); 
     }
 
     static generateToken(payload: any): string {
