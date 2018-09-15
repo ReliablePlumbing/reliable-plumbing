@@ -2,17 +2,21 @@ version: '3'
 services:
   mongo:
     image: mongo
+    labels:
+      - "base_image=mongo"
     restart: always
     ports:
       - "27017:27017"
     volumes:
       - /db/db:/data/db
+      - /db/backups:/backups
+      
   api:
-    image: ahmedgomaa/api:1.0.0
+    build: .
     restart: always
     ports:
       - "80:3000"
     volumes:
-      - /apidata/apifiles:/dist/files
+      - /apidata/files:/usr/src/dist/files
     depends_on:
       - mongo
