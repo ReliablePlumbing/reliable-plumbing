@@ -2,7 +2,7 @@ import { Service } from 'typedi'
 import config from '../../config';
 import * as fs from 'fs';
 import * as uuid from 'uuid';
-import * as sharp from 'sharp';
+// import * as sharp from 'sharp';
 import * as path from 'path';
 @Service()
 export class FilesManager {
@@ -25,15 +25,15 @@ export class FilesManager {
             let oldPath = file.path;
             let newPath = objectPath + '/' + file.filename;
 
-            sharp(oldPath)
-                .resize(config.filesSettings.imageMaxWidth, config.filesSettings.imageMaxHeight)
-                .withoutEnlargement(true)
-                .background('#ffffff00')
-                .embed()
-                .toFile(newPath)
-                .then((a) => {
-                    this.createThumbnail(oldPath, file.filename, objectPath);
-                });
+            // sharp(oldPath)
+            //     .resize(config.filesSettings.imageMaxWidth, config.filesSettings.imageMaxHeight)
+            //     .withoutEnlargement(true)
+            //     .background('#ffffff00')
+            //     .embed()
+            //     .toFile(newPath)
+            //     .then((a) => {
+            //         this.createThumbnail(oldPath, file.filename, objectPath);
+            //     });
 
         }
     }
@@ -45,20 +45,20 @@ export class FilesManager {
 
         let thmbnailName = fileNameWithoutExt + config.filesSettings.thumbnailExtension + format;
         let thmbnailNewPath = objectPath + '/' + thmbnailName;
-        sharp(oldPath)
-            .resize(config.filesSettings.thumbnailWidth, config.filesSettings.thumbnailHeight)
-            .withoutEnlargement(true)
-            .background('#ffffff00')
-            .embed()
-            .toFile(thmbnailNewPath)
-            .then((a) => {
+        // sharp(oldPath)
+        //     .resize(config.filesSettings.thumbnailWidth, config.filesSettings.thumbnailHeight)
+        //     .withoutEnlargement(true)
+        //     .background('#ffffff00')
+        //     .embed()
+        //     .toFile(thmbnailNewPath)
+        //     .then((a) => {
 
-                sharp.cache(false);
-                fs.unlink(oldPath, err => {
-                    if (err)
-                        console.log(err);
-                })
-            });
+        //         sharp.cache(false);
+        //         fs.unlink(oldPath, err => {
+        //             if (err)
+        //                 console.log(err);
+        //         })
+        //     });
     }
 
     getFilesUrls(filesDic) {

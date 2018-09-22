@@ -1,12 +1,10 @@
 <header id="header">
     <div class="container-fluid">
         <nav class="navbar navbar-toggleable-md navbar-expand-lg">
-            <button *ngIf="isControlPanel||isCustomerPortal" (click)="toggleNavigations()" class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse"
-                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <button *ngIf="isControlPanel||isCustomerPortal" (click)="toggleNavigations()" class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon fa fa-bars"></span>
             </button>
-            <button *ngIf="!isControlPanel&&!isCustomerPortal" class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
-                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <button *ngIf="!isControlPanel&&!isCustomerPortal" class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon fa fa-bars"></span>
             </button>
             <a id="logo" class="navbar-brand" [routerLink]="['/']">
@@ -19,16 +17,10 @@
                             <a class="nav-link" href="#home">Home</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#about">About Us</a>
-                        </li>
-                        <li class="nav-item">
                             <a class="nav-link" href="#services">Services</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#testimonials">Testimonials</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#team">Team</a>
+                            <a class="nav-link" href="#about">About Us</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="#contact">Contact Us</a>

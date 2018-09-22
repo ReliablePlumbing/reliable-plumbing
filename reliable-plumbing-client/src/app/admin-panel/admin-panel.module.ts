@@ -21,7 +21,6 @@ import { ResetPasswordComponent } from './reset-password/reset-password.componen
 import { QuoteManagementComponent } from './quote-management/quote-management.component';
 import { DashboardsComponent } from './dashboards/dashboards.component';
 import { CallManagementComponent } from './call-management/call-management.component';
-
 @NgModule({
   imports: [
     CommonModule, AdminPanelRoutingModule, ServicesModule, FormsModule, UserManagementModule,

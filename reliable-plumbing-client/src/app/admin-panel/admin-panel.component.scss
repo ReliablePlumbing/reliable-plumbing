@@ -1,6 +1,7 @@
 .side-menu {
     padding-left: 0 !important;
     padding-right: 0 !important;
+    position: relative;
 }
 
 .admin-panel {
@@ -10,19 +11,17 @@
 .toggle-nav {
     position: absolute;
     cursor: pointer;
-    left: 0;
+    right: 0;
     top: 0;
     color: #fff;
     padding: 5px 16px;
-    background-color: #c82333 !important;
+    background-color: #007bff !important;
     z-index: 9;
     font-size: 22px;
     i {
         font-style: normal;
     }
 }
-
-
 
 .list-group {
     min-height: 100vh;
@@ -51,7 +50,7 @@
     }
 }
 
-.home-item{
+.home-item {
     display: none;
 }
 
@@ -62,11 +61,11 @@
     .toggle-nav {
         display: none;
     }
-    .home-item{
+    .home-item {
         display: block;
     }
 }
 
-.panel-content{
+.panel-content {
     font-size: 12px;
 }

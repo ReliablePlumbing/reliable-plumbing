@@ -1,6 +1,7 @@
 .side-menu {
     padding-left: 0 !important;
     padding-right: 0 !important;
+    position: relative;
 }
 
 .admin-panel {
@@ -10,11 +11,11 @@
 .toggle-nav {
     position: absolute;
     cursor: pointer;
-    left: 0;
+    right: 0;
     top: 0;
     color: #fff;
     padding: 5px 16px;
-    background-color: #c82333 !important;
+    background-color: #007bff !important;
     z-index: 9;
     font-size: 22px;
     i {

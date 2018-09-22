@@ -50,6 +50,9 @@
         &:last-child {
             margin-bottom: 0;
         }
+        span {
+            color: #40a4df;
+        }
     }
 }
 
@@ -135,6 +138,7 @@
     .service-description {
         margin-left: 80px;
         line-height: 24px;
+        min-height: 75px;
         color: #fff;
         margin-bottom: 10px;
     }

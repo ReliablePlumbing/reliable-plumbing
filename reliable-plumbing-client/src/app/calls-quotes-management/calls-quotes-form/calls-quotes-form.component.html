@@ -1,258 +1,249 @@
 <ng-container *ngIf="!isLoggedIn || adminMode">
-  <p-steps [model]="steps" styleClass="steps-custom" [activeIndex]="activeIndex"></p-steps>
+    <p-steps [model]="steps" styleClass="steps-custom" [activeIndex]="activeIndex"></p-steps>
 </ng-container>
 
 <section class="register">
-  <div class="register-container">
-    <div class="container">
-      <ng-container *ngIf="(!isLoggedIn || adminMode) && activeIndex==0">
-        <div class="row">
+    <div class="register-container">
+        <div class="container">
+            <ng-container *ngIf="(!isLoggedIn || adminMode) && activeIndex==0">
+                <div class="row">
 
-          <div class="col-md-12" *ngIf="adminMode">
-            <div class="form-group">
-              <label class="">Existing User
+                    <div class="col-md-12" *ngIf="adminMode">
+                        <div class="form-group">
+                            <label class="">Existing User
               </label>
-              <p-inputSwitch onLabel="Yes" offLabel="No" [(ngModel)]="existingCustomer" [ngModelOptions]="{standalone: true}"></p-inputSwitch>
-            </div>
-          </div>
+                            <p-inputSwitch onLabel="Yes" offLabel="No" [(ngModel)]="existingCustomer" [ngModelOptions]="{standalone: true}"></p-inputSwitch>
+                        </div>
+                    </div>
 
-          <div class="col-md-6" *ngIf="adminMode&&existingCustomer">
-            <div class="form-group">
-              <label for="firstName" class="">Search Customers (first/last name, phone or email)
+                    <div class="col-md-6" *ngIf="adminMode&&existingCustomer">
+                        <div class="form-group">
+                            <label for="firstName" class="">Search Customers (first/last name, phone or email)
                 <!-- <i *ngIf="getControlValidation('firstName','required')">*</i> -->
               </label>
-              <input type="text" class="form-control" [class.is-invalid]="searchFailed" [(ngModel)]="selectedUser" [ngbTypeahead]="search"
-                placeholder="Customers Search" [ngModelOptions]="{standalone: true}" [inputFormatter]="inputFormatter" [resultTemplate]="rt"
-              />
-              <span *ngIf="searching">searching...</span>
-            </div>
-          </div>
-        </div>
-        <ng-template #rt let-r="result" let-t="term">
-          {{ r.firstName + ' ' + r.lastName + ' (' +r.email +')'}}
-        </ng-template>
+                            <input type="text" class="form-control" [class.is-invalid]="searchFailed" [(ngModel)]="selectedUser" [ngbTypeahead]="search" placeholder="Customers Search" [ngModelOptions]="{standalone: true}" [inputFormatter]="inputFormatter" [resultTemplate]="rt" />
+                            <span *ngIf="searching">searching...</span>
+                        </div>
+                    </div>
+                </div>
+                <ng-template #rt let-r="result" let-t="term">
+                    {{ r.firstName + ' ' + r.lastName + ' (' +r.email +')'}}
+                </ng-template>
 
-        <ng-container *ngIf="!isLoggedIn || (adminMode && !existingCustomer)">
-          <form [formGroup]="customerInfoForm" novalidate>
-            <div class="row">
+                <ng-container *ngIf="!isLoggedIn || (adminMode && !existingCustomer)">
+                    <form [formGroup]="customerInfoForm" novalidate>
+                        <div class="row">
 
-              <div class="col-md-6">
-                <div class="form-group">
-                  <label for="firstName" class="">First Name
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="firstName" class="">First Name
                     <i *ngIf="getControlValidation('firstName','required')">*</i>
                   </label>
-                  <input type="text" name="firstName" class="form-control" formControlName="firstName" [(ngModel)]="appointment.customerInfo.firstName"
-                  />
-                  <label *ngIf="getControlValidation('firstName','required', false)" class="validation-text">* Required</label>
-                </div>
-              </div>
+                                    <input type="text" name="firstName" class="form-control" formControlName="firstName" [(ngModel)]="appointment.customerInfo.firstName" />
+                                    <label *ngIf="getControlValidation('firstName','required', false)" class="validation-text">* Required</label>
+                                </div>
+                            </div>
 
-              <div class="col-md-6">
-                <div class="form-group">
-                  <label for="lastName" class="">Last Name
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="lastName" class="">Last Name
                     <i *ngIf="getControlValidation('lastName','required')">*</i>
                   </label>
-                  <input type="text" name="lastName" class="form-control" formControlName="lastName" [(ngModel)]="appointment.customerInfo.lastName"
-                  />
-                </div>
-              </div>
+                                    <input type="text" name="lastName" class="form-control" formControlName="lastName" [(ngModel)]="appointment.customerInfo.lastName" />
+                                </div>
+                            </div>
 
-              <div class="col-md-6">
-                <div class="form-group">
-                  <label for="mobile" class="">Mobile/Telephone
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="mobile" class="">Mobile/Telephone
                     <i *ngIf="getControlValidation('mobile','required')">*</i>
                   </label>
-                  <input type="tel" name="mobile" class="form-control" formControlName="mobile" [(ngModel)]="appointment.customerInfo.mobile"
-                    placeholder="ex: (123) 123-1234" [textMask]="mobileMaskOpts" />
-                  <label *ngIf="getControlValidation('mobile','required', false)" class="validation-text">* Required</label>
-                </div>
-              </div>
+                                    <input type="tel" name="mobile" class="form-control" formControlName="mobile" [(ngModel)]="appointment.customerInfo.mobile" placeholder="ex: (123) 123-1234" [textMask]="mobileMaskOpts" />
+                                    <label *ngIf="getControlValidation('mobile','required', false)" class="validation-text">* Required</label>
+                                </div>
+                            </div>
 
-              <div class="col-md-6">
-                <div class="form-group">
-                  <label for="email" class="">Email Address
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="email" class="">Email Address
                     <i *ngIf="getControlValidation('email','required')">*</i>
                   </label>
-                  <input type="email" name="email" class="form-control" placeholder="ex: exmple@domain.com" formControlName="email" [(ngModel)]="appointment.customerInfo.email"
-                  />
-                  <span class="error-message" *ngIf="getControlValidation('email','email', false)">Please enter a valid email</span>
-                  <label *ngIf="getControlValidation('email','required', false)" class="validation-text">* Required</label>
-                </div>
-              </div>
+                                    <input type="email" name="email" class="form-control" placeholder="ex: exmple@domain.com" formControlName="email" [(ngModel)]="appointment.customerInfo.email" />
+                                    <span class="error-message" *ngIf="getControlValidation('email','email', false)">Please enter a valid email</span>
+                                    <label *ngIf="getControlValidation('email','required', false)" class="validation-text">* Required</label>
+                                </div>
+                            </div>
 
-              <div class="col-md-6">
-                <div class="form-group">
-                  <label for="street" class="">Street Address
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="street" class="">Street Address
                     <i *ngIf="getControlValidation('street','required')">*</i>
                   </label>
-                  <input type="text" name="street" class="form-control" formControlName="street" [(ngModel)]="appointment.customerInfo.street"
-                  />
-                  <label *ngIf="getControlValidation('street','required', false)" class="validation-text">* Required</label>
-                </div>
-              </div>
+                                    <input type="text" name="street" class="form-control" formControlName="street" [(ngModel)]="appointment.customerInfo.street" />
+                                    <label *ngIf="getControlValidation('street','required', false)" class="validation-text">* Required</label>
+                                </div>
+                            </div>
 
-              <div class="col-md-6">
-                <div class="form-group">
-                  <label for="city" class="">City
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="city" class="">City
                     <i *ngIf="getControlValidation('city','required')">*</i>
                   </label>
-                  <input type="text" name="city" class="form-control" formControlName="city" [(ngModel)]="appointment.customerInfo.city" />
-                  <label *ngIf="getControlValidation('city','required', false)" class="validation-text">* Required</label>
-                </div>
-              </div>
+                                    <input type="text" name="city" class="form-control" formControlName="city" [(ngModel)]="appointment.customerInfo.city" />
+                                    <label *ngIf="getControlValidation('city','required', false)" class="validation-text">* Required</label>
+                                </div>
+                            </div>
 
-              <div class="col-md-6">
-                <div class="form-group">
-                  <label for="state" class="">State
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="state" class="">State
                     <i *ngIf="getControlValidation('state','required')">*</i>
                   </label>
-                  <input type="text" name="state" class="form-control" formControlName="state" [(ngModel)]="appointment.customerInfo.state"
-                  />
-                  <label *ngIf="getControlValidation('state','required', false)" class="validation-text">* Required</label>
-                </div>
-              </div>
+                                    <input type="text" name="state" class="form-control" formControlName="state" [(ngModel)]="appointment.customerInfo.state" />
+                                    <label *ngIf="getControlValidation('state','required', false)" class="validation-text">* Required</label>
+                                </div>
+                            </div>
 
-              <div class="col-md-6">
-                <div class="form-group">
-                  <label for="zipCode" class="">Zip Code
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="zipCode" class="">Zip Code
                     <i *ngIf="getControlValidation('zipCode','required')">*</i>
                   </label>
-                  <input type="text" name="zipCode" class="form-control" formControlName="zipCode" [(ngModel)]="appointment.customerInfo.zipCode"
-                  />
-                  <label *ngIf="getControlValidation('zipCode','required', false)" class="validation-text">* Required</label>
+                                    <input type="text" name="zipCode" class="form-control" formControlName="zipCode" [(ngModel)]="appointment.customerInfo.zipCode" />
+                                    <label *ngIf="getControlValidation('zipCode','required', false)" class="validation-text">* Required</label>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </ng-container>
+                <div class="row">
+                    <div class="col-md-12">
+                        <button type="submit" (click)="nextStep()" class="btn btn-success">Next</button> &nbsp;
+                        <button type="reset" (click)="resetUserInfoForm()" class="btn btn-danger">Clear</button>
+                    </div>
                 </div>
-              </div>
-            </div>
-          </form>
-        </ng-container>
-        <div class="row">
-          <div class="col-md-12">
-            <button type="submit" (click)="nextStep()" class="btn btn-success">Next</button> &nbsp;
-            <button type="reset" (click)="resetUserInfoForm()" class="btn btn-danger">Clear</button>
-          </div>
-        </div>
-      </ng-container>
-      <ng-container *ngIf="activeIndex==1 || (isLoggedIn && !adminMode)">
+            </ng-container>
+            <ng-container *ngIf="activeIndex==1 || (isLoggedIn && !adminMode)">
 
-        <form [formGroup]="appointmentForm" novalidate>
-          <div class="row">
+                <form [formGroup]="appointmentForm" novalidate>
+                    <div class="row">
 
-            <!-- Sites -->
-            <ng-container *ngIf="((isLoggedIn && !adminMode) || existingCustomer) && !forQuote">
-              <div class="col-sm-12">
-                <div class="form-group">
-                  <label for="site" class="">Choose Site
+                        <!-- Sites -->
+                        <ng-container *ngIf="((isLoggedIn && !adminMode) || existingCustomer) && !forQuote">
+                            <div class="col-sm-12">
+                                <div class="form-group">
+                                    <label for="site" class="">Choose Site
                     <i *ngIf="getControlValidation('site','req')">*</i>
                   </label>
-                  <select name="site" formControlName="site" [(ngModel)]="appointment.siteId">
+                                    <select name="site" formControlName="site" [(ngModel)]="appointment.siteId">
                     <option disabled value="-1" selected>Select Site</option>
                     <option *ngFor="let site of sites" [ngValue]="site.id">{{constructSite(site)}}</option>
                   </select>
-                  <label *ngIf="getControlValidation('site','req', false)" class="validation-text">* Required</label>
-                </div>
-              </div>
-            </ng-container>
+                                    <label *ngIf="getControlValidation('site','req', false)" class="validation-text">* Required</label>
+                                </div>
+                            </div>
+                        </ng-container>
 
-            <!-- Call Date & time -->
-            <ng-container *ngIf="mode==modes.call">
-              <div class="col-md-6">
-                <div class="form-group date-picker-cont">
-                  <label for="date" class="">Pick a date
+                        <!-- Call Date & time -->
+                        <ng-container *ngIf="mode==modes.call">
+                            <div class="col-md-6">
+                                <div class="form-group date-picker-cont">
+                                    <label for="date" class="">Pick a date
                     <i *ngIf="getControlValidation('date','required')">*</i>
                   </label>
-                  <input class="form-control" placeholder="yyyy-mm-dd" name="date" formControlName="date" [(ngModel)]="appointment.dateObj"
-                    ngbDatepicker #d="ngbDatepicker">
-                  <button class="input-group-addon" (click)="d.toggle()" type="button">
-                    <i class="fa fa-calendar" aria-hidden="true"></i>
-                  </button>
-                  <label *ngIf="getControlValidation('date','required', false)" class="validation-text">* Required</label>
-                  <span class="error-message" *ngIf="getControlValidation('date','invalidDate')">only valid date are today or after that</span>
-                </div>
-              </div>
+                                    <div class="">
+                                        <input class="form-control" placeholder="yyyy-mm-dd" name="date" formControlName="date" [(ngModel)]="appointment.dateObj" ngbDatepicker #d="ngbDatepicker">
+                                        <button class="input-group-addon" (click)="d.toggle()" type="button">
+                      <i class="fa fa-calendar" aria-hidden="true"></i>
+                    </button>
+                                    </div>
+                                    <label *ngIf="getControlValidation('date','required', false)" class="validation-text">* Required</label>
+                                    <span class="error-message" *ngIf="getControlValidation('date','invalidDate')">only valid date are today
+                    or after that</span>
+                                </div>
+                            </div>
 
-              <div class="col-md-6">
-                <div class="form-group">
-                  <label for="time" class="">Pick a time
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="time" class="">Pick a time
                     <i *ngIf="getControlValidation('time','req')">*</i>
                   </label>
-                  <select name="time" formControlName="time" [(ngModel)]="appointment.time">
+                                    <select name="time" formControlName="time" [(ngModel)]="appointment.time">
                     <option disabled value="-1" selected>select time</option>
                     <option *ngFor="let time of timeList" [ngValue]="time">{{time.timeStr}}</option>
                   </select>
-                  <label *ngIf="getControlValidation('time','req', false)" class="validation-text">* Required</label>
-                </div>
-              </div>
-            </ng-container>
+                                    <label *ngIf="getControlValidation('time','req', false)" class="validation-text">* Required</label>
+                                </div>
+                            </div>
+                        </ng-container>
 
-            <!-- Services -->
-            <div class="col-md-6" *ngIf="!forQuote">
-              <div class="form-group">
-                <label for="appointmentType" class="">Service
+                        <!-- Services -->
+                        <div class="col-md-6" *ngIf="!forQuote">
+                            <div class="form-group">
+                                <label for="appointmentType" class="">Service
                   <i *ngIf="getControlValidation('appointmentType','req')">*</i>
                 </label>
-                <select name="appointmentType" formControlName="appointmentType" [(ngModel)]="appointment.typeId">
+                                <select name="appointmentType" formControlName="appointmentType" [(ngModel)]="appointment.typeId">
                   <option disabled selected value="-1">Select Service</option>
                   <option *ngFor="let appoinType of appointmentTypes" [value]="appoinType.id">{{appoinType.name}}</option>
                 </select>
-                <label *ngIf="getControlValidation('appointmentType','req', false)" class="validation-text">* Required</label>
-              </div>
-            </div>
+                                <label *ngIf="getControlValidation('appointmentType','req', false)" class="validation-text">* Required</label>
+                            </div>
+                        </div>
 
-            <!-- Contact Method -->
-            <div class="col-md-6" *ngIf="!forQuote">
-              <div class="form-group">
-                <label for="preferedContactType" class="">Preferred Method of contact
+                        <!-- Contact Method -->
+                        <div class="col-md-6" *ngIf="!forQuote">
+                            <div class="form-group">
+                                <label for="preferedContactType" class="">Preferred Method of contact
                   <div class="btn-group status-btns-group btns-block">
                     <label class="btn btn-info">
                       <input type="radio" class="pointer" name="preferedContactType" [checked]="appointment.preferedContactType == 'Email'" (click)="appointment.preferedContactType = 'Email'"
                       />Email
                     </label>
-                    <label class="btn btn-info">
+                                <label class="btn btn-info">
                       <input type="radio" class="pointer" name="preferedContactType" [checked]="appointment.preferedContactType == 'Telephone'"
                         (click)="appointment.preferedContactType = 'Telephone'" />Telephone
                     </label>
-                  </div>
-                </label>
-              </div>
-            </div>
+                            </div>
+                            </label>
+                        </div>
+                    </div>
 
-            <!-- Images -->
-            <div class="col-md-12" *ngIf="!forQuote">
-              <div class="form-group photos-sec">
-                <label for="preferedContactType" class="">Post photos</label>
-                <p-fileUpload mode="basic" name="demo[]" accept="image/*" maxFileSize="10000000" (onSelect)="onUploadFile($event)" multiple="multiple"
-                  auto="true"></p-fileUpload>
-                <button class="btn btn-danger" (click)="removeAllImages()">Clear</button>
-              </div>
-              <p-galleria *ngIf="images.length>0" [images]="images" panelWidth="500" panelHeight="313" [showCaption]="false"></p-galleria>
-            </div>
+                    <!-- Images -->
+                    <div class="col-md-12" *ngIf="!forQuote">
+                        <div class="form-group photos-sec">
+                            <label for="preferedContactType" class="">Post photos</label>
+                            <p-fileUpload mode="basic" name="demo[]" accept="image/*" maxFileSize="10000000" (onSelect)="onUploadFile($event)" multiple="multiple" auto="true"></p-fileUpload>
+                            <button class="btn btn-danger" (click)="removeAllImages()">Clear</button>
+                        </div>
+                        <p-galleria *ngIf="images.length>0" [images]="images" panelWidth="500" panelHeight="313" [showCaption]="false"></p-galleria>
+                    </div>
 
-            <!-- Description -->
-            <div class="col-md-12" *ngIf="!forQuote">
-              <div class="form-group">
-                <label for="message" class="">Description</label>
-                <textarea type="text" name="message" class="form-control" formControlName="message" [(ngModel)]="appointment.message"></textarea>
-              </div>
-            </div>
+                    <!-- Description -->
+                    <div class="col-md-12" *ngIf="!forQuote">
+                        <div class="form-group">
+                            <label for="message" class="">Description</label>
+                            <textarea type="text" name="message" class="form-control" formControlName="message" [(ngModel)]="appointment.message"></textarea>
+                        </div>
+                    </div>
 
-            <div class="col-md-12">
-              <div *ngIf="!isLoggedIn && !adminMode">
-                <p>Please be informed that appointment will not be scheduled until a representative from the office contacts
-                  you via email</p>
-              </div>
-            </div>
+                    <div class="col-md-12">
+                        <div *ngIf="!isLoggedIn && !adminMode">
+                            <p>Please be informed that appointment will not be scheduled until a representative from the office contacts you via email</p>
+                        </div>
+                    </div>
 
-            <div class="col-md-12">
-              <button type="submit" (click)="scheduleAppointment()" class="btn btn-success">Send</button> &nbsp;
-              <button *ngIf="!isLoggedIn || adminMode" type="submit" (click)="prevStep()" class="btn btn-success">Back</button> &nbsp;
-              <button type="reset" (click)="resetForm()" class="btn btn-danger">Clear</button>
-            </div>
-          </div>
+                    <div class="col-md-12">
+                        <button type="submit" (click)="scheduleAppointment()" class="btn btn-success">Send</button> &nbsp;
+                        <button *ngIf="!isLoggedIn || adminMode" type="submit" (click)="prevStep()" class="btn btn-success">Back</button> &nbsp;
+                        <button type="reset" (click)="resetForm()" class="btn btn-danger">Clear</button>
+                    </div>
+        </div>
         </form>
-      </ng-container>
+        </ng-container>
 
     </div>
-  </div>
-  <!-- /.registeration-container -->
+    </div>
+    <!-- /.registeration-container -->
 </section>
 <!-- /.registeration -->

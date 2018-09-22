@@ -49,16 +49,6 @@ h6 {
   padding: 0; }
 
 /* Prelaoder */
-#preloader {
-  position: fixed;
-  left: 0;
-  top: 0;
-  z-index: 999;
-  width: 100%;
-  height: 100%;
-  overflow: visible;
-  background: #fff url("../img/preloader.svg") no-repeat center center; }
-
 /* Back to top button */
 .back-to-top {
   position: fixed;
@@ -607,7 +597,7 @@ body.mobile-nav-active {
       font-size: 14px; }
 
 .nav-item.panel-link {
-  background-color: #1893dc;
+  background-color: #007bff;
   padding: 0px 2px; }
   .nav-item.panel-link a {
     padding: 8px; }
@@ -655,6 +645,8 @@ body.mobile-nav-active {
     line-height: 26px; }
     #about .about-text:last-child {
       margin-bottom: 0; }
+    #about .about-text span {
+      color: #40a4df; }
 
 /* Services Section
 --------------------------------*/
@@ -708,6 +700,7 @@ body.mobile-nav-active {
   #services .service-description {
     margin-left: 80px;
     line-height: 24px;
+    min-height: 75px;
     color: #fff;
     margin-bottom: 10px; }
 
@@ -1043,7 +1036,6 @@ form .btn {
   background-size: cover; }
   .schedule-sec-bg:before {
     background: rgba(0, 0, 0, 0.8); }
-
 
 .schedule-form {
   position: relative;
