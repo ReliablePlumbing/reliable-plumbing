@@ -1,4 +1,5 @@
 node {
+  checkout scm
   stage('docker Build') {
     echo "docker build"
     sh """
